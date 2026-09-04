@@ -1,0 +1,539 @@
+/* Juniper — a complete, self-contained visual identity theme.
+ *
+ * Portable: this file has NO external dependencies. Every palette scale it
+ * references (including olive/slate/gray anchors that originally came from
+ * Tailwind's default theme) is defined below, so it can be dropped into any
+ * project. Values are oklch; formulas use CSS relative color syntax
+ * (`oklch(from …)`), `color-mix()`, and `light-dark()` — all baseline in
+ * evergreen browsers.
+ *
+ * Architecture (see SKILL.md): this file defines LEAF variables only
+ * (`--action`, `--field-border`, …). A separate contract layer aliases each
+ * leaf to a semantic `--color-*` token inside Tailwind v4's `@theme inline`
+ * (`--color-action: var(--action)`) — that layer is the only place utilities
+ * are generated. Utilities inline one level deep, so they reference the leaf
+ * at use-site, which is what lets a `[data-theme]` attribute or an
+ * element-scoped class re-point a leaf and re-theme everything.
+ *
+ * Leaves live on bare `:root` so Juniper is the fallback theme: a DOM with no
+ * (or an unrecognized) data-theme attribute still renders fully themed —
+ * pre-hydration snapshot tools (e.g. session replay) never capture an
+ * un-themed frame. If a second theme coexists, give it a
+ * `:root[data-theme="other"]` block (wins by specificity) and keep this one
+ * on `:root, :root[data-theme="juniper"]`.
+ *
+ * Many formulas share their shapes across token families on purpose — each
+ * family is free to diverge independently (different mix ratios, different
+ * lightness curves) without touching the others. */
+
+:root {
+  /* Juniper's palette scales — plain `:root` on purpose, NOT @theme: no
+   * bg-miso-* utilities may ever be generated. Direct palette utilities
+   * inline their literal at build time and can never retheme — these scales
+   * exist only to be var()-referenced by the theme block below. */
+
+  --jn-fern-50: oklch(96% 0.015 124);
+  --jn-fern-100: oklch(90% 0.019 125.73);
+  --jn-fern-200: oklch(83% 0.03 127.93);
+  --jn-fern-300: oklch(79% 0.043 130.72);
+  --jn-fern-400: oklch(73% 0.054 134.28);
+  --jn-fern-500: oklch(65% 0.058 138.8);
+  --jn-fern-600: oklch(56% 0.057 144.55);
+  --jn-fern-700: oklch(49.22% 0.0534 151.85);
+  --jn-fern-800: oklch(44% 0.048 161.15);
+  --jn-fern-900: oklch(38% 0.041 173);
+  --jn-fern-950: oklch(26% 0.034 188);
+
+  /* miso — warm parchment neutral (hue drifts warm → neutral down-scale) */
+  --jn-miso-50: oklch(97.2% 0.007 80);
+  --jn-miso-100: oklch(93.44% 0.01 83.26);
+  --jn-miso-200: oklch(86% 0.013 72);
+  --jn-miso-300: oklch(76% 0.018 62);
+  --jn-miso-400: oklch(65% 0.022 54);
+  --jn-miso-500: oklch(54% 0.024 50);
+  --jn-miso-600: oklch(44% 0.022 56);
+  --jn-miso-700: oklch(37% 0.018 65);
+  --jn-miso-800: oklch(32% 0.012 76);
+  --jn-miso-900: oklch(28.5% 0.006 86);
+  --jn-miso-950: oklch(24.78% 0.0029 93.39);
+
+  /* spruce — cool teal-green, the brand anchor */
+  --color-spruce-50: oklch(97% 0.0055 216);
+  --color-spruce-100: oklch(91.5% 0.0104 212.28);
+  --color-spruce-200: oklch(83.2% 0.026 203);
+  --color-spruce-300: oklch(72.8% 0.05 194);
+  --color-spruce-400: oklch(63.8% 0.074 186);
+  --color-spruce-500: oklch(54.8% 0.088 180);
+  --color-spruce-600: oklch(46.4% 0.082 175);
+  --color-spruce-700: oklch(41% 0.068 171);
+  --color-spruce-800: oklch(35.68% 0.0519 168.01);
+  --color-spruce-900: oklch(27.8% 0.03 166);
+  --color-spruce-950: oklch(23.8% 0.018 164);
+
+  /* momo — warm coral-red; the identity's ONLY red (destructive/error) */
+  --color-momo-50: oklch(96.5% 0.02 50);
+  --color-momo-100: oklch(90% 0.049 43.5);
+  --color-momo-200: oklch(84% 0.0832 36.5);
+  --color-momo-300: oklch(78% 0.1262 29.8);
+  --color-momo-400: oklch(70% 0.1602 23.8);
+  --color-momo-500: oklch(62% 0.1802 19.33);
+  --color-momo-600: oklch(52% 0.1442 21.44);
+  --color-momo-700: oklch(42% 0.1082 25.22);
+  --color-momo-800: oklch(32% 0.0722 28.56);
+  --color-momo-900: oklch(23% 0.0422 31.78);
+  --color-momo-950: oklch(18% 0.02 34);
+
+  /* pear — yellow-green; links, focus, success, brand accents */
+  --color-pear-50: oklch(95.5% 0.021 120);
+  --color-pear-100: oklch(93% 0.068 121);
+  --color-pear-200: oklch(91% 0.165 122);
+  --color-pear-300: oklch(82% 0.188 124);
+  --color-pear-400: oklch(72% 0.196 128);
+  --color-pear-500: oklch(61% 0.172 132);
+  --color-pear-600: oklch(52% 0.144 135);
+  --color-pear-700: oklch(43% 0.112 138);
+  --color-pear-800: oklch(35% 0.082 148);
+  --color-pear-900: oklch(28% 0.062 156);
+  --color-pear-950: oklch(24% 0.058 162);
+
+  /* olive — muted green-gray neutral (mirrors Tailwind's default olive;
+   * inlined here so this file stands alone) */
+  --color-olive-50: oklch(98.8% 0.003 106.5);
+  --color-olive-100: oklch(96.6% 0.005 106.5);
+  --color-olive-200: oklch(93% 0.007 106.5);
+  --color-olive-300: oklch(88% 0.011 106.6);
+  --color-olive-400: oklch(73.7% 0.021 106.9);
+  --color-olive-500: oklch(58% 0.031 107.3);
+  --color-olive-600: oklch(46.6% 0.025 107.3);
+  --color-olive-700: oklch(39.4% 0.023 107.4);
+  --color-olive-800: oklch(28.6% 0.016 107.4);
+  --color-olive-900: oklch(22.8% 0.013 107.4);
+  --color-olive-950: oklch(15.3% 0.006 107.1);
+
+  /* cool neutral anchors (mirror Tailwind defaults; inlined for portability) */
+  --color-slate-900: oklch(20.8% 0.042 265.755);
+  --color-gray-500: oklch(55.1% 0.027 264.364);
+
+  /* accent trios — subtle / base / bold */
+  --color-aubergine-subtle: oklch(62% 0.028 312);
+  --color-aubergine: oklch(40.74% 0.0608 318);
+  --color-aubergine-bold: oklch(28% 0.078 313);
+
+  --color-sunflower-subtle: oklch(93.5% 0.11 91);
+  --color-sunflower: oklch(83% 0.198 85);
+  --color-sunflower-bold: oklch(55% 0.2 78);
+
+  --color-bonito-subtle: oklch(73.11% 0.055 198);
+  --color-bonito: oklch(65% 0.155 192);
+  --color-bonito-bold: oklch(42% 0.11 182);
+}
+
+:root,
+:root[data-theme="juniper"] {
+  color-scheme: light dark;
+
+  /* Base tokens */
+  --body: light-dark(var(--color-miso-200), var(--color-spruce-800));
+  --foreground: light-dark(var(--color-miso-800), var(--color-olive-300));
+  --border: light-dark(var(--color-miso-300), var(--color-olive-900));
+  --background: light-dark(var(--color-miso-50), var(--color-spruce-900));
+
+  /* Seeds — private derivation inputs for this theme's formulas. Nothing
+   * outside this file should reference a seed. */
+  --seed-primary: light-dark(
+    var(--color-spruce-800),
+    oklch(from var(--color-pear-500) l 0.16 h)
+  );
+  --seed-secondary: light-dark(var(--color-pear-400), var(--color-spruce-900));
+  --seed-accent: var(--color-spruce-300);
+
+  /* Juniper keeps cool neutrals alongside its warm ones. */
+  --seed-muted: light-dark(
+    var(--color-olive-500),
+    oklch(from var(--color-pear-400) l 0.055 h)
+  );
+  --seed-destructive: light-dark(var(--color-momo-600), var(--color-momo-500));
+  --seed-selected: var(--color-spruce-500);
+
+  --ring: var(--color-pear-600);
+
+  /* Private bases */
+  --action-color: var(--seed-primary);
+  --field-color: var(--color-spruce-700);
+  --link-color: light-dark(
+    var(--color-pear-600),
+    oklch(from var(--color-pear-400) l 0.165 h)
+  );
+
+  /* Contrast trio — text/accent bases for contrast surfaces (nav, tooltips) */
+  --contrast-fg: var(--color-pear-50);
+  --contrast-accent: var(--color-pear-400);
+
+  /* Void (empty-state surfaces) */
+  --void-fg: light-dark(var(--color-miso-500), var(--color-olive-400));
+  --void-surface: light-dark(var(--color-miso-600), var(--color-spruce-400));
+  --void-error: oklch(from var(--seed-destructive) 55% 0.17 h);
+
+  /* Actions */
+  --action: var(--action-color);
+  --action-fg: light-dark(
+    oklch(from var(--seed-secondary) 80% 0.1 h),
+    oklch(from var(--seed-secondary) 18% 0.071 h)
+  );
+  --action-hover: light-dark(
+    color-mix(in oklch, var(--seed-secondary) 20%, var(--seed-primary) 80%),
+    oklch(from var(--seed-primary) 55% calc(c - 0.015) calc(h + 10))
+  );
+  --action-hover-fg: oklch(from var(--seed-secondary) 95% 0.005 h);
+  --action-muted: var(--color-olive-500);
+  --action-active: oklch(from var(--action-color) 95% calc(c - 0.025) h);
+  --action-busy: light-dark(
+    color-mix(in oklch, var(--action-color) 60%, var(--seed-muted) 15%),
+    color-mix(in oklch, var(--action-color) 50%, var(--seed-secondary) 25%)
+  );
+  --action-disabled: light-dark(
+    oklch(from var(--seed-muted) 75% c h / 0.6),
+    color-mix(
+      in oklch,
+      var(--color-spruce-900) 50%,
+      var(--color-spruce-800) 30%
+    )
+  );
+
+  --action-secondary: light-dark(
+    oklch(from var(--seed-secondary) 77% 0.044 h),
+    oklch(from var(--seed-secondary) l c h / 0.85)
+  );
+  --action-secondary-highlight: light-dark(
+    oklch(from var(--seed-secondary) 67% 0.1 h),
+    oklch(from var(--seed-secondary) 20% c h)
+  );
+  --action-secondary-highlight-fg: light-dark(
+    oklch(from var(--action-muted) 5% 0.01 h),
+    var(--color-spruce-200)
+  );
+  --action-secondary-accent: var(--color-spruce-600);
+
+  --action-ghost: light-dark(
+    var(--action),
+    oklch(from var(--color-pear-300) l 0.22 h)
+  );
+  --action-ghost-highlight: light-dark(
+    oklch(from var(--seed-secondary) 68% 0.075 h / 0.35),
+    oklch(from var(--seed-secondary) l c h)
+  );
+
+  /* Destructive variants — all reds unify onto the momo scale. An
+   * element-scoped class (e.g. `.action--destructive`) re-points the action
+   * leaves to these; it cannot re-derive from a base, because formulas
+   * resolve at :root. */
+  --destructive-action: var(--seed-destructive);
+  --destructive-action-fg: light-dark(
+    oklch(from var(--seed-destructive) 97% 0.015 h),
+    var(--color-momo-50)
+  );
+  --destructive-action-hover: light-dark(
+    oklch(from var(--seed-destructive) 43% 0.18 h),
+    oklch(from var(--seed-destructive) 50% 0.18 h)
+  );
+  --destructive-action-muted: oklch(
+    from var(--seed-destructive) calc(l * 0.75) 0.04 h
+  );
+  --destructive-action-active: oklch(
+    from var(--seed-destructive) 95% calc(c - 0.025) h
+  );
+  --destructive-action-busy: color-mix(
+    in oklch,
+    var(--seed-destructive) 60%,
+    var(--seed-muted) 15%
+  );
+  --destructive-action-disabled: light-dark(
+    oklch(from var(--seed-destructive) 30% c h / 0.36),
+    oklch(from var(--seed-destructive) 45% c h / 0.4)
+  );
+  --destructive-action-disabled-fg: light-dark(
+    var(--color-momo-100),
+    var(--color-momo-500)
+  );
+
+  /* Fields */
+  --field-value: light-dark(
+    var(--field-color),
+    oklch(from var(--color-pear-200) l 0.05 h)
+  );
+  --field-surface: light-dark(
+    oklch(from var(--color-olive-200) 94% c h),
+    color-mix(
+      in oklch,
+      oklch(from var(--color-slate-900) l 0.011 h) 75%,
+      var(--color-spruce-900)
+    )
+  );
+  --field-surface-elevated: light-dark(
+    var(--color-olive-50),
+    oklch(from var(--color-slate-900) l 0.015 h / 0.75)
+  );
+  --field-border: light-dark(
+    oklch(from var(--field-color) 75% 0.018 h),
+    oklch(from var(--color-spruce-700) 40% 0.07 h)
+  );
+
+  /* Reduced chroma so labels don't stand out too much. */
+  --field-tint: light-dark(
+    oklch(from var(--color-spruce-500) l 0.03 h),
+    oklch(from var(--color-bonito) 70% 0.0225 h)
+  );
+  --field-error: var(--seed-destructive);
+  --field-active: color-mix(
+    in oklch,
+    var(--field-color) 50%,
+    var(--seed-accent) 50%
+  );
+  --field-muted: var(--void-fg);
+  --field-surface-disabled: color-mix(
+    in oklch,
+    var(--field-surface) 10%,
+    var(--seed-muted) 30%
+  );
+
+  /* Links */
+  --link: var(--link-color);
+  --link-fg: oklch(from var(--link-color) 97% 0.015 h);
+  --link-hover: light-dark(
+    oklch(from var(--link-color) calc(l - 0.25) min(c + 0.05, 0.18) h),
+    oklch(from var(--link-color) calc(l + 0.25) 0.18 h)
+  );
+
+  /* Options (selectable items in listboxes, selects, menus) — the dark
+   * appearance mirrors nav-option's colors (below): a dropdown's dark surface
+   * is the same dark-on-dark context the nav already solved for, so reuse its
+   * tuned values instead of re-deriving them. */
+  --option: light-dark(var(--seed-primary), var(--nav-option));
+  --option-tint: light-dark(
+    oklch(from var(--option) 41.41% c h),
+    var(--nav-option-active)
+  );
+  --option-highlight: light-dark(
+    color-mix(in oklch, var(--option) 15%, var(--seed-accent) 22%),
+    var(--nav-option-focus)
+  );
+  --option-highlight-fg: light-dark(
+    oklch(from var(--option) 15% c calc(h + 13)),
+    var(--nav-option-focus-fg)
+  );
+  --option-contrast: oklch(from var(--option) 96% 0.015 h);
+  --option-disabled: color-mix(
+    in oklch,
+    var(--option) 20%,
+    var(--seed-muted) 50%
+  );
+  --option-selected: light-dark(
+    oklch(from var(--seed-secondary) 85% 0.095 h),
+    var(--nav-option-active-fg)
+  );
+  --option-disabled-selected: light-dark(
+    oklch(from var(--seed-secondary) 35% 0.095 h),
+    color-mix(in oklch, var(--nav-option-active-fg) 20%, var(--seed-muted) 40%)
+  );
+
+  --option-today: light-dark(var(--color-olive-300), var(--color-olive-950));
+  --option-today-fg: light-dark(var(--color-spruce-700), var(--color-pear-400));
+
+  --option-tint-on-elevated: light-dark(
+    oklch(from var(--color-spruce-800) 48% c h),
+    oklch(from var(--color-spruce-800) 36% c h)
+  );
+
+  /* Categorical (season-named; charts consume via chart-series-* below) */
+  --winter-light: var(--color-bonito-subtle);
+  --winter-dark: var(--color-bonito-bold);
+  --spring-light: var(--color-aubergine-subtle);
+  --spring-dark: var(--color-aubergine-bold);
+  --summer-light: var(--color-sunflower);
+  --summer-dark: var(--color-sunflower-bold);
+  --fall-light: var(--color-momo-300);
+  --fall-dark: var(--color-momo-700);
+
+  /* Badge — opaque surface/border tints derived from the categorical scale,
+   * mixed toward the theme's own lightest neutral rather than a literal white
+   * or an alpha channel: a translucent fill composites with whatever sits
+   * behind a badge, so it wouldn't render consistently. */
+  --badge-default-surface: light-dark(
+    oklch(from var(--color-bonito) 80% 0.02 h),
+    oklch(from var(--color-bonito) 54% 0.08 h)
+  );
+  --badge-default-border: light-dark(
+    oklch(from var(--color-bonito) 35% 0.06 h),
+    oklch(from var(--color-bonito) 8% 0.095 h)
+  );
+
+  --badge-secondary-surface: light-dark(
+    oklch(from var(--color-sunflower) 84% 0.12 h),
+    oklch(from var(--color-sunflower) 74% 0.12 h)
+  );
+  --badge-secondary-border: light-dark(
+    oklch(from var(--color-sunflower-bold) 50% c h),
+    oklch(from var(--color-sunflower) 33% c h)
+  );
+
+  --badge-destructive-surface: light-dark(
+    oklch(from var(--color-momo-300) l 0.07 h),
+    oklch(from var(--color-momo-700) l 0.08 h)
+  );
+  --badge-destructive-border: light-dark(
+    var(--color-momo-700),
+    oklch(from var(--color-momo-100) 84% c h)
+  );
+
+  --badge-outline-border: light-dark(
+    var(--color-pear-700),
+    oklch(from var(--color-pear-300) l 0.075 h)
+  );
+
+  /* Charts — series tokens are the override point chart code consumes
+   * directly (never a season name). series-a renders filled, so it carries a
+   * complementary tone for its gradient stop; series-b is a plain stroke. */
+  --chart-axis: light-dark(var(--color-miso-500), var(--color-spruce-300));
+  --chart-grid: light-dark(var(--color-miso-300), var(--color-spruce-600));
+  --chart-series-a: light-dark(
+    var(--color-bonito-bold),
+    var(--color-spruce-600)
+  );
+  --chart-series-a-complementary: light-dark(
+    var(--color-pear-500),
+    var(--color-pear-400)
+  );
+  --chart-series-b: light-dark(var(--color-momo-500), var(--color-momo-300));
+
+  /* Tables */
+  --table-header: light-dark(
+    oklch(from var(--color-spruce-900) l c h / 0.15),
+    var(--color-spruce-950)
+  );
+  --table-footer: oklch(
+    from light-dark(var(--color-spruce-700), var(--color-spruce-500)) l c h /
+      0.125
+  );
+  --table-highlight: light-dark(
+    oklch(from var(--color-pear-500) l c h / 0.1),
+    oklch(from var(--color-spruce-300) l c h / 0.1)
+  );
+  --numeric-cell: light-dark(
+    var(--color-spruce-600),
+    oklch(from var(--color-spruce-500) calc(l * 1.2) c h)
+  );
+
+  /* General */
+  --divider: light-dark(var(--color-miso-200), var(--color-spruce-600));
+
+  --brand-mark: light-dark(var(--color-miso-900), var(--color-pear-50));
+  --brand-mark-contrast: light-dark(
+    var(--color-spruce-700),
+    var(--color-pear-100)
+  );
+  /* The hero is a brand moment, unlike the neutral nav. */
+  --hero-surface: light-dark(var(--color-miso-200), var(--color-spruce-900));
+  --hero-accent: light-dark(var(--color-pear-50), var(--color-bonito-bold));
+
+  /* Nav — a component-scoped family: one visual surface, shared by the nav
+   * bar and any popover that must render as an extension of it. */
+  --nav-fg: var(--color-miso-200);
+  --nav-action-fg: oklch(from var(--contrast-fg) 88% c h);
+  --nav-tint: light-dark(
+    oklch(from var(--color-miso-950) l c h / 0.75),
+    oklch(from var(--color-spruce-900) l c h / 0.75)
+  );
+  --nav-highlight: light-dark(
+    oklch(from var(--color-miso-600) l c h / 0.75),
+    oklch(from var(--color-spruce-600) l c h / 0.75)
+  );
+  --nav-highlight-fg: var(--color-pear-200);
+  --nav-current: var(--color-pear-300);
+  --nav-contrast: var(--color-spruce-50);
+  --nav-error: var(--color-momo-300);
+  --nav-outline: var(--contrast-accent);
+  --nav-surface: var(--color-spruce-700);
+  --top-nav-light: light-dark(
+    oklch(from var(--color-spruce-500) l c h / 0.35),
+    transparent
+  );
+  --nav-shadow:
+    inset 0 2px 0 0 var(--top-nav-light),
+    0 6px 2px -3px oklch(from var(--color-spruce-950) l c h / 0.15);
+  --nav-option: var(--nav-action-fg);
+  --nav-option-active: var(--nav-tint);
+  --nav-option-active-fg: var(--nav-current);
+  --nav-option-focus: var(--nav-highlight);
+  --nav-option-focus-fg: var(--nav-highlight-fg);
+
+  /* Skeletons — deliberately neutral loading states. */
+  --skeleton: light-dark(
+    oklch(from var(--seed-muted) 0.8 0.015 h),
+    color-mix(in oklch, var(--color-olive-500) 35%, var(--color-spruce-800) 65%)
+  );
+  --skeleton-on-elevated: var(--skeleton);
+  --skeleton-fg: var(--color-miso-50);
+  --skeleton-indicator: var(--color-spruce-400);
+
+  /* Empty / Placeholder */
+  --empty: var(--seed-muted);
+  --empty-fg: var(--seed-muted);
+  --empty-error: var(--seed-destructive);
+  --empty-error-fg: light-dark(var(--color-momo-700), var(--color-momo-500));
+
+  /* Notice — sunflower-anchored. */
+  --notice-fg: oklch(from var(--color-sunflower-bold) 45% 0.13 h);
+  --notice-surface-accent: oklch(
+    from var(--color-sunflower-subtle) l c h / 0.55
+  );
+  --notice-accent: var(--color-sunflower-bold);
+  --notice-tint: oklch(from var(--color-sunflower-bold) 52% c h);
+  --notice-body: oklch(from var(--color-sunflower-bold) 38% 0.09 h);
+
+  /* Success */
+  --success-fg: var(--color-pear-600);
+
+  /* shadcn-compatible tier (map these if the project uses shadcn/ui) */
+  --card: var(--background);
+  --card-foreground: light-dark(var(--color-spruce-800), var(--color-miso-100));
+  --popover: light-dark(white, var(--color-spruce-950));
+  --popover-foreground: var(--color-spruce-600);
+  --primary: var(--color-spruce-800);
+  --primary-foreground: var(--color-pear-50);
+  --secondary-foreground: var(--color-spruce-900);
+  --muted: light-dark(
+    var(--color-miso-100),
+    color-mix(in oklch, var(--color-spruce-700) 40%, var(--color-olive-700) 60%)
+  );
+  --muted-foreground: light-dark(
+    color-mix(in oklch, var(--color-spruce-500) 40%, var(--color-gray-500) 60%),
+    oklch(from var(--color-spruce-500) 60% 0.06 h)
+  );
+  --accent: var(--color-spruce-300);
+  --accent-foreground: var(--color-spruce-800);
+  --destructive: var(--color-momo-500);
+  --input: var(--color-miso-300);
+  --surface-contrast-bg: light-dark(
+    var(--color-miso-800),
+    var(--color-spruce-400)
+  );
+  --surface-contrast-fg: light-dark(
+    var(--color-miso-100),
+    var(--color-miso-950)
+  );
+  --tooltip: var(--surface-contrast-bg);
+  --tooltip-foreground: var(--surface-contrast-fg);
+
+  /* Tokens cleanup */
+  --nav-bg: var(--color-spruce-800);
+}
+
+/* ::selection has no per-leaf fallback chain. Single-theme projects can use
+ * bare `:root ::selection`; when a second theme coexists, guard with
+ * `:root:not([data-theme="other"])` so the other theme can opt out. */
+:root ::selection {
+  background-color: light-dark(
+    oklch(from var(--color-spruce-200) l c h / 0.65),
+    oklch(from var(--color-bonito) 12% c h / 0.65)
+  );
+}

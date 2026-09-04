@@ -1,0 +1,94 @@
+/* States use react-aria's data attributes (data-hovered/pressed/disabled)
+ * rather than raw pseudo-classes, so hover styling stays correct across
+ * pointer types. */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 120ms var(--ease),
+    color 120ms var(--ease),
+    border-color 120ms var(--ease),
+    transform 120ms var(--ease);
+}
+
+.button svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.button[data-pressed] {
+  transform: translateY(1px);
+}
+
+.button[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Roles */
+
+.primary {
+  background-color: var(--jn-fern-700);
+  color: var(--jn-miso-50);
+}
+
+.primary[data-hovered] {
+  background-color: var(--jn-fern-600);
+}
+
+.secondary {
+  background-color: var(--jn-miso-200);
+  color: var(--jn-fern-950);
+  border-color: var(--jn-miso-300);
+}
+
+.secondary[data-hovered] {
+  background-color: var(--jn-miso-300);
+}
+
+.discrete {
+  background-color: transparent;
+  color: var(--jn-fern-800);
+}
+
+/* An open popover/menu keeps a discrete trigger engaged. */
+.discrete[data-hovered],
+.discrete[aria-expanded='true'] {
+  background-color: var(--jn-fern-100);
+  color: var(--jn-fern-950);
+}
+
+/* Sizes */
+
+.mini {
+  height: 1.75rem;
+  padding: 0 0.375rem;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+}
+
+.small {
+  height: 2rem;
+  padding: 0 0.625rem;
+  font-size: 0.875rem;
+}
+
+.medium {
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}

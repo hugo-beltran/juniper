@@ -1,0 +1,134 @@
+/* Keep the open disclosure's trigger in its engaged state. */
+.trigger[aria-expanded="true"] {
+  background-color: var(--nav-option-focus);
+  color: var(--color-pear-800);
+}
+
+/* Brand tile: pear accent from the nav family, dark spruce mark. */
+.logo {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  color: var(--jn-fern-800);
+}
+
+.logo svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.meta {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+  line-height: 1.2;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.plan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.chevron {
+  margin-left: auto;
+  transition: rotate 200ms var(--ease);
+}
+
+.trigger[aria-expanded="true"] .chevron {
+  rotate: 180deg;
+}
+
+/* Inline expansion: the grid-rows 0fr → 1fr trick animates to an unknown
+ * content height. Padding must live on .panelContent, not .panelInner — a
+ * padded overflow-hidden row would keep its padding height at 0fr. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 250ms var(--ease);
+}
+
+.panel[data-expanded] {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panelContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-top: 0.25rem;
+}
+
+.itemLogo {
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid oklch(from var(--jn-fern-800) l c h / 0.25);
+  border-radius: var(--radius-sm);
+}
+
+.itemLogo svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.itemName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.check {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 120ms var(--ease);
+}
+
+[data-selected] > .check {
+  opacity: 1;
+}
+
+.addTenant {
+  width: 100%;
+  justify-content: flex-start;
+  font-size: 0.8125rem;
+}
+
+/* Icon rail: the add button clips to a left-anchored tile like the items. */
+[data-slot="sidebar"][data-state="collapsed"] .addTenant {
+  width: 2rem;
+  padding: 0 0.5rem;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+}

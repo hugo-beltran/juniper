@@ -1,0 +1,232 @@
+/* Inset-only sidebar dressed in the theme's nav-* family: the wrapper is the
+ * nav surface, menu items consume the nav-option tokens, and the inset main
+ * panel sits on the page canvas (--body) with the shape language's xl radius —
+ * border-and-tint separation, no shadows. Collapse is icon-rail only, keyed
+ * off data-state on the sidebar root. */
+
+.wrapper {
+  display: flex;
+  min-height: 100svh;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    var(--jn-fern-300),
+    var(--jn-fern-500)
+  );
+}
+
+.sidebar {
+  color: var(--jn-fern-950);
+}
+
+/* In normal flow (no offcanvas, so no fixed/gap pair needed): the container
+ * itself holds the layout width and animates it; sticky keeps it pinned while
+ * the inset scrolls. */
+.container {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100svh;
+  width: var(--sidebar-width);
+  padding: 0.5rem;
+  transition: width 200ms var(--ease);
+}
+
+.sidebar[data-state="collapsed"] .container {
+  width: calc(var(--sidebar-width-icon) + 1rem);
+}
+
+.inner {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+.inset {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin: 0.5rem;
+  margin-left: 0;
+  background-color: var(--jn-miso-50);
+  border-radius: var(--radius-sm);
+}
+
+.header {
+  margin-top: 0.75rem;
+}
+
+.header,
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.sidebar[data-state="collapsed"] .content {
+  overflow: hidden;
+}
+
+.group {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.groupLabel {
+  display: flex;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--jn-fern-700);
+  opacity: 0.7;
+  white-space: nowrap;
+  transition:
+    margin 200ms var(--ease),
+    opacity 200ms var(--ease);
+}
+
+.sidebar[data-state="collapsed"] .groupLabel {
+  margin-top: -2rem;
+  opacity: 0;
+}
+
+.groupContent {
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.menu {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Sliding shared pill behind the active item. Sized and translated from JS
+ * measurements in SidebarMenu; paints beneath the buttons (DOM-first among
+ * positioned siblings) and never intercepts the pointer. */
+.menuIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  border-radius: var(--radius-md);
+  background-color: oklch(from var(--jn-fern-50) l c h / 0.75);
+  pointer-events: none;
+  will-change: transform;
+  transition:
+    transform 300ms var(--ease),
+    width 200ms var(--ease),
+    height 200ms var(--ease),
+    opacity 150ms var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuIndicator {
+    transition: opacity 150ms var(--ease);
+  }
+}
+
+.menuItem {
+  position: relative;
+}
+
+.menuButton {
+  display: flex;
+  width: 100%;
+  height: 2rem;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  padding: 1rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--jn-fern-800);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.1rem;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    width 200ms var(--ease),
+    padding 200ms var(--ease),
+    background-color 120ms var(--ease),
+    color 120ms var(--ease);
+}
+
+/* The active item's surface is the shared pill — no hover tint on top of it. */
+.menuButton:hover:not([data-active]):not([aria-current="page"]) {
+  background-color: oklch(from var(--color-pear-700) l c h / 0.14);
+}
+
+.menuButton:hover {
+  color: var(--color-pear-700);
+}
+
+.menuButton:focus-visible {
+  outline-color: var(--nav-outline);
+}
+
+/* Active via explicit prop (data-active) or a TanStack Router link's own
+ * aria-current="page" — no extra wiring needed at call sites. */
+.menuButton[data-active],
+.menuButton[aria-current="page"] {
+  color: var(--color-pear-600);
+}
+
+.menuButton svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.menuButton span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuButtonLg {
+  height: 3rem;
+}
+
+.sidebar[data-state="collapsed"] .menuButton {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+}
+
+/* Content stays left-anchored so the leading tile/icon remains the visible
+ * 2rem square; the rest clips. Centering would shift it off-canvas. */
+.sidebar[data-state="collapsed"] .menuButtonLg {
+  padding: 0;
+}

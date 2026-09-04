@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-theme="juniper">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juniper Dashboard</title>
+    <!-- Pre-paint color-mode preference: runs before any stylesheet or bundle
+         so there is never a flash of the wrong mode. Theme tokens resolve
+         light/dark via light-dark(), driven by the color-scheme property. -->
+    <script>
+      try {
+        var mode = localStorage.getItem('juniper-color-mode')
+        if (mode === 'light' || mode === 'dark') {
+          document.documentElement.style.colorScheme = mode
+        }
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
