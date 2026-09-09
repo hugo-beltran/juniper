@@ -1,12 +1,16 @@
-/* Global stylesheet: imports the Juniper theme (leaf tokens) and sets the
+/* Global stylesheet: imports the Juniper theme (palette scales) and sets the
  * document-level base. Everything else is styled inside components via CSS
- * modules that consume the theme's leaf variables — page/route code never
+ * modules that consume the theme's palette variables — page/route code never
  * touches a token directly. */
-@import './juniper-theme.css';
+@import "./juniper-theme.css";
 
 :root {
-  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'Geist Mono', source-code-pro, Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+  --foreground: var(--juni-bark-800);
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "Geist Mono", source-code-pro, Menlo, Consolas, "DejaVu Sans Mono",
+    monospace;
 
   /* Shape language: 10px base radius. */
   --radius-sm: 6px;
@@ -51,6 +55,15 @@ body {
 :focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--juni-needle-600);
 }
 
 a {

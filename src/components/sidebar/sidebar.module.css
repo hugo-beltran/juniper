@@ -1,46 +1,33 @@
-/* Inset-only sidebar dressed in the theme's nav-* family: the wrapper is the
- * nav surface, menu items consume the nav-option tokens, and the inset main
- * panel sits on the page canvas (--body) with the shape language's xl radius —
- * border-and-tint separation, no shadows. Collapse is icon-rail only, keyed
- * off data-state on the sidebar root. */
-
 .wrapper {
   display: flex;
   min-height: 100svh;
   width: 100%;
   background: linear-gradient(
     to bottom,
-    var(--jn-fern-300),
-    var(--jn-fern-500)
+    var(--juni-needle-400),
+    var(--juni-needle-700) 120%
   );
 }
 
-.sidebar {
-  color: var(--jn-fern-950);
-}
-
-/* In normal flow (no offcanvas, so no fixed/gap pair needed): the container
- * itself holds the layout width and animates it; sticky keeps it pinned while
- * the inset scrolls. */
 .container {
   position: sticky;
   top: 0;
   display: flex;
+  flex-direction: column;
   height: 100svh;
   width: var(--sidebar-width);
-  padding: 0.5rem;
+  padding: 0.25rem;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--juni-needle-400),
+    var(--juni-needle-700) 120%
+  );
   transition: width 200ms var(--ease);
 }
 
-.sidebar[data-state="collapsed"] .container {
-  width: calc(var(--sidebar-width-icon) + 1rem);
-}
-
-.inner {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  flex-direction: column;
+.container[data-state="collapsed"] {
+  width: calc(var(--sidebar-width-icon) + 0.5rem);
 }
 
 .inset {
@@ -49,11 +36,11 @@
   flex: 1;
   flex-direction: column;
   width: 100%;
-  min-width: 0;
+  min-width: 40rem;
   margin: 0.5rem;
   margin-left: 0;
-  background-color: var(--jn-miso-50);
-  border-radius: var(--radius-sm);
+  background-color: var(--juni-bark-50);
+  border-radius: var(--radius-md);
 }
 
 .header {
@@ -73,11 +60,6 @@
   flex: 1;
   min-height: 0;
   flex-direction: column;
-  overflow: auto;
-}
-
-.sidebar[data-state="collapsed"] .content {
-  overflow: hidden;
 }
 
 .group {
@@ -89,6 +71,24 @@
   padding: 0.5rem;
 }
 
+/* Etched divider after every group but the last: two stacked 1px hard-stop
+ * lines blended into the sidebar surface. A pseudo-element — no DOM node,
+ * nothing for assistive tech to announce, and call sites can't forget it. */
+.group:not(:last-child)::after {
+  content: "";
+  align-self: center;
+  width: 90%;
+  height: 2px;
+  flex-shrink: 0;
+  margin-top: 0.75rem;
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-100) l c h / 0.25) 0 1px,
+    oklch(from var(--juni-needle-900) l c h / 0.2) 1px 2px
+  );
+  mix-blend-mode: overlay;
+}
+
 .groupLabel {
   display: flex;
   height: 2rem;
@@ -98,16 +98,14 @@
   border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--jn-fern-700);
-  opacity: 0.7;
+  color: var(--juni-bloom-50);
   white-space: nowrap;
-  transition:
-    margin 200ms var(--ease),
-    opacity 200ms var(--ease);
+  opacity: 0.75;
+  mix-blend-mode: screen;
 }
 
-.sidebar[data-state="collapsed"] .groupLabel {
-  margin-top: -2rem;
+.container[data-state="collapsed"] .groupLabel {
+  margin-top: -1.667rem;
   opacity: 0;
 }
 
@@ -128,22 +126,18 @@
   list-style: none;
 }
 
-/* Sliding shared pill behind the active item. Sized and translated from JS
- * measurements in SidebarMenu; paints beneath the buttons (DOM-first among
- * positioned siblings) and never intercepts the pointer. */
+/* Sliding shared pill drawn as an inset-connector tab */
 .menuIndicator {
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0;
-  border-radius: var(--radius-md);
-  background-color: oklch(from var(--jn-fern-50) l c h / 0.75);
+  background-color: var(--juni-bark-50);
+  filter: drop-shadow(3px 3px 0 var(--juni-berry-600));
   pointer-events: none;
   will-change: transform;
   transition:
     transform 300ms var(--ease),
-    width 200ms var(--ease),
-    height 200ms var(--ease),
     opacity 150ms var(--ease);
 }
 
@@ -157,10 +151,29 @@
   position: relative;
 }
 
+/* Hover = attention, not decoration: rows idle at 0.9, the pointed-at row
+ * bumps to 1, and the remaining candidates recede. Active elements never
+ * dim — the current page is a landmark, not part of the hover conversation.
+ * Keyboard focus mirrors hover. */
+.menuButton:hover,
+.menuButton:focus-visible,
+.menuButton[data-active],
+.menuButton[aria-current="page"] {
+  color: var(--juni-needle-900);
+}
+
+.menu:has(.menuButton:hover)
+  .menuButton:not(:hover, [data-active], [aria-current="page"]),
+.menu:has(.menuButton:focus-visible)
+  .menuButton:not(:focus-visible, [data-active], [aria-current="page"]) {
+  color: var(--juni-needle-700);
+  opacity: 0.75;
+}
+
 .menuButton {
   display: flex;
   width: 100%;
-  height: 2rem;
+  height: 2.5rem;
   align-items: center;
   gap: 0.3rem;
   overflow: hidden;
@@ -168,7 +181,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--jn-fern-800);
+  color: var(--juni-needle-950);
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
@@ -177,20 +190,7 @@
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition:
-    width 200ms var(--ease),
-    padding 200ms var(--ease),
-    background-color 120ms var(--ease),
-    color 120ms var(--ease);
-}
-
-/* The active item's surface is the shared pill — no hover tint on top of it. */
-.menuButton:hover:not([data-active]):not([aria-current="page"]) {
-  background-color: oklch(from var(--color-pear-700) l c h / 0.14);
-}
-
-.menuButton:hover {
-  color: var(--color-pear-700);
+  transition: color 120ms var(--ease);
 }
 
 .menuButton:focus-visible {
@@ -201,7 +201,48 @@
  * aria-current="page" — no extra wiring needed at call sites. */
 .menuButton[data-active],
 .menuButton[aria-current="page"] {
-  color: var(--color-pear-600);
+  color: var(--juni-bloom-700);
+  pointer-events: none;
+}
+
+/* Trailing reveal: a chevron slides in at the row's end on hover/focus.
+ * Suppressed on the active item (you're already there) and on disclosure
+ * triggers (they render their own chevron). Drawn as a currentColor mask so
+ * it inherits the row's hover color. */
+.menuButton::after {
+  content: "";
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E")
+    no-repeat center / contain;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 150ms var(--ease),
+    transform 150ms var(--ease);
+}
+
+.menuButton:is(:hover, :focus-visible):not(
+    [data-active],
+    [aria-current="page"]
+  )::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* No room (and no pointer path) for it in the icon rail. */
+.container[data-state="collapsed"] .menuButton::after {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuButton::after {
+    transform: translateX(0);
+    transition: opacity 150ms var(--ease);
+  }
 }
 
 .menuButton svg {
@@ -215,18 +256,41 @@
   text-overflow: ellipsis;
 }
 
+/* Collapsed rail: the label itself becomes the tooltip — repositioned over
+ * the inset (li is its containing block, so the button's overflow:hidden
+ * can't clip it) in the inset's own surface color. Shown after a short
+ * intent delay on hover/focus; hidden instantly. Pure CSS, no overlay. */
+.container[data-state="collapsed"] .menuButton span:last-child {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 1rem);
+  translate: 0 -50%;
+  overflow: visible;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--juni-bark-50);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms var(--ease);
+}
+
+.container[data-state="collapsed"]
+  .menuButton:is(:hover, :focus-visible)
+  span:last-child {
+  opacity: 1;
+  transition-delay: 300ms;
+}
+
 .menuButtonLg {
   height: 3rem;
 }
 
-.sidebar[data-state="collapsed"] .menuButton {
-  width: 2rem;
-  height: 2rem;
-  padding: 0.5rem;
-}
+/* No collapsed width override: the rail's geometry (container minus its and
+ * the group's padding) already resolves a 100%-width item to the 2rem tile,
+ * so the item needs no width flip — and therefore no transition — of its own. */
 
 /* Content stays left-anchored so the leading tile/icon remains the visible
  * 2rem square; the rest clips. Centering would shift it off-canvas. */
-.sidebar[data-state="collapsed"] .menuButtonLg {
+.container[data-state="collapsed"] .menuButtonLg {
   padding: 0;
 }

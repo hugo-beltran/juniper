@@ -15,6 +15,9 @@ const queryClient = new QueryClient({
 
 const router = createRouter({
   routeTree,
+  // Mirrors Vite's `base` (/juniper/ on GitHub Pages, / in dev) so route
+  // matching and generated hrefs agree with where the app is served.
+  basepath: import.meta.env.BASE_URL,
   // The QueryClient rides along in router context so route loaders can
   // prefetch with queryClient.ensureQueryData — React Query stays the single
   // cache; the router only orchestrates when data is needed.

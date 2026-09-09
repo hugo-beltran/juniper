@@ -1,0 +1,232 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 880px;
+}
+
+.page h1 {
+  margin: 0;
+}
+
+.page h2 {
+  margin: 1.5rem 0 0;
+  font-size: 1rem;
+}
+
+.sub {
+  margin: 0 0 1rem;
+  max-width: 62ch;
+  font-size: 0.9rem;
+  color: var(--juni-bark-600);
+}
+
+.sub code {
+  font-size: 0.85em;
+}
+
+.ramp {
+  margin-bottom: 0.35rem;
+}
+
+.rampName {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin-bottom: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.rampName small {
+  font-weight: 400;
+  color: var(--juni-bark-600);
+}
+
+.badge {
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background-color: var(--juni-needle-200);
+  color: var(--juni-needle-900);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  outline: 1px solid var(--juni-bark-200);
+}
+
+.swatch {
+  height: 52px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-size: 0.65rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.chartCard {
+  padding: 1.25rem 1.25rem 0.75rem;
+  background-color: var(--juni-lichen-50);
+  border: 1px solid var(--juni-bark-200);
+  border-radius: var(--radius-lg);
+}
+
+.legend {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+  font-size: 0.78rem;
+}
+
+.legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chip,
+.chipDashed {
+  width: 22px;
+  border-top: 3px solid;
+  border-radius: 2px;
+}
+
+.chipDashed {
+  border-top-style: dashed;
+}
+
+.grid {
+  stroke: var(--juni-bark-100);
+  stroke-width: 1;
+}
+
+.tick {
+  font-size: 11px;
+  fill: var(--juni-bark-600);
+}
+
+.axisLabel {
+  font-size: 12px;
+  fill: var(--juni-bark-700);
+}
+
+.values {
+  padding: 0.9rem 1rem;
+  background-color: var(--juni-lichen-50);
+  border: 1px solid var(--juni-bark-200);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* Accent-ramp page additions: grove reference legend chip, pairing chips
+ * previewing a candidate step directly against grove. */
+.chipDotted {
+  width: 22px;
+  border-top: 3px dotted;
+  border-radius: 2px;
+}
+
+.pairs {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+.pair {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pair i {
+  width: 34px;
+  height: 22px;
+  display: inline-block;
+}
+
+.pair i:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.pair i:last-of-type {
+  border-radius: 0 5px 5px 0;
+}
+
+/* Compact strip for a three-stop accent trio. */
+.trioStrip {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 320px;
+}
+
+.pairKey {
+  font-size: 0.65rem;
+  color: var(--juni-bark-500);
+}
+
+.pair small {
+  margin-left: 0.35rem;
+  font-size: 0.65rem;
+  color: var(--juni-bark-600);
+}
+
+/* Palette page: family tabs (react-aria Tabs — selection via data attrs)
+ * and alert-badge chips rendered on a reference surface. */
+.tabList {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--juni-bark-200);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: -1px;
+  padding: 0.45rem 0.9rem;
+  border-bottom: 2px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--juni-bark-600);
+  cursor: pointer;
+}
+
+.tab[data-hovered] {
+  color: var(--juni-bark-800);
+}
+
+.tab[data-selected] {
+  color: var(--juni-needle-700);
+  border-bottom-color: var(--juni-needle-600);
+}
+
+.tabDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.overChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.overChip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}

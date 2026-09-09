@@ -15,11 +15,6 @@ import {
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components";
 import { Button, type ButtonProps } from "@/components/button/button";
-import {
-  Focusable,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/tooltip/tooltip";
 import { cn } from "@/lib/cn";
 import styles from "./sidebar.module.css";
 
@@ -30,7 +25,7 @@ import styles from "./sidebar.module.css";
  * shortcut. Nav items render TanStack Router links via `asChild` (Radix
  * Slot) — active styling keys off the link's aria-current="page". */
 
-const SIDEBAR_WIDTH = "16rem";
+const SIDEBAR_WIDTH = "15rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 
 interface SidebarContextValue {
@@ -115,16 +110,13 @@ export function Sidebar({
   const { state } = useSidebar();
 
   return (
-    <div data-slot="sidebar" className={styles.sidebar} data-state={state}>
-      <div
-        data-slot="sidebar-container"
-        className={cn(styles.container, className)}
-        {...props}
-      >
-        <div data-slot="sidebar-inner" className={styles.inner}>
-          {children}
-        </div>
-      </div>
+    <div
+      data-slot="sidebar"
+      data-state={state}
+      className={cn(styles.container, className)}
+      {...props}
+    >
+      {children}
     </div>
   );
 }
@@ -247,14 +239,40 @@ export function SidebarMenu({
   const listRef = useRef<HTMLUListElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
 
-  /* Sliding shared pill: one indicator per menu, measured against whichever
-   * item is active (a router link's aria-current="page", or an explicit
-   * data-active). A MutationObserver keeps it router-agnostic; a
-   * ResizeObserver re-seats it through the collapse animation. */
+  /* Sliding shared pill, drawn as an inset-connector tab: the indicator
+   * extends past the menu to the sidebar container's right edge — where the
+   * inset panel begins — and a clip-path carves a browser-tab silhouette
+   * (rounded left corners, concave flares at the junction) so the active item
+   * reads as part of the inset surface. Measured against whichever item is
+   * active (a router link's aria-current="page", or an explicit data-active);
+   * a MutationObserver keeps it router-agnostic, a ResizeObserver re-seats it
+   * through the collapse animation. */
   useEffect(() => {
     const list = listRef.current;
     const indicator = indicatorRef.current;
     if (!list || !indicator) return;
+
+    /* Corner radius of the tab's left side, and the radius of the concave
+     * flares where it meets the inset. The indicator bleeds FLARE px above
+     * and below the row to make room for the flares. */
+    const RADIUS = 8;
+    const FLARE = 10;
+
+    const tabPath = (width: number, rowHeight: number) => {
+      const top = FLARE;
+      const bottom = FLARE + rowHeight;
+      return [
+        `M 0 ${top + RADIUS}`,
+        `Q 0 ${top} ${RADIUS} ${top}`,
+        `L ${width - FLARE} ${top}`,
+        `Q ${width} ${top} ${width} 0`,
+        `L ${width} ${bottom + FLARE}`,
+        `Q ${width} ${bottom} ${width - FLARE} ${bottom}`,
+        `L ${RADIUS} ${bottom}`,
+        `Q 0 ${bottom} 0 ${bottom - RADIUS}`,
+        "Z",
+      ].join(" ");
+    };
 
     const position = () => {
       const active = list.querySelector<HTMLElement>(
@@ -272,10 +290,17 @@ export function SidebarMenu({
 
       const listRect = list.getBoundingClientRect();
       const rect = active.getBoundingClientRect();
+      const container = list.closest('[data-slot="sidebar"]');
+      /* Reach the container's border-box right edge — the inset's left edge. */
+      const width = container
+        ? container.getBoundingClientRect().right - rect.left
+        : rect.width;
+
       indicator.style.opacity = "1";
-      indicator.style.width = `${rect.width}px`;
-      indicator.style.height = `${rect.height}px`;
-      indicator.style.transform = `translate(${rect.left - listRect.left}px, ${rect.top - listRect.top}px)`;
+      indicator.style.width = `${width}px`;
+      indicator.style.height = `${rect.height + FLARE * 2}px`;
+      indicator.style.transform = `translate(${rect.left - listRect.left}px, ${rect.top - listRect.top - FLARE}px)`;
+      indicator.style.clipPath = `path("${tabPath(width, rect.height)}")`;
 
       if (instant) {
         void indicator.offsetHeight;
@@ -294,10 +319,17 @@ export function SidebarMenu({
     });
     const resizes = new ResizeObserver(position);
     resizes.observe(list);
+    /* The tab's width tracks the container edge, so observe it too, and
+     * re-seat once its collapse/expand transition lands — observer delivery
+     * can be throttled (hidden/background tabs), transitionend is not. */
+    const container = list.closest('[data-slot="sidebar"]');
+    if (container) resizes.observe(container);
+    container?.addEventListener("transitionend", position);
 
     return () => {
       mutations.disconnect();
       resizes.disconnect();
+      container?.removeEventListener("transitionend", position);
     };
   }, []);
 
@@ -329,11 +361,14 @@ export function SidebarMenuItem({ className, ...props }: ComponentProps<"li">) {
   );
 }
 
+/* Collapsed-rail labels need no tooltip component: the row's own label span
+ * is absolutely repositioned over the inset and revealed on hover/focus by
+ * the CSS module — same element, no overlay, and the accessible name stays
+ * on the button at all times. */
 export function SidebarMenuButton({
   asChild = false,
   isActive = false,
   size = "default",
-  tooltip,
   className,
   ...props
 }: Omit<AriaButtonProps, "className"> & {
@@ -341,10 +376,7 @@ export function SidebarMenuButton({
   asChild?: boolean;
   isActive?: boolean;
   size?: "default" | "lg";
-  tooltip?: string;
 }) {
-  const { state } = useSidebar();
-
   const sharedProps = {
     "data-slot": "sidebar-menu-button",
     "data-size": size,
@@ -358,23 +390,9 @@ export function SidebarMenuButton({
 
   /* asChild slots a router link in (plain DOM element); otherwise render a
    * react-aria Button so press/aria wiring from MenuTrigger etc. connects. */
-  const button = asChild ? (
+  return asChild ? (
     <Slot {...sharedProps} {...(props as ComponentProps<typeof Slot>)} />
   ) : (
     <AriaButton {...sharedProps} {...props} />
-  );
-
-  if (!tooltip) {
-    return button;
-  }
-
-  return (
-    /* Labels are visible while expanded; only surface the tooltip when
-     * collapsed to icons. Non-RAC triggers (slotted links) need Focusable to
-     * receive the tooltip's hover/focus wiring. */
-    <TooltipTrigger delay={0} isDisabled={state !== "collapsed"}>
-      {asChild ? <Focusable>{button}</Focusable> : button}
-      <Tooltip placement="right">{tooltip}</Tooltip>
-    </TooltipTrigger>
   );
 }

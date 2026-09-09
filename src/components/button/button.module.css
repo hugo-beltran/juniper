@@ -42,34 +42,34 @@
 /* Roles */
 
 .primary {
-  background-color: var(--jn-fern-700);
-  color: var(--jn-miso-50);
+  background-color: var(--juni-needle-700);
+  color: var(--juni-bark-50);
 }
 
 .primary[data-hovered] {
-  background-color: var(--jn-fern-600);
+  background-color: var(--juni-needle-600);
 }
 
 .secondary {
-  background-color: var(--jn-miso-200);
-  color: var(--jn-fern-950);
-  border-color: var(--jn-miso-300);
+  background-color: var(--juni-bark-200);
+  color: var(--juni-needle-950);
+  border-color: var(--juni-bark-300);
 }
 
 .secondary[data-hovered] {
-  background-color: var(--jn-miso-300);
+  background-color: var(--juni-bark-300);
 }
 
 .discrete {
   background-color: transparent;
-  color: var(--jn-fern-800);
+  color: var(--juni-needle-800);
 }
 
 /* An open popover/menu keeps a discrete trigger engaged. */
 .discrete[data-hovered],
 .discrete[aria-expanded='true'] {
-  background-color: var(--jn-fern-100);
-  color: var(--jn-fern-950);
+  background-color: var(--juni-needle-100);
+  color: var(--juni-needle-950);
 }
 
 /* Sizes */

@@ -1,0 +1,6 @@
+.card {
+  background-color: var(--juni-bark-50);
+  border: 1px solid var(--juni-bark-200);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}

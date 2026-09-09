@@ -1,9 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/* The app's landing view lives at /dashboard; the bare root just forwards. */
 export const Route = createFileRoute("/_authenticated/")({
-  component: DashboardPage,
+  beforeLoad: () => {
+    throw redirect({ to: "/dashboard" });
+  },
 });
-
-function DashboardPage() {
-  return <div>Hello world</div>;
-}

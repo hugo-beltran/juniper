@@ -12,7 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
+import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
+import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
+import { Route as AuthenticatedSeedBramblewoodRouteImport } from './routes/_authenticated/seed/bramblewood'
+import { Route as AuthenticatedSeedEvergreenStudioRouteImport } from './routes/_authenticated/seed/evergreen-studio'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -28,40 +36,137 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCustomersRoute = AuthenticatedCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedProductsRoute = AuthenticatedProductsRouteImport.update({
   id: '/products',
   path: '/products',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTradeAnalyzerRoute =
+  AuthenticatedTradeAnalyzerRouteImport.update({
+    id: '/trade-analyzer',
+    path: '/trade-analyzer',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
+  id: '/lab/palette',
+  path: '/lab/palette',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSeedBramblewoodRoute =
+  AuthenticatedSeedBramblewoodRouteImport.update({
+    id: '/seed/bramblewood',
+    path: '/seed/bramblewood',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSeedEvergreenStudioRoute =
+  AuthenticatedSeedEvergreenStudioRouteImport.update({
+    id: '/seed/evergreen-studio',
+    path: '/seed/evergreen-studio',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/customers': typeof AuthenticatedCustomersRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
+  '/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
+  '/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/customers': typeof AuthenticatedCustomersRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/': typeof AuthenticatedIndexRoute
+  '/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
+  '/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/customers': typeof AuthenticatedCustomersRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/products': typeof AuthenticatedProductsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/_authenticated/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
+  '/_authenticated/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/products'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/analytics'
+    | '/customers'
+    | '/dashboard'
+    | '/products'
+    | '/settings'
+    | '/trade-analyzer'
+    | '/lab/palette'
+    | '/seed/bramblewood'
+    | '/seed/evergreen-studio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/products' | '/'
+  to:
+    | '/login'
+    | '/analytics'
+    | '/customers'
+    | '/dashboard'
+    | '/products'
+    | '/settings'
+    | '/trade-analyzer'
+    | '/'
+    | '/lab/palette'
+    | '/seed/bramblewood'
+    | '/seed/evergreen-studio'
   id:
     | '__root__'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/analytics'
+    | '/_authenticated/customers'
+    | '/_authenticated/dashboard'
     | '/_authenticated/products'
+    | '/_authenticated/settings'
+    | '/_authenticated/trade-analyzer'
     | '/_authenticated/'
+    | '/_authenticated/lab/palette'
+    | '/_authenticated/seed/bramblewood'
+    | '/_authenticated/seed/evergreen-studio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,6 +197,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/customers': {
+      id: '/_authenticated/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof AuthenticatedCustomersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/products': {
       id: '/_authenticated/products'
       path: '/products'
@@ -99,17 +225,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/trade-analyzer': {
+      id: '/_authenticated/trade-analyzer'
+      path: '/trade-analyzer'
+      fullPath: '/trade-analyzer'
+      preLoaderRoute: typeof AuthenticatedTradeAnalyzerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lab/palette': {
+      id: '/_authenticated/lab/palette'
+      path: '/lab/palette'
+      fullPath: '/lab/palette'
+      preLoaderRoute: typeof AuthenticatedLabPaletteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/seed/bramblewood': {
+      id: '/_authenticated/seed/bramblewood'
+      path: '/seed/bramblewood'
+      fullPath: '/seed/bramblewood'
+      preLoaderRoute: typeof AuthenticatedSeedBramblewoodRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/seed/evergreen-studio': {
+      id: '/_authenticated/seed/evergreen-studio'
+      path: '/seed/evergreen-studio'
+      fullPath: '/seed/evergreen-studio'
+      preLoaderRoute: typeof AuthenticatedSeedEvergreenStudioRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
+  AuthenticatedSeedBramblewoodRoute: typeof AuthenticatedSeedBramblewoodRoute
+  AuthenticatedSeedEvergreenStudioRoute: typeof AuthenticatedSeedEvergreenStudioRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProductsRoute: AuthenticatedProductsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
+  AuthenticatedSeedBramblewoodRoute: AuthenticatedSeedBramblewoodRoute,
+  AuthenticatedSeedEvergreenStudioRoute: AuthenticatedSeedEvergreenStudioRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

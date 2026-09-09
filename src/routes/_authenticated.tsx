@@ -1,3 +1,16 @@
+import { useState, type ComponentType, type SVGProps } from "react";
+import {
+  ArrowsRightLeftIcon,
+  BookOpenIcon,
+  ChartPieIcon,
+  Cog6ToothIcon,
+  CubeIcon,
+  LifebuoyIcon,
+  RectangleGroupIcon,
+  SparklesIcon,
+  SwatchIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import {
   Sidebar,
@@ -22,17 +35,57 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 const TENANTS: Tenant[] = [
-  { name: "Juniper Labs", plan: "Enterprise" },
+  { name: "Juniper", plan: "Smart Dashboard" },
+  { name: "Kingfisher", plan: "Fantasy League" },
   { name: "Evergreen Studio", plan: "Pro" },
   { name: "Bramblewood", plan: "Free" },
 ];
 
+/* Per-tenant nav: each tenant gets its own sidebar group under the shared
+ * Platform items. Tenants without real views yet point at seed routes. */
+interface TenantMenu {
+  label: string;
+  items: {
+    to: string;
+    label: string;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+  }[];
+}
+
+const TENANT_MENUS: Record<string, TenantMenu> = {
+  Juniper: {
+    label: "Lab",
+    items: [{ to: "/lab/palette", label: "Palette", icon: SwatchIcon }],
+  },
+  Kingfisher: {
+    label: "Fantasy Baseball",
+    items: [
+      { to: "/trade-analyzer", label: "Trade Analyzer", icon: ArrowsRightLeftIcon },
+    ],
+  },
+  "Evergreen Studio": {
+    label: "Workspace",
+    items: [{ to: "/seed/evergreen-studio", label: "Seed", icon: SparklesIcon }],
+  },
+  Bramblewood: {
+    label: "Workspace",
+    items: [{ to: "/seed/bramblewood", label: "Seed", icon: SparklesIcon }],
+  },
+};
+
 function AuthenticatedLayout() {
+  const [activeTenant, setActiveTenant] = useState(TENANTS[0]);
+  const tenantMenu = TENANT_MENUS[activeTenant.name];
+
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <TenantSwitcher tenants={TENANTS} />
+          <TenantSwitcher
+            tenants={TENANTS}
+            activeTenant={activeTenant}
+            onActiveTenantChange={setActiveTenant}
+          />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
@@ -40,19 +93,89 @@ function AuthenticatedLayout() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Overview">
-                    <Link to="/" activeOptions={{ exact: true }}>
-                      <GaugeIcon />
-                      <span>Overview</span>
+                  <SidebarMenuButton asChild>
+                    <Link to="/dashboard">
+                      <RectangleGroupIcon />
+                      <span>Dashboard</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Products">
+                  <SidebarMenuButton asChild>
                     <Link to="/products">
-                      <PackageIcon />
+                      <CubeIcon />
                       <span>Products</span>
                     </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/analytics">
+                      <ChartPieIcon />
+                      <span>Analytics</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/customers">
+                      <UsersIcon />
+                      <span>Customers</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/settings">
+                      <Cog6ToothIcon />
+                      <span>Settings</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          {tenantMenu && (
+            <SidebarGroup>
+              <SidebarGroupLabel>{tenantMenu.label}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {tenantMenu.items.map((item) => (
+                    <SidebarMenuItem key={item.to}>
+                      <SidebarMenuButton asChild>
+                        <Link to={item.to}>
+                          <item.icon />
+                          <span>{item.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
+          <SidebarGroup>
+            <SidebarGroupLabel>Resources</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a
+                      href="https://github.com/hugo-beltran/juniper#readme"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <BookOpenIcon />
+                      <span>Documentation</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="mailto:support@juniper.dev">
+                      <LifebuoyIcon />
+                      <span>Support</span>
+                    </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
@@ -69,27 +192,5 @@ function AuthenticatedLayout() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
-}
-
-/* Inline lucide icons — swap for an icon library when one gets picked. */
-
-function GaugeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="m12 14 4-4" />
-      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-    </svg>
-  );
-}
-
-function PackageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
-      <path d="M12 22V12" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="m7.5 4.27 9 5.15" />
-    </svg>
   );
 }

@@ -3,6 +3,8 @@
  * an import cycle. */
 
 export * from './button/button'
+export * from './leads-table/leads-table'
 export * from './sidebar/sidebar'
+export * from './summary-card/summary-card'
 export * from './tenant-switcher/tenant-switcher'
 export * from './tooltip/tooltip'

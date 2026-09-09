@@ -1,24 +1,98 @@
-/* Keep the open disclosure's trigger in its engaged state. */
-.trigger[aria-expanded="true"] {
-  background-color: var(--nav-option-focus);
-  color: var(--color-pear-800);
+/* Own trigger — deliberately NOT a SidebarMenuButton, so its styling can
+ * diverge from the nav rows. Everything a button needs is declared here. */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  padding: 2rem 0.5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--juni-needle-900);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--ease),
+    box-shadow 120ms var(--ease);
 }
 
-/* Brand tile: pear accent from the nav family, dark spruce mark. */
+.trigger:focus-visible {
+  outline-color: var(--nav-outline);
+}
+
+/* Inner bevel glass: light top edge over a berry-shaded bottom edge — softly
+ * pressed, same etched language as the group dividers. Hover paints it on
+ * the trigger alone (closed state only — expanded, the blob owns it). */
+.trigger:hover:not([aria-expanded="true"]) {
+  color: var(--juni-needle-950);
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-400) l c h / 0.35),
+    oklch(from var(--juni-needle-400) l c h / 0.9)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.25),
+    inset 0 -1px 0 oklch(from var(--juni-berry-900) l c h / 0.1);
+}
+
+/* Expanded: the same glass grows to encompass trigger AND panel — the blob.
+ * The surface lives on the item wrapper, so as the panel's grid-rows animate
+ * open, the glass stretches with it. */
+.root {
+  border-radius: var(--radius-md);
+  transition:
+    background-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+
+.root:has(.trigger[aria-expanded="true"]) {
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-500) l c h / 0.6),
+    oklch(from var(--juni-needle-500) l c h / 0.8)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.55),
+    inset 0 -1px 0 oklch(from var(--juni-berry-800) l c h / 0.15);
+}
+
+/* Inside the blob the trigger paints nothing of its own. */
+.trigger[aria-expanded="true"] {
+  color: var(--juni-needle-50);
+}
+
+/* Blobatar tile for the active tenant (trigger only — list rows stay plain),
+ * over a glass squircle backdrop. */
 .logo {
+  position: relative;
   display: flex;
-  width: 2rem;
-  height: 2rem;
+  width: 2.125rem;
+  height: 2.125rem;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
-  color: var(--jn-fern-800);
 }
 
+.logo img,
 .logo svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 100%;
+  height: 100%;
+}
+
+.logoBackdrop {
+  position: absolute;
+  inset: 0;
+}
+
+/* The absolute backdrop would otherwise paint above its static siblings —
+ * positioned elements win regardless of DOM order. */
+.logo > *:not(.logoBackdrop) {
+  position: relative;
 }
 
 .meta {
@@ -33,8 +107,9 @@
 .name {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
+  text-wrap: nowrap;
 }
 
 .plan {
@@ -46,12 +121,23 @@
 }
 
 .chevron {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
   margin-left: auto;
-  transition: rotate 200ms var(--ease);
+  transition:
+    color 200ms var(--ease),
+    opacity 200ms var(--ease);
+  opacity: 0;
+}
+
+.trigger:hover .chevron {
+  opacity: 1;
 }
 
 .trigger[aria-expanded="true"] .chevron {
-  rotate: 180deg;
+  color: var(--juni-needle-200);
+  opacity: 1;
 }
 
 /* Inline expansion: the grid-rows 0fr → 1fr trick animates to an unknown
@@ -61,6 +147,7 @@
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 250ms var(--ease);
+  padding: 0.25rem 0.6rem 0.6rem;
 }
 
 .panel[data-expanded] {
@@ -79,56 +166,38 @@
   padding-top: 0.25rem;
 }
 
-.itemLogo {
-  display: flex;
-  width: 1.5rem;
-  height: 1.5rem;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid oklch(from var(--jn-fern-800) l c h / 0.25);
-  border-radius: var(--radius-sm);
-}
-
-.itemLogo svg {
-  width: 0.875rem;
-  height: 0.875rem;
-}
-
 .itemName {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.check {
-  width: 0.875rem;
-  height: 0.875rem;
-  flex-shrink: 0;
-  opacity: 0;
-  transition: opacity 120ms var(--ease);
+.item[data-selected] {
+  background-color: oklch(from var(--juni-bark-50) l c h / 0.9);
 }
 
 [data-selected] > .check {
   opacity: 1;
 }
 
-.addTenant {
-  width: 100%;
-  justify-content: flex-start;
-  font-size: 0.8125rem;
+[data-slot="sidebar"][data-state="collapsed"] .logo {
+  rotate: -5deg;
+  transition: rotate 300ms var(--ease);
 }
 
-/* Icon rail: the add button clips to a left-anchored tile like the items. */
-[data-slot="sidebar"][data-state="collapsed"] .addTenant {
-  width: 2rem;
-  padding: 0 0.5rem;
-  overflow: hidden;
+@starting-style {
+  [data-slot="sidebar"][data-state="collapsed"] .logo {
+    rotate: 0deg;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .panel,
   .chevron {
+    transition: none;
+  }
+
+  [data-slot="sidebar"][data-state="collapsed"] .logo {
     transition: none;
   }
 }

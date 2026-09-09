@@ -1,8 +1,8 @@
 .content {
   z-index: 50;
   border-radius: var(--radius-sm);
-  background-color: light-dark(var(--color-miso-800), var(--color-spruce-400));
-  color: light-dark(var(--color-miso-100), var(--color-miso-950));
+  background-color: light-dark(var(--juni-bark-800), var(--juni-needle-500));
+  color: light-dark(var(--juni-bark-100), var(--juni-bark-950));
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;

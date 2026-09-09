@@ -1,0 +1,15 @@
+.sparkline {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sparkline svg {
+  display: block;
+}
+
+.line {
+  fill: none;
+  stroke: var(--juni-bloom-500);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
