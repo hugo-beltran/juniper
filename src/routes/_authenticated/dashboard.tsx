@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { LeadsTable, type Lead } from "@/components";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Button, LeadsTable, type Lead } from "@/components";
 import styles from "./dashboard.module.css";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -56,9 +56,19 @@ const LEADS: Lead[] = [
 ];
 
 function DashboardPage() {
+  const navigate = useNavigate();
+
   return (
     <div className={styles.page}>
-      <h1>Scouting Pipeline</h1>
+      <div className={styles.header}>
+        <h1>Scouting Pipeline</h1>
+        <Button
+          size="small"
+          onPress={() => navigate({ to: "/scout-report" })}
+        >
+          New SCOUT report
+        </Button>
+      </div>
       <LeadsTable leads={LEADS} />
     </div>
   );

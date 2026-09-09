@@ -1,0 +1,185 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 44rem;
+}
+
+.page h1 {
+  margin: 0;
+}
+
+.sub {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 0.9rem;
+  color: var(--juni-bark-600);
+}
+
+/* How-to-write guides — static, directly under the subheading. */
+.guides {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--juni-bark-600);
+}
+
+.guides li {
+  margin-bottom: 0.15rem;
+}
+
+/* Basics — the structured half of the report. */
+.basicsGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  gap: 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--juni-bark-200);
+  border-radius: var(--radius-md);
+  background-color: var(--juni-lichen-50);
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--juni-bark-800);
+}
+
+.input::placeholder {
+  color: var(--juni-bark-400);
+}
+
+.required {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--juni-heartwood-600);
+}
+
+/* Timeline — sequence is the point: a rail connects the five reads in order.
+ * Medallions and their trailing rail segment turn needle once the dimension
+ * has notes; the first empty one wears the focus ring as "up next". */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.75rem;
+}
+
+.node:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: calc(0.875rem - 1px);
+  top: 2rem;
+  bottom: -1.25rem;
+  width: 2px;
+  background-color: var(--juni-bark-200);
+}
+
+.node[data-filled]:not(:last-child)::before {
+  background-color: var(--juni-needle-300);
+}
+
+.medallion {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--juni-bark-200);
+  border-radius: 50%;
+  background-color: var(--juni-bark-100);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--juni-bark-600);
+  transition:
+    background-color 120ms var(--ease),
+    color 120ms var(--ease);
+}
+
+.node[data-filled] .medallion {
+  border-color: var(--juni-needle-600);
+  background-color: var(--juni-needle-600);
+  color: var(--juni-needle-50);
+}
+
+.node[data-next] .medallion {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.dimension {
+  min-width: 0;
+}
+
+.dimensionTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--juni-needle-950);
+}
+
+.noteArea {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--juni-bark-200);
+  border-radius: var(--radius-md);
+  background-color: var(--juni-lichen-50);
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--juni-bark-800);
+  resize: vertical;
+}
+
+.noteArea::placeholder {
+  color: var(--juni-bark-400);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* Post-file confirmation panel. */
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.5rem;
+}
+
+.confirmation h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}

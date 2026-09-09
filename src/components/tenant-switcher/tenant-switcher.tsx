@@ -4,7 +4,7 @@ import "blobatar/motion.css";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Button as AriaButton, type Selection } from "react-aria-components";
 import { useSidebar } from "@/components/sidebar/sidebar";
-import { blobatarPalette } from "@/lib/blobatar-palette";
+import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette";
 import { ListBox, ListBoxItem } from "./listbox";
 import { Squircle } from "./squircle";
 import { useClickOutside } from "./use-click-outside";
@@ -85,7 +85,7 @@ export function TenantSwitcher({
           <Squircle className={styles.logoBackdrop} />
           <Blobatar
             name={name}
-            palette={blobatarPalette(name)}
+            palette={TENANT_BLOBATAR_PALETTE}
             animate="hover"
             size={120}
             title={name}
@@ -103,9 +103,7 @@ export function TenantSwitcher({
             <Squircle className={styles.logoBackdrop} />
             <Blobatar
               name={name}
-              palette={
-                blobatarPalette(name)
-              }
+              palette={TENANT_BLOBATAR_PALETTE}
               animate="hover"
               size={120}
               title={name}

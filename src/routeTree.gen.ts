@@ -16,6 +16,7 @@ import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
+import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenticated/scout-report'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
@@ -56,6 +57,12 @@ const AuthenticatedProductsRoute = AuthenticatedProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedScoutReportRoute =
+  AuthenticatedScoutReportRouteImport.update({
+    id: '/scout-report',
+    path: '/scout-report',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
@@ -104,6 +112,7 @@ export interface FileRoutesByTo {
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/': typeof AuthenticatedIndexRoute
@@ -119,6 +128,7 @@ export interface FileRoutesById {
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/products': typeof AuthenticatedProductsRoute
+  '/_authenticated/scout-report': typeof AuthenticatedScoutReportRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/dashboard'
     | '/products'
+    | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
     | '/lab/palette'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/dashboard'
     | '/products'
+    | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
     | '/'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated/customers'
     | '/_authenticated/dashboard'
     | '/_authenticated/products'
+    | '/_authenticated/scout-report'
     | '/_authenticated/settings'
     | '/_authenticated/trade-analyzer'
     | '/_authenticated/'
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/scout-report': {
+      id: '/_authenticated/scout-report'
+      path: '/scout-report'
+      fullPath: '/scout-report'
+      preLoaderRoute: typeof AuthenticatedScoutReportRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -268,6 +288,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
+  AuthenticatedScoutReportRoute: typeof AuthenticatedScoutReportRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -281,6 +302,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProductsRoute: AuthenticatedProductsRoute,
+  AuthenticatedScoutReportRoute: AuthenticatedScoutReportRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,

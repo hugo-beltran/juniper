@@ -11,7 +11,7 @@
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
@@ -41,13 +41,57 @@
 
 /* Roles */
 
+/* Primary — glass pane after the Squircle's recipe (squircle.tsx): a radial
+ * gradient lit from off-center (deepest at 70%/70%, easing light toward the
+ * top-left, far stop pushed past the edge like the SVG's 145% offset), the
+ * rim as a uniform 1px translucent-white inner ring (the CSS analog of its
+ * centered 2px stroke clipped to the shape), and a diagonally offset
+ * needle-tinted drop shadow (the SVG filter offsets dx = dy). Pressing moves
+ * the gradient's light source to the top-left and swaps the drop shadow for
+ * an inner one — the pane pushes in. */
 .primary {
-  background-color: var(--juni-needle-700);
+  background: radial-gradient(
+    circle at 70% 70%,
+    var(--juni-needle-400) 10%,
+    var(--juni-needle-500) 145%
+  );
   color: var(--juni-bark-50);
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
+    2px 2px 6px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  transition:
+    box-shadow 120ms var(--ease),
+    transform 120ms var(--ease);
 }
 
 .primary[data-hovered] {
-  background-color: var(--juni-needle-600);
+  color: white;
+  background: radial-gradient(
+    circle at 70% 70%,
+    var(--juni-needle-300) -50%,
+    var(--juni-needle-400) 55%
+  );
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
+    1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
+}
+
+/* Pressed: hover brightens, so the push-in goes the other way — one step
+ * deeper than idle, light source flipped to the top-left, the pane's own
+ * shadow pulled inside. Text back to bark-50 (hover's needle-700 ink would
+ * drown on the deep fill); the residual contact shadow keeps idle's
+ * bloom tint. */
+.primary[data-pressed] {
+  color: var(--juni-bark-50);
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--juni-needle-500) 10%,
+    var(--juni-needle-600) 145%
+  );
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.1),
+    inset 1px 1px 3px oklch(from var(--juni-needle-950) l c h / 0.35),
+    1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.15);
 }
 
 .secondary {
@@ -67,7 +111,7 @@
 
 /* An open popover/menu keeps a discrete trigger engaged. */
 .discrete[data-hovered],
-.discrete[aria-expanded='true'] {
+.discrete[aria-expanded="true"] {
   background-color: var(--juni-needle-100);
   color: var(--juni-needle-950);
 }
@@ -83,7 +127,7 @@
 
 .small {
   height: 2rem;
-  padding: 0 0.625rem;
+  padding: 1rem 1rem;
   font-size: 0.875rem;
 }
 

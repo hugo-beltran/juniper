@@ -76,7 +76,7 @@ const columns = helper.columns([
       <div className={styles.player}>
         <Blobatar
           name={row.original.player}
-          palette={blobatarPalette(row.original.player, "soft")}
+          palette={blobatarPalette(row.original.player)}
           size={28}
         />
         <span className={styles.playerName}>{row.original.player}</span>
@@ -89,12 +89,17 @@ const columns = helper.columns([
     header: "Stage",
     sortFn: (rowA, rowB) =>
       STAGE_ORDER[rowA.original.stage] - STAGE_ORDER[rowB.original.stage],
-    cell: ({ row }) => (
-      <span className={styles.stage}>
-        <i className={styles.stageDot} aria-hidden />
-        {row.original.stage}
-      </span>
-    ),
+    cell: ({ row }) => {
+      const stageIndex = STAGE_ORDER[row.original.stage];
+
+      return (
+        <span className={styles.stage}>
+          {stageIndex > 0 && "●".repeat(stageIndex)}
+          {stageIndex < 5 && "○".repeat(5 - stageIndex)}
+          <strong>{row.original.stage}</strong>
+        </span>
+      );
+    },
   }),
   helper.accessor("ask", {
     header: "Ask",
@@ -177,6 +182,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
     () => [...new Set(leads.map((lead) => lead.club))].sort(),
     [leads],
   );
+
   const scouts = useMemo(
     () => [...new Set(leads.map((lead) => lead.scout))].sort(),
     [leads],
@@ -197,6 +203,7 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
 
   const hasActiveFilters =
     stageFilter !== ALL || clubFilter !== "" || scoutFilter !== "";
+
   const clearFilters = () => {
     setStageFilter(ALL);
     setClubFilter("");
