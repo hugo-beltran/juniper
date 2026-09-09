@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Blobatar } from "@blobatar/react";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import {
   createColumnHelper,
@@ -13,6 +14,7 @@ import {
   type Selection,
 } from "react-aria-components";
 import { Button } from "@/components/button/button";
+import { blobatarPalette } from "@/lib/blobatar-palette";
 import styles from "./leads-table.module.css";
 
 /* CRM-style leads table, sports flavor: free-agent targets moving through a
@@ -53,26 +55,13 @@ const formatAsk = (usd: number) =>
     ? `$${+(usd / 1_000_000).toFixed(1)}M`
     : `$${Math.round(usd / 1_000)}K`;
 
-/* Stage → pill tone; grade → badge tone (20-80 scale: 60+ is plus). */
-const STAGE_CLASS: Record<Stage, string> = {
-  Scouted: styles.stageScouted,
-  Contacted: styles.stageContacted,
-  Workout: styles.stageWorkout,
-  Offer: styles.stageOffer,
-  Signed: styles.stageSigned,
-};
-
+/* Grade → badge tone (20-80 scale: 60+ is plus). */
 const gradeClass = (grade: number) =>
-  grade >= 60 ? styles.gradePlus : grade >= 50 ? styles.gradeAvg : styles.gradeLow;
-
-/* Filter-chip dot per stage — each chip carries its stage's color code. */
-const CHIP_DOT_CLASS: Record<Stage, string> = {
-  Scouted: styles.chipDotScouted,
-  Contacted: styles.chipDotContacted,
-  Workout: styles.chipDotWorkout,
-  Offer: styles.chipDotOffer,
-  Signed: styles.chipDotSigned,
-};
+  grade >= 60
+    ? styles.gradePlus
+    : grade >= 50
+      ? styles.gradeAvg
+      : styles.gradeLow;
 
 const features = tableFeatures({
   rowSortingFeature,
@@ -84,9 +73,14 @@ const columns = helper.columns([
   helper.accessor("player", {
     header: "Player",
     cell: ({ row }) => (
-      <div>
-        <div className={styles.player}>{row.original.player}</div>
-        <div className={styles.position}>{row.original.position}</div>
+      <div className={styles.player}>
+        <Blobatar
+          name={row.original.player}
+          palette={blobatarPalette(row.original.player, "soft")}
+          size={28}
+        />
+        <span className={styles.playerName}>{row.original.player}</span>
+        <span className={styles.position}>({row.original.position})</span>
       </div>
     ),
   }),
@@ -96,7 +90,7 @@ const columns = helper.columns([
     sortFn: (rowA, rowB) =>
       STAGE_ORDER[rowA.original.stage] - STAGE_ORDER[rowB.original.stage],
     cell: ({ row }) => (
-      <span className={`${styles.stage} ${STAGE_CLASS[row.original.stage]}`}>
+      <span className={styles.stage}>
         <i className={styles.stageDot} aria-hidden />
         {row.original.stage}
       </span>
@@ -145,7 +139,10 @@ function HeaderFilter({
   onChange: (value: string) => void;
 }) {
   return (
-    <span className={styles.headerFilter} data-active={value !== "" || undefined}>
+    <span
+      className={styles.headerFilter}
+      data-active={value !== "" || undefined}
+    >
       <FunnelIcon className={styles.filterIcon} aria-hidden />
       {value !== "" && <span className={styles.filterBadge} aria-hidden />}
       <select
@@ -225,10 +222,6 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
             const count = leads.filter((lead) => lead.stage === stage).length;
             return (
               <ToggleButton key={stage} id={stage} className={styles.chip}>
-                <i
-                  className={`${styles.chipDot} ${CHIP_DOT_CLASS[stage]}`}
-                  aria-hidden
-                />
                 {stage}
                 <span className={styles.chipCount}>{count}</span>
               </ToggleButton>
@@ -268,7 +261,11 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                       >
                         <table.FlexRender header={header} />
                         <span className={styles.sortIndicator} aria-hidden>
-                          {sorted === "asc" ? "▲" : sorted === "desc" ? "▼" : ""}
+                          {sorted === "asc"
+                            ? "▲"
+                            : sorted === "desc"
+                              ? "▼"
+                              : ""}
                         </span>
                       </button>
                     ) : (

@@ -86,12 +86,13 @@ movable.
 - Reference the raw `--juni-*` palette scales directly in component CSS. Scale
   steps are mode-invariant, so use `light-dark()` inline where light and dark
   need different steps.
-- Ramps are named for juniper anatomy. Four chromatic families, each
-  consolidated from retired ramps: `--juni-needle-*` (foliage green — brand,
-  hue ~130), `--juni-bloom-*` (the berries' waxy teal coating, ~211),
-  `--juni-berry-*` (ripe purple — accent, ~306), and `--juni-heartwood-*`
-  (red wood, ~28; the identity's only red, destructive/error). Neutrals:
-  `--juni-bark-*` (warm gray) and `--juni-lichen-*` (green-gray). Every
+- Ramps are named for juniper anatomy and carry one function each:
+  `--juni-needle-*` the brand (foliage green, hue ~130), `--juni-bloom-*`
+  its complementary (the berries' waxy teal coating, ~211), `--juni-berry-*`
+  the accent (ripe violet, ~292), `--juni-heartwood-*` outliers and
+  attention catchers (red wood, ~28; the identity's only red,
+  destructive/error), and `--juni-bark-*` muted surfaces and plain content
+  (warm gray). `--juni-lichen-*` (green-gray) is a secondary neutral. Every
   exploration is archived in-app at `/lab/palette`, one tab per family,
   under its exploration-era name (grove/reef/orchid/nectarine).
 - Palette scales and the remaining semantic tokens:

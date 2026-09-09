@@ -67,7 +67,12 @@ const ORIOLE_NECTARINE: Oklch[] = [
   [38, 0.0674, -0.41], [26, 0.062, -6.95],
 ];
 
-/* ---- shipped ramps (must mirror juniper-theme.css) ---- */
+/* ---- shipped ramps ----
+ * GROVE and REEF mirror juniper-theme.css (needle / bloom). ORCHID is the
+ * accent AS ORIGINALLY SHIPPED (2026-09-08): it was the reference ramp and
+ * chroma-profile donor for the bloom and heartwood explorations, so it stays
+ * frozen here even though the theme's --juni-berry-* was later revised to
+ * the Iris blend (2026-09-09). */
 
 export const GROVE: Oklch[] = [
   [95.75, 0.0171, 121.4], [91.5, 0.0362, 122.66], [87, 0.0772, 124.08],
@@ -86,6 +91,13 @@ export const REEF: Oklch[] = [
   [79, 0.095, 216.24], [73, 0.105, 214.38], [65, 0.0991, 211.5],
   [56, 0.0885, 210.02], [48.18, 0.0748, 208.9], [44, 0.0607, 208.89],
   [38, 0.049, 208.31], [26, 0.0429, 205.9],
+];
+/* bark — the authored neutral (mirrors juniper-theme.css; no exploration). */
+const BARK_RAMP: Oklch[] = [
+  [96, 0.00414, 80], [90, 0.0046, 77.3], [83, 0.0058, 74.71],
+  [79, 0.0076, 72.23], [73, 0.0097, 69.87], [65, 0.0121, 67.61],
+  [56, 0.0144, 65.47], [50, 0.0166, 63.43], [44, 0.0184, 61.51],
+  [38, 0.0196, 59.7], [26, 0.02, 58],
 ];
 
 const GROVE_PROFILE = normalizedProfile(GROVE);
@@ -178,6 +190,8 @@ export interface RampDef {
 export interface Family {
   id: string;
   tab: string;
+  /** the color's job in the system — shown beside the tab name */
+  role: string;
   intro: string;
   shippedVar: string;
   cMax: number;
@@ -193,6 +207,7 @@ export const FAMILIES: Family[] = [
   {
     id: "needle",
     tab: "Needle",
+    role: "brand",
     shippedVar: "--juni-needle-*",
     cMax: 0.21,
     lMin: 20,
@@ -207,32 +222,14 @@ export const FAMILIES: Family[] = [
     ],
   },
   {
-    id: "berry",
-    tab: "Berry",
-    shippedVar: "--juni-berry-*",
-    cMax: 0.15,
-    lMin: 20,
-    intro:
-      "The purple accent, born by merging the retired blue berry and plum ramps — both competed with the brand green for attention; the brief was one complementary tone. Blue berry's hue climbs down-scale (236→278) while plum's falls (330→300), so blends hold an unusually stable hue. A (Iris) was trialed first but read too recessive; C (Orchid) — hue ~306, nearly opposite the brand's ~130 — shipped as \"orchid\", then renamed berry in the juniper-anatomy pass, inheriting the retired blue ramp's name (ripe juniper berries are purple; unripe ones wear the blue).",
-    chips: { kind: "beside", refs: [{ label: "needle", ramp: GROVE }] },
-    ramps: [
-      { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
-      { key: "berry", name: "berry (retired, blue)", ramp: BERRY, style: "dashed" },
-      { key: "plum", name: "plum (retired)", ramp: PLUM, style: "dashed" },
-      { key: "A", slug: "iris", name: "A — Iris (true average)", note: "hue 50/50 · chroma ×1.0 — trialed first, too recessive", ramp: orchidBlend(0.5, 1.0) },
-      { key: "B", slug: "violet", name: "B — Violet (vivid average)", note: "hue 50/50 · chroma ×1.8", ramp: orchidBlend(0.5, 1.8) },
-      { key: "C", slug: "orchid", name: "C — Orchid (grove's complement)", note: "hue 70% plum · chroma ×1.6", ramp: orchidBlend(0.7, 1.6), chosen: true },
-      { key: "D", slug: "twilight", name: "D — Twilight (cool foil)", note: "hue 70% berry · chroma ×1.4", ramp: orchidBlend(0.3, 1.4) },
-    ],
-  },
-  {
     id: "bloom",
     tab: "Bloom",
+    role: "complementary",
     shippedVar: "--juni-bloom-*",
     cMax: 0.15,
     lMin: 20,
     intro:
-      "The teal, born by promoting the retired bonito trio to a full ramp — a point 30% toward the retired blue berry, 70% bonito. Bonito only existed as three stops, so its hues were interpolated onto the house lightness ladder. The straight blend honoring the trio's chroma spiked at the 500 step (the base anchor carries C 0.155) and was rejected for seamless easing: each candidate borrows the normalized chroma profile of an existing ramp. C (Reef, the brand ramp's profile at peak 0.105) shipped, completing a loose triad — needle ~130, bloom ~211, berry ~306. Shipped as \"reef\", renamed bloom in the juniper-anatomy pass.",
+      "The complementary — a cool teal counterweight to the brand green — born by promoting the retired bonito trio to a full ramp — a point 30% toward the retired blue berry, 70% bonito. Bonito only existed as three stops, so its hues were interpolated onto the house lightness ladder. The straight blend honoring the trio's chroma spiked at the 500 step (the base anchor carries C 0.155) and was rejected for seamless easing: each candidate borrows the normalized chroma profile of an existing ramp. C (Reef, the brand ramp's profile at peak 0.105) shipped, completing a loose triad — needle ~130, bloom ~211, berry ~306 at the time (the accent has since been revised to ~292). Shipped as \"reef\", renamed bloom in the juniper-anatomy pass.",
     chips: {
       kind: "beside",
       refs: [
@@ -243,7 +240,7 @@ export const FAMILIES: Family[] = [
     anchors: BONITO_TRIO,
     ramps: [
       { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
-      { key: "berry-accent", name: "berry (accent)", ramp: ORCHID, style: "dotted" },
+      { key: "berry-accent", name: "berry (accent, orchid era)", ramp: ORCHID, style: "dotted" },
       { key: "old", name: "straight blend (rejected)", note: "trio chroma honored — spikes at the 500 step", ramp: REEF_OLD_BLEND, style: "dashed" },
       { key: "A", slug: "lagoon", name: "A — Lagoon (calm)", note: "the accent ramp's chroma profile · peak 0.10", ramp: reefBuild(ORCHID_PROFILE, 0.1) },
       { key: "B", slug: "bonito", name: "B — Bonito (parity)", note: "the accent ramp's chroma profile · peak 0.115", ramp: reefBuild(ORCHID_PROFILE, 0.115) },
@@ -251,13 +248,34 @@ export const FAMILIES: Family[] = [
     ],
   },
   {
+    id: "berry",
+    tab: "Berry",
+    role: "accent",
+    shippedVar: "--juni-berry-*",
+    cMax: 0.15,
+    lMin: 20,
+    intro:
+      "The violet accent, born by merging the retired blue berry and plum ramps — both competed with the brand green for attention; the brief was one complementary tone. Blue berry's hue climbs down-scale (236→278) while plum's falls (330→300), so blends hold an unusually stable hue. C (Orchid, hue ~306) shipped first as \"orchid\" and was renamed berry in the juniper-anatomy pass (ripe juniper berries are purple; unripe ones wear the blue); the pick was then revised to A (Iris) — the true per-step average, hue ~292 — trading the vivid complement for a quieter tone. The bloom and heartwood archives still reference the orchid-era values they were explored against.",
+    chips: { kind: "beside", refs: [{ label: "needle", ramp: GROVE }] },
+    ramps: [
+      { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
+      { key: "berry", name: "berry (retired, blue)", ramp: BERRY, style: "dashed" },
+      { key: "plum", name: "plum (retired)", ramp: PLUM, style: "dashed" },
+      { key: "A", slug: "iris", name: "A — Iris (true average)", note: "hue 50/50 · chroma ×1.0 — trialed, dropped, then shipped as the revision", ramp: orchidBlend(0.5, 1.0), chosen: true },
+      { key: "B", slug: "violet", name: "B — Violet (vivid average)", note: "hue 50/50 · chroma ×1.8", ramp: orchidBlend(0.5, 1.8) },
+      { key: "C", slug: "orchid", name: "C — Orchid (grove's complement)", note: "hue 70% plum · chroma ×1.6 — shipped first, superseded by Iris", ramp: orchidBlend(0.7, 1.6) },
+      { key: "D", slug: "twilight", name: "D — Twilight (cool foil)", note: "hue 70% berry · chroma ×1.4", ramp: orchidBlend(0.3, 1.4) },
+    ],
+  },
+  {
     id: "heartwood",
     tab: "Heartwood",
+    role: "outliers & attention",
     shippedVar: "--juni-heartwood-*",
     cMax: 0.19,
     lMin: 15,
     intro:
-      "The red family (destructive/error — the identity's only red), born by adjusting the retired momo, which peaked at C 0.18 against the trio's 0.10-0.12 and sat on its own darker lightness ladder. Four briefs were explored: sober it, pull it toward the oriole project's nectarine, re-seat its hue in the wheel gap the trio leaves open (~38), or tune it to sit legibly on the brand-green surfaces. 2 (Nectarine, pulled 60% toward oriole's ramp — gold-leaning tints, crimson depths) shipped on the house ladder at chroma ×0.85, as \"nectarine\"; renamed heartwood in the juniper-anatomy pass.",
+      "The outlier and attention-catcher family (destructive/error — the identity's only red), born by adjusting the retired momo, which peaked at C 0.18 against the trio's 0.10-0.12 and sat on its own darker lightness ladder. Four briefs were explored: sober it, pull it toward the oriole project's nectarine, re-seat its hue in the wheel gap the trio leaves open (~38), or tune it to sit legibly on the brand-green surfaces. 2 (Nectarine, pulled 60% toward oriole's ramp — gold-leaning tints, crimson depths) shipped on the house ladder at chroma ×0.85, as \"nectarine\"; renamed heartwood in the juniper-anatomy pass.",
     chips: { kind: "on", refs: [{ label: "needle", ramp: GROVE }] },
     ramps: [
       { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
@@ -272,6 +290,19 @@ export const FAMILIES: Family[] = [
       { key: "2", slug: "nectarine", name: "2 — Nectarine", note: "60% toward oriole's nectarine · chroma ×0.85", ramp: NECT_CHOSEN, chosen: true },
       { key: "3", slug: "tetrad", name: "3 — Tetrad", note: "hue +18.7 so 500 lands at h38, the wheel gap's midpoint", ramp: NECT_TETRAD },
       { key: "4", slug: "overgrove", name: "4 — Over grove", note: "darker mids (500 at L58) for separation from grove surfaces", ramp: NECT_OVER },
+    ],
+  },
+  {
+    id: "bark",
+    tab: "Bark",
+    role: "muted surfaces & plain content",
+    shippedVar: "--juni-bark-*",
+    cMax: 0.03,
+    lMin: 20,
+    intro:
+      "The warm gray neutral — muted surfaces, plain content, and the chrome around everything else. Hue drifts warm as it darkens (80→58) so the grays never go cold against the green chrome. It predates the lab (né driftwood, renamed in the juniper-anatomy pass) and had no merge exploration; it is recorded here as the fifth working color of the system.",
+    ramps: [
+      { key: "bark", slug: "bark", name: "bark (né driftwood)", note: "authored neutral · hue drifts warm down-scale", ramp: BARK_RAMP, chosen: true },
     ],
   },
 ];

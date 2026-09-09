@@ -214,6 +214,13 @@
   border-radius: 3px;
 }
 
+/* The color's job in the system, riding along on each tab. */
+.tabRole {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--juni-bark-500);
+}
+
 .overChip {
   display: inline-flex;
   align-items: center;

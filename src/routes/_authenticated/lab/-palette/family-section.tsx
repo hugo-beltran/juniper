@@ -1,10 +1,4 @@
-import {
-  STEPS,
-  oklch,
-  type Family,
-  type Oklch,
-  type RampDef,
-} from "./data";
+import { STEPS, oklch, type Family, type Oklch, type RampDef } from "./data";
 import styles from "../ramp-lab.module.css";
 
 /* Renders one palette family's tab panel: the shipped ramp, the exploration
@@ -73,9 +67,7 @@ function OnChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
           Alert
         </span>
       ))}
-      <small className={styles.pairKey}>
-        on {bg.label}-100 / 400 / 800
-      </small>
+      <small className={styles.pairKey}>on {bg.label}-100 / 400 / 800</small>
     </div>
   );
 }
@@ -235,6 +227,10 @@ export function FamilySection({ family }: { family: Family }) {
   const chosen = family.ramps.find((r) => r.chosen);
   if (!chosen) return null;
 
+  /* A family with only its shipped ramp (bark) has no archive to show. */
+  const hasExploration =
+    family.anchors !== undefined || family.ramps.some((r) => !r.chosen);
+
   return (
     <>
       <p className={styles.sub}>{family.intro}</p>
@@ -243,73 +239,82 @@ export function FamilySection({ family }: { family: Family }) {
         <div className={styles.rampName}>
           {family.shippedVar}
           <span className={styles.badge}>current</span>
+          <small>{family.role}</small>
         </div>
         <Strip ramp={chosen.ramp} />
       </div>
 
-      <h2>Exploration</h2>
-      {family.anchors && (
-        <div className={styles.ramp}>
-          <div className={styles.rampName}>
-            bonito trio (retired)
-            <small>the three accent anchors being promoted</small>
-          </div>
-          <div className={`${styles.strip} ${styles.trioStrip}`}>
-            {family.anchors.map(({ label, value }) => (
-              <div
-                key={label}
-                className={styles.swatch}
-                style={{ background: oklch(value), color: swatchText(value[0]) }}
-              >
-                {label}
+      {hasExploration && (
+        <>
+          <h2>Exploration</h2>
+          {family.anchors && (
+            <div className={styles.ramp}>
+              <div className={styles.rampName}>
+                bonito trio (retired)
+                <small>the three accent anchors being promoted</small>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
-      {family.ramps.map((r) => (
-        <div key={r.key} className={styles.ramp}>
-          <div className={styles.rampName}>
-            {r.name}
-            {r.chosen && (
-              <span className={styles.badge}>
-                shipped as {family.shippedVar.replace("--juni-", "").replace("-*", "")}
-              </span>
-            )}
-            {r.note && <small>{r.note}</small>}
-          </div>
-          <Strip ramp={r.ramp} />
-          {isCandidate(r) &&
-            family.chips &&
-            (family.chips.kind === "beside" ? (
-              <BesideChips family={family} ramp={r.ramp} />
-            ) : (
-              <OnChips family={family} ramp={r.ramp} />
-            ))}
-        </div>
-      ))}
-
-      <h2>Chroma vs lightness</h2>
-      <div className={styles.chartCard}>
-        <div className={styles.legend}>
+              <div className={`${styles.strip} ${styles.trioStrip}`}>
+                {family.anchors.map(({ label, value }) => (
+                  <div
+                    key={label}
+                    className={styles.swatch}
+                    style={{
+                      background: oklch(value),
+                      color: swatchText(value[0]),
+                    }}
+                  >
+                    {label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {family.ramps.map((r) => (
-            <span key={r.key}>
-              <span
-                className={
-                  r.style === "dashed"
-                    ? styles.chipDashed
-                    : r.style === "dotted"
-                      ? styles.chipDotted
-                      : styles.chip
-                }
-                style={{ borderColor: oklch(r.ramp[5]) }}
-              />
-              {r.name}
-            </span>
+            <div key={r.key} className={styles.ramp}>
+              <div className={styles.rampName}>
+                {r.name}
+                {r.chosen && (
+                  <span className={styles.badge}>
+                    shipped as{" "}
+                    {family.shippedVar.replace("--juni-", "").replace("-*", "")}
+                  </span>
+                )}
+                {r.note && <small>{r.note}</small>}
+              </div>
+              <Strip ramp={r.ramp} />
+              {isCandidate(r) &&
+                family.chips &&
+                (family.chips.kind === "beside" ? (
+                  <BesideChips family={family} ramp={r.ramp} />
+                ) : (
+                  <OnChips family={family} ramp={r.ramp} />
+                ))}
+            </div>
           ))}
-        </div>
-        <Chart family={family} />
-      </div>
+
+          <h2>Chroma vs lightness</h2>
+          <div className={styles.chartCard}>
+            <div className={styles.legend}>
+              {family.ramps.map((r) => (
+                <span key={r.key}>
+                  <span
+                    className={
+                      r.style === "dashed"
+                        ? styles.chipDashed
+                        : r.style === "dotted"
+                          ? styles.chipDotted
+                          : styles.chip
+                    }
+                    style={{ borderColor: oklch(r.ramp[5]) }}
+                  />
+                  {r.name}
+                </span>
+              ))}
+            </div>
+            <Chart family={family} />
+          </div>
+        </>
+      )}
 
       <h2>oklch values</h2>
       <pre className={styles.values}>{valuesListing(family)}</pre>

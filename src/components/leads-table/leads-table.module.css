@@ -49,43 +49,25 @@
   opacity: 0.65;
 }
 
-/* Stage color code on each chip — the family each stage pill wears. */
-.chipDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.chipDotScouted {
-  background-color: var(--juni-heartwood-600);
-}
-
-.chipDotContacted {
-  background-color: var(--juni-berry-400);
-}
-
-.chipDotWorkout {
-  background-color: var(--juni-berry-800);
-}
-
-.chipDotOffer {
-  background-color: var(--juni-bloom-600);
-}
-
-.chipDotSigned {
-  background-color: var(--juni-needle-600);
-}
-
+/* border-collapse: separate (not collapse) — collapsed borders detach from
+ * position: sticky headers in some engines; the table draws no rules, so
+ * separate + zero spacing renders identically. */
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
+/* Sticky header: rides the page scroll pinned to the viewport top, painted
+ * in the inset's own surface color so rows vanish beneath it. */
 .th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: var(--juni-bark-50);
   padding: 0.4rem 0.625rem;
   text-align: left;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -181,7 +163,7 @@
 }
 
 .row:hover {
-  background-color: oklch(from var(--juni-lichen-100) l c h / 0.55);
+  background-color: oklch(from var(--juni-lichen-200) l c h / 0.75);
 }
 
 /* Ask and grade are numeric columns; right/center respectively. */
@@ -195,14 +177,35 @@
   text-align: center;
 }
 
+/* Single-line player cell: [blobatar] Name (POS). */
 .player {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.player svg {
+  flex-shrink: 0;
+}
+
+/* Link affordance only — a player detail page doesn't exist yet, so the
+ * name merely suggests the navigation to come. Swap the span for a router
+ * <Link> when the route lands. */
+.playerName {
   font-weight: 500;
   color: var(--juni-needle-950);
+  cursor: pointer;
+}
+
+.playerName:hover {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .position {
   font-size: 0.7rem;
-  line-height: 1.2;
   color: var(--juni-bark-500);
 }
 
@@ -217,12 +220,8 @@
   white-space: nowrap;
 }
 
-/* Stage pills — hue progression across the funnel: heartwood (warm, raw
- * lead) cools through berry and bloom and arrives at needle green (signed =
- * brand success). Depth ramps alongside: the cold half (Scouted, Contacted)
- * wears washes, everything from Workout on is a solid chip. Each pill sets
- * --stage-dot: the wash family's 600 on tints, light text-family steps on
- * solids. */
+/* Stage pills — one sober combination for every stage (the old Signed look):
+ * needle wash, deep text, needle dot. The word alone carries the stage. */
 .stage {
   display: inline-flex;
   align-items: center;
@@ -232,43 +231,15 @@
   font-size: 0.7rem;
   font-weight: 500;
   white-space: nowrap;
+  background-color: var(--juni-needle-200);
+  color: var(--juni-bloom-950);
 }
 
 .stageDot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--stage-dot);
-}
-
-.stageScouted {
-  --stage-dot: var(--juni-heartwood-700);
-  background-color: var(--juni-heartwood-200);
-  color: var(--juni-berry-950);
-}
-
-.stageContacted {
-  --stage-dot: var(--juni-berry-600);
-  background-color: var(--juni-berry-200);
-  color: var(--juni-bloom-950);
-}
-
-.stageWorkout {
-  --stage-dot: var(--juni-heartwood-300);
-  background-color: var(--juni-berry-800);
-  color: var(--juni-lichen-50);
-}
-
-.stageOffer {
-  --stage-dot: var(--juni-bloom-50);
-  background-color: var(--juni-bloom-200);
-  color: var(--juni-bloom-900);
-}
-
-.stageSigned {
-  --stage-dot: var(--juni-needle-600);
-  background-color: var(--juni-needle-200);
-  color: var(--juni-bloom-950);
+  background-color: var(--juni-needle-600);
 }
 
 /* 20-80 scouting grade badge. */

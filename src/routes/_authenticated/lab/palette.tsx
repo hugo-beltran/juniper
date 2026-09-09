@@ -16,11 +16,13 @@ function PalettePage() {
     <div className={styles.page}>
       <h1>Color Palette</h1>
       <p className={styles.sub}>
-        The identity's four chromatic families, named for juniper anatomy —
-        needle ~130, bloom ~211, berry ~306, heartwood ~28 at their 500 steps —
-        each consolidated from retired ramps during the 2026-09-08
-        explorations. Every tab shows the shipped ramp and the archive of how
-        it was chosen (under its exploration-era name).
+        The identity's five working colors, named for juniper anatomy and
+        organized by function: needle is the brand (~130), bloom its
+        complementary (~211), berry the accent (~292), heartwood the outlier and
+        attention-catcher (~28), and bark the neutral for muted surfaces and
+        plain content. Each chromatic family was consolidated from retired ramps
+        during the 2026-09-08 explorations; every tab shows the shipped ramp and
+        the archive of how it was chosen (under its exploration-era name).
       </p>
       <Tabs>
         <TabList aria-label="Palette families" className={styles.tabList}>

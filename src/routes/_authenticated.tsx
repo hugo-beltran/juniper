@@ -60,12 +60,18 @@ const TENANT_MENUS: Record<string, TenantMenu> = {
   Kingfisher: {
     label: "Fantasy Baseball",
     items: [
-      { to: "/trade-analyzer", label: "Trade Analyzer", icon: ArrowsRightLeftIcon },
+      {
+        to: "/trade-analyzer",
+        label: "Trade Analyzer",
+        icon: ArrowsRightLeftIcon,
+      },
     ],
   },
   "Evergreen Studio": {
     label: "Workspace",
-    items: [{ to: "/seed/evergreen-studio", label: "Seed", icon: SparklesIcon }],
+    items: [
+      { to: "/seed/evergreen-studio", label: "Seed", icon: SparklesIcon },
+    ],
   },
   Bramblewood: {
     label: "Workspace",
@@ -96,7 +102,7 @@ function AuthenticatedLayout() {
                   <SidebarMenuButton asChild>
                     <Link to="/dashboard">
                       <RectangleGroupIcon />
-                      <span>Dashboard</span>
+                      <span>Scouting</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -13,7 +13,8 @@
  * grove/reef/orchid/nectarine/driftwood/olive. */
 
 :root {
-  /* bark — warm gray neutral (hue drifts warm down-scale); né driftwood */
+  /* bark — warm gray neutral for muted surfaces and plain content (hue
+   * drifts warm down-scale); né driftwood */
   --juni-bark-50: oklch(96% 0.00414 80);
   --juni-bark-100: oklch(90% 0.0046 77.3);
   --juni-bark-200: oklch(83% 0.0058 74.71);
@@ -26,8 +27,9 @@
   --juni-bark-900: oklch(38% 0.0196 59.7);
   --juni-bark-950: oklch(26% 0.02 58);
 
-  /* heartwood — warm apricot-to-crimson; the identity's ONLY red
-   * (destructive/error). Born by pulling the retired momo 60% toward the
+  /* heartwood — warm apricot-to-crimson for outliers and attention
+   * catchers; the identity's ONLY red (destructive/error). Born by pulling
+   * the retired momo 60% toward the
    * oriole project's nectarine ramp (chroma ×0.85, house lightness ladder) —
    * tints lean gold, depths lean crimson. Shipped as "nectarine"; renamed.
    * Archived at /lab/palette. */
@@ -73,26 +75,27 @@
   --juni-lichen-900: oklch(22.8% 0.013 107.4);
   --juni-lichen-950: oklch(15.3% 0.006 107.1);
 
-  /* berry — vivid purple accent, needle's near-complement (needle hue ~130,
-   * berry ~306). Born as the merge of the retired blue "berry" and "plum"
-   * ramps ("Orchid": mean lightness, hue 70% plum, chroma ×1.6 over the
-   * muted sources; the quieter "Iris" true average was trialed first).
-   * Shipped as "orchid"; renamed — it inherits the name of the retired blue
-   * ramp it partly descends from. Archived at /lab/palette. */
-  --juni-berry-50: oklch(96% 0.0304 302.19);
-  --juni-berry-100: oklch(90% 0.0394 303.3);
-  --juni-berry-200: oklch(83% 0.0575 304.33);
-  --juni-berry-300: oklch(79% 0.0765 305.23);
-  --juni-berry-400: oklch(73% 0.0963 305.93);
-  --juni-berry-500: oklch(65% 0.1137 306.33);
-  --juni-berry-600: oklch(56% 0.119 306.26);
-  --juni-berry-700: oklch(49.09% 0.1176 305.45);
-  --juni-berry-800: oklch(44% 0.1098 303.5);
-  --juni-berry-900: oklch(38% 0.0982 299.79);
-  --juni-berry-950: oklch(26% 0.0888 293.34);
+  /* berry — cool violet accent (hue ~292). Born as the merge of the retired
+   * blue "berry" and "plum" ramps: the vivid "Orchid" blend (hue 70% plum,
+   * chroma ×1.6) shipped first as "orchid"; revised to "Iris", the true
+   * per-step average of the sources — quieter, and the opposing hue drifts
+   * cancel into a stable violet. The family inherits the retired blue
+   * ramp's name (ripe juniper berries are purple). Archived at
+   * /lab/palette. */
+  --juni-berry-50: oklch(96% 0.019 283.27);
+  --juni-berry-100: oklch(90% 0.0246 285.27);
+  --juni-berry-200: oklch(83% 0.036 287.2);
+  --juni-berry-300: oklch(79% 0.0478 289.05);
+  --juni-berry-400: oklch(73% 0.0602 290.75);
+  --juni-berry-500: oklch(65% 0.0711 292.24);
+  --juni-berry-600: oklch(56% 0.0743 293.38);
+  --juni-berry-700: oklch(49.09% 0.0735 294);
+  --juni-berry-800: oklch(44% 0.0686 293.81);
+  --juni-berry-900: oklch(38% 0.0614 292.37);
+  --juni-berry-950: oklch(26% 0.0555 288.96);
 
-  /* bloom — cool teal, the third chromatic family (needle ~130, bloom ~211,
-   * berry ~306 — a loose triad). Born by promoting the retired bonito trio
+  /* bloom — cool teal, the brand's complementary (needle ~130, bloom ~211,
+   * berry ~292 — a loose triad). Born by promoting the retired bonito trio
    * to a full ramp ("Reef": bonito's hues interpolated onto the house
    * lightness ladder and pulled 30% toward the retired blue berry; chroma
    * follows needle's normalized profile at peak 0.105 — a straight blend

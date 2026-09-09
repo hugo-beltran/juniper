@@ -4,6 +4,7 @@ import "blobatar/motion.css";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Button as AriaButton, type Selection } from "react-aria-components";
 import { useSidebar } from "@/components/sidebar/sidebar";
+import { blobatarPalette } from "@/lib/blobatar-palette";
 import { ListBox, ListBoxItem } from "./listbox";
 import { Squircle } from "./squircle";
 import { useClickOutside } from "./use-click-outside";
@@ -12,32 +13,6 @@ import styles from "./tenant-switcher.module.css";
 export interface Tenant {
   name: string;
   plan: string;
-}
-
-/* The identity's four chromatic families as blobatar palettes, each at a
- * hand-picked step (eyes flip between the family's 100 and 950 for contrast
- * with the head). Hex because blobatar's tint math parses hex (and overrides
- * bypass its contrast guarantee, so eyes are set explicitly); resolved from
- * the --juni-* vars named below — re-derive if a ramp changes. Array order is
- * deliberate: under the FNV-1a bucketing below, the current tenants land
- * Juniper→needle, Bramblewood→heartwood, Evergreen Studio→berry,
- * Kingfisher→bloom. */
-const BLOBATAR_PALETTES = [
-  { head: "#eff3e6", eye: "#1c3d2e" }, // needle-50 / needle-900
-  { head: "#d36d61", eye: "#341c20" }, // heartwood-500 / heartwood-950
-  { head: "#714d95", eye: "#e3d8f4" }, // berry-700 / berry-100
-  { head: "#1a6a75", eye: "#c4e4ef" }, // bloom-700 / bloom-100
-];
-
-/* FNV-1a, chosen over simpler folds because it spreads the seed tenant names
- * across all four buckets (multiplicative char-sum hashes collide them). */
-function fnv1a(text: string) {
-  let hash = 2166136261;
-  for (const ch of text) {
-    hash ^= ch.charCodeAt(0);
-    hash = Math.imul(hash, 16777619) >>> 0;
-  }
-  return hash;
 }
 
 /* Inline disclosure switcher — no popover, per the project's UX philosophy:
@@ -110,7 +85,7 @@ export function TenantSwitcher({
           <Squircle className={styles.logoBackdrop} />
           <Blobatar
             name={name}
-            palette={BLOBATAR_PALETTES[fnv1a(name) % BLOBATAR_PALETTES.length]}
+            palette={blobatarPalette(name)}
             animate="hover"
             size={120}
             title={name}
@@ -129,7 +104,7 @@ export function TenantSwitcher({
             <Blobatar
               name={name}
               palette={
-                BLOBATAR_PALETTES[fnv1a(name) % BLOBATAR_PALETTES.length]
+                blobatarPalette(name)
               }
               animate="hover"
               size={120}
