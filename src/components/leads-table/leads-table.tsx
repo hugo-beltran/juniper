@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { Blobatar } from "@blobatar/react";
-import { FunnelIcon } from "@heroicons/react/24/outline";
 import {
   createColumnHelper,
   createSortedRowModel,
@@ -8,18 +7,14 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
-import {
-  ToggleButton,
-  ToggleButtonGroup,
-  type Selection,
-} from "react-aria-components";
-import { Button } from "@/components/button/button";
 import { blobatarPalette } from "@/lib/blobatar-palette";
+import { LeadsFilters } from "./leads-filters";
 import styles from "./leads-table.module.css";
 
 /* CRM-style leads table, sports flavor: free-agent targets moving through a
  * scouting pipeline. Flat and borderless — hierarchy comes from type and
- * spacing, not rules. Classification chips at the top filter by stage. */
+ * spacing, not rules. Filtering (stage, club, scout) lives in the inline
+ * LeadsFilters panel above the table; the table owns the filter state. */
 
 export const STAGES = [
   "Scouted",
@@ -36,6 +31,23 @@ const STAGE_ORDER = Object.fromEntries(
   STAGES.map((stage, index) => [stage, index]),
 ) as Record<Stage, number>;
 
+/* Filter state the table renders. Controlled by the page (which keeps it
+ * in the route's search params) or, when no `filters` prop is passed, held
+ * internally. "" means "any" for the select filters. */
+export interface LeadsFilterState {
+  pendingOnly: boolean;
+  stage: Stage | "";
+  club: string;
+  scout: string;
+}
+
+export const EMPTY_LEADS_FILTERS: LeadsFilterState = {
+  pendingOnly: false,
+  stage: "",
+  club: "",
+  scout: "",
+};
+
 export interface Lead {
   id: string;
   player: string;
@@ -44,8 +56,8 @@ export interface Lead {
   stage: Stage;
   /** contract ask, USD */
   ask: number;
-  /** 20-80 scouting grade */
-  grade: number;
+  /** 20-80 scouting grade; absent until the player has been analyzed */
+  grade?: number;
   scout: string;
   lastActivity: string;
 }
@@ -94,8 +106,8 @@ const columns = helper.columns([
 
       return (
         <span className={styles.stage}>
-          {stageIndex > 0 && "●".repeat(stageIndex)}
-          {stageIndex < 5 && "○".repeat(5 - stageIndex)}
+          ●{stageIndex > 0 && "●".repeat(stageIndex)}
+          {stageIndex < 4 && "○".repeat(4 - stageIndex)}
           <strong>{row.original.stage}</strong>
         </span>
       );
@@ -109,11 +121,19 @@ const columns = helper.columns([
   }),
   helper.accessor("grade", {
     header: "Grade",
-    cell: ({ row }) => (
-      <span className={`${styles.grade} ${gradeClass(row.original.grade)}`}>
-        {row.original.grade}
-      </span>
-    ),
+    /* Ungraded players sink to the bottom whichever way the column sorts. */
+    sortUndefined: "last",
+    cell: ({ row }) => {
+      const { grade } = row.original;
+      return grade === undefined ? (
+        <span className={`${styles.grade} ${styles.gradePending}`}>
+          <span aria-hidden>&mdash;</span>
+          <span className="sr-only">Grade pending</span>
+        </span>
+      ) : (
+        <span className={`${styles.grade} ${gradeClass(grade)}`}>{grade}</span>
+      );
+    },
   }),
   helper.accessor("scout", { header: "Scout" }),
   helper.accessor("lastActivity", {
@@ -127,56 +147,46 @@ const columns = helper.columns([
   }),
 ]);
 
-const ALL = "all";
-
-/* Header-cell filter: a funnel trigger with an invisible native <select>
- * stretched over it — native semantics and keyboard support, styled face.
- * Shows the active value beside the funnel while filtering. */
-function HeaderFilter({
-  label,
-  options,
-  value,
-  onChange,
+/* Controlled or uncontrolled, like Sidebar and TenantSwitcher: pass
+ * `filters` + `onFiltersChange` to own the state (the dashboard keeps it in
+ * the URL); omit both and the table keeps it internally. The table never
+ * touches the router — it only reports the next state. */
+export function LeadsTable({
+  leads,
+  filters: filtersProp,
+  onFiltersChange,
 }: {
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  leads: Lead[];
+  filters?: LeadsFilterState;
+  onFiltersChange?: (filters: LeadsFilterState) => void;
 }) {
-  return (
-    <span
-      className={styles.headerFilter}
-      data-active={value !== "" || undefined}
-    >
-      <FunnelIcon className={styles.filterIcon} aria-hidden />
-      {value !== "" && <span className={styles.filterBadge} aria-hidden />}
-      <select
-        aria-label={`Filter by ${label}`}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className={styles.filterSelect}
-      >
-        <option value="">All {label}s</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </span>
-  );
-}
-
-export function LeadsTable({ leads }: { leads: Lead[] }) {
-  const [stageFilter, setStageFilter] = useState<Stage | typeof ALL>(ALL);
-  const [clubFilter, setClubFilter] = useState("");
-  const [scoutFilter, setScoutFilter] = useState("");
-
-  const handleSelectionChange = (keys: Selection) => {
-    if (keys === "all") return;
-    const key = keys.values().next().value;
-    if (key !== undefined) setStageFilter(key as Stage | typeof ALL);
+  const [internalFilters, setInternalFilters] =
+    useState<LeadsFilterState>(EMPTY_LEADS_FILTERS);
+  const filters = filtersProp ?? internalFilters;
+  const setFilters = (next: LeadsFilterState) => {
+    if (onFiltersChange) onFiltersChange(next);
+    else setInternalFilters(next);
   };
+  const patch = (partial: Partial<LeadsFilterState>) =>
+    setFilters({ ...filters, ...partial });
+  const {
+    pendingOnly,
+    stage: stageFilter,
+    club: clubFilter,
+    scout: scoutFilter,
+  } = filters;
+
+  /* Stage options carry their pipeline counts (over all leads, not the
+   * filtered set) so the select doubles as a funnel summary. */
+  const stageOptions = useMemo(
+    () =>
+      STAGES.map((stage) => ({
+        value: stage,
+        label: stage,
+        hint: String(leads.filter((lead) => lead.stage === stage).length),
+      })),
+    [leads],
+  );
 
   const clubs = useMemo(
     () => [...new Set(leads.map((lead) => lead.club))].sort(),
@@ -192,55 +202,59 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
     () =>
       leads.filter(
         (lead) =>
-          (stageFilter === ALL || lead.stage === stageFilter) &&
+          (!pendingOnly || lead.grade === undefined) &&
+          (stageFilter === "" || lead.stage === stageFilter) &&
           (clubFilter === "" || lead.club === clubFilter) &&
           (scoutFilter === "" || lead.scout === scoutFilter),
       ),
-    [leads, stageFilter, clubFilter, scoutFilter],
+    [leads, pendingOnly, stageFilter, clubFilter, scoutFilter],
   );
 
   const table = useTable({ features, columns, data: filtered });
 
-  const hasActiveFilters =
-    stageFilter !== ALL || clubFilter !== "" || scoutFilter !== "";
-
-  const clearFilters = () => {
-    setStageFilter(ALL);
-    setClubFilter("");
-    setScoutFilter("");
-  };
+  const clearFilters = () => setFilters(EMPTY_LEADS_FILTERS);
 
   return (
     <div data-slot="leads-table">
-      <div className={styles.toolbar}>
-        <ToggleButtonGroup
-          aria-label="Filter by stage"
-          selectionMode="single"
-          disallowEmptySelection
-          selectedKeys={[stageFilter]}
-          onSelectionChange={handleSelectionChange}
-          className={styles.chips}
-        >
-          <ToggleButton id={ALL} className={styles.chip}>
-            All
-            <span className={styles.chipCount}>{leads.length}</span>
-          </ToggleButton>
-          {STAGES.map((stage) => {
-            const count = leads.filter((lead) => lead.stage === stage).length;
-            return (
-              <ToggleButton key={stage} id={stage} className={styles.chip}>
-                {stage}
-                <span className={styles.chipCount}>{count}</span>
-              </ToggleButton>
-            );
-          })}
-        </ToggleButtonGroup>
-        {hasActiveFilters && (
-          <Button size="mini" variant="discrete" onPress={clearFilters}>
-            Clear filters
-          </Button>
-        )}
-      </div>
+      <LeadsFilters
+        toggles={[
+          /* Off: every lead. On: only leads still awaiting a grade. The
+           * label names what "on" does, per switch semantics. */
+          {
+            id: "pending",
+            label: "Pending analysis only",
+            description: "Leads scouted but not yet graded",
+            checked: pendingOnly,
+            onChange: (checked) => patch({ pendingOnly: checked }),
+          },
+        ]}
+        fields={[
+          {
+            id: "stage",
+            label: "Stage",
+            value: stageFilter,
+            options: stageOptions,
+            onChange: (value) => patch({ stage: value as Stage | "" }),
+          },
+          {
+            id: "club",
+            label: "Club",
+            value: clubFilter,
+            options: clubs.map((club) => ({ value: club, label: club })),
+            onChange: (value) => patch({ club: value }),
+          },
+          {
+            id: "scout",
+            label: "Scout",
+            value: scoutFilter,
+            options: scouts.map((scout) => ({ value: scout, label: scout })),
+            onChange: (value) => patch({ scout: value }),
+          },
+        ]}
+        onClearAll={clearFilters}
+        resultCount={filtered.length}
+        totalCount={leads.length}
+      />
 
       <table className={styles.table}>
         <thead>
@@ -277,22 +291,6 @@ export function LeadsTable({ leads }: { leads: Lead[] }) {
                       </button>
                     ) : (
                       <table.FlexRender header={header} />
-                    )}
-                    {header.column.id === "club" && (
-                      <HeaderFilter
-                        label="club"
-                        options={clubs}
-                        value={clubFilter}
-                        onChange={setClubFilter}
-                      />
-                    )}
-                    {header.column.id === "scout" && (
-                      <HeaderFilter
-                        label="scout"
-                        options={scouts}
-                        value={scoutFilter}
-                        onChange={setScoutFilter}
-                      />
                     )}
                   </th>
                 );

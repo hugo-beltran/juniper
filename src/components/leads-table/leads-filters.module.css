@@ -1,0 +1,152 @@
+/* Filter row: three labelled native selects, a result summary and Clear
+ * all, in the sticky toolbar above the table. */
+
+/* Sticky filter toolbar: pins to the viewport top above the sticky column
+ * headers. Its box is exactly 4rem tall so the headers' sticky offset
+ * (top: 4rem on .th in leads-table.module.css) sits flush beneath it —
+ * change one, change both. Every item bottom-aligns onto one edge: the
+ * select triggers, summary, Clear all and divider share a 1.75rem control
+ * row, the select labels and the switch's title rise above it. Fields never wrap; at
+ * narrow widths the row scrolls sideways instead so the height holds. */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 4rem;
+  padding: 0.625rem 0 0.75rem;
+  background-color: var(--juni-bark-50);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Boolean filter as a react-aria Switch: track on the left, two-line copy
+ * (title + muted hint) as the label, the whole row one press target. No
+ * fixed height or padding: the toolbar bottom-aligns every item, so the
+ * copy's last line sits on the same edge as the selects, the summary and
+ * Clear all. States use react-aria data attributes; the focus ring is the
+ * native outline drawn on the track because the real input is visually
+ * hidden. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  padding: 0 0.25rem;
+  color: var(--juni-needle-950);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Track carries the house volume (theming §4.6): extruded off the surface
+ * by the shared highlight/shade pair; the thumb sits on it with its own
+ * small shade. */
+.switchTrack {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1.125rem;
+  border-radius: 999px;
+  background-color: var(--juni-bark-300);
+  box-shadow:
+    -1px -1px 2px var(--lift-highlight),
+    1px 1px 3px var(--lift-shade);
+  transition:
+    background-color 120ms var(--ease),
+    box-shadow 120ms var(--ease);
+}
+
+.switchThumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background-color: var(--juni-bark-50);
+  box-shadow: 1px 1px 2px var(--lift-shade);
+  transition: translate 120ms var(--ease);
+}
+
+.toggle[data-pressed] .switchTrack {
+  box-shadow:
+    inset -1px -1px 2px var(--lift-highlight),
+    inset 1px 1px 2px var(--lift-shade);
+}
+
+/* Pointer colour (theming §4.7): hover answers in bloom. */
+.toggle[data-hovered] .switchTrack {
+  background-color: var(--juni-bloom-300);
+}
+
+.toggle[data-selected] .switchTrack {
+  background-color: var(--juni-needle-600);
+}
+
+.toggle[data-selected][data-hovered] .switchTrack {
+  background-color: var(--juni-needle-700);
+}
+
+.toggle[data-selected] .switchThumb {
+  translate: 0.875rem 0;
+}
+
+.toggle[data-focus-visible] .switchTrack {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.toggleCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.toggleTitle {
+  font-size: var(--text-md);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.toggleHint {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--juni-bark-600);
+  transition: color 120ms var(--ease);
+}
+
+.toggle[data-selected] .toggleHint {
+  color: var(--juni-needle-800);
+}
+
+/* Hairline between the switches and the selects (react-aria Separator,
+ * role="separator"); spans the 1.75rem control row at the bottom, so it
+ * reads as a rule, not a wall. */
+.divider {
+  width: 1px;
+  height: 1.75rem;
+  flex-shrink: 0;
+  background-color: var(--juni-bark-200);
+}
+
+/* Summary and Clear all share the 1.75rem control row so their text
+ * centers on the selects' text; no padding tricks. */
+.summary {
+  display: inline-flex;
+  align-items: center;
+  height: 1.75rem;
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--juni-bark-500);
+  white-space: nowrap;
+}
+
+.toolbar > [data-slot="button"] {
+  flex-shrink: 0;
+}

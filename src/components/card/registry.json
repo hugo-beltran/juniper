@@ -1,0 +1,14 @@
+{
+  "title": "Card",
+  "description": "Generic bordered surface container. Promoted out of the summary-card family when the SCOUT report timeline became its second consumer.",
+  "category": "layout",
+  "anatomy": [
+    { "part": "Card", "description": "A div with data-slot=\"card\": bark-50 surface, bark-200 hairline border, the house radius. Accepts any div props and a className to extend." }
+  ],
+  "usage": [
+    "Compose content inside; Card owns only the surface, border and radius, never padding conventions of its children.",
+    "Prefer extending Card over drawing a bordered box in a route or feature module.",
+    "Promotion precedent: a private descendant becomes a top-level component like this one when a second, unrelated component needs it."
+  ],
+  "docs": ["component-architecture"]
+}

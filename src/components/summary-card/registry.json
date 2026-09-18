@@ -1,0 +1,15 @@
+{
+  "title": "Summary card",
+  "description": "KPI card: a title, a prominent metric, an optional decorative sparkline beside it and an optional footer line. Built on Card; the sparkline is a private descendant drawn with visx primitives.",
+  "category": "composite",
+  "anatomy": [
+    { "part": "SummaryCard", "description": "Card with data-slot=\"summary-card\"; props are title, metric, trend, footer, className." },
+    { "part": "Sparkline", "description": "Private visx LinePath, aria-hidden, no axes or tooltip; fills its flex slot's width, fixed height. Colors come from --juni-* vars applied through CSS classes because SVG presentation attributes cannot hold var()." }
+  ],
+  "usage": [
+    "Pass the metric as a ReactNode so units and deltas can be marked up by the caller.",
+    "The sparkline is decorative: the metric text MUST carry the information on its own.",
+    "Charts take colors only from the palette via CSS classes so they re-theme live with light/dark."
+  ],
+  "docs": ["component-architecture", "theming", "light-dark"]
+}

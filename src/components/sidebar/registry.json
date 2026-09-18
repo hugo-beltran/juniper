@@ -1,0 +1,21 @@
+{
+  "title": "Sidebar",
+  "description": "Trimmed port of the shadcn sidebar, inset variant only, icon collapse only. Compound component: the consumer arranges named parts as JSX; each part owns its own chrome. Nav items render router links via asChild; active styling keys off aria-current=\"page\".",
+  "category": "composite",
+  "anatomy": [
+    { "part": "SidebarProvider", "description": "Owns open/collapsed state (controlled or uncontrolled) and exposes it through useSidebar. Sets the width custom properties on the wrapper." },
+    { "part": "Sidebar", "description": "The navigation column; data-state=\"expanded|collapsed\" drives the collapse animation." },
+    { "part": "SidebarTrigger", "description": "Mini discrete Button that toggles the sidebar; the label is visually hidden with the global sr-only class." },
+    { "part": "SidebarInset", "description": "The main content surface beside the sidebar, rendered as <main>." },
+    { "part": "SidebarHeader / SidebarContent / SidebarFooter", "description": "Vertical regions of the column." },
+    { "part": "SidebarGroup / SidebarGroupLabel / SidebarGroupContent", "description": "A labelled cluster of menu items." },
+    { "part": "SidebarMenu / SidebarMenuItem / SidebarMenuButton", "description": "The nav list. SidebarMenu draws a sliding indicator shaped as an inset-connector tab under the active item; SidebarMenuButton slots a router link with asChild or renders a react-aria Button." }
+  ],
+  "usage": [
+    "Wrap the layout in SidebarProvider; render Sidebar and SidebarInset as siblings inside it.",
+    "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
+    "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
+    "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut."
+  ],
+  "docs": ["component-architecture", "theming", "light-dark"]
+}

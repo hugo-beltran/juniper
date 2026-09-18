@@ -4,7 +4,7 @@
   background-color: light-dark(var(--juni-bark-800), var(--juni-needle-500));
   color: light-dark(var(--juni-bark-100), var(--juni-bark-950));
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.4;
 }

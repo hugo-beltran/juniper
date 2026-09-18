@@ -13,7 +13,25 @@ design system rendered through a React stack with no Tailwind.
 | Tables | TanStack Table v9 (`useTable` + `tableFeatures`) |
 | Charts | visx primitives + d3 (scales/format helpers) |
 | Components | shadcn-style: react-aria-components + CVA variants + CSS modules |
-| Theme | `src/styles/juniper-theme.css` — oklch `--juni-*` palette scales (grove is the brand ramp), light/dark via `light-dark()` |
+| Theme | `src/styles/juniper-theme.css` — oklch `--juni-*` palette scales (needle is the brand ramp), light/dark via `light-dark()` |
+
+## The contract
+
+Juniper is a design-system contract, not a code package. The normative
+reference docs live in [`docs/`](docs/) and are published, together with a
+machine-readable component registry generated from `src/`, on every deploy:
+
+- <https://hugo-beltran.github.io/juniper/llms.txt> — crawl entry point for
+  LLM agents and humans; links every doc and registry entry.
+- <https://hugo-beltran.github.io/juniper/registry/index.json> — the registry
+  index; per-component entries inline their source files and list their
+  `--juni-*` dependencies.
+
+The generator (`scripts/registry/`) runs inside `vite build` and fails the
+build when a barrel export lacks a `registry.json` sidecar or a component
+stylesheet uses a color outside the palette. `CLAUDE.md` states the rules
+contributors and agents follow; `docs/registry-schema.md` describes the
+schema and how to register a component.
 
 ## Commands
 

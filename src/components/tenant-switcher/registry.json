@@ -1,0 +1,18 @@
+{
+  "title": "Tenant switcher",
+  "description": "Inline disclosure switcher for the sidebar header, no popover: expanding grows the header in place and pushes the nav down; selection is a react-aria ListBox rendered in document flow. Collapsed to the icon rail it becomes a read-only tile showing the active tenant's Blobatar on a squircle backdrop.",
+  "category": "composite",
+  "anatomy": [
+    { "part": "TenantSwitcher", "description": "Root with data-slot=\"tenant-switcher\"; props are tenants, activeTenant, onActiveTenantChange (controlled or uncontrolled)." },
+    { "part": "Trigger", "description": "react-aria Button with aria-expanded and aria-controls pointing at the panel; shows logo, name, plan and a chevron." },
+    { "part": "Panel", "description": "Grid-rows 0fr to 1fr disclosure, inert while closed; Escape closes and returns focus to the trigger; an outside pointerdown dismisses." },
+    { "part": "ListBox / ListBoxItem", "description": "Private react-aria ListBox wrappers with single selection; keyboard navigation and typeahead come from react-aria." },
+    { "part": "Squircle", "description": "Private superellipse SVG backdrop with a glass gradient and a tinted drop shadow; colors land as CSS vars via style attributes." }
+  ],
+  "usage": [
+    "Must render inside SidebarProvider: it reads the collapsed state through useSidebar.",
+    "Inline over overlay is the house philosophy for disclosure; do not swap the panel for a popover.",
+    "ListBox, Squircle and useClickOutside stay private to this family until a second, unrelated component needs them."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

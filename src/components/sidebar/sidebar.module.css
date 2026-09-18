@@ -96,7 +96,7 @@
   align-items: center;
   padding: 0 0.5rem;
   border-radius: var(--radius-md);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--juni-bloom-50);
   white-space: nowrap;
@@ -111,7 +111,7 @@
 
 .groupContent {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--text-base);
 }
 
 .menu {
@@ -183,7 +183,7 @@
   background: transparent;
   color: var(--juni-needle-950);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: var(--text-base);
   font-weight: 500;
   line-height: 1.1rem;
   text-align: left;

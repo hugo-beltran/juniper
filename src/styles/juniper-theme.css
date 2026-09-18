@@ -130,8 +130,13 @@
   /* Page canvas. (Dark stop was spruce-800; needle-900 is its closest match.) */
   --body: light-dark(var(--juni-bark-200), var(--juni-needle-900));
 
-  /* Focus ring (consumed by the global :focus-visible rule). */
-  --ring: var(--juni-needle-600);
+  /* Focus ring (consumed by the global :focus-visible rule and the few
+   * components that draw the outline on a proxy element). Bloom, the
+   * complementary, by decision (2026-09-17): focus is a pointer state, and
+   * pointer states answer in bloom while selection answers in needle
+   * (docs/theming.md §4.7) — so a focused control can never be mistaken
+   * for a selected one. */
+  --ring: var(--juni-bloom-600);
 
   /* Links — private base feeds both states. */
   --link-color: light-dark(
@@ -144,8 +149,21 @@
     oklch(from var(--link-color) calc(l + 0.25) 0.18 h)
   );
 
-  /* Nav — focus outline on the sidebar surface. */
-  --nav-outline: var(--juni-needle-400);
+  /* Nav — focus outline on the sidebar's dark needle surface; the same
+   * bloom decision as --ring, lifted to a step that clears needle-900. */
+  --nav-outline: var(--juni-bloom-400);
+
+  /* Volume — the extruded recipe neutral controls wear (docs/theming.md
+   * §4.6): a highlight cast up-left and a shade cast down-right. The colors
+   * are the primary button's own (its needle-50 inner ring and bloom-700
+   * drop shadow), so every control is lit by the same lamp. The highlight
+   * lifts lightness and alpha because it must show against bark-50, where
+   * needle-50 at 15% would vanish; the button's ring sits on a needle-400
+   * fill. Pressed/open inverts them (inset). Chosen 2026-09-17 from the
+   * /lab/lift exploration. Consumers: the leads-table Select (trigger and
+   * popover) and switch track. */
+  --lift-highlight: oklch(from var(--juni-needle-50) calc(l + 0.03) c h / 0.9);
+  --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.2);
 }
 
 :root ::selection {

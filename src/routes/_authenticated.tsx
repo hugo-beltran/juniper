@@ -5,6 +5,7 @@ import {
   ChartPieIcon,
   Cog6ToothIcon,
   CubeIcon,
+  CubeTransparentIcon,
   LifebuoyIcon,
   RectangleGroupIcon,
   SparklesIcon,
@@ -55,7 +56,10 @@ interface TenantMenu {
 const TENANT_MENUS: Record<string, TenantMenu> = {
   Juniper: {
     label: "Lab",
-    items: [{ to: "/lab/palette", label: "Palette", icon: SwatchIcon }],
+    items: [
+      { to: "/lab/palette", label: "Palette", icon: SwatchIcon },
+      { to: "/lab/lift", label: "Lift", icon: CubeTransparentIcon },
+    ],
   },
   Kingfisher: {
     label: "Fantasy Baseball",
