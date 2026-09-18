@@ -51,7 +51,10 @@ keyboard focus, the focus ring), contrast accents and tinted shadows.
 2.3. `--juni-berry-*` is the violet accent: categorical emphasis and chips.
 
 2.4. `--juni-heartwood-*` is the identity's only red. Every destructive or
-error state MUST use it, and nothing else MAY be red.
+error state MUST use it, and nothing else MAY be red. It is also the
+attention colour: a badge or indicator that says "something needs acting
+on" (a count of leads awaiting analysis) wears heartwood, and MUST render
+nothing when there is nothing to act on, so the red keeps its meaning.
 
 2.5. `--juni-bark-*` is the warm-gray neutral for surfaces, borders and plain
 content. `--juni-lichen-*` is the green-gray secondary neutral for muted
@@ -167,8 +170,10 @@ never by shadow.
   bark-50). Do not introduce a third material. The chosen recipe and the
   five rejected alternatives are archived at `/lab/lift` in the demo app.
 
-4.7. **Pointer colour.** Hover and keyboard focus on a control answer in
-`--juni-bloom-*`, the complementary: a bloom hairline on a trigger
+4.7. **Pointer colour.** Hover and keyboard focus on a neutral control
+answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
+the primary button, a clear ×  — keep their own needle fill on hover: they
+act rather than point): a bloom hairline on a trigger
 (`bloom-400`), a bloom wash on a list row (`bloom-100`, text `bloom-950`),
 a bloom track on a hovered switch (`bloom-300`). Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you

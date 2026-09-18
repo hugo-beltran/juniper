@@ -49,7 +49,8 @@
             {
               "label": "Scouting",
               "to": "/dashboard",
-              "icon": "rectangle-group"
+              "icon": "rectangle-group",
+              "badge": "pending-analysis"
             },
             {
               "label": "Trade Analyzer",

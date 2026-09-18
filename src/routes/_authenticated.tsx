@@ -29,6 +29,7 @@ import {
   SidebarInset,
   SidebarInsetHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -38,14 +39,21 @@ import {
 import {
   defaultTenant,
   firstRoute,
+  leadsQuery,
   navigationQuery,
+  pendingAnalysisCount,
+  type NavBadge,
   type NavIcon,
   type NavTenant,
 } from "@/lib/api";
 import styles from "./_authenticated.module.css";
 
 export const Route = createFileRoute("/_authenticated")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(navigationQuery),
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(navigationQuery),
+      context.queryClient.ensureQueryData(leadsQuery),
+    ]),
   component: AuthenticatedLayout,
 });
 
@@ -66,6 +74,13 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   users: UsersIcon,
 };
 
+/* Badge sources named in the tree, resolved to live counts here. 0 hides
+ * the badge. */
+function useNavBadges(): Record<NavBadge, number> {
+  const { data: leads } = useSuspenseQuery(leadsQuery);
+  return { "pending-analysis": pendingAnalysisCount(leads) };
+}
+
 const ownsPath = (tenant: NavTenant, pathname: string) =>
   tenant.groups.some((group) =>
     group.items.some((item) => item.to !== undefined && item.to === pathname),
@@ -76,6 +91,7 @@ function AuthenticatedLayout() {
   const { tenants } = tree;
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const badges = useNavBadges();
   const [selectedId, setSelectedId] = useState(defaultTenant(tree).id);
 
   /* The URL wins: landing on a route a tenant owns selects that tenant, so
@@ -113,13 +129,28 @@ function AuthenticatedLayout() {
                 <SidebarMenu>
                   {group.items.map((item) => {
                     const Icon = ICONS[item.icon];
+                    const count = item.badge ? badges[item.badge] : 0;
+                    /* The dot goes before the label in DOM order (see
+                     * SidebarMenuBadge); the words go inside the label. */
+                    const badge = count > 0 && <SidebarMenuBadge />;
+                    const labelText = (
+                      <>
+                        {item.label}
+                        {count > 0 && (
+                          <span className="sr-only">
+                            {`, ${count} leads pending analysis`}
+                          </span>
+                        )}
+                      </>
+                    );
                     return (
                       <SidebarMenuItem key={item.label}>
                         <SidebarMenuButton asChild>
                           {item.to !== undefined ? (
                             <Link to={item.to}>
                               <Icon />
-                              <span>{item.label}</span>
+                              {badge}
+                              <span>{labelText}</span>
                             </Link>
                           ) : (
                             <a
@@ -128,7 +159,8 @@ function AuthenticatedLayout() {
                               rel={item.href.startsWith("http") ? "noreferrer" : undefined}
                             >
                               <Icon />
-                              <span>{item.label}</span>
+                              {badge}
+                              <span>{labelText}</span>
                             </a>
                           )}
                         </SidebarMenuButton>

@@ -21,7 +21,9 @@
 }
 
 /* Clear (×) — shown only while a value is set; sits over the trigger's
- * right end ahead of the chevron. Hover answers in bloom (§4.7). */
+ * right end ahead of the chevron. Hover fills with needle like a small
+ * primary action (it acts, it does not merely point — §4.7 covers neutral
+ * controls). */
 .clear {
   position: absolute;
   top: 50%;
@@ -33,7 +35,7 @@
   height: 1.125rem;
   padding: 0;
   border: none;
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--juni-bark-600);
   translate: 0 -50%;
@@ -44,14 +46,14 @@
 }
 
 .clear svg {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .clear[data-hovered],
 .clear[data-pressed] {
-  background-color: var(--juni-bloom-100);
-  color: var(--juni-bloom-950);
+  background-color: var(--juni-needle-400);
+  color: var(--juni-bark-50);
 }
 
 /* Trigger — extruded (theming §4.6): the surface pushed out, faint

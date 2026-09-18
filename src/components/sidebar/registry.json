@@ -34,6 +34,10 @@
     {
       "part": "SidebarMenu / SidebarMenuItem / SidebarMenuButton",
       "description": "The nav list. SidebarMenu draws a sliding indicator shaped as an inset-connector tab under the active item; SidebarMenuButton slots a router link with asChild or renders a react-aria Button."
+    },
+    {
+      "part": "SidebarMenuBadge",
+      "description": "Attention indicator: a heartwood-400 dot ringed in the rail's green, floating just after the row's label (rendered inside the button before the label span, reordered by CSS so the label stays the last child that doubles as the rail tooltip); on the icon's corner in the collapsed rail; no ring on the active row, where it sits on the bark-50 pill. Purely visual and aria-hidden — the words for screen readers live inside the label as sr-only text. Never a pointer target."
     }
   ],
   "usage": [
@@ -42,7 +46,8 @@
     "Sticky content inside the inset pins to top: 0; the floating trigger lives in the inset's left gutter, so nothing needs to offset for it.",
     "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
     "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
-    "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut."
+    "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut.",
+    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0."
   ],
   "docs": [
     "component-architecture",

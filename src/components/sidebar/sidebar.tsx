@@ -387,6 +387,27 @@ export function SidebarMenuItem({ className, ...props }: ComponentProps<"li">) {
   );
 }
 
+/* Attention indicator on a menu row: a heartwood dot floating after the
+ * label, a dot on the icon's corner in the collapsed rail. Render it inside
+ * the button BEFORE the label span (the CSS reorders it visually): the
+ * label must stay the button's last child because it doubles as the rail
+ * tooltip. Purely visual (aria-hidden) — put the words for screen readers
+ * inside the label with the sr-only class, so the row reads "Scouting, 8
+ * leads pending analysis" in that order. */
+export function SidebarMenuBadge({
+  className,
+  ...props
+}: ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="sidebar-menu-badge"
+      aria-hidden
+      className={cn(styles.menuBadge, className)}
+      {...props}
+    />
+  );
+}
+
 /* Collapsed-rail labels need no tooltip component: the row's own label span
  * is absolutely repositioned over the inset and revealed on hover/focus by
  * the CSS module — same element, no overlay, and the accessible name stays

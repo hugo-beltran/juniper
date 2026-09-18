@@ -268,6 +268,7 @@
  * it inherits the row's hover color. */
 .menuButton::after {
   content: "";
+  order: 2;
   width: 0.875rem;
   height: 0.875rem;
   margin-left: auto;
@@ -295,6 +296,39 @@
   display: none;
 }
 
+/* Attention indicator: a heartwood-400 dot floating just after the label
+ * (flex `order` puts it after the text and before the trailing chevron,
+ * while the label span stays the button's last child, which the
+ * collapsed-rail tooltip relies on), ringed in the rail's own green so it
+ * reads against the gradient. No digits — presence is the signal; the
+ * label carries the sr-only count. Never a pointer target. */
+.menuBadge {
+  order: 1;
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--juni-heartwood-400);
+  box-shadow: 0 0 0 2px var(--juni-needle-500);
+  translate: 0 -0.25rem;
+  pointer-events: none;
+}
+
+/* In the rail the dot moves to the icon's top-right corner (positioned
+ * against the li, like the label tooltip). */
+.container[data-state="collapsed"] .menuBadge {
+  position: absolute;
+  top: 0.55rem;
+  left: 1.25rem;
+  translate: none;
+}
+
+/* On the active row the dot sits on the bark-50 indicator pill, where the
+ * green ring would read as a stray outline — no ring there. */
+.menuButton:is([aria-current="page"], [data-active]) .menuBadge {
+  box-shadow: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .menuButton::after {
     transform: translateX(0);
@@ -308,7 +342,7 @@
   flex-shrink: 0;
 }
 
-.menuButton span:last-child {
+.menuButton > span:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -317,7 +351,7 @@
  * the inset (li is its containing block, so the button's overflow:hidden
  * can't clip it) in the inset's own surface color. Shown after a short
  * intent delay on hover/focus; hidden instantly. Pure CSS, no overlay. */
-.container[data-state="collapsed"] .menuButton span:last-child {
+.container[data-state="collapsed"] .menuButton > span:last-child {
   position: absolute;
   top: 50%;
   left: calc(100% + 1rem);
@@ -333,7 +367,7 @@
 
 .container[data-state="collapsed"]
   .menuButton:is(:hover, :focus-visible)
-  span:last-child {
+  > span:last-child {
   opacity: 1;
   transition-delay: 300ms;
 }
