@@ -19,9 +19,8 @@ import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenticated/scout-report'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
+import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
-import { Route as AuthenticatedSeedBramblewoodRouteImport } from './routes/_authenticated/seed/bramblewood'
-import { Route as AuthenticatedSeedEvergreenStudioRouteImport } from './routes/_authenticated/seed/evergreen-studio'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -74,23 +73,16 @@ const AuthenticatedTradeAnalyzerRoute =
     path: '/trade-analyzer',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedLabLiftRoute = AuthenticatedLabLiftRouteImport.update({
+  id: '/lab/lift',
+  path: '/lab/lift',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
   id: '/lab/palette',
   path: '/lab/palette',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedSeedBramblewoodRoute =
-  AuthenticatedSeedBramblewoodRouteImport.update({
-    id: '/seed/bramblewood',
-    path: '/seed/bramblewood',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSeedEvergreenStudioRoute =
-  AuthenticatedSeedEvergreenStudioRouteImport.update({
-    id: '/seed/evergreen-studio',
-    path: '/seed/evergreen-studio',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -102,9 +94,8 @@ export interface FileRoutesByFullPath {
   '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
+  '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
-  '/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
-  '/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -116,9 +107,8 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/': typeof AuthenticatedIndexRoute
+  '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
-  '/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
-  '/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,9 +122,8 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
-  '/_authenticated/seed/bramblewood': typeof AuthenticatedSeedBramblewoodRoute
-  '/_authenticated/seed/evergreen-studio': typeof AuthenticatedSeedEvergreenStudioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -148,9 +137,8 @@ export interface FileRouteTypes {
     | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
+    | '/lab/lift'
     | '/lab/palette'
-    | '/seed/bramblewood'
-    | '/seed/evergreen-studio'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -162,9 +150,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/trade-analyzer'
     | '/'
+    | '/lab/lift'
     | '/lab/palette'
-    | '/seed/bramblewood'
-    | '/seed/evergreen-studio'
   id:
     | '__root__'
     | '/_authenticated'
@@ -177,9 +164,8 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/trade-analyzer'
     | '/_authenticated/'
+    | '/_authenticated/lab/lift'
     | '/_authenticated/lab/palette'
-    | '/_authenticated/seed/bramblewood'
-    | '/_authenticated/seed/evergreen-studio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -259,25 +245,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTradeAnalyzerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/lift': {
+      id: '/_authenticated/lab/lift'
+      path: '/lab/lift'
+      fullPath: '/lab/lift'
+      preLoaderRoute: typeof AuthenticatedLabLiftRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/palette': {
       id: '/_authenticated/lab/palette'
       path: '/lab/palette'
       fullPath: '/lab/palette'
       preLoaderRoute: typeof AuthenticatedLabPaletteRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/seed/bramblewood': {
-      id: '/_authenticated/seed/bramblewood'
-      path: '/seed/bramblewood'
-      fullPath: '/seed/bramblewood'
-      preLoaderRoute: typeof AuthenticatedSeedBramblewoodRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/seed/evergreen-studio': {
-      id: '/_authenticated/seed/evergreen-studio'
-      path: '/seed/evergreen-studio'
-      fullPath: '/seed/evergreen-studio'
-      preLoaderRoute: typeof AuthenticatedSeedEvergreenStudioRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -292,9 +271,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
-  AuthenticatedSeedBramblewoodRoute: typeof AuthenticatedSeedBramblewoodRoute
-  AuthenticatedSeedEvergreenStudioRoute: typeof AuthenticatedSeedEvergreenStudioRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -306,9 +284,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
-  AuthenticatedSeedBramblewoodRoute: AuthenticatedSeedBramblewoodRoute,
-  AuthenticatedSeedEvergreenStudioRoute: AuthenticatedSeedEvergreenStudioRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

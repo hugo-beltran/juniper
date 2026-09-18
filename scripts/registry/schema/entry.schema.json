@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hugo-beltran.github.io/juniper/registry/schema/entry.schema.json",
+  "title": "Juniper registry entry",
+  "description": "One published unit of the Juniper contract: a component, a shared lib helper, or the theme. Source files are inlined so a single fetch yields everything needed to reproduce the entry.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "name",
+    "type",
+    "title",
+    "description",
+    "url",
+    "files",
+    "palette",
+    "dependencies",
+    "docs"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Kebab-case identifier; for components, the directory name under src/components."
+    },
+    "type": { "enum": ["component", "lib", "theme"] },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "url": { "type": "string", "format": "uri" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/file" }
+    },
+    "palette": {
+      "type": "array",
+      "description": "Sorted --juni-* custom properties referenced by this entry's CSS. For the theme entry, every property it defines.",
+      "items": { "type": "string", "pattern": "^--juni-[a-z]+(-[a-z0-9]+)*$" },
+      "uniqueItems": true
+    },
+    "dependencies": {
+      "type": "object",
+      "required": ["npm", "registry"],
+      "additionalProperties": false,
+      "properties": {
+        "npm": {
+          "type": "array",
+          "description": "npm package names imported by this entry's source files.",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "registry": {
+          "type": "array",
+          "description": "Names of other registry entries this one imports (components or lib helpers).",
+          "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "docs": {
+      "type": "array",
+      "description": "Slugs of reference docs that govern this entry.",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "uniqueItems": true
+    },
+    "category": { "enum": ["primitive", "composite", "layout", "demo"] },
+    "anatomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["part", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "part": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "usage": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "component" } } },
+      "then": { "required": ["category", "anatomy", "usage"] }
+    },
+    {
+      "if": { "properties": { "type": { "enum": ["lib", "theme"] } } },
+      "then": {
+        "not": {
+          "anyOf": [
+            { "required": ["category"] },
+            { "required": ["anatomy"] },
+            { "required": ["usage"] }
+          ]
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "file": {
+      "type": "object",
+      "required": ["path", "kind", "content"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Repo-relative path, e.g. src/components/button/button.tsx."
+        },
+        "kind": {
+          "enum": ["component", "style", "hook", "util"],
+          "description": "component = .tsx, style = .css (CSS module), hook = use-*.ts, util = other .ts."
+        },
+        "content": {
+          "type": "string",
+          "description": "Full UTF-8 source of the file."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Button",
+  "description": "shadcn-style button on the react-aria Button primitive. Callers pass intent props (variant, size), never class names. Primary is a glass pane lit from off-center; secondary and discrete are flat.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "Button", "description": "The single root element, a react-aria Button. Carries data-slot=\"button\", data-variant and data-size for styling hooks and tests." }
+  ],
+  "usage": [
+    "Use onPress and isDisabled (react-aria semantics), not onClick and disabled.",
+    "Variants: primary (default, one per view), secondary (supporting actions), discrete (toolbar and inline triggers). Sizes: mini, small, medium (default).",
+    "State styling keys off react-aria data attributes (data-hovered, data-pressed, data-disabled), so hover stays correct across pointer types.",
+    "There is no destructive variant yet; when one is added it MUST use the heartwood ramp, the identity's only red.",
+    "An icon inside the button is sized by the button; pass it as a child, do not size it yourself."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

@@ -1,7 +1,11 @@
+/* The wrapper is the viewport: fixed to the screen height and clipped, so
+ * the document never scrolls. The inset is the page's one scroll container
+ * (sticky toolbars and headers inside it pin to its top edge). */
 .wrapper {
   display: flex;
-  min-height: 100svh;
+  height: 100svh;
   width: 100%;
+  overflow: hidden;
   background: linear-gradient(
     to bottom,
     var(--juni-needle-400),
@@ -37,10 +41,63 @@
   flex-direction: column;
   width: 100%;
   min-width: 40rem;
+  min-height: 0;
   margin: 0.5rem;
   margin-left: 0;
+  /* Reserved gutter for the floating trigger; see SidebarInsetHeader. */
+  padding-left: var(--sidebar-inset-gutter);
+  overflow-y: auto;
+  /* Reserve the scrollbar's column even when content fits, so pages that
+   * scroll and pages that don't share the same content width and nothing
+   * shifts when a filter shortens the table. */
+  scrollbar-gutter: stable;
   background-color: var(--juni-bark-50);
   border-radius: var(--radius-md);
+  /* Subtle scrollbar, part of the surface (theming §4.4.1): thin, bark-300
+   * thumb on a transparent track, bark-400 on hover. scrollbar-color is the
+   * standard property; the ::-webkit-scrollbar rules cover engines without
+   * it and are ignored where scrollbar-color applies. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--juni-bark-300) transparent;
+}
+
+.inset:hover {
+  scrollbar-color: var(--juni-bark-400) transparent;
+}
+
+.inset::-webkit-scrollbar {
+  width: 8px;
+}
+
+.inset::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.inset::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: var(--juni-bark-200);
+}
+
+.inset::-webkit-scrollbar-thumb:hover {
+  background-color: var(--juni-bark-400);
+}
+
+/* The anchor takes no height and spans the inset's full width (it escapes
+ * the gutter padding with a negative margin); its children are placed
+ * absolutely in the gutter, vertically centered on a 4rem toolbar row. */
+.insetHeader {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  height: 0;
+  margin-left: calc(-1 * var(--sidebar-inset-gutter));
+  flex-shrink: 0;
+}
+
+.insetHeader > * {
+  position: absolute;
+  top: 1.125rem;
+  left: 0.625rem;
 }
 
 .header {
@@ -96,7 +153,7 @@
   align-items: center;
   padding: 0 0.5rem;
   border-radius: var(--radius-md);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--juni-bloom-50);
   white-space: nowrap;
@@ -111,7 +168,7 @@
 
 .groupContent {
   width: 100%;
-  font-size: 0.875rem;
+  font-size: var(--text-base);
 }
 
 .menu {
@@ -183,7 +240,7 @@
   background: transparent;
   color: var(--juni-needle-950);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: var(--text-base);
   font-weight: 500;
   line-height: 1.1rem;
   text-align: left;
@@ -211,6 +268,7 @@
  * it inherits the row's hover color. */
 .menuButton::after {
   content: "";
+  order: 2;
   width: 0.875rem;
   height: 0.875rem;
   margin-left: auto;
@@ -238,6 +296,39 @@
   display: none;
 }
 
+/* Attention indicator: a heartwood-400 dot floating just after the label
+ * (flex `order` puts it after the text and before the trailing chevron,
+ * while the label span stays the button's last child, which the
+ * collapsed-rail tooltip relies on), ringed in the rail's own green so it
+ * reads against the gradient. No digits — presence is the signal; the
+ * label carries the sr-only count. Never a pointer target. */
+.menuBadge {
+  order: 1;
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--juni-heartwood-400);
+  box-shadow: 0 0 0 2px var(--juni-needle-500);
+  translate: 0 -0.25rem;
+  pointer-events: none;
+}
+
+/* In the rail the dot moves to the icon's top-right corner (positioned
+ * against the li, like the label tooltip). */
+.container[data-state="collapsed"] .menuBadge {
+  position: absolute;
+  top: 0.55rem;
+  left: 1.25rem;
+  translate: none;
+}
+
+/* On the active row the dot sits on the bark-50 indicator pill, where the
+ * green ring would read as a stray outline — no ring there. */
+.menuButton:is([aria-current="page"], [data-active]) .menuBadge {
+  box-shadow: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .menuButton::after {
     transform: translateX(0);
@@ -251,7 +342,7 @@
   flex-shrink: 0;
 }
 
-.menuButton span:last-child {
+.menuButton > span:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -260,7 +351,7 @@
  * the inset (li is its containing block, so the button's overflow:hidden
  * can't clip it) in the inset's own surface color. Shown after a short
  * intent delay on hover/focus; hidden instantly. Pure CSS, no overlay. */
-.container[data-state="collapsed"] .menuButton span:last-child {
+.container[data-state="collapsed"] .menuButton > span:last-child {
   position: absolute;
   top: 50%;
   left: calc(100% + 1rem);
@@ -276,7 +367,7 @@
 
 .container[data-state="collapsed"]
   .menuButton:is(:hover, :focus-visible)
-  span:last-child {
+  > span:last-child {
   opacity: 1;
   transition-delay: 300ms;
 }

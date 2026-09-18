@@ -1,0 +1,57 @@
+{
+  "title": "Sidebar",
+  "description": "Trimmed port of the shadcn sidebar, inset variant only, icon collapse only. Compound component: the consumer arranges named parts as JSX; each part owns its own chrome. Nav items render router links via asChild; active styling keys off aria-current=\"page\".",
+  "category": "composite",
+  "anatomy": [
+    {
+      "part": "SidebarProvider",
+      "description": "Owns open/collapsed state (controlled or uncontrolled) and exposes it through useSidebar. Sets the width custom properties on the wrapper."
+    },
+    {
+      "part": "Sidebar",
+      "description": "The navigation column; data-state=\"expanded|collapsed\" drives the collapse animation."
+    },
+    {
+      "part": "SidebarTrigger",
+      "description": "Mini discrete Button that toggles the sidebar; the label is visually hidden with the global sr-only class."
+    },
+    {
+      "part": "SidebarInset",
+      "description": "The main content surface beside the sidebar, rendered as <main>. It is the page's only scroll container — the wrapper is viewport-height and clipped, so the document never scrolls — with the house subtle scrollbar and a reserved left gutter for the floating trigger; sticky toolbars and headers inside it pin to its top edge, and the router restores its scroll position."
+    },
+    {
+      "part": "SidebarInsetHeader",
+      "description": "Zero-height sticky anchor at the top of the inset that floats the SidebarTrigger in the inset's reserved left gutter (--sidebar-inset-gutter, 3rem), so the toggle stays present while the inset scrolls and shares a row with sticky toolbars and table headers without any offset."
+    },
+    {
+      "part": "SidebarHeader / SidebarContent / SidebarFooter",
+      "description": "Vertical regions of the column."
+    },
+    {
+      "part": "SidebarGroup / SidebarGroupLabel / SidebarGroupContent",
+      "description": "A labelled cluster of menu items."
+    },
+    {
+      "part": "SidebarMenu / SidebarMenuItem / SidebarMenuButton",
+      "description": "The nav list. SidebarMenu draws a sliding indicator shaped as an inset-connector tab under the active item; SidebarMenuButton slots a router link with asChild or renders a react-aria Button."
+    },
+    {
+      "part": "SidebarMenuBadge",
+      "description": "Attention indicator: a heartwood-400 dot ringed in the rail's green, floating just after the row's label (rendered inside the button before the label span, reordered by CSS so the label stays the last child that doubles as the rail tooltip); on the icon's corner in the collapsed rail; no ring on the active row, where it sits on the bark-50 pill. Purely visual and aria-hidden — the words for screen readers live inside the label as sr-only text. Never a pointer target."
+    }
+  ],
+  "usage": [
+    "Wrap the layout in SidebarProvider; render Sidebar and SidebarInset as siblings inside it.",
+    "Scrolling happens inside SidebarInset, not the document: size sticky offsets against the inset's top edge, and never rely on window.scrollY.",
+    "Sticky content inside the inset pins to top: 0; the floating trigger lives in the inset's left gutter, so nothing needs to offset for it.",
+    "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
+    "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
+    "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut.",
+    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0."
+  ],
+  "docs": [
+    "component-architecture",
+    "theming",
+    "light-dark"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Leads table",
+  "description": "CRM-style pipeline table on TanStack Table v9 (useTable + tableFeatures): flat and borderless, hierarchy from type and spacing. A sticky toolbar of three labelled native selects (Stage, Club, Scout) filters the rows; sticky toolbar and headers ride the page scroll.",
+  "category": "demo",
+  "anatomy": [
+    {
+      "part": "LeadsFilters",
+      "description": "Private filter row in the sticky toolbar: a react-aria Switch on the left with two-line copy as its label (\"Pending analysis only\" plus a muted hint wired as aria-describedby; pressing track or copy toggles), a vertical Separator, then one house Select per filter (react-aria Select: label, extruded trigger with a clear (×) button while a value is set, anchored popover at trigger width on the same material; Stage with pipeline counts, Club, Scout), a live result summary, and a discrete Clear all Button. Data-driven through toggles and fields arrays; owns no filter state."
+    },
+    {
+      "part": "Table",
+      "description": "Semantic table with sortable headers (aria-sort) and a hover wash on rows; no rules drawn."
+    },
+    {
+      "part": "Cells",
+      "description": "Player avatar via Blobatar on a bark palette, stage progress dots, formatted ask, and a graded badge on the 20-80 scouting scale — or a hollow \"Needs analysis\" badge when the player has no grade yet."
+    }
+  ],
+  "usage": [
+    "Controlled or uncontrolled: pass filters + onFiltersChange to own the filter state (the dashboard keeps it in zod-validated search params); omit both and the table keeps it internally. The table never touches the router.",
+    "A reference composition, not a reusable primitive: copy the patterns (the house Select with its anchored popover, sticky toolbar offsets, data-attribute state styling) rather than the component.",
+    "Filters are always visible controls; the only overlay is each Select's anchored popover, which matches its trigger's width and material. No dialogs or free-floating menus.",
+    "Toolbar controls wear the house volume: the select and the switch track use the extruded recipe (--lift-highlight / --lift-shade, inset when pressed) per docs/theming.md 4.6.",
+    "Hover and keyboard focus answer in bloom (trigger hairline, list-row wash, switch track); selection stays in needle, per docs/theming.md 4.7.",
+    "Register sorting features up front with tableFeatures; never pass v8-style table options.",
+    "The Stage column sorts by funnel position, not alphabet; the Grade column sorts ungraded rows last; the Activity column is unsortable until it carries a real timestamp.",
+    "Sticky toolbar height (leads-filters, 4rem) and header top offset (leads-table) are coupled: change one, change both."
+  ],
+  "docs": [
+    "component-architecture",
+    "theming"
+  ]
+}

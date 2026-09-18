@@ -107,7 +107,7 @@
 .name {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 1.125rem;
+  font-size: var(--text-xl);
   font-weight: 600;
   text-wrap: nowrap;
 }
@@ -115,7 +115,7 @@
 .plan {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   font-weight: 400;
   opacity: 0.7;
 }

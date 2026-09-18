@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
+import { juniperRegistry } from './scripts/registry/vite-plugin.ts'
 
 export default defineConfig(({ command, isPreview }) => ({
   // GitHub Pages serves the app from /<repo>/; dev stays at the root. The
@@ -18,6 +19,9 @@ export default defineConfig(({ command, isPreview }) => ({
     // `import Icon from './icon.svg?react'` — plain .svg imports still
     // resolve to asset URLs.
     svgr(),
+    // Publishes llms.txt, docs/ and registry/ into dist/ on build — the
+    // Juniper contract surface. URL prefix is derived from `base` above.
+    juniperRegistry(),
   ],
   resolve: {
     alias: {

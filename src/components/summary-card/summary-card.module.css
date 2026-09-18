@@ -14,7 +14,7 @@
 }
 
 .title {
-  font-size: 0.8125rem;
+  font-size: var(--text-md);
   font-weight: 600;
   color: var(--juni-bloom-800);
 }
@@ -27,7 +27,7 @@
 }
 
 .metric {
-  font-size: 2rem;
+  font-size: var(--display-lg);
   font-weight: 800;
   line-height: 1.2;
   color: var(--juni-needle-500);
@@ -36,7 +36,7 @@
 
 .footer {
   margin-top: 0.3rem;
-  font-size: 0.8rem;
+  font-size: var(--text-md);
   line-height: 1.4;
   color: var(--juni-bark-600);
 }

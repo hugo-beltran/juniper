@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hugo-beltran.github.io/juniper/registry/schema/index.schema.json",
+  "title": "Juniper registry index",
+  "description": "Top-level listing of everything the Juniper contract publishes: reference docs and registry entries with their URLs. Fetch this first, then follow entry URLs.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "name",
+    "description",
+    "baseUrl",
+    "repository",
+    "llms",
+    "schema",
+    "docs",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "format": "uri" },
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "name": { "type": "string", "const": "juniper" },
+    "description": { "type": "string" },
+    "baseUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Absolute URL prefix every published path hangs off, with trailing slash."
+    },
+    "repository": { "type": "string", "format": "uri" },
+    "llms": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the llms.txt crawl entry point."
+    },
+    "schema": {
+      "type": "object",
+      "required": ["index", "entry"],
+      "additionalProperties": false,
+      "properties": {
+        "index": { "type": "string", "format": "uri" },
+        "entry": { "type": "string", "format": "uri" }
+      }
+    },
+    "docs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slug", "title", "summary", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "title": { "type": "string" },
+          "summary": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "title", "description", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "type": { "enum": ["component", "lib", "theme"] },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "enum": ["primitive", "composite", "layout", "demo"] },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    }
+  }
+}

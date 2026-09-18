@@ -11,18 +11,18 @@
 
 .page h2 {
   margin: 1.5rem 0 0;
-  font-size: 1rem;
+  font-size: var(--text-lg);
 }
 
 .sub {
   margin: 0 0 1rem;
   max-width: 62ch;
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--juni-bark-600);
 }
 
 .sub code {
-  font-size: 0.85em;
+  font-size: var(--text-sm);
 }
 
 .ramp {
@@ -34,7 +34,7 @@
   gap: 0.5rem;
   align-items: baseline;
   margin-bottom: 0.3rem;
-  font-size: 0.8rem;
+  font-size: var(--text-md);
   font-weight: 600;
 }
 
@@ -48,7 +48,7 @@
   border-radius: 999px;
   background-color: var(--juni-needle-200);
   color: var(--juni-needle-900);
-  font-size: 0.7rem;
+  font-size: var(--text-xs);
   font-weight: 600;
 }
 
@@ -66,7 +66,7 @@
   align-items: flex-end;
   justify-content: center;
   padding-bottom: 4px;
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   font-variant-numeric: tabular-nums;
 }
 
@@ -82,7 +82,7 @@
   gap: 1.25rem;
   flex-wrap: wrap;
   margin-bottom: 0.75rem;
-  font-size: 0.78rem;
+  font-size: var(--text-sm);
 }
 
 .legend > span {
@@ -108,12 +108,12 @@
 }
 
 .tick {
-  font-size: 11px;
+  font-size: var(--text-xs);
   fill: var(--juni-bark-600);
 }
 
 .axisLabel {
-  font-size: 12px;
+  font-size: var(--text-sm);
   fill: var(--juni-bark-700);
 }
 
@@ -122,7 +122,7 @@
   background-color: var(--juni-lichen-50);
   border: 1px solid var(--juni-bark-200);
   border-radius: var(--radius-md);
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   line-height: 1.5;
   overflow-x: auto;
 }
@@ -167,13 +167,13 @@
 }
 
 .pairKey {
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   color: var(--juni-bark-500);
 }
 
 .pair small {
   margin-left: 0.35rem;
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   color: var(--juni-bark-600);
 }
 
@@ -193,7 +193,7 @@
   margin-bottom: -1px;
   padding: 0.45rem 0.9rem;
   border-bottom: 2px solid transparent;
-  font-size: 0.85rem;
+  font-size: var(--text-base);
   font-weight: 500;
   color: var(--juni-bark-600);
   cursor: pointer;
@@ -216,7 +216,7 @@
 
 /* The color's job in the system, riding along on each tab. */
 .tabRole {
-  font-size: 0.7rem;
+  font-size: var(--text-xs);
   font-weight: 400;
   color: var(--juni-bark-500);
 }
@@ -227,7 +227,7 @@
   gap: 0.35rem;
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: var(--text-sm);
   font-weight: 600;
 }
 

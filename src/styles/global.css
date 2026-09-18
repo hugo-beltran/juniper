@@ -21,6 +21,20 @@
   /* Motion: the project-wide default easing. Components reference this token
    * in every transition instead of hardcoding a keyword or curve. */
   --ease: ease-in-out;
+
+  /* Type scale: seven text steps and two display sizes, binned 2026-09-17
+   * from the 21 free values then in use (docs/theming.md §4.2). Every
+   * font-size in component CSS MUST be one of these (or inherit); the
+   * registry build enforces it. Pixel values assume the 16px root. */
+  --text-2xs: 0.625rem; /* 10px — badges, glyph runs */
+  --text-xs: 0.6875rem; /* 11px — field labels, hints, table headers */
+  --text-sm: 0.75rem; /* 12px — summaries, tooltips, nav meta */
+  --text-md: 0.8125rem; /* 13px — controls, table cells, list items */
+  --text-base: 0.875rem; /* 14px — default UI text, buttons, nav */
+  --text-lg: 1rem; /* 16px — document body, intros */
+  --text-xl: 1.125rem; /* 18px — emphasized names, h3 */
+  --display-sm: 1.375rem; /* 22px — section headings, h2 */
+  --display-lg: 2rem; /* 32px — page titles, KPI metrics, h1 */
 }
 
 *,
@@ -37,7 +51,7 @@ body {
   margin: 0;
   min-height: 100%;
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--text-lg);
   line-height: 1.5;
   background-color: var(--body);
   color: var(--foreground);
@@ -57,6 +71,8 @@ body {
   outline-offset: 2px;
 }
 
+/* Headings sit on the type scale rather than the UA defaults (h2 was 24px,
+ * h3 18.7px). h1 keeps its 32px. */
 h1,
 h2,
 h3,
@@ -64,6 +80,24 @@ h4,
 h5,
 h6 {
   color: var(--juni-needle-600);
+}
+
+h1 {
+  font-size: var(--display-lg);
+}
+
+h2 {
+  font-size: var(--display-sm);
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+h4,
+h5,
+h6 {
+  font-size: var(--text-base);
 }
 
 a {

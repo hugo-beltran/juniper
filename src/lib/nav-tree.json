@@ -1,0 +1,109 @@
+{
+  "defaultTenant": "kingfisher",
+  "tenants": [
+    {
+      "id": "juniper",
+      "name": "Juniper",
+      "plan": "Smart Dashboard",
+      "groups": [
+        {
+          "label": "Lab",
+          "items": [
+            {
+              "label": "Palette",
+              "to": "/lab/palette",
+              "icon": "swatch"
+            },
+            {
+              "label": "Lift",
+              "to": "/lab/lift",
+              "icon": "cube-transparent"
+            }
+          ]
+        },
+        {
+          "label": "Resources",
+          "items": [
+            {
+              "label": "Documentation",
+              "href": "https://github.com/hugo-beltran/juniper#readme",
+              "icon": "book-open"
+            },
+            {
+              "label": "Support",
+              "href": "mailto:support@juniper.dev",
+              "icon": "lifebuoy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kingfisher",
+      "name": "Kingfisher",
+      "plan": "Fantasy League",
+      "groups": [
+        {
+          "label": "Fantasy Baseball",
+          "items": [
+            {
+              "label": "Scouting",
+              "to": "/dashboard",
+              "icon": "rectangle-group",
+              "badge": "pending-analysis"
+            },
+            {
+              "label": "Trade Analyzer",
+              "to": "/trade-analyzer",
+              "icon": "arrows-right-left"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evergreen-studio",
+      "name": "Evergreen Studio",
+      "plan": "Pro",
+      "groups": [
+        {
+          "label": "Workspace",
+          "items": [
+            {
+              "label": "Analytics",
+              "to": "/analytics",
+              "icon": "chart-pie"
+            },
+            {
+              "label": "Settings",
+              "to": "/settings",
+              "icon": "cog"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bramblewood",
+      "name": "Bramblewood",
+      "plan": "Free",
+      "groups": [
+        {
+          "label": "Workspace",
+          "items": [
+            {
+              "label": "Products",
+              "to": "/products",
+              "icon": "cube"
+            },
+            {
+              "label": "Customers",
+              "to": "/customers",
+              "icon": "users"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

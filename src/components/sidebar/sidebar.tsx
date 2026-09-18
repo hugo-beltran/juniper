@@ -27,6 +27,10 @@ import styles from "./sidebar.module.css";
 
 const SIDEBAR_WIDTH = "15rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
+/* Left gutter the inset reserves for the floating SidebarTrigger, published
+ * as --sidebar-inset-gutter. Content never enters it, so the trigger can
+ * share a row with sticky toolbars and table headers without offsets. */
+const SIDEBAR_INSET_GUTTER = "3rem";
 
 interface SidebarContextValue {
   state: "expanded" | "collapsed";
@@ -90,6 +94,7 @@ export function SidebarProvider({
           {
             "--sidebar-width": SIDEBAR_WIDTH,
             "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+            "--sidebar-inset-gutter": SIDEBAR_INSET_GUTTER,
             ...style,
           } as CSSProperties
         }
@@ -155,11 +160,32 @@ export function SidebarTrigger({
   );
 }
 
+/* The page's scroll container (the document never scrolls); the router
+ * restores its scroll position by the data-scroll-restoration-id. */
 export function SidebarInset({ className, ...props }: ComponentProps<"main">) {
   return (
     <main
       data-slot="sidebar-inset"
+      data-scroll-restoration-id="sidebar-inset"
       className={cn(styles.inset, className)}
+      {...props}
+    />
+  );
+}
+
+/* Zero-height sticky anchor at the top of the inset that floats the
+ * SidebarTrigger in the inset's left gutter (--sidebar-inset-gutter), so
+ * the toggle stays present while the inset scrolls and sits on the same
+ * row as any sticky toolbar or table header — no offsets needed, because
+ * content never enters the gutter. */
+export function SidebarInsetHeader({
+  className,
+  ...props
+}: ComponentProps<"header">) {
+  return (
+    <header
+      data-slot="sidebar-inset-header"
+      className={cn(styles.insetHeader, className)}
       {...props}
     />
   );
@@ -356,6 +382,27 @@ export function SidebarMenuItem({ className, ...props }: ComponentProps<"li">) {
     <li
       data-slot="sidebar-menu-item"
       className={cn(styles.menuItem, className)}
+      {...props}
+    />
+  );
+}
+
+/* Attention indicator on a menu row: a heartwood dot floating after the
+ * label, a dot on the icon's corner in the collapsed rail. Render it inside
+ * the button BEFORE the label span (the CSS reorders it visually): the
+ * label must stay the button's last child because it doubles as the rail
+ * tooltip. Purely visual (aria-hidden) — put the words for screen readers
+ * inside the label with the sr-only class, so the row reads "Scouting, 8
+ * leads pending analysis" in that order. */
+export function SidebarMenuBadge({
+  className,
+  ...props
+}: ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="sidebar-menu-badge"
+      aria-hidden
+      className={cn(styles.menuBadge, className)}
       {...props}
     />
   );
