@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query'
+import navTree from './nav-tree.json'
 
 /* Mock API for the demo: shaped like a real data layer (queryOptions per
  * resource, network latency simulated) so swapping in real endpoints only
@@ -64,6 +65,53 @@ const STATS: Stat[] = [
   { id: 'nps', label: 'Net promoter score', value: '61', delta: 2.0 },
 ]
 
+/* Navigation tree, per tenant. Mimics a server response that tells the
+ * shell which tenants exist and which menu groups each one gets — there are
+ * no fixed menu items; everything hangs off the selected tenant. Icons are
+ * names the shell maps to components (JSON cannot carry a component). An
+ * item is either an in-app route (`to`) or an external link (`href`). */
+
+export type NavIcon =
+  | 'swatch'
+  | 'cube-transparent'
+  | 'book-open'
+  | 'lifebuoy'
+  | 'rectangle-group'
+  | 'arrows-right-left'
+  | 'chart-pie'
+  | 'cog'
+  | 'cube'
+  | 'users'
+
+export type NavItem =
+  | { label: string; to: string; icon: NavIcon; href?: undefined }
+  | { label: string; href: string; icon: NavIcon; to?: undefined }
+
+export interface NavGroup {
+  label: string
+  items: NavItem[]
+}
+
+export interface NavTenant {
+  id: string
+  name: string
+  plan: string
+  groups: NavGroup[]
+}
+
+export interface NavTree {
+  /** id of the tenant selected when the URL belongs to no tenant. */
+  defaultTenant: string
+  tenants: NavTenant[]
+}
+
+export const defaultTenant = (tree: NavTree) =>
+  tree.tenants.find((tenant) => tenant.id === tree.defaultTenant) ?? tree.tenants[0]
+
+/** First in-app route of a tenant's menu — where switching to it lands. */
+export const firstRoute = (tenant: NavTenant) =>
+  tenant.groups.flatMap((group) => group.items).find((item) => item.to)?.to
+
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -89,5 +137,13 @@ export const statsQuery = queryOptions({
   queryFn: async () => {
     await delay(300)
     return STATS
+  },
+})
+
+export const navigationQuery = queryOptions({
+  queryKey: ['navigation'],
+  queryFn: async () => {
+    await delay(200)
+    return navTree as NavTree
   },
 })

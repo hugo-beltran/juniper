@@ -8,11 +8,17 @@ import {
   CubeTransparentIcon,
   LifebuoyIcon,
   RectangleGroupIcon,
-  SparklesIcon,
   SwatchIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  Link,
+  Outlet,
+  createFileRoute,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
 import {
   Sidebar,
   SidebarContent,
@@ -21,182 +27,124 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
+  SidebarInsetHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
   TenantSwitcher,
-  type Tenant,
 } from "@/components";
+import {
+  defaultTenant,
+  firstRoute,
+  navigationQuery,
+  type NavIcon,
+  type NavTenant,
+} from "@/lib/api";
 import styles from "./_authenticated.module.css";
 
 export const Route = createFileRoute("/_authenticated")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(navigationQuery),
   component: AuthenticatedLayout,
 });
 
-const TENANTS: Tenant[] = [
-  { name: "Juniper", plan: "Smart Dashboard" },
-  { name: "Kingfisher", plan: "Fantasy League" },
-  { name: "Evergreen Studio", plan: "Pro" },
-  { name: "Bramblewood", plan: "Free" },
-];
-
-/* Per-tenant nav: each tenant gets its own sidebar group under the shared
- * Platform items. Tenants without real views yet point at seed routes. */
-interface TenantMenu {
-  label: string;
-  items: {
-    to: string;
-    label: string;
-    icon: ComponentType<SVGProps<SVGSVGElement>>;
-  }[];
-}
-
-const TENANT_MENUS: Record<string, TenantMenu> = {
-  Juniper: {
-    label: "Lab",
-    items: [
-      { to: "/lab/palette", label: "Palette", icon: SwatchIcon },
-      { to: "/lab/lift", label: "Lift", icon: CubeTransparentIcon },
-    ],
-  },
-  Kingfisher: {
-    label: "Fantasy Baseball",
-    items: [
-      {
-        to: "/trade-analyzer",
-        label: "Trade Analyzer",
-        icon: ArrowsRightLeftIcon,
-      },
-    ],
-  },
-  "Evergreen Studio": {
-    label: "Workspace",
-    items: [
-      { to: "/seed/evergreen-studio", label: "Seed", icon: SparklesIcon },
-    ],
-  },
-  Bramblewood: {
-    label: "Workspace",
-    items: [{ to: "/seed/bramblewood", label: "Seed", icon: SparklesIcon }],
-  },
+/* The menu tree comes from the navigation resource (src/lib/nav-tree.json
+ * behind navigationQuery, standing in for a server response): every menu
+ * group belongs to a tenant, there are no fixed items. Icon names in the
+ * data map to heroicons here. */
+const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
+  swatch: SwatchIcon,
+  "cube-transparent": CubeTransparentIcon,
+  "book-open": BookOpenIcon,
+  lifebuoy: LifebuoyIcon,
+  "rectangle-group": RectangleGroupIcon,
+  "arrows-right-left": ArrowsRightLeftIcon,
+  "chart-pie": ChartPieIcon,
+  cog: Cog6ToothIcon,
+  cube: CubeIcon,
+  users: UsersIcon,
 };
 
+const ownsPath = (tenant: NavTenant, pathname: string) =>
+  tenant.groups.some((group) =>
+    group.items.some((item) => item.to !== undefined && item.to === pathname),
+  );
+
 function AuthenticatedLayout() {
-  const [activeTenant, setActiveTenant] = useState(TENANTS[0]);
-  const tenantMenu = TENANT_MENUS[activeTenant.name];
+  const tree = useSuspenseQuery(navigationQuery).data;
+  const { tenants } = tree;
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [selectedId, setSelectedId] = useState(defaultTenant(tree).id);
+
+  /* The URL wins: landing on a route a tenant owns selects that tenant, so
+   * a deep link never shows one tenant's menu over another's page. The
+   * switcher's own choice applies only for routes no tenant owns, and
+   * starts at the tree's default tenant. */
+  const activeTenant =
+    tenants.find((tenant) => ownsPath(tenant, pathname)) ??
+    tenants.find((tenant) => tenant.id === selectedId) ??
+    defaultTenant(tree);
+
+  const handleTenantChange = (next: { name: string }) => {
+    const tenant = tenants.find((candidate) => candidate.name === next.name);
+    if (!tenant) return;
+    setSelectedId(tenant.id);
+    const to = firstRoute(tenant);
+    if (to) navigate({ to });
+  };
 
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <TenantSwitcher
-            tenants={TENANTS}
+            tenants={tenants}
             activeTenant={activeTenant}
-            onActiveTenantChange={setActiveTenant}
+            onActiveTenantChange={handleTenantChange}
           />
         </SidebarHeader>
         <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/dashboard">
-                      <RectangleGroupIcon />
-                      <span>Scouting</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/products">
-                      <CubeIcon />
-                      <span>Products</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/analytics">
-                      <ChartPieIcon />
-                      <span>Analytics</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/customers">
-                      <UsersIcon />
-                      <span>Customers</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/settings">
-                      <Cog6ToothIcon />
-                      <span>Settings</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          {tenantMenu && (
-            <SidebarGroup>
-              <SidebarGroupLabel>{tenantMenu.label}</SidebarGroupLabel>
+          {activeTenant?.groups.map((group) => (
+            <SidebarGroup key={group.label}>
+              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {tenantMenu.items.map((item) => (
-                    <SidebarMenuItem key={item.to}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.to}>
-                          <item.icon />
-                          <span>{item.label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+                  {group.items.map((item) => {
+                    const Icon = ICONS[item.icon];
+                    return (
+                      <SidebarMenuItem key={item.label}>
+                        <SidebarMenuButton asChild>
+                          {item.to !== undefined ? (
+                            <Link to={item.to}>
+                              <Icon />
+                              <span>{item.label}</span>
+                            </Link>
+                          ) : (
+                            <a
+                              href={item.href}
+                              target={item.href.startsWith("http") ? "_blank" : undefined}
+                              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                            >
+                              <Icon />
+                              <span>{item.label}</span>
+                            </a>
+                          )}
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-          )}
-          <SidebarGroup>
-            <SidebarGroupLabel>Resources</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <a
-                      href="https://github.com/hugo-beltran/juniper#readme"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <BookOpenIcon />
-                      <span>Documentation</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <a href="mailto:support@juniper.dev">
-                      <LifebuoyIcon />
-                      <span>Support</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          ))}
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        <header className={styles.toolbar}>
+        <SidebarInsetHeader>
           <SidebarTrigger />
-        </header>
+        </SidebarInsetHeader>
         <div className={styles.main}>
           <Outlet />
         </div>

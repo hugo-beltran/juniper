@@ -118,6 +118,15 @@ primitive so press and aria wiring connect.
 
 ## 4. Composition patterns
 
+4.0. **The inset scrolls, not the page.** `SidebarInset` is the single
+scroll container; the layout wrapper is viewport-height and clipped.
+The inset reserves a left gutter (`--sidebar-inset-gutter`, 3rem) that
+content never enters; `SidebarInsetHeader` is a zero-height sticky anchor
+that floats the sidebar trigger in that gutter, so the toggle stays present
+while the inset scrolls and shares the top row with sticky toolbars and
+table headers, which pin to `top: 0` with no offset. Scroll position is
+restored per route through the inset, and nothing reads `window.scrollY`.
+
 4.1. **Compound components for owned layouts.** A component that owns a
 layout (Sidebar) exposes named parts (`SidebarHeader`, `SidebarMenu`,
 `SidebarMenuButton`) the consumer arranges as JSX, instead of one component

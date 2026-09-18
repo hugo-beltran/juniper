@@ -2,7 +2,8 @@
  * all, in the sticky toolbar above the table. */
 
 /* Sticky filter toolbar: pins to the viewport top above the sticky column
- * headers. Its box is exactly 4rem tall so the headers' sticky offset
+ * headers; the floating sidebar trigger shares this row from the inset's
+ * left gutter. Its box is exactly 4rem tall so the headers' sticky offset
  * (top: 4rem on .th in leads-table.module.css) sits flush beneath it —
  * change one, change both. Every item bottom-aligns onto one edge: the
  * select triggers, summary, Clear all and divider share a 1.75rem control

@@ -118,11 +118,15 @@ inside an open list (a Select's popover, a menu) draw no ring, because the
 bloom row wash (4.7) already marks the focused row and a ring on top of it
 is noise; the ring stays on the list's trigger.
 
-4.4.1. Scrollbars inside a control's popover are part of its material:
-thin, a `bark-300` thumb on a transparent track, `bark-400` on hover,
-flush with the popover's edge (the scrolling list carries the horizontal
-inset, the popover only the vertical one). Use `scrollbar-color` and
-`scrollbar-width` with the `::-webkit-scrollbar` rules as fallback.
+4.4.1. **Scroll containers** are part of the surface they sit in, not chrome
+laid over it. The page's one scroll container is the sidebar inset (the
+document itself never scrolls); a control's popover is the other. Both
+wear the same scrollbar: thin, a `bark-300` thumb on a transparent track,
+`bark-400` on hover, flush with the container's edge (a scrolling list
+carries the horizontal inset, its popover only the vertical one). Use
+`scrollbar-color` and `scrollbar-width` with the `::-webkit-scrollbar`
+rules as fallback. Sticky elements pin to the inset's top edge, so their
+offsets are measured from it, never from the viewport.
 
 4.5. Interactive states MUST key off react-aria data attributes
 (`[data-hovered]`, `[data-pressed]`, `[data-selected]`, `[data-disabled]`),

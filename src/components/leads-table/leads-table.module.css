@@ -24,7 +24,9 @@
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--juni-bark-500);
+  /* Bloom, the complementary, so the header row reads as a tinted rule
+   * above the bark-toned cells rather than more grey text. */
+  color: var(--juni-bloom-700);
   white-space: nowrap;
 }
 
@@ -45,7 +47,7 @@
 }
 
 .sortButton:hover {
-  color: var(--juni-bark-800);
+  color: var(--juni-bloom-950);
 }
 
 .sortIndicator {

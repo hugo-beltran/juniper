@@ -5,7 +5,7 @@
   "anatomy": [
     {
       "part": "LeadsFilters",
-      "description": "Private filter row in the sticky toolbar: a react-aria Switch on the left with two-line copy as its label (\"Pending analysis only\" plus a muted hint wired as aria-describedby; pressing track or copy toggles), a vertical Separator, then one house Select per filter (react-aria Select: label, extruded trigger, anchored popover at trigger width on the same material; Stage with pipeline counts, Club, Scout), a live result summary, and a discrete Clear all Button. Data-driven through toggles and fields arrays; owns no filter state."
+      "description": "Private filter row in the sticky toolbar: a react-aria Switch on the left with two-line copy as its label (\"Pending analysis only\" plus a muted hint wired as aria-describedby; pressing track or copy toggles), a vertical Separator, then one house Select per filter (react-aria Select: label, extruded trigger with a clear (×) button while a value is set, anchored popover at trigger width on the same material; Stage with pipeline counts, Club, Scout), a live result summary, and a discrete Clear all Button. Data-driven through toggles and fields arrays; owns no filter state."
     },
     {
       "part": "Table",

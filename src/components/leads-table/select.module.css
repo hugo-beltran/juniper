@@ -15,18 +15,59 @@
   color: var(--juni-bark-500);
 }
 
+.control {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Clear (×) — shown only while a value is set; sits over the trigger's
+ * right end ahead of the chevron. Hover answers in bloom (§4.7). */
+.clear {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--juni-bark-600);
+  translate: 0 -50%;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--ease),
+    color 120ms var(--ease);
+}
+
+.clear svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.clear[data-hovered],
+.clear[data-pressed] {
+  background-color: var(--juni-bloom-100);
+  color: var(--juni-bloom-950);
+}
+
 /* Trigger — extruded (theming §4.6): the surface pushed out, faint
  * hairline, highlight up-left, shade down-right. Hover pushes further out;
  * pressed or open sinks it, and it stays sunk while the list is open so the
  * pair reads as one body: a sunken cap over a raised list. */
 .trigger {
   display: inline-flex;
+  flex: 1;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  position: relative;
   min-width: 10rem;
   height: 1.75rem;
-  padding: 0 0.5rem 0 0.625rem;
+  padding: 0 1.75rem 0 0.625rem;
   border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
   border-radius: var(--radius-md);
   background-color: var(--juni-bark-50);
@@ -65,8 +106,10 @@
     inset 1px 1px 3px var(--lift-shade);
 }
 
-/* A select holding a value wears the selected wash; the volume stays. */
+/* A select holding a value wears the selected wash; the volume stays, and
+ * the trigger makes room for the clear button before the chevron. */
 .select[data-active] .trigger {
+  padding-right: 3rem;
   border-color: oklch(from var(--juni-needle-300) l c h / 0.7);
   background-color: var(--juni-needle-100);
 }
@@ -79,15 +122,19 @@
 }
 
 .chevron {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
   width: 0.875rem;
   height: 0.875rem;
   color: var(--juni-bark-600);
+  translate: 0 -50%;
   transition: rotate 120ms var(--ease);
 }
 
 .select[data-open] .chevron {
   rotate: 180deg;
+  translate: 0 -50%;
 }
 
 /* Popover — the same extruded material as the trigger, anchored

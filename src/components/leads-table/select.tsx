@@ -1,6 +1,7 @@
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
   Button as AriaButton,
+  ButtonContext,
   Label,
   ListBox,
   ListBoxItem,
@@ -54,14 +55,33 @@ export function Select({
       onSelectionChange={(key) => onChange(key === ANY ? "" : String(key))}
     >
       <Label className={styles.label}>{label}</Label>
-      <AriaButton className={styles.trigger}>
-        {/* textValue (the bare label), not the item's children — the list
-            hint (a count) belongs in the list, not on the trigger. */}
-        <SelectValue className={styles.value}>
-          {({ selectedText }) => selectedText}
-        </SelectValue>
-        <ChevronDownIcon aria-hidden className={styles.chevron} />
-      </AriaButton>
+      {/* The clear button is a sibling of the trigger, not a child — a
+          button cannot nest in a button — laid over the trigger's right
+          end, before the chevron, only while a value is set. Select hands
+          its trigger props to every react-aria Button inside it via
+          ButtonContext, so the context is reset around the clear button or
+          it would open the list instead of clearing. */}
+      <div className={styles.control}>
+        <AriaButton className={styles.trigger}>
+          {/* textValue (the bare label), not the item's children — the list
+              hint (a count) belongs in the list, not on the trigger. */}
+          <SelectValue className={styles.value}>
+            {({ selectedText }) => selectedText}
+          </SelectValue>
+          <ChevronDownIcon aria-hidden className={styles.chevron} />
+        </AriaButton>
+        {value !== "" && (
+          <ButtonContext.Provider value={null}>
+            <AriaButton
+              aria-label={`Clear ${label.toLowerCase()}`}
+              className={styles.clear}
+              onPress={() => onChange("")}
+            >
+              <XMarkIcon aria-hidden />
+            </AriaButton>
+          </ButtonContext.Provider>
+        )}
+      </div>
       <Popover className={styles.popover} placement="bottom start" offset={4}>
         <ListBox className={styles.listBox}>
           <ListBoxItem id={ANY} textValue={placeholder} className={styles.item}>
