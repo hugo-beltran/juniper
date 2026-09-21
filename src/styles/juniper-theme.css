@@ -160,8 +160,9 @@
    * lifts lightness and alpha because it must show against bark-50, where
    * needle-50 at 15% would vanish; the button's ring sits on a needle-400
    * fill. Pressed/open inverts them (inset). Chosen 2026-09-17 from the
-   * /lab/lift exploration. Consumers: the leads-table Select (trigger and
-   * popover) and switch track. */
+      * /lab/lift exploration. Consumers: Input, Textarea and Select (box,
+   * trigger and popover), the secondary and discrete Button, and the
+   * Switch track. */
   --lift-highlight: oklch(from var(--juni-needle-50) calc(l + 0.03) c h / 0.9);
   --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.2);
 }

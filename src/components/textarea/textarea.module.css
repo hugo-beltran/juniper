@@ -1,0 +1,70 @@
+/* Labelled multi-line field: Field label above, the box, Field description
+ * and error below. Same recipe as Input; only the box geometry differs. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
+  border-radius: var(--radius-md);
+  background-color: var(--juni-bark-50);
+  color: var(--juni-needle-950);
+  font: inherit;
+  line-height: 1.45;
+  resize: vertical;
+  box-shadow:
+    -2px -2px 4px var(--lift-highlight),
+    2px 2px 5px var(--lift-shade);
+  transition:
+    border-color 120ms var(--ease),
+    box-shadow 120ms var(--ease);
+}
+
+/* Sizes set type and inset; height follows `rows`. */
+.mini .textarea,
+.small .textarea {
+  padding: 0.375rem 0.625rem;
+  font-size: var(--text-md);
+}
+
+.medium .textarea {
+  padding: 0.55rem 0.75rem;
+  font-size: var(--text-base);
+}
+
+.textarea::placeholder {
+  color: var(--juni-bark-400);
+}
+
+/* Pointer colour (theming §4.7): hover and focus answer in bloom. */
+.textarea[data-hovered],
+.textarea[data-focused] {
+  border-color: var(--juni-bloom-400);
+}
+
+.textarea[data-hovered] {
+  box-shadow:
+    -2px -2px 5px var(--lift-highlight),
+    3px 3px 6px var(--lift-shade);
+}
+
+.textarea[data-focused] {
+  box-shadow:
+    inset -1px -1px 2px var(--lift-highlight),
+    inset 1px 1px 3px var(--lift-shade);
+}
+
+/* Errors are the identity's only red (theming §2.4). */
+.field[data-invalid] .textarea {
+  border-color: var(--juni-heartwood-500);
+}
+
+.field[data-disabled] .textarea {
+  cursor: not-allowed;
+  opacity: 0.5;
+  resize: none;
+}

@@ -1,15 +1,19 @@
 {
   "title": "Leads table",
-  "description": "CRM-style pipeline table on TanStack Table v9 (useTable + tableFeatures): flat and borderless, hierarchy from type and spacing. A sticky toolbar of three labelled native selects (Stage, Club, Scout) filters the rows; sticky toolbar and headers ride the page scroll.",
+  "description": "CRM-style pipeline table on TanStack Table v9 (useTable + tableFeatures): flat and borderless, hierarchy from type and spacing. A sticky toolbar of three house Selects (Stage, Club, Scout) filters the rows; sticky toolbar and headers ride the page scroll.",
   "category": "demo",
   "anatomy": [
     {
-      "part": "LeadsFilters",
-      "description": "Private filter row in the sticky toolbar: a react-aria Switch on the left with two-line copy as its label (\"Pending analysis only\" plus a muted hint wired as aria-describedby; pressing track or copy toggles), a vertical Separator, then one house Select per filter (react-aria Select: label, extruded trigger with a clear (×) button while a value is set, anchored popover at trigger width on the same material; Stage with pipeline counts, Club, Scout), a live result summary, and a discrete Clear all Button. Data-driven through toggles and fields arrays; owns no filter state."
+      "part": "FilterBar",
+      "description": "The shared FilterBar (src/components/filter-bar) in the sticky toolbar: a Switch (\"Pending analysis only\" with its hint as description), a vertical Separator, one Select per filter in filter mode (Stage with pipeline counts, Club, Scout) and a discrete Clear all Button while a filter is active. Data-driven; the table owns the filter state."
     },
     {
       "part": "Table",
-      "description": "Semantic table with sortable headers (aria-sort) and a hover wash on rows; no rules drawn."
+      "description": "Semantic table with sortable headers (aria-sort) and a hover wash on rows; no rules drawn. Rendered while the component has at least 640px of width."
+    },
+    {
+      "part": "Cards",
+      "description": "While the sidebar inset reports itself narrow (useSidebarInset, below 704px of the scroll container's width, not a viewport query) the same TanStack row model renders as a flex list: the FilterBar takes its narrow layout (switch left, Filters toggle right, selects in the in-place drawer) and hosts a Sort by Select plus an Asc/Desc Button that drive TanStack's sorting state; each row is a flat Card with the Player cell as its head and the other cells as label/value pairs under bloom captions taken from the column headers."
     },
     {
       "part": "Cells",
@@ -18,13 +22,15 @@
   ],
   "usage": [
     "Controlled or uncontrolled: pass filters + onFiltersChange to own the filter state (the dashboard keeps it in zod-validated search params); omit both and the table keeps it internally. The table never touches the router.",
-    "A reference composition, not a reusable primitive: copy the patterns (the house Select with its anchored popover, sticky toolbar offsets, data-attribute state styling) rather than the component.",
+    "A reference composition, not a reusable primitive: copy the patterns (FilterBar above a flat sortable table, sticky toolbar offsets, data-attribute state styling) rather than the component.",
     "Filters are always visible controls; the only overlay is each Select's anchored popover, which matches its trigger's width and material. No dialogs or free-floating menus.",
-    "Toolbar controls wear the house volume: the select and the switch track use the extruded recipe (--lift-highlight / --lift-shade, inset when pressed) per docs/theming.md 4.6.",
+    "Toolbar controls wear the house volume: the shared Select and Switch use the extruded recipe (--lift-highlight / --lift-shade, inset when pressed) per docs/theming.md 4.6.",
     "Hover and keyboard focus answer in bloom (trigger hairline, list-row wash, switch track); selection stays in needle, per docs/theming.md 4.7.",
     "Register sorting features up front with tableFeatures; never pass v8-style table options.",
+    "One engine, two layouts: the card layout reuses the columns' cell renderers and header strings through table.FlexRender and columnDef.header, and its Sort control calls column.toggleSorting and table.setSorting, so the sort survives a layout switch. Never fork the data or the column definitions for mobile.",
+    "The layout switches on the sidebar inset's published width (useSidebarInset(threshold), the scroll container the table lives in) because the sidebar changes the space a table has; the table uses the house threshold, and the FilterBar above it may fold earlier on its own. Do not switch layouts on window width or on the table's own box.",
     "The Stage column sorts by funnel position, not alphabet; the Grade column sorts ungraded rows last; the Activity column is unsortable until it carries a real timestamp.",
-    "Sticky toolbar height (leads-filters, 4rem) and header top offset (leads-table) are coupled: change one, change both."
+    "Sticky toolbar height (filter-bar, 4rem) and header top offset (leads-table) are coupled: change one, change both."
   ],
   "docs": [
     "component-architecture",

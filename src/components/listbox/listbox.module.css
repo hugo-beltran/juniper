@@ -1,0 +1,126 @@
+.listBox {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  outline: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color 120ms var(--ease),
+    color 120ms var(--ease);
+}
+
+/* Inline — rows mirror the sidebar menuButton metrics and states so the
+ * tenant switcher's list reads as the same species of control as the nav
+ * below it. */
+
+.listBox[data-variant="inline"] {
+  gap: 0.125rem;
+  padding: 0;
+}
+
+.listBox[data-variant="inline"] .item {
+  height: 2rem;
+  gap: 0.3rem;
+  padding: 1rem 0.5rem;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1.1rem;
+  color: var(--juni-needle-900);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.listBox[data-variant="inline"] .item[data-hovered],
+.listBox[data-variant="inline"] .item[data-focused] {
+  background-color: oklch(from var(--juni-needle-50) l c h / 0.15);
+  color: var(--juni-needle-700);
+}
+
+.listBox[data-variant="inline"] .item[data-focus-visible] {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.listBox[data-variant="inline"] .item[data-selected] {
+  color: var(--juni-needle-600);
+}
+
+/* Popover — the list inside a Select. Options draw no focus ring: inside
+ * an open list the bloom row wash (theming §4.7) is the focus indicator,
+ * and a ring on top of it is noise. The ring stays on the trigger.
+ * Sanctioned exception to §4.4. The list carries the horizontal inset so
+ * its scrollbar sits at the popover's edge instead of floating inside it. */
+
+.listBox[data-variant="popover"] {
+  gap: 1px;
+  max-height: 16rem;
+  padding: 0 0.25rem;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--juni-bark-300) transparent;
+}
+
+.listBox[data-variant="popover"]:hover {
+  scrollbar-color: var(--juni-bark-400) transparent;
+}
+
+.listBox[data-variant="popover"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+.listBox[data-variant="popover"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.listBox[data-variant="popover"]::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background-color: var(--juni-bark-300);
+}
+
+.listBox[data-variant="popover"]::-webkit-scrollbar-thumb:hover {
+  background-color: var(--juni-bark-400);
+}
+
+.listBox[data-variant="popover"] .item {
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-md);
+  color: var(--juni-needle-950);
+  cursor: default;
+  transition: background-color 80ms var(--ease);
+}
+
+.listBox[data-variant="popover"] .item[data-focus-visible] {
+  outline: none;
+}
+
+.listBox[data-variant="popover"] .item[data-focused] {
+  background-color: var(--juni-bloom-100);
+  color: var(--juni-bloom-950);
+}
+
+.listBox[data-variant="popover"] .item[data-selected] {
+  font-weight: 600;
+  background-color: var(--juni-needle-100);
+}
+
+/* Selected and focused at once: mix the selection wash with the pointer
+ * wash rather than reaching for a third step, so the row visibly carries
+ * both states (theming §4.7). */
+.listBox[data-variant="popover"] .item[data-selected][data-focused] {
+  background-color: color-mix(
+    in oklch,
+    var(--juni-needle-100),
+    var(--juni-bloom-100)
+  );
+  color: var(--juni-bloom-950);
+}

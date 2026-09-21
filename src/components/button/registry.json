@@ -1,14 +1,16 @@
 {
   "title": "Button",
-  "description": "shadcn-style button on the react-aria Button primitive. Callers pass intent props (variant, size), never class names. Primary is a glass pane lit from off-center; secondary and discrete are flat.",
+  "description": "shadcn-style button on the react-aria Button primitive. Callers pass intent props (variant, size), never class names. Primary is a glass pane lit from off-center; secondary is extruded like a field; discrete is flat text that washes bloom on hover and sinks when pressed. asChild slots a router Link in place of the button.",
   "category": "primitive",
   "anatomy": [
-    { "part": "Button", "description": "The single root element, a react-aria Button. Carries data-slot=\"button\", data-variant and data-size for styling hooks and tests." }
+    { "part": "Button", "description": "The single root element, a react-aria Button — or, with asChild, the slotted child (a router Link) carrying the same props. Carries data-slot=\"button\", data-variant and data-size for styling hooks and tests." }
   ],
   "usage": [
     "Use onPress and isDisabled (react-aria semantics), not onClick and disabled.",
-    "Variants: primary (default, one per view), secondary (supporting actions), discrete (toolbar and inline triggers). Sizes: mini, small, medium (default).",
+    "Variants: primary (default, one per view; the glass pane), secondary (supporting actions; the extruded recipe on bark-50, bloom hairline on hover, inset when pressed), discrete (toolbar and inline triggers; flat at rest, bloom wash on hover, inset when pressed or open). Sizes: mini, small, medium (default).",
+    "Navigation wears asChild: <Button asChild variant=\"discrete\"><Link to=\"/dashboard\">Discard</Link></Button> keeps anchor semantics under the button's face. Only the slotted element is styled with :hover/:active; react-aria buttons keep data-hovered/data-pressed.",
     "State styling keys off react-aria data attributes (data-hovered, data-pressed, data-disabled), so hover stays correct across pointer types.",
+    "Field sizes (Input, Textarea, Select) mirror these heights, so a field and a button sit on one row at the same size name.",
     "There is no destructive variant yet; when one is added it MUST use the heartwood ramp, the identity's only red.",
     "An icon inside the button is sized by the button; pass it as a child, do not size it yourself."
   ],

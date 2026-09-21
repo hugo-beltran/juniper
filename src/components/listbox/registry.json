@@ -1,0 +1,17 @@
+{
+  "title": "ListBox",
+  "description": "House react-aria ListBox with two settings chosen by the root's variant: inline rows in the document flow (the tenant switcher) and popover rows inside a Select's anchored list, where a bloom wash marks focus and a needle wash marks selection with no ring.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "ListBox", "description": "react-aria ListBox root with data-slot=\"listbox\" and data-variant=\"inline\" | \"popover\". Owns gap, inset, the 16rem scroll cap and the thin bark scrollbar of the popover setting." },
+    { "part": "ListBoxItem", "description": "react-aria ListBoxItem with data-slot=\"listbox-item\". Styled through the root's variant, so an item needs no prop; extend with className for row content such as a trailing hint." }
+  ],
+  "usage": [
+    "Pass variant on the root only: inline for a list rendered in place (inline over overlay, component-architecture §4.2), popover when the list sits in a Select or other anchored picker.",
+    "Popover rows draw no focus ring; the bloom row wash is the focus indicator and the ring stays on the trigger (theming §4.4 exception). Inline rows keep the ring because nothing else marks focus there.",
+    "Focus and hover answer in bloom, selection in needle, and a row that is both mixes the two washes with color-mix (theming §4.7).",
+    "Keyboard navigation, typeahead and selection semantics come from react-aria; never reimplement them on the items.",
+    "Promotion precedent: this was the tenant switcher's private descendant until Select became its second, unrelated consumer."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

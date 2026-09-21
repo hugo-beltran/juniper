@@ -1,0 +1,18 @@
+{
+  "title": "Input",
+  "description": "Single-line text field on react-aria TextField + Input: a labelled control whose box wears the extruded volume and sinks while focused, with hover and focus in bloom and validation in heartwood. Label, description and error come from Field.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "Input", "description": "react-aria TextField root with data-slot=\"input\" and data-size; carries data-invalid, data-disabled and data-required from react-aria. Owns the label-above stack." },
+    { "part": "FieldLabel / FieldDescription / FieldError", "description": "The shared Field parts, associated by react-aria; the error renders only while isInvalid." },
+    { "part": "Box", "description": "The react-aria Input: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button." }
+  ],
+  "usage": [
+    "Always pass label; an unlabelled field is not a Juniper control. Use description for a hint and errorMessage with isInvalid for validation; react-aria wires both into aria-describedby.",
+    "Use react-aria semantics: value and onChange (the string, not an event), isRequired, isInvalid, isDisabled, type, name and autoComplete pass straight through to TextField.",
+    "Sizes mirror Button (mini, small, medium) so a field and a button share a row; forms use the default medium.",
+    "The box sinks (inset shadows) while focused and keeps the native bloom focus ring; never remove the outline or emulate it with box-shadow.",
+    "For multi-line text use Textarea; for a fixed set of choices use Select. Route code composes these, it never styles a raw input."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

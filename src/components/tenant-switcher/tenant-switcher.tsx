@@ -5,7 +5,7 @@ import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Button as AriaButton, type Selection } from "react-aria-components";
 import { useSidebar } from "@/components/sidebar/sidebar";
 import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette";
-import { ListBox, ListBoxItem } from "./listbox";
+import { ListBox, ListBoxItem } from "@/components/listbox/listbox";
 import { Squircle } from "./squircle";
 import { useClickOutside } from "./use-click-outside";
 import styles from "./tenant-switcher.module.css";

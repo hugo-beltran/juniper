@@ -18,6 +18,11 @@
               "label": "Lift",
               "to": "/lab/lift",
               "icon": "cube-transparent"
+            },
+            {
+              "label": "Forms",
+              "to": "/lab/forms",
+              "icon": "pencil-square"
             }
           ]
         },
@@ -62,13 +67,18 @@
       ]
     },
     {
-      "id": "evergreen-studio",
-      "name": "Evergreen Studio",
-      "plan": "Pro",
+      "id": "bridge",
+      "name": "Bridge",
+      "plan": "Content Manager",
       "groups": [
         {
           "label": "Workspace",
           "items": [
+            {
+              "label": "Users",
+              "to": "/users",
+              "icon": "users"
+            },
             {
               "label": "Analytics",
               "to": "/analytics",

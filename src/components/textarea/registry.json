@@ -1,0 +1,18 @@
+{
+  "title": "Textarea",
+  "description": "Multi-line text field on react-aria TextField + TextArea, on the same extruded material and states as Input, with a vertical resize handle and a minimum height set by rows. Label, description and error come from Field.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "Textarea", "description": "react-aria TextField root with data-slot=\"textarea\" and data-size; carries data-invalid, data-disabled and data-required from react-aria. Owns the label-above stack." },
+    { "part": "FieldLabel / FieldDescription / FieldError", "description": "The shared Field parts, associated by react-aria; the error renders only while isInvalid." },
+    { "part": "Box", "description": "The react-aria TextArea: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid; vertical resize only." }
+  ],
+  "usage": [
+    "Always pass label. Use labelVariant=\"title\" when the field heads its own card (the SCOUT report's dimension notes); the default caption is the uppercase form label.",
+    "rows sets the visible lines (default 3); the box grows by the user's drag, never by content, so a long note does not reflow the page.",
+    "Use react-aria semantics: value and onChange (the string, not an event), isRequired, isInvalid, isDisabled and name pass straight through to TextField.",
+    "Same recipe as Input: extruded at rest, inset while focused, bloom on hover and focus, heartwood while invalid. Change one, change both.",
+    "Disabled removes the resize handle along with the pointer."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

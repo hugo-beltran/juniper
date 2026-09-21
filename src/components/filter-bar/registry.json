@@ -1,0 +1,23 @@
+{
+  "title": "Filter bar",
+  "description": "Sticky toolbar above a table: an optional search Input, Switch toggles, a Separator, one Select per field in filter mode and a discrete Clear all while a filter is active. In its narrow layout the search and switches keep the row with a Filters toggle at the far end, and the selects, any extras (a Sort control) and Clear all fold into an in-place Disclosure drawer beneath. Data-driven; the table it sits above owns the filter state.",
+  "category": "composite",
+  "anatomy": [
+    { "part": "FilterBar", "description": "The sticky 4rem toolbar with data-slot=\"filter-bar\": bark-50 surface, items bottom-aligned onto one 1.75rem control row, scrolls sideways rather than wrapping." },
+    { "part": "Search", "description": "Optional house Input (size mini, type search) rendered first, with a 13rem floor." },
+    { "part": "Toggles", "description": "House Switches for boolean filters, then a vertical react-aria Separator when fields follow." },
+    { "part": "Fields", "description": "One house Select per field in filter mode (isClearable, size mini, placeholder \"Any <label>\") with a 10rem floor; options may carry a muted hint such as a count." },
+    { "part": "Clear all", "description": "Discrete mini Button at the row's right end (in the drawer's footer when narrow), rendered only while a filter is active. The Filters toggle's count pill is the visible tally of active filters." },
+    { "part": "Filters toggle (narrow)", "description": "Secondary mini Button with slot=\"trigger\" on a react-aria Disclosure: aria-expanded and aria-controls wired by react-aria, sinks while open, wears the active filter count as a needle pill." },
+    { "part": "Drawer (narrow)", "description": "react-aria DisclosurePanel that grows in place beneath the row and pushes content down, and stays sticky with the row while open: the selects and extras in a wrapping flex, then Clear all while a filter is active. Closed by a bark-200 rule. Never a floating panel." }
+  ],
+  "usage": [
+    "Pass the filter state in (search.value, toggle.checked, field.value) and change callbacks out; the bar holds no state, so the table or the route stays the single owner (component-architecture §6.3 keeps shareable state in the URL).",
+    "A table beneath it pins its header at top: 4rem to sit flush under the bar; change one, change both.",
+    "The bar's controls are the shared primitives at size mini: Input, Switch, Select. Do not restyle them here; adjust the primitive.",
+    "The narrow layout follows the sidebar inset's published width (useSidebarInset(threshold)); the bar may fold earlier than the table beneath it goes to cards, which leaves a folded drawer above a real table between the two thresholds. A table that must stay in step passes narrow explicitly. Pass the table's Sort control as extras so it lives in the drawer beside the selects.",
+    "The drawer is a Disclosure that expands in place (component-architecture §4.2). In the narrow layout the Disclosure root, row and drawer together, is the sticky block, so an open drawer stays pinned with the row while the list scrolls.",
+    "Promotion precedent: this was leads-table's private LeadsFilters until the users table became a second, unrelated consumer."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

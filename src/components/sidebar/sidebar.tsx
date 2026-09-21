@@ -3,9 +3,11 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type ComponentProps,
   type CSSProperties,
 } from "react";
@@ -31,6 +33,11 @@ const SIDEBAR_WIDTH_ICON = "3rem";
  * as --sidebar-inset-gutter. Content never enters it, so the trigger can
  * share a row with sticky toolbars and table headers without offsets. */
 const SIDEBAR_INSET_GUTTER = "3rem";
+/* Below this many pixels of the inset's width, content inside it takes its
+ * narrow layout (tables become cards, the filter bar folds its selects into
+ * a drawer). 44rem: 40rem of content beside the 3rem gutter and the page's
+ * own inset padding. Published through useSidebarInset(). */
+export const SIDEBAR_INSET_NARROW_WIDTH = 704;
 
 interface SidebarContextValue {
   state: "expanded" | "collapsed";
@@ -40,6 +47,78 @@ interface SidebarContextValue {
 }
 
 const SidebarContext = createContext<SidebarContextValue | null>(null);
+
+/* The inset's measured width, published to everything rendered inside it
+ * as a small external store rather than a context value. The inset is the
+ * one scroll container, so its width — not the viewport's and not each
+ * component's own — is the signal a table or toolbar adapts to. Consumers
+ * subscribe through useSidebarInset(threshold) with a selector that yields
+ * only their boolean, so a resize re-renders a consumer exactly when its
+ * own threshold is crossed, not on every pixel. */
+interface InsetWidthStore {
+  get: () => number | undefined;
+  set: (width: number) => void;
+  subscribe: (listener: () => void) => () => void;
+}
+
+function createInsetWidthStore(): InsetWidthStore {
+  let width: number | undefined;
+  const listeners = new Set<() => void>();
+  return {
+    get: () => width,
+    set: (next) => {
+      if (next === width) return;
+      width = next;
+      for (const listener of listeners) listener();
+    },
+    subscribe: (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+  };
+}
+
+/* Outside an inset: never measured, never narrow. */
+const OUTSIDE_INSET: InsetWidthStore = {
+  get: () => undefined,
+  set: () => {},
+  subscribe: () => () => {},
+};
+
+const SidebarInsetContext = createContext<InsetWidthStore>(OUTSIDE_INSET);
+
+function useInsetNarrow(store: InsetWidthStore, narrowBelow: number) {
+  return useSyncExternalStore(
+    store.subscribe,
+    () => {
+      const width = store.get();
+      return width !== undefined && width < narrowBelow;
+    },
+    () => false,
+  );
+}
+
+/**
+ * Is the sidebar inset narrower than `narrowBelow` px? Defaults to the
+ * house threshold (SIDEBAR_INSET_NARROW_WIDTH); a component whose content
+ * needs its own breakpoint passes it: `useSidebarInset(600)`. Re-renders
+ * only when the answer flips. Safe outside an inset (always wide).
+ */
+export function useSidebarInset(
+  narrowBelow: number = SIDEBAR_INSET_NARROW_WIDTH,
+): boolean {
+  return useInsetNarrow(useContext(SidebarInsetContext), narrowBelow);
+}
+
+/**
+ * The inset's measured width in px (undefined before the first measurement
+ * or outside an inset). Re-renders on every resize frame — prefer
+ * useSidebarInset(threshold) unless the number itself is needed.
+ */
+export function useSidebarInsetWidth(): number | undefined {
+  const store = useContext(SidebarInsetContext);
+  return useSyncExternalStore(store.subscribe, store.get, () => undefined);
+}
 
 export function useSidebar() {
   const context = useContext(SidebarContext);
@@ -161,15 +240,40 @@ export function SidebarTrigger({
 }
 
 /* The page's scroll container (the document never scrolls); the router
- * restores its scroll position by the data-scroll-restoration-id. */
+ * restores its scroll position by the data-scroll-restoration-id. Measures
+ * its own width (first in a layout effect, so the narrow layout is chosen
+ * before the first paint; then a ResizeObserver, which already coalesces
+ * to one notification per frame) into the inset width store; data-narrow
+ * mirrors the house-threshold boolean for styling hooks. */
 export function SidebarInset({ className, ...props }: ComponentProps<"main">) {
+  const ref = useRef<HTMLElement>(null);
+  const storeRef = useRef<InsetWidthStore>(null);
+  storeRef.current ??= createInsetWidthStore();
+  const store = storeRef.current;
+
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const update = () => store.set(element.clientWidth);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [store]);
+
+  const narrow = useInsetNarrow(store, SIDEBAR_INSET_NARROW_WIDTH);
+
   return (
-    <main
-      data-slot="sidebar-inset"
-      data-scroll-restoration-id="sidebar-inset"
-      className={cn(styles.inset, className)}
-      {...props}
-    />
+    <SidebarInsetContext.Provider value={store}>
+      <main
+        ref={ref}
+        data-slot="sidebar-inset"
+        data-scroll-restoration-id="sidebar-inset"
+        data-narrow={narrow || undefined}
+        className={cn(styles.inset, className)}
+        {...props}
+      />
+    </SidebarInsetContext.Provider>
   );
 }
 

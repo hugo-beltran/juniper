@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { Lead } from '@/components/leads-table/leads-table'
+import type { User } from '@/components/users-table/users-table'
 import navTree from './nav-tree.json'
 
 /* Mock API for the demo: shaped like a real data layer (queryOptions per
@@ -116,6 +117,31 @@ export const LEADS: Lead[] = [
   { id: "44", player: "L. Cardoso", position: "CF", club: "Bayside Nine", stage: "Signed", ask: 19_500_000, grade: 65, scout: "S. Whitfield", lastActivity: "4d ago" },
 ];
 
+/* Demo roster for the Bridge content-manager tenant — fictional members.
+ * Timestamps are relative to build-time "now" so "last active" reads
+ * naturally whenever the demo runs; two invitees have never signed in. */
+const NOW = Date.now()
+const ago = (ms: number) => new Date(NOW - ms).toISOString()
+const HOUR = 3_600_000
+const DAY = 24 * HOUR
+
+export const USERS: User[] = [
+  { id: 'u-01', name: 'Priya Raman', email: 'priya@bridge.example', role: 'Owner', status: 'Active', lastActiveAt: ago(0.4 * HOUR), joinedAt: '2024-02-12' },
+  { id: 'u-02', name: 'Tomás Herrera', email: 'tomas@bridge.example', role: 'Admin', status: 'Active', lastActiveAt: ago(3 * HOUR), joinedAt: '2024-03-04' },
+  { id: 'u-03', name: 'Ingrid Solberg', email: 'ingrid@bridge.example', role: 'Admin', status: 'Active', lastActiveAt: ago(2 * DAY), joinedAt: '2024-05-21' },
+  { id: 'u-04', name: 'Kwame Mensah', email: 'kwame@bridge.example', role: 'Editor', status: 'Active', lastActiveAt: ago(1.2 * HOUR), joinedAt: '2024-06-10' },
+  { id: 'u-05', name: 'Yuki Tanabe', email: 'yuki@bridge.example', role: 'Editor', status: 'Active', lastActiveAt: ago(26 * HOUR), joinedAt: '2024-08-19' },
+  { id: 'u-06', name: 'Marta Kowalczyk', email: 'marta@bridge.example', role: 'Editor', status: 'Suspended', lastActiveAt: ago(41 * DAY), joinedAt: '2024-09-02' },
+  { id: 'u-07', name: 'Daniel Achebe', email: 'daniel@bridge.example', role: 'Contributor', status: 'Active', lastActiveAt: ago(5 * DAY), joinedAt: '2025-01-14' },
+  { id: 'u-08', name: 'Sofia Lindqvist', email: 'sofia@bridge.example', role: 'Contributor', status: 'Active', lastActiveAt: ago(9 * HOUR), joinedAt: '2025-02-03' },
+  { id: 'u-09', name: 'Rafael Duarte', email: 'rafael@bridge.example', role: 'Contributor', status: 'Invited', joinedAt: '2026-09-11' },
+  { id: 'u-10', name: 'Hana Okafor', email: 'hana@bridge.example', role: 'Contributor', status: 'Active', lastActiveAt: ago(12 * DAY), joinedAt: '2025-04-28' },
+  { id: 'u-11', name: 'Lukas Brandt', email: 'lukas@bridge.example', role: 'Viewer', status: 'Active', lastActiveAt: ago(3 * DAY), joinedAt: '2025-06-16' },
+  { id: 'u-12', name: 'Amara Osei', email: 'amara@bridge.example', role: 'Viewer', status: 'Invited', joinedAt: '2026-09-15' },
+  { id: 'u-13', name: 'Noor Haddad', email: 'noor@bridge.example', role: 'Viewer', status: 'Active', lastActiveAt: ago(7 * DAY), joinedAt: '2025-08-07' },
+  { id: 'u-14', name: 'Ewan Macrae', email: 'ewan@bridge.example', role: 'Editor', status: 'Active', lastActiveAt: ago(0.1 * HOUR), joinedAt: '2025-11-20' },
+]
+
 /** Leads still waiting on a scouting grade — what the Scouting nav badge counts. */
 export const pendingAnalysisCount = (leads: Lead[]) =>
   leads.filter((lead) => lead.grade === undefined).length
@@ -137,6 +163,7 @@ export type NavIcon =
   | 'cog'
   | 'cube'
   | 'users'
+  | 'pencil-square'
 
 /* A badge the shell resolves to a live count; the tree only names the
  * source, the shell decides how to compute it. */
@@ -204,6 +231,14 @@ export const navigationQuery = queryOptions({
   queryFn: async () => {
     await delay(200)
     return navTree as NavTree
+  },
+})
+
+export const usersQuery = queryOptions({
+  queryKey: ['users'],
+  queryFn: async () => {
+    await delay(300)
+    return USERS
   },
 })
 

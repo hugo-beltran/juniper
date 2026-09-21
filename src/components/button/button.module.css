@@ -1,6 +1,10 @@
 /* States use react-aria's data attributes (data-hovered/pressed/disabled)
  * rather than raw pseudo-classes, so hover styling stays correct across
- * pointer types. */
+ * pointer types. An `asChild` element (a router link) is not a react-aria
+ * element and never receives them, so each state selector also accepts
+ * :hover/:active on an element WITHOUT react-aria's data-rac marker — the
+ * pseudo-classes apply only to slotted children, never to react-aria
+ * buttons. */
 
 .button {
   display: inline-flex;
@@ -14,12 +18,14 @@
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
   user-select: none;
   transition:
     background-color 120ms var(--ease),
     color 120ms var(--ease),
     border-color 120ms var(--ease),
+    box-shadow 120ms var(--ease),
     transform 120ms var(--ease);
 }
 
@@ -30,7 +36,7 @@
   pointer-events: none;
 }
 
-.button[data-pressed] {
+.button:is([data-pressed], :not([data-rac]):active) {
   transform: translateY(1px);
 }
 
@@ -48,7 +54,8 @@
  * centered 2px stroke clipped to the shape), and a diagonally offset
  * needle-tinted drop shadow (the SVG filter offsets dx = dy). Pressing moves
  * the gradient's light source to the top-left and swaps the drop shadow for
- * an inner one — the pane pushes in. */
+ * an inner one — the pane pushes in. The one control that carries color,
+ * so the one that carries light (theming §4.6). */
 .primary {
   background: radial-gradient(
     circle at 70% 70%,
@@ -64,8 +71,8 @@
     transform 120ms var(--ease);
 }
 
-.primary[data-hovered] {
-  color: white;
+.primary:is([data-hovered], :not([data-rac]):hover) {
+  color: var(--juni-bark-50);
   background: radial-gradient(
     circle at 70% 70%,
     var(--juni-needle-300) -50%,
@@ -78,10 +85,9 @@
 
 /* Pressed: hover brightens, so the push-in goes the other way — one step
  * deeper than idle, light source flipped to the top-left, the pane's own
- * shadow pulled inside. Text back to bark-50 (hover's needle-700 ink would
- * drown on the deep fill); the residual contact shadow keeps idle's
- * bloom tint. */
-.primary[data-pressed] {
+ * shadow pulled inside. The residual contact shadow keeps idle's bloom
+ * tint. */
+.primary:is([data-pressed], :not([data-rac]):active) {
   color: var(--juni-bark-50);
   background: radial-gradient(
     circle at 30% 30%,
@@ -94,26 +100,55 @@
     1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.15);
 }
 
+/* Secondary — extruded (theming §4.6), the same material as a field or a
+ * select trigger: the surface's own bark-50 fill, faint hairline, highlight
+ * up-left and shade down-right. Hover pushes further out with a bloom
+ * hairline (§4.7); pressed, or open as a menu trigger, sinks it. */
 .secondary {
-  background-color: var(--juni-bark-200);
+  background-color: var(--juni-bark-50);
   color: var(--juni-needle-950);
-  border-color: var(--juni-bark-300);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+  box-shadow:
+    -2px -2px 4px var(--lift-highlight),
+    2px 2px 5px var(--lift-shade);
 }
 
-.secondary[data-hovered] {
-  background-color: var(--juni-bark-300);
+.secondary:is([data-hovered], [data-focus-visible], :not([data-rac]):hover) {
+  border-color: var(--juni-bloom-400);
 }
 
+.secondary:is([data-hovered], :not([data-rac]):hover) {
+  box-shadow:
+    -2px -2px 5px var(--lift-highlight),
+    3px 3px 6px var(--lift-shade);
+}
+
+.secondary:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
+  box-shadow:
+    inset -1px -1px 2px var(--lift-highlight),
+    inset 1px 1px 3px var(--lift-shade);
+}
+
+/* Discrete — inline text that becomes a control on approach. Flat at rest
+ * (it carries no weight until touched); hover washes it in bloom (§4.7);
+ * pressed or open it takes the surface fill and sinks (inset) like every
+ * other neutral control. */
 .discrete {
   background-color: transparent;
   color: var(--juni-needle-800);
 }
 
-/* An open popover/menu keeps a discrete trigger engaged. */
-.discrete[data-hovered],
-.discrete[aria-expanded="true"] {
-  background-color: var(--juni-needle-100);
+.discrete:is([data-hovered], :not([data-rac]):hover) {
+  background-color: var(--juni-bloom-100);
+  color: var(--juni-bloom-950);
+}
+
+.discrete:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
+  background-color: var(--juni-bark-50);
   color: var(--juni-needle-950);
+  box-shadow:
+    inset -1px -1px 2px var(--lift-highlight),
+    inset 1px 1px 3px var(--lift-shade);
 }
 
 /* Sizes */
