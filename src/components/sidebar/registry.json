@@ -17,7 +17,7 @@
     },
     {
       "part": "SidebarInset",
-      "description": "The main content surface beside the sidebar, rendered as <main>. It is the page's only scroll container — the wrapper is viewport-height and clipped, so the document never scrolls — with the house subtle scrollbar and a reserved left gutter for the floating trigger; sticky toolbars and headers inside it pin to its top edge, and the router restores its scroll position."
+      "description": "The <main> scroll container beside the sidebar (the document never scrolls). Measures its own width with a ResizeObserver into an external store; useSidebarInset(narrowBelow = SIDEBAR_INSET_NARROW_WIDTH, 704px) subscribes with a selector and returns a boolean that re-renders the caller only when it flips, useSidebarInsetWidth() returns the raw number; data-narrow mirrors the house-threshold boolean. Content inside adapts to this signal, never to the viewport."
     },
     {
       "part": "SidebarInsetHeader",
@@ -43,6 +43,8 @@
   "usage": [
     "Wrap the layout in SidebarProvider; render Sidebar and SidebarInset as siblings inside it.",
     "Scrolling happens inside SidebarInset, not the document: size sticky offsets against the inset's top edge, and never rely on window.scrollY.",
+    "Read useSidebarInset(threshold) to adapt a component to the space it actually has (the leads table becomes cards, the filter bar folds into a drawer). The inset publishes the fact (its width); each consumer owns the policy (its threshold) as a named constant beside its content, defaulting to the house value so the common case switches together. Outside an inset the hook reports wide.",
+    "Never debounce the inset signal: ResizeObserver already coalesces to one notification per frame and the selector re-renders a consumer only when its boolean flips, so a delay would only leave content in the wrong layout mid-resize.",
     "Sticky content inside the inset pins to top: 0; the floating trigger lives in the inset's left gutter, so nothing needs to offset for it.",
     "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
     "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",

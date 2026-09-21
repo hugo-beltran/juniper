@@ -1,0 +1,24 @@
+{
+  "title": "Select",
+  "description": "Labelled picker on react-aria Select: an extruded trigger that sinks while open, and an anchored popover on the same material at exactly the trigger's width, so the open list reads as the control grown downward. A form control by default; isClearable turns it into a filter with a selectable \"any\" row, a clear button and the needle wash.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "Select", "description": "react-aria Select root with data-slot=\"select\", data-size, and data-active while a clearable select holds a value. Owns the label-above stack." },
+    { "part": "FieldLabel / FieldDescription / FieldError", "description": "The shared Field parts, associated by react-aria; the error renders only while isInvalid." },
+    { "part": "Trigger", "description": "react-aria Button wearing the extruded recipe: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while pressed or open. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button." },
+    { "part": "SelectValue", "description": "The chosen option's textValue, or the placeholder in bark-500 while empty. Hints stay in the list." },
+    { "part": "Clear", "description": "A react-aria Button laid over the trigger's right end, only with isClearable and a value set; hover fills needle because it acts rather than points. Wrapped in a reset ButtonContext so it clears instead of opening." },
+    { "part": "Popover", "description": "Anchored bottom-start at var(--trigger-width) on the same extruded material, scrolls with the thin bark scrollbar." },
+    { "part": "ListBox variant=\"popover\"", "description": "The house ListBox: bloom wash marks the focused row, needle wash the selected one, color-mix when both, no ring on rows." }
+  ],
+  "usage": [
+    "Controlled only: pass value (\"\" for nothing selected) and onChange; options are { value, label, hint? } where hint renders muted in the list, never on the trigger.",
+    "Form use: leave isClearable off. The placeholder shows until a choice is made, isRequired and isInvalid plus errorMessage carry validation, and a filled select stays neutral.",
+    "Filter use: set isClearable. The placeholder becomes a selectable \"any\" row (so keyboard users can reset from the list), a clear × appears while a value is set, and the trigger wears the needle-100 wash to say a filter is applied.",
+    "Sizes mirror Button (mini, small, medium) so a select and a button share a row; the toolbar uses mini, forms use the default medium.",
+    "The popover is the sanctioned anchored picker (component-architecture §4.2): it must stay flush beneath the trigger at the trigger's width and on the same material. Never turn it into a free-floating menu.",
+    "Use this instead of a native <select> so the open list inherits the volume and the palette (component-architecture §4.3).",
+    "Hover and keyboard focus answer in bloom (trigger hairline, list-row wash); selection stays in needle, per theming §4.7. The focus ring stays on the trigger; rows draw none."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

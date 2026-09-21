@@ -1,0 +1,20 @@
+{
+  "title": "Users table",
+  "description": "Workspace members table for a content-manager tenant on TanStack Table v9: flat and borderless, a member cell with avatar, name and email, role sorted by privilege, a status badge (Active needle, Invited hollow, Suspended heartwood) and time columns that sort by timestamp while showing words. A FilterBar with search, Role and Status sits above it.",
+  "category": "demo",
+  "anatomy": [
+    { "part": "FilterBar", "description": "The shared FilterBar: a search Input (name or email), Role and Status Selects with counts as hints, and Clear all while a filter is active." },
+    { "part": "Table", "description": "Semantic table with sortable headers (aria-sort) pinned at top: 4rem beneath the bar; hover wash on rows; no rules drawn." },
+    { "part": "Member cell", "description": "Blobatar on a bark palette, the name in needle-950 over the email in bark-500." },
+    { "part": "Status badge", "description": "Active: needle-200 wash. Invited: hollow dashed bark badge, nothing has happened yet. Suspended: heartwood-200 wash, the attention colour, because it needs acting on." }
+  ],
+  "usage": [
+    "Controlled or uncontrolled: pass filters + onFiltersChange to own the state (the users page keeps query, role and status in zod-validated search params); omit both and the table keeps it internally. The table never touches the router.",
+    "A reference composition, not a reusable primitive: copy the patterns (FilterBar above a flat sortable table, timestamp-backed relative time, status badges on the ramps' meanings) rather than the component.",
+    "Role sorts by privilege (Owner first), never alphabetically; Last active sorts by timestamp with never-active invitees last.",
+    "Only Suspended may be red: heartwood is the identity's attention colour and MUST mean something needs acting on.",
+    "Sticky toolbar height (filter-bar, 4rem) and header top offset (users-table) are coupled: change one, change both.",
+    "Table chrome is duplicated from leads-table on purpose; a shared Table primitive is the promotion waiting on a third consumer."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

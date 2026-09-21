@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Blobatar } from "@blobatar/react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Input, Label, TextArea, TextField } from "react-aria-components";
-import { Button, Card } from "@/components";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Button, Card, Input, Select, Textarea } from "@/components";
 import { blobatarPalette } from "@/lib/blobatar-palette";
 import styles from "./scout-report.module.css";
 
@@ -12,8 +11,10 @@ export const Route = createFileRoute("/_authenticated/scout-report")({
 
 /* SCOUT report — the demo's stand-in for the qualitative-notes wizard:
  * acronym-keyed dimensions filed in a deliberate order (hence the timeline),
- * plus structured basics, producing a new pipeline entry. No persistence:
- * filing shows a confirmation and the state resets on reload. */
+ * plus structured basics, producing a new pipeline entry. Composed entirely
+ * from registry primitives (Input, Select, Textarea, Button, Card); the
+ * route owns layout and state, never a token. No persistence: filing shows
+ * a confirmation and the state resets on reload. */
 
 const DIMENSIONS = [
   {
@@ -50,14 +51,13 @@ const DIMENSIONS = [
 
 const POSITIONS = [
   "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "OF", "DH", "UTL", "SP", "RP",
-];
+].map((position) => ({ value: position, label: position }));
 
 const EMPTY_NOTES = Object.fromEntries(
   DIMENSIONS.map((d) => [d.letter, ""]),
 ) as Record<string, string>;
 
 function ScoutReportPage() {
-  const navigate = useNavigate();
   const [player, setPlayer] = useState("");
   const [position, setPosition] = useState("");
   const [club, setClub] = useState("");
@@ -71,9 +71,10 @@ function ScoutReportPage() {
   ).length;
   const nextIndex = DIMENSIONS.findIndex((d) => notes[d.letter].trim() === "");
 
-  const basicsValid =
-    player.trim() !== "" && position !== "" && club.trim() !== "";
-
+  const missingPlayer = player.trim() === "";
+  const missingPosition = position === "";
+  const missingClub = club.trim() === "";
+  const basicsValid = !missingPlayer && !missingPosition && !missingClub;
 
   const fileReport = () => {
     if (!basicsValid) {
@@ -99,8 +100,8 @@ function ScoutReportPage() {
             {ask.trim() !== "" && <> with an ask of {ask}</>}, with{" "}
             {filledCount} of {DIMENSIONS.length} SCOUT dimensions on file.
           </p>
-          <Button onPress={() => navigate({ to: "/dashboard" })}>
-            Back to pipeline
+          <Button asChild>
+            <Link to="/dashboard">Back to pipeline</Link>
           </Button>
         </Card>
       </div>
@@ -124,55 +125,40 @@ function ScoutReportPage() {
 
       <Card className={styles.basics}>
         <div className={styles.basicsGrid}>
-          <TextField
-            className={styles.field}
+          <Input
+            label="Player"
+            placeholder="e.g. R. Ibarra"
             value={player}
             onChange={setPlayer}
             isRequired
-          >
-            <Label className={styles.label}>Player</Label>
-            <Input className={styles.input} placeholder="e.g. R. Ibarra" />
-            {attempted && player.trim() === "" && (
-              <span className={styles.required}>Required</span>
-            )}
-          </TextField>
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="scout-position">
-              Position
-            </label>
-            <select
-              id="scout-position"
-              className={styles.select}
-              value={position}
-              onChange={(event) => setPosition(event.target.value)}
-            >
-              <option value="">Select…</option>
-              {POSITIONS.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
-            {attempted && position === "" && (
-              <span className={styles.required}>Required</span>
-            )}
-          </div>
-          <TextField
-            className={styles.field}
+            isInvalid={attempted && missingPlayer}
+            errorMessage="Required"
+          />
+          <Select
+            label="Position"
+            placeholder="Select…"
+            options={POSITIONS}
+            value={position}
+            onChange={setPosition}
+            isRequired
+            isInvalid={attempted && missingPosition}
+            errorMessage="Required"
+          />
+          <Input
+            label="Club"
+            placeholder="e.g. Harbor Cats"
             value={club}
             onChange={setClub}
             isRequired
-          >
-            <Label className={styles.label}>Club</Label>
-            <Input className={styles.input} placeholder="e.g. Harbor Cats" />
-            {attempted && club.trim() === "" && (
-              <span className={styles.required}>Required</span>
-            )}
-          </TextField>
-          <TextField className={styles.field} value={ask} onChange={setAsk}>
-            <Label className={styles.label}>Ask</Label>
-            <Input className={styles.input} placeholder="e.g. $4.5M" />
-          </TextField>
+            isInvalid={attempted && missingClub}
+            errorMessage="Required"
+          />
+          <Input
+            label="Ask"
+            placeholder="e.g. $4.5M"
+            value={ask}
+            onChange={setAsk}
+          />
         </div>
       </Card>
 
@@ -190,20 +176,16 @@ function ScoutReportPage() {
                 {d.letter}
               </span>
               <Card className={styles.dimension}>
-                <TextField
-                  className={styles.field}
+                <Textarea
+                  label={d.title}
+                  labelVariant="title"
+                  placeholder={d.placeholder}
+                  rows={3}
                   value={notes[d.letter]}
                   onChange={(value) =>
                     setNotes((current) => ({ ...current, [d.letter]: value }))
                   }
-                >
-                  <Label className={styles.dimensionTitle}>{d.title}</Label>
-                  <TextArea
-                    className={styles.noteArea}
-                    placeholder={d.placeholder}
-                    rows={3}
-                  />
-                </TextField>
+                />
               </Card>
             </li>
           );
@@ -212,14 +194,11 @@ function ScoutReportPage() {
 
       <div className={styles.actions}>
         <Button onPress={fileReport}>File report</Button>
-        <Button
-          variant="discrete"
-          onPress={() => navigate({ to: "/dashboard" })}
-        >
-          Discard
+        <Button variant="discrete" asChild>
+          <Link to="/dashboard">Discard</Link>
         </Button>
         {attempted && !basicsValid && (
-          <span className={styles.required}>
+          <span className={styles.required} role="alert">
             Player, position, and club are required.
           </span>
         )}

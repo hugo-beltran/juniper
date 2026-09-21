@@ -1,0 +1,126 @@
+/* Sticky filter toolbar: pins to the inset's top above a table's sticky
+ * column headers; the floating sidebar trigger shares this row from the
+ * inset's left gutter. Its box is exactly 4rem tall so the headers' sticky
+ * offset (top: 4rem on the table's .th) sits flush beneath it — change one,
+ * change both. Every item bottom-aligns onto one edge: the search box, the
+ * select triggers, Clear all and divider share a 1.75rem control
+ * row (size mini), the field labels and the switch's title rise above it.
+ * Items never wrap; at narrow widths the row scrolls sideways instead so
+ * the height holds. */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 4rem;
+  padding: 0.625rem 0 0.75rem;
+  background-color: var(--juni-bark-50);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Hairline between the switches and the selects (react-aria Separator,
+ * role="separator"); spans the 1.75rem control row at the bottom, so it
+ * reads as a rule, not a wall. */
+.divider {
+  width: 1px;
+  height: 1.75rem;
+  flex-shrink: 0;
+  background-color: var(--juni-bark-200);
+}
+
+/* Fields fill their container by default; the toolbar gives each a floor
+ * so the label row does not collapse around a short value. */
+.toolbar > [data-slot="select"] {
+  min-width: 10rem;
+}
+
+.toolbar > [data-slot="input"] {
+  min-width: 13rem;
+}
+
+/* Clear all (wide) and the Filters toggle (narrow) hold the row's right
+ * end; both sit on the 1.75rem control row. */
+.toolbar > [data-slot="button"] {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Narrow layout — the Disclosure root (row + drawer) is the sticky block,
+ * so the open drawer rides along with the row instead of scrolling away
+ * beneath it. It pins within the table's height like the wide toolbar; the
+ * row inside it goes static so only one element is sticky. Painted in the
+ * inset's surface so cards vanish beneath the whole block. */
+.disclosure {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: var(--juni-bark-50);
+}
+
+/* Row: search and switches on the left, the Filters toggle on the right. */
+.toolbarNarrow {
+  position: static;
+  justify-content: space-between;
+  overflow: visible;
+}
+
+.lead {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: flex-end;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* The switch gives way before the toggle does: it shrinks and its copy
+ * truncates, the toggle keeps its size. */
+.lead > [data-slot="switch"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Active-filter count on the toggle: a needle pill, the selection colour,
+ * because it says what is chosen (theming §4.7). */
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background-color: var(--juni-needle-100);
+  color: var(--juni-needle-950);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Drawer: grows in place beneath the row and pushes the rows down, and
+ * stays pinned with the row while the list scrolls; closed by a rule so it
+ * reads as the toolbar's lower shelf, not a panel. */
+.drawer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.25rem 0 0.75rem;
+  border-bottom: 1px solid var(--juni-bark-200);
+}
+
+.drawerFields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.drawerFields > [data-slot="select"] {
+  flex: 1 1 10rem;
+}
+
+.drawerFooter {
+  display: flex;
+  justify-content: flex-end;
+}

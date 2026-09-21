@@ -51,10 +51,12 @@ keyboard focus, the focus ring), contrast accents and tinted shadows.
 2.3. `--juni-berry-*` is the violet accent: categorical emphasis and chips.
 
 2.4. `--juni-heartwood-*` is the identity's only red. Every destructive or
-error state MUST use it, and nothing else MAY be red. It is also the
-attention colour: a badge or indicator that says "something needs acting
-on" (a count of leads awaiting analysis) wears heartwood, and MUST render
-nothing when there is nothing to act on, so the red keeps its meaning.
+error state MUST use it, and nothing else MAY be red: a field's error text
+(`heartwood-600`) and its invalid hairline (`heartwood-500`) come from here.
+It is also the attention colour: a badge or indicator that says "something
+needs acting on" (a count of leads awaiting analysis) wears heartwood, and
+MUST render nothing when there is nothing to act on, so the red keeps its
+meaning.
 
 2.5. `--juni-bark-*` is the warm-gray neutral for surfaces, borders and plain
 content. `--juni-lichen-*` is the green-gray secondary neutral for muted
@@ -140,9 +142,9 @@ pushed out toward the viewer, and pressing pushes them back in. Static
 surfaces (cards, tables, panels) stay flat and separate by border and tint,
 never by shadow.
 
-- Neutral controls (fields, selects, switch tracks, secondary and discrete
-  triggers that need weight) MUST use the **extruded** recipe: the control
-  keeps the surface's own fill, a faint hairline
+- Neutral controls (text fields, textareas, select triggers, switch tracks,
+  secondary buttons) MUST use the **extruded** recipe: the control keeps the
+  surface's own fill, a faint hairline
   (`oklch(from var(--juni-bark-200) l c h / 0.6)`), a highlight cast
   up-left and a shade cast down-right from the shared tokens:
 
@@ -152,12 +154,16 @@ never by shadow.
     2px 2px 5px var(--lift-shade);
   ```
 
-  Hover MAY push further out (larger offsets). Pressed or open MUST invert
-  both shadows to `inset` so the control sinks. Smaller controls scale the
-  offsets down (the switch track uses 1px/2px), never the recipe. A
-  control's own popover (a Select's list) wears the same recipe at the
-  trigger's width, so the open pair reads as one body: a sunken cap over a
-  raised list.
+    Hover MAY push further out (larger offsets). Pressed or open MUST invert
+  both shadows to `inset` so the control sinks; a text field counts as
+  pressed while it holds focus, so typing reads as pressing into the
+  surface. Smaller controls scale the offsets down (the switch track uses
+  1px/2px), never the recipe. A control's own popover (a Select's list)
+  wears the same recipe at the trigger's width, so the open pair reads as
+  one body: a sunken cap over a raised list.
+- The discrete button is the one neutral trigger with no volume at rest: it
+  is inline text until touched. It MUST still take the surface fill and
+  sink (inset) when pressed or open, so every control shares the press.
 - The primary action keeps its own material: the chromatic **glass pane**
   (radial fill lit off-center, 1px translucent inner ring, bloom-tinted
   drop shadow with equal x/y offset, press flips the light and pulls the
@@ -174,8 +180,9 @@ never by shadow.
 answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
 the primary button, a clear ×  — keep their own needle fill on hover: they
 act rather than point): a bloom hairline on a trigger
-(`bloom-400`), a bloom wash on a list row (`bloom-100`, text `bloom-950`),
-a bloom track on a hovered switch (`bloom-300`). Selection and the active
+or a text field (`bloom-400`), a bloom wash on a list row or a discrete
+button (`bloom-100`, text `bloom-950`), a bloom track on a hovered switch
+(`bloom-300`). Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you
 are" never blurs with "what is chosen"; when both land on one element,
 MIX the two washes rather than picking a third step:

@@ -40,7 +40,9 @@
   flex: 1;
   flex-direction: column;
   width: 100%;
-  min-width: 40rem;
+  /* No width floor: the inset shrinks with the viewport and content adapts
+   * (the leads table re-renders as cards below 640px of its own width). */
+  min-width: 0;
   min-height: 0;
   margin: 0.5rem;
   margin-left: 0;

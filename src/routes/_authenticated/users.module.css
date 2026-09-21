@@ -1,0 +1,22 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.sub {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--text-base);
+  color: var(--juni-bark-600);
+}

@@ -19,6 +19,8 @@ import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenticated/scout-report'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
+import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticated/lab/forms'
 import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
 
@@ -73,6 +75,16 @@ const AuthenticatedTradeAnalyzerRoute =
     path: '/trade-analyzer',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedLabFormsRoute = AuthenticatedLabFormsRouteImport.update({
+  id: '/lab/forms',
+  path: '/lab/forms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabLiftRoute = AuthenticatedLabLiftRouteImport.update({
   id: '/lab/lift',
   path: '/lab/lift',
@@ -94,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
+  '/users': typeof AuthenticatedUsersRoute
+  '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
@@ -106,7 +120,9 @@ export interface FileRoutesByTo {
   '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
+  '/users': typeof AuthenticatedUsersRoute
   '/': typeof AuthenticatedIndexRoute
+  '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
@@ -121,7 +137,9 @@ export interface FileRoutesById {
   '/_authenticated/scout-report': typeof AuthenticatedScoutReportRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
+  '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/lab/forms': typeof AuthenticatedLabFormsRoute
   '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
@@ -137,6 +155,8 @@ export interface FileRouteTypes {
     | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
+    | '/users'
+    | '/lab/forms'
     | '/lab/lift'
     | '/lab/palette'
   fileRoutesByTo: FileRoutesByTo
@@ -149,7 +169,9 @@ export interface FileRouteTypes {
     | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
+    | '/users'
     | '/'
+    | '/lab/forms'
     | '/lab/lift'
     | '/lab/palette'
   id:
@@ -163,7 +185,9 @@ export interface FileRouteTypes {
     | '/_authenticated/scout-report'
     | '/_authenticated/settings'
     | '/_authenticated/trade-analyzer'
+    | '/_authenticated/users'
     | '/_authenticated/'
+    | '/_authenticated/lab/forms'
     | '/_authenticated/lab/lift'
     | '/_authenticated/lab/palette'
   fileRoutesById: FileRoutesById
@@ -245,6 +269,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTradeAnalyzerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/users': {
+      id: '/_authenticated/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthenticatedUsersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lab/forms': {
+      id: '/_authenticated/lab/forms'
+      path: '/lab/forms'
+      fullPath: '/lab/forms'
+      preLoaderRoute: typeof AuthenticatedLabFormsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/lift': {
       id: '/_authenticated/lab/lift'
       path: '/lab/lift'
@@ -270,7 +308,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedScoutReportRoute: typeof AuthenticatedScoutReportRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
+  AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedLabFormsRoute: typeof AuthenticatedLabFormsRoute
   AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
 }
@@ -283,7 +323,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedScoutReportRoute: AuthenticatedScoutReportRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
+  AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedLabFormsRoute: AuthenticatedLabFormsRoute,
   AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
 }

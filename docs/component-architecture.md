@@ -37,6 +37,14 @@ src/components/
     button.tsx
     button.module.css
     registry.json               contract sidecar (see registry-schema.md)
+  field/                        shared label / description / error parts
+  input/                        labelled TextField + Input
+  textarea/                     labelled TextField + TextArea
+  select/                       labelled Select with anchored popover
+  listbox/                      ListBox, inline and popover variants
+  switch/                       labelled Switch, extruded track
+  filter-bar/                   sticky search / switch / select toolbar
+  users-table/                  demo composition: FilterBar + flat table
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -53,14 +61,24 @@ component. The main file is `<name>.tsx` with `<name>.module.css` beside it.
 There is no `ui/` layer and no `components/shared/`.
 
 2.2. A private descendant (a sub-part only this component uses, such as
-`sparkline.tsx`, `listbox.tsx`, `squircle.tsx`, `use-click-outside.ts`)
-MUST colocate in its parent's directory. It is not exported from the barrel.
+`sparkline.tsx`, `squircle.tsx`, `use-click-outside.ts`) MUST colocate in
+its parent's directory. It is not exported from the barrel.
 
 2.3. **Promotion rule.** A private descendant is promoted to its own
 directory only when a second, *unrelated* component needs it. Promotion
 means: move the files, add a barrel export, add a `registry.json`, and
 switch the original parent to import through `@/components/<name>/<name>`.
-Do not promote speculatively.
+Do not promote speculatively. Precedents: `select` and `switch` left
+`leads-table` and `listbox` left `tenant-switcher` when the form primitives
+needed them; `filter-bar` (né `leads-filters`) left `leads-table` when the
+users table became its second consumer;
+`field` (label, description, error) was promoted on its first day because
+three unrelated primitives needed it at once, which meets the rule of three.
+
+2.3.1. **Shared chrome is composed, not copied.** Labelled controls (Input,
+Textarea, Select) render the `field` parts for their label, description and
+error and own only their stack and their box. A new labelled control MUST
+compose `field` rather than restate its type and colour.
 
 2.4. The barrel (`src/components/index.ts`) is the public surface and the
 registry's registration list. Routes and features MUST import through it.
@@ -112,9 +130,18 @@ data attributes react-aria sets (`[data-hovered]`, `[data-pressed]`,
 [Theming rules](./theming.md) 4.6. Static parts stay flat.
 
 3.7. `asChild` (Radix Slot) is the way to render a router `<Link>` in place
-of a button-shaped element. When `asChild` is true the component renders
-`<Slot>` with the shared props; otherwise it renders the react-aria
-primitive so press and aria wiring connect.
+of a button-shaped element (`Button`, `SidebarMenuButton`). When `asChild`
+is true the component renders `<Slot>` with the shared props; otherwise it
+renders the react-aria primitive so press and aria wiring connect. A slotted
+element never receives react-aria's data attributes, so its module MAY style
+hover and press with `:hover` / `:active` scoped to elements without the
+`data-rac` marker (`.x:is([data-hovered], :not([data-rac]):hover)`), which
+keeps 3.5 intact for the react-aria path.
+
+3.8. **Sizes are one scale.** `Button`, `Input`, `Textarea` and `Select`
+share the size names `mini` (1.75rem), `small` (2rem) and `medium` (2.5rem,
+default), so a field and a button placed on one row at the same size name
+align without consumer CSS.
 
 ## 4. Composition patterns
 
@@ -126,6 +153,15 @@ that floats the sidebar trigger in that gutter, so the toggle stays present
 while the inset scrolls and shares the top row with sticky toolbars and
 table headers, which pin to `top: 0` with no offset. Scroll position is
 restored per route through the inset, and nothing reads `window.scrollY`.
+The inset also measures its own width into a store that
+`useSidebarInset(narrowBelow)` subscribes to with a selector, returning a
+boolean that re-renders the caller only when it flips (the raw number is
+`useSidebarInsetWidth()`; the house threshold is 44rem, mirrored as
+`data-narrow`). The inset publishes the fact; each consumer owns its
+policy as a named constant beside its content, defaulting to the house
+value so the common case switches together. The signal is never
+debounced: the observer already coalesces per frame, and a delay would
+only hold content in the wrong layout mid-resize.
 
 4.1. **Compound components for owned layouts.** A component that owns a
 layout (Sidebar) exposes named parts (`SidebarHeader`, `SidebarMenu`,
@@ -136,7 +172,9 @@ chrome.
 4.2. **Inline over overlay.** Disclosure grows in place and pushes content
 (the tenant switcher's panel) rather than floating a dialog, drawer or
 free-floating menu, wherever the layout allows. When in-place expansion is
-needed, use react-aria `Disclosure`/`DisclosurePanel`; for dismissable
+needed, use react-aria `Disclosure`/`DisclosurePanel` (the filter bar's
+narrow layout folds its selects and sort control into a `DisclosurePanel`
+beneath the toolbar row, pushing the rows down); for dismissable
 selections, use `TagGroup`. Two overlays are sanctioned: tooltips, and
 **anchored pickers** (the popover of a `Select` or `ComboBox`) that open
 flush beneath their trigger at exactly the trigger's width
@@ -148,10 +186,12 @@ are not used.
 4.3. **Native over emulated.** Prefer the native element or CSS feature:
 `outline` for focus, `<table>` with `aria-sort` for sortable data, `inert`
 for closed panels, a native checkbox or radio where a plain toggle will do.
-The exception is the picker: use the house `Select` (react-aria `Select`,
-labelled, with the anchored popover from 4.2) rather than a native
-`<select>`, so the open list inherits the volume and the palette; the
-native control's list cannot be themed.
+The exception is the picker: use the house `Select`
+(`src/components/select`, react-aria `Select`, labelled, with the anchored
+popover from 4.2) rather than a native `<select>`, so the open list inherits
+the volume and the palette; the native control's list cannot be themed. Text
+entry uses the house `Input` and `Textarea`, never a raw react-aria
+`TextField` styled from route CSS ([Theming rules](./theming.md) 1.6).
 
 4.4. **Consolidate near-duplicates.** Before writing a new themed clickable
 surface, check whether Button (a variant) or an existing part already solves
@@ -160,6 +200,23 @@ it. A trigger that re-implements Button's concerns SHOULD render Button.
 4.5. **Controlled or uncontrolled.** Stateful components (Sidebar,
 TenantSwitcher) accept an optional controlled value plus change handler and
 fall back to internal state.
+
+4.6. **One engine, two layouts.** A data table that must also work in a
+narrow space keeps a single TanStack instance (columns, filtering hand-off,
+sorting) and renders it two ways: the semantic `<table>` with `aria-sort`
+headers while it has room, and a flex list of flat Cards below a threshold,
+where each row's cells become label/value pairs (labels from
+`columnDef.header`, values through `table.FlexRender`) and a Sort control
+(Select for the column, Button for the direction), living in the filter
+bar's drawer, drives the same sorting state. The filter bar takes the same
+`narrow` signal: switches stay on the row, a Filters toggle sits at its
+far end, and the selects fold into the drawer. The signal MUST be the
+sidebar inset's published width (`useSidebarInset(threshold)`, 4.0), not the
+viewport and not the component's own box, because the sidebar changes the
+space a table has and every component inside the inset must switch
+together; the inset measures before paint so the layout never flashes.
+Never fork the data or the column definitions for a mobile variant. The
+leads table is the reference.
 
 ## 5. Accessibility baseline
 

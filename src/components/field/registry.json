@@ -1,0 +1,18 @@
+{
+  "title": "Field",
+  "description": "The chrome every labelled control shares: FieldLabel above, FieldDescription and FieldError below, as react-aria parts so Input, Textarea and Select compose one copy of the label, hint and error styling.",
+  "category": "primitive",
+  "anatomy": [
+    { "part": "FieldLabel", "description": "react-aria Label with data-slot=\"field-label\". Variants: caption (uppercase, bark-500; the default) and title (sentence case, needle-950, for a field that heads its own card), mirrored as data-variant." },
+    { "part": "FieldDescription", "description": "react-aria Text slot=\"description\" with data-slot=\"field-description\": muted bark-500 hint that lands in the control's aria-describedby." },
+    { "part": "FieldError", "description": "react-aria FieldError with data-slot=\"field-error\": heartwood-600 message that renders only while the field is invalid and joins aria-describedby." }
+  ],
+  "usage": [
+    "Render these parts inside a react-aria field root (TextField, Select) so the label, description and error are associated automatically; never wire htmlFor or aria-describedby by hand.",
+    "Field owns type and colour only; the control that composes it owns the stack (flex column, 0.2rem gap) and the control box.",
+    "Errors are the identity's only red: FieldError uses the heartwood ramp, and nothing else in a field may be red.",
+    "Prefer passing label, description and errorMessage props to Input, Textarea or Select; reach for these parts directly only when building a new labelled control.",
+    "Promotion precedent: three unrelated primitives needed the same chrome at once, which meets the rule of three, so Field was promoted on its first day rather than copied into each directory."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

@@ -7,14 +7,13 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
+import { Button } from "@/components/button/button";
+import { Card } from "@/components/card/card";
+import { FilterBar } from "@/components/filter-bar/filter-bar";
+import { Select } from "@/components/select/select";
+import { useSidebarInset } from "@/components/sidebar/sidebar";
 import { blobatarPalette } from "@/lib/blobatar-palette";
-import { LeadsFilters } from "./leads-filters";
 import styles from "./leads-table.module.css";
-
-/* CRM-style leads table, sports flavor: free-agent targets moving through a
- * scouting pipeline. Flat and borderless — hierarchy comes from type and
- * spacing, not rules. Filtering (stage, club, scout) lives in the inline
- * LeadsFilters panel above the table; the table owns the filter state. */
 
 export const STAGES = [
   "Scouted",
@@ -214,9 +213,58 @@ export function LeadsTable({
 
   const clearFilters = () => setFilters(EMPTY_LEADS_FILTERS);
 
+  /* The inset's width, not the viewport's and not this element's own: the
+   * one scroll container decides. Outside an inset the table stays wide. */
+  const narrow = useSidebarInset();
+
+  /* Card layout's sort control, handed to the FilterBar's drawer: the
+   * sortable columns as a Select, the direction as a Button. Both drive
+   * TanStack's sorting state directly, so switching layouts keeps the
+   * current sort. */
+  const sortableColumns = table
+    .getAllLeafColumns()
+    .filter((column) => column.getCanSort());
+  const sortedColumn = sortableColumns.find((column) => column.getIsSorted());
+  const sortDirection = sortedColumn?.getIsSorted() || undefined;
+
+  const sortControl = (
+    <>
+      <Select
+        size="mini"
+        isClearable
+        label="Sort by"
+        placeholder="Pipeline order"
+        value={sortedColumn?.id ?? ""}
+        options={sortableColumns.map((column) => ({
+          value: column.id,
+          label: String(column.columnDef.header),
+        }))}
+        onChange={(id) => {
+          if (id === "") table.setSorting([]);
+          else if (id !== sortedColumn?.id)
+            table.getColumn(id)?.toggleSorting(false);
+        }}
+      />
+      {sortedColumn && (
+        <Button
+          size="mini"
+          variant="secondary"
+          aria-label={
+            sortDirection === "desc" ? "Sort ascending" : "Sort descending"
+          }
+          onPress={() => sortedColumn.toggleSorting(sortDirection === "asc")}
+        >
+          <span aria-hidden>{sortDirection === "desc" ? "▼" : "▲"}</span>
+          {sortDirection === "desc" ? "Desc" : "Asc"}
+        </Button>
+      )}
+    </>
+  );
+
   return (
-    <div data-slot="leads-table">
-      <LeadsFilters
+    <div data-slot="leads-table" data-layout={narrow ? "cards" : "table"}>
+      <FilterBar
+        extras={sortControl}
         toggles={[
           /* Off: every lead. On: only leads still awaiting a grade. The
            * label names what "on" does, per switch semantics. */
@@ -252,64 +300,93 @@ export function LeadsTable({
           },
         ]}
         onClearAll={clearFilters}
-        resultCount={filtered.length}
-        totalCount={leads.length}
       />
 
-      <table className={styles.table}>
-        <thead>
-          {table.getHeaderGroups().map((group) => (
-            <tr key={group.id}>
-              {group.headers.map((header) => {
-                const sorted = header.column.getIsSorted();
-                return (
-                  <th
-                    key={header.id}
-                    className={styles.th}
-                    aria-sort={
-                      sorted === "asc"
-                        ? "ascending"
-                        : sorted === "desc"
-                          ? "descending"
-                          : undefined
-                    }
-                  >
-                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <button
-                        type="button"
-                        className={styles.sortButton}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
+      {narrow ? (
+        <>
+          <ul className={styles.cards}>
+            {table.getRowModel().rows.map((row) => {
+              const [head, ...fields] = row.getAllCells();
+              return (
+                <li key={row.id}>
+                  <Card className={styles.card}>
+                    <div className={styles.cardHead}>
+                      <table.FlexRender cell={head} />
+                    </div>
+                    <dl className={styles.cardGrid}>
+                      {fields.map((cell) => (
+                        <div key={cell.id} className={styles.cardField}>
+                          <dt className={styles.cardLabel}>
+                            {String(cell.column.columnDef.header)}
+                          </dt>
+                          <dd className={styles.cardValue}>
+                            <table.FlexRender cell={cell} />
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </Card>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ) : (
+        <table className={styles.table}>
+          <thead>
+            {table.getHeaderGroups().map((group) => (
+              <tr key={group.id}>
+                {group.headers.map((header) => {
+                  const sorted = header.column.getIsSorted();
+                  return (
+                    <th
+                      key={header.id}
+                      className={styles.th}
+                      aria-sort={
+                        sorted === "asc"
+                          ? "ascending"
+                          : sorted === "desc"
+                            ? "descending"
+                            : undefined
+                      }
+                    >
+                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                        <button
+                          type="button"
+                          className={styles.sortButton}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          <table.FlexRender header={header} />
+                          <span className={styles.sortIndicator} aria-hidden>
+                            {sorted === "asc"
+                              ? "▲"
+                              : sorted === "desc"
+                                ? "▼"
+                                : ""}
+                          </span>
+                        </button>
+                      ) : (
                         <table.FlexRender header={header} />
-                        <span className={styles.sortIndicator} aria-hidden>
-                          {sorted === "asc"
-                            ? "▲"
-                            : sorted === "desc"
-                              ? "▼"
-                              : ""}
-                        </span>
-                      </button>
-                    ) : (
-                      <table.FlexRender header={header} />
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className={styles.row}>
-              {row.getAllCells().map((cell) => (
-                <td key={cell.id} className={styles.td}>
-                  <table.FlexRender cell={cell} />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                      )}
+                    </th>
+                  );
+                })}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id} className={styles.row}>
+                {row.getAllCells().map((cell) => (
+                  <td key={cell.id} className={styles.td}>
+                    <table.FlexRender cell={cell} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {filtered.length === 0 && (
         <p className={styles.empty}>No leads match the current filters.</p>
       )}

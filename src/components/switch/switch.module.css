@@ -1,0 +1,120 @@
+/* SwitchField root (data-selected / data-disabled) wrapping the
+ * SwitchButton label (data-hovered / data-pressed / data-focus-visible):
+ * track on the left, two-line copy as the label, the whole row one press
+ * target. No fixed height or padding: a toolbar bottom-aligns it so the
+ * copy's last line sits on the same edge as neighbouring controls. The
+ * focus ring is the native outline drawn on the track because the real
+ * input is visually hidden. */
+.switch {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0 0.25rem;
+  color: var(--juni-needle-950);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.switch[data-disabled] .button {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Track carries the house volume (theming §4.6): extruded off the surface
+ * by the shared highlight/shade pair at the small-control offsets; the
+ * thumb sits on it with its own small shade. */
+.track {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1.125rem;
+  border-radius: 999px;
+  background-color: var(--juni-bark-300);
+  box-shadow:
+    -1px -1px 2px var(--lift-highlight),
+    1px 1px 3px var(--lift-shade);
+  transition:
+    background-color 120ms var(--ease),
+    box-shadow 120ms var(--ease);
+}
+
+.thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background-color: var(--juni-bark-50);
+  box-shadow: 1px 1px 2px var(--lift-shade);
+  transition: translate 120ms var(--ease);
+}
+
+.button[data-pressed] .track {
+  box-shadow:
+    inset -1px -1px 2px var(--lift-highlight),
+    inset 1px 1px 2px var(--lift-shade);
+}
+
+/* Pointer colour (theming §4.7): hover answers in bloom; selection stays
+ * in needle. */
+.button[data-hovered] .track {
+  background-color: var(--juni-bloom-300);
+}
+
+.button[data-selected] .track {
+  background-color: var(--juni-needle-600);
+}
+
+.button[data-selected][data-hovered] .track {
+  background-color: var(--juni-needle-700);
+}
+
+.button[data-selected] .thumb {
+  translate: 0.875rem 0;
+}
+
+.button[data-focus-visible] .track {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* The copy truncates rather than wraps when a container squeezes the
+ * switch (a narrow toolbar): the row keeps its height and the full text
+ * stays in the accessible name. */
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 500;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hint {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--juni-bark-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 120ms var(--ease);
+}
+
+.button[data-selected] .hint {
+  color: var(--juni-needle-800);
+}
