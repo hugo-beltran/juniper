@@ -164,6 +164,7 @@ export type NavIcon =
   | 'cube'
   | 'users'
   | 'pencil-square'
+  | 'device-phone-mobile'
 
 /* A badge the shell resolves to a live count; the tree only names the
  * source, the shell decides how to compute it. */

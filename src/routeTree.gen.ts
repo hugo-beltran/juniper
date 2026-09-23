@@ -20,6 +20,7 @@ import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenti
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedLabDockRouteImport } from './routes/_authenticated/lab/dock'
 import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticated/lab/forms'
 import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
@@ -80,6 +81,11 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLabDockRoute = AuthenticatedLabDockRouteImport.update({
+  id: '/lab/dock',
+  path: '/lab/dock',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabFormsRoute = AuthenticatedLabFormsRouteImport.update({
   id: '/lab/forms',
   path: '/lab/forms',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/users': typeof AuthenticatedUsersRoute
   '/': typeof AuthenticatedIndexRoute
+  '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/lab/dock': typeof AuthenticatedLabDockRoute
   '/_authenticated/lab/forms': typeof AuthenticatedLabFormsRoute
   '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/trade-analyzer'
     | '/users'
+    | '/lab/dock'
     | '/lab/forms'
     | '/lab/lift'
     | '/lab/palette'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/trade-analyzer'
     | '/users'
     | '/'
+    | '/lab/dock'
     | '/lab/forms'
     | '/lab/lift'
     | '/lab/palette'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trade-analyzer'
     | '/_authenticated/users'
     | '/_authenticated/'
+    | '/_authenticated/lab/dock'
     | '/_authenticated/lab/forms'
     | '/_authenticated/lab/lift'
     | '/_authenticated/lab/palette'
@@ -276,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/dock': {
+      id: '/_authenticated/lab/dock'
+      path: '/lab/dock'
+      fullPath: '/lab/dock'
+      preLoaderRoute: typeof AuthenticatedLabDockRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/forms': {
       id: '/_authenticated/lab/forms'
       path: '/lab/forms'
@@ -310,6 +329,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedLabDockRoute: typeof AuthenticatedLabDockRoute
   AuthenticatedLabFormsRoute: typeof AuthenticatedLabFormsRoute
   AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
@@ -325,6 +345,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedLabDockRoute: AuthenticatedLabDockRoute,
   AuthenticatedLabFormsRoute: AuthenticatedLabFormsRoute,
   AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
