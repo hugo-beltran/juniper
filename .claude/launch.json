@@ -4,13 +4,20 @@
     {
       "name": "juniper-dashboard",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 5173
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173,
+      "autoPort": true
     },
     {
       "name": "juniper-preview",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview"],
+      "runtimeArgs": [
+        "run",
+        "preview"
+      ],
       "port": 4173
     }
   ]
