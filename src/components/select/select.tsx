@@ -1,12 +1,12 @@
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline"
+import { cva } from "class-variance-authority"
 import {
   Button as AriaButton,
+  Select as AriaSelect,
   ButtonContext,
   Popover,
-  Select as AriaSelect,
   SelectValue,
 } from "react-aria-components"
-import { cva } from "class-variance-authority"
 import {
   FieldDescription,
   FieldError,

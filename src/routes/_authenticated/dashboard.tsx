@@ -1,7 +1,7 @@
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { Button, LeadsTable, STAGES, type LeadsFilterState } from "@/components"
+import { Button, type LeadsFilterState, LeadsTable, STAGES } from "@/components"
 import { LEADS, leadsQuery } from "@/lib/api"
 import styles from "./dashboard.module.css"
 

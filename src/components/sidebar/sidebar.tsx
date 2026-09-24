@@ -1,4 +1,7 @@
+import { Slot } from "@radix-ui/react-slot"
 import {
+  type ComponentProps,
+  type CSSProperties,
   createContext,
   useCallback,
   useContext,
@@ -8,10 +11,7 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-  type ComponentProps,
-  type CSSProperties,
 } from "react"
-import { Slot } from "@radix-ui/react-slot"
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,

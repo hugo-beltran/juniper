@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react"
+import { type RefObject, useEffect, useRef } from "react"
 
 /* Fires when a pointer goes down outside `ref`. The callback rides in a ref
  * so the document listener binds once per `enabled` flip, not per render —

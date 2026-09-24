@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { Button, LoginScreen } from "@/components"
 import { defaultTenant, firstRoute, navigationQuery } from "@/lib/api"
 

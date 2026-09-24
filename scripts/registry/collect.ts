@@ -1,5 +1,6 @@
-import { readFileSync, readdirSync, existsSync } from "node:fs"
+import { existsSync, readdirSync, readFileSync } from "node:fs"
 import path from "node:path"
+import { checkConformance } from "./conformance.ts"
 import type {
   ComponentEntry,
   Dependencies,
@@ -12,7 +13,6 @@ import type {
   ThemeEntry,
 } from "./types.ts"
 import { SCHEMA_VERSION } from "./types.ts"
-import { checkConformance } from "./conformance.ts"
 
 /* Collects everything the registry publishes, from source. The registered
  * set is the components barrel: a directory exported from

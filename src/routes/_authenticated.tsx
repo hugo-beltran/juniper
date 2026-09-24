@@ -1,4 +1,3 @@
-import { useState, type ComponentType, type SVGProps } from "react"
 import {
   ArrowRightEndOnRectangleIcon,
   ArrowsRightLeftIcon,
@@ -15,12 +14,13 @@ import {
 } from "@heroicons/react/24/outline"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import {
+  createFileRoute,
   Link,
   Outlet,
-  createFileRoute,
   useLocation,
   useNavigate,
 } from "@tanstack/react-router"
+import { type ComponentType, type SVGProps, useState } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -42,11 +42,11 @@ import {
   defaultTenant,
   firstRoute,
   leadsQuery,
-  navigationQuery,
-  pendingAnalysisCount,
   type NavBadge,
   type NavIcon,
   type NavTenant,
+  navigationQuery,
+  pendingAnalysisCount,
 } from "@/lib/api"
 import styles from "./_authenticated.module.css"
 

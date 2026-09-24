@@ -1,4 +1,4 @@
-import { useId, useMemo, type ComponentProps } from "react"
+import { type ComponentProps, useId, useMemo } from "react"
 
 /* Superellipse (Lamé curve) squircle, after
  * https://observablehq.com/@daformat/draw-squircle-shapes-with-svg-javascript

@@ -1,9 +1,10 @@
-import { useState } from "react"
-import { createFileRoute } from "@tanstack/react-router"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { Blobatar } from "@blobatar/react"
 import { KeyIcon } from "@heroicons/react/24/outline"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { useState } from "react"
 import type { Selection } from "react-aria-components"
+import Mark from "@/assets/juni.svg?react"
 import {
   Button,
   Card,
@@ -15,10 +16,9 @@ import {
   PageTitle,
   Select,
 } from "@/components"
-import { defaultTenant, navigationQuery, type NavTenant } from "@/lib/api"
+import { defaultTenant, type NavTenant, navigationQuery } from "@/lib/api"
 import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette"
 import { cn } from "@/lib/cn"
-import Mark from "@/assets/juni.svg?react"
 import styles from "./login.module.css"
 
 export const Route = createFileRoute("/_authenticated/lab/login")({

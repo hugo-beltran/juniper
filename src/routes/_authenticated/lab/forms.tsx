@@ -1,6 +1,6 @@
-import { useState } from "react"
-import { Link, createFileRoute } from "@tanstack/react-router"
 import { ArrowRightIcon } from "@heroicons/react/24/outline"
+import { createFileRoute, Link } from "@tanstack/react-router"
+import { useState } from "react"
 import {
   Button,
   Card,
@@ -9,9 +9,9 @@ import {
   PageHeader,
   PageTitle,
   Select,
+  type SelectOption,
   Switch,
   Textarea,
-  type SelectOption,
 } from "@/components"
 import styles from "./forms.module.css"
 

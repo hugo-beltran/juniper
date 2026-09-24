@@ -1,5 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
 import {
   PageDescription,
@@ -7,8 +7,8 @@ import {
   PageTitle,
   USER_ROLES,
   USER_STATUSES,
-  UsersTable,
   type UsersFilterState,
+  UsersTable,
 } from "@/components"
 import { usersQuery } from "@/lib/api"
 import styles from "./users.module.css"

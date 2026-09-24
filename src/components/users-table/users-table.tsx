@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react"
 import { Blobatar } from "@blobatar/react"
 import {
   createColumnHelper,
@@ -7,6 +6,7 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table"
+import { useMemo, useState } from "react"
 import { FilterBar } from "@/components/filter-bar/filter-bar"
 import { blobatarPalette } from "@/lib/blobatar-palette"
 import styles from "./users-table.module.css"

@@ -1,5 +1,5 @@
-import { STEPS, oklch, type Family, type Oklch, type RampDef } from "./data"
 import styles from "../ramp-lab.module.css"
+import { type Family, type Oklch, oklch, type RampDef, STEPS } from "./data"
 
 /* Renders one palette family's tab panel: the shipped ramp, the exploration
  * strips (with pairing/legibility chips on candidates), the chroma-vs-

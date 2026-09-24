@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
-import { cn } from "@/lib/cn"
 import { Card } from "@/components/card/card"
+import { cn } from "@/lib/cn"
 import { Sparkline } from "./sparkline"
 import styles from "./summary-card.module.css"
 
