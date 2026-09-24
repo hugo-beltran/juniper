@@ -1,7 +1,7 @@
-import type { ComponentProps } from "react";
-import { Heading, type HeadingProps } from "react-aria-components";
-import { cn } from "@/lib/cn";
-import styles from "./page.module.css";
+import type { ComponentProps } from "react"
+import { Heading, type HeadingProps } from "react-aria-components"
+import { cn } from "@/lib/cn"
+import styles from "./page.module.css"
 
 /* Page chrome: the title and intro at the top of a route. Six route modules
  * restated the same h1-plus-muted-paragraph recipe, each with palette steps
@@ -17,7 +17,7 @@ export function PageHeader({ className, ...props }: ComponentProps<"div">) {
       className={cn(styles.header, className)}
       {...props}
     />
-  );
+  )
 }
 
 /* react-aria Heading, h1 by default: a page has one title. */
@@ -33,18 +33,15 @@ export function PageTitle({
       className={cn(styles.title, className)}
       {...props}
     />
-  );
+  )
 }
 
-export function PageDescription({
-  className,
-  ...props
-}: ComponentProps<"p">) {
+export function PageDescription({ className, ...props }: ComponentProps<"p">) {
   return (
     <p
       data-slot="page-description"
       className={cn(styles.description, className)}
       {...props}
     />
-  );
+  )
 }

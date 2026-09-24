@@ -3,11 +3,26 @@
   "description": "Boolean control on react-aria SwitchField + SwitchButton: an extruded track on the left and the copy (a title plus an optional muted hint) as the label on the right, the whole row one press target. Hover answers in bloom, the selected track in needle, and the focus ring is drawn on the track.",
   "category": "primitive",
   "anatomy": [
-    { "part": "Switch", "description": "react-aria SwitchField root (a div) with data-slot=\"switch\", carrying data-selected and data-disabled. Names the hidden checkbox by the title (aria-labelledby) and describes it by the hint (aria-describedby) so the two lines are never read as one name." },
-    { "part": "Button", "description": "react-aria SwitchButton, the <label> that is the press target around the visually hidden checkbox; carries data-hovered, data-pressed and data-focus-visible." },
-    { "part": "Track", "description": "2rem × 1.125rem pill in bark-300 wearing the extruded recipe at the small-control offsets (1px/2px), inset while pressed; bloom-300 on hover, needle-600 when selected (needle-700 hovered). Carries the --ring outline on focus-visible because the real input is hidden." },
-    { "part": "Thumb", "description": "0.875rem bark-50 disc with its own small shade, translated right when selected." },
-    { "part": "Copy", "description": "Title (text-md, 500) and optional hint (text-xs, bark-600, needle-800 while selected)." }
+    {
+      "part": "Switch",
+      "description": "react-aria SwitchField root (a div) with data-slot=\"switch\", carrying data-selected and data-disabled. Names the hidden checkbox by the title (aria-labelledby) and describes it by the hint (aria-describedby) so the two lines are never read as one name."
+    },
+    {
+      "part": "Button",
+      "description": "react-aria SwitchButton, the <label> that is the press target around the visually hidden checkbox; carries data-hovered, data-pressed and data-focus-visible."
+    },
+    {
+      "part": "Track",
+      "description": "2rem × 1.125rem pill in bark-300 wearing the extruded recipe at the small-control offsets (1px/2px), inset while pressed; bloom-300 on hover, needle-600 when selected (needle-700 hovered). Carries the --ring outline on focus-visible because the real input is hidden."
+    },
+    {
+      "part": "Thumb",
+      "description": "0.875rem bark-50 disc with its own small shade, translated right when selected."
+    },
+    {
+      "part": "Copy",
+      "description": "Title (text-md, 500) and optional hint (text-xs, bark-600, needle-800 while selected)."
+    }
   ],
   "usage": [
     "Pass label and, when the toggle needs explaining, description; both render inside the press target and are wired as name and description automatically.",

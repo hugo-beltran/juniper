@@ -2,17 +2,17 @@ import {
   Input as AriaInput,
   TextField,
   type TextFieldProps,
-} from "react-aria-components";
-import { cva } from "class-variance-authority";
+} from "react-aria-components"
+import { cva } from "class-variance-authority"
 import {
   FieldDescription,
   FieldError,
   FieldLabel,
   type FieldLabelVariant,
   type FieldSize,
-} from "@/components/field/field";
-import { cn } from "@/lib/cn";
-import styles from "./input.module.css";
+} from "@/components/field/field"
+import { cn } from "@/lib/cn"
+import styles from "./input.module.css"
 
 /* Single-line text field on react-aria's TextField + Input: a labelled
  * control, not a bare <input>. The box wears the extruded volume (theming
@@ -25,15 +25,15 @@ import styles from "./input.module.css";
 
 export interface InputProps
   extends Omit<TextFieldProps, "className" | "children"> {
-  label: string;
-  labelVariant?: FieldLabelVariant;
-  placeholder?: string;
-  description?: string;
+  label: string
+  labelVariant?: FieldLabelVariant
+  placeholder?: string
+  description?: string
   /** Shown (and read) only while `isInvalid`. */
-  errorMessage?: string;
+  errorMessage?: string
   /** Box height; mirrors Button sizes so a field and a button share a row. */
-  size?: FieldSize;
-  className?: string;
+  size?: FieldSize
+  className?: string
 }
 
 const inputVariants = cva(styles.field, {
@@ -45,7 +45,7 @@ const inputVariants = cva(styles.field, {
     },
   },
   defaultVariants: { size: "medium" },
-});
+})
 
 export function Input({
   label,
@@ -69,5 +69,5 @@ export function Input({
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </TextField>
-  );
+  )
 }

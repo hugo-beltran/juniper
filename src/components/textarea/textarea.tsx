@@ -2,17 +2,17 @@ import {
   TextArea as AriaTextArea,
   TextField,
   type TextFieldProps,
-} from "react-aria-components";
-import { cva } from "class-variance-authority";
+} from "react-aria-components"
+import { cva } from "class-variance-authority"
 import {
   FieldDescription,
   FieldError,
   FieldLabel,
   type FieldLabelVariant,
   type FieldSize,
-} from "@/components/field/field";
-import { cn } from "@/lib/cn";
-import styles from "./textarea.module.css";
+} from "@/components/field/field"
+import { cn } from "@/lib/cn"
+import styles from "./textarea.module.css"
 
 /* Multi-line text field on react-aria's TextField + TextArea. Same
  * material and states as Input — extruded, sinks while focused, bloom on
@@ -22,17 +22,17 @@ import styles from "./textarea.module.css";
 
 export interface TextareaProps
   extends Omit<TextFieldProps, "className" | "children"> {
-  label: string;
-  labelVariant?: FieldLabelVariant;
-  placeholder?: string;
-  description?: string;
+  label: string
+  labelVariant?: FieldLabelVariant
+  placeholder?: string
+  description?: string
   /** Shown (and read) only while `isInvalid`. */
-  errorMessage?: string;
+  errorMessage?: string
   /** Visible lines before scrolling; the box grows by drag, never by content. */
-  rows?: number;
+  rows?: number
   /** Type size and inset; mirrors Input. */
-  size?: FieldSize;
-  className?: string;
+  size?: FieldSize
+  className?: string
 }
 
 const textareaVariants = cva(styles.field, {
@@ -44,7 +44,7 @@ const textareaVariants = cva(styles.field, {
     },
   },
   defaultVariants: { size: "medium" },
-});
+})
 
 export function Textarea({
   label,
@@ -73,5 +73,5 @@ export function Textarea({
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </TextField>
-  );
+  )
 }

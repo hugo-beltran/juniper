@@ -1,10 +1,10 @@
-import { readFileSync, readdirSync } from "node:fs";
-import path from "node:path";
-import type { Plugin, ResolvedConfig } from "vite";
-import { collect } from "./collect.ts";
-import { renderLlmsTxt } from "./llms.ts";
-import type { IndexEntry, RegistryIndex } from "./types.ts";
-import { SCHEMA_VERSION } from "./types.ts";
+import { readFileSync, readdirSync } from "node:fs"
+import path from "node:path"
+import type { Plugin, ResolvedConfig } from "vite"
+import { collect } from "./collect.ts"
+import { renderLlmsTxt } from "./llms.ts"
+import type { IndexEntry, RegistryIndex } from "./types.ts"
+import { SCHEMA_VERSION } from "./types.ts"
 
 /* Publishes the Juniper contract beside the app on every `vite build`:
  *
@@ -23,30 +23,32 @@ import { SCHEMA_VERSION } from "./types.ts";
  * beside a fresh app. This path layout is a published contract; changing it
  * breaks every consumer that has stored a URL. */
 
-const SITE_ORIGIN = "https://hugo-beltran.github.io";
-const REPOSITORY = "https://github.com/hugo-beltran/juniper";
+const SITE_ORIGIN = "https://hugo-beltran.github.io"
+const REPOSITORY = "https://github.com/hugo-beltran/juniper"
 
 export function juniperRegistry({
   origin = SITE_ORIGIN,
-}: { origin?: string } = {}): Plugin {
-  let config: ResolvedConfig;
+}: {
+  origin?: string
+} = {}): Plugin {
+  let config: ResolvedConfig
 
   return {
     name: "juniper-registry",
     apply: "build",
     configResolved(resolved) {
-      config = resolved;
+      config = resolved
     },
     generateBundle() {
-      const root = config.root;
-      const baseUrl = new URL(config.base, origin).href;
-      const { entries, docs, docSources } = collect({ root, baseUrl });
+      const root = config.root
+      const baseUrl = new URL(config.base, origin).href
+      const { entries, docs, docSources } = collect({ root, baseUrl })
 
       const emit = (fileName: string, source: string) =>
-        this.emitFile({ type: "asset", fileName, source });
+        this.emitFile({ type: "asset", fileName, source })
 
       for (const entry of entries) {
-        emit(new URL(entry.url).pathname.replace(config.base, ""), json(entry));
+        emit(new URL(entry.url).pathname.replace(config.base, ""), json(entry))
       }
 
       const index: RegistryIndex = {
@@ -71,31 +73,31 @@ export function juniperRegistry({
           ...(entry.type === "component" ? { category: entry.category } : {}),
           url: entry.url,
         })),
-      };
-      emit("registry/index.json", json(index));
+      }
+      emit("registry/index.json", json(index))
 
-      const schemaDir = path.join(root, "scripts/registry/schema");
+      const schemaDir = path.join(root, "scripts/registry/schema")
       for (const file of readdirSync(schemaDir)) {
         emit(
           `registry/schema/${file}`,
           readFileSync(path.join(schemaDir, file), "utf8"),
-        );
+        )
       }
 
-      for (const [slug, source] of docSources) emit(`docs/${slug}.md`, source);
+      for (const [slug, source] of docSources) emit(`docs/${slug}.md`, source)
 
       emit(
         "llms.txt",
         renderLlmsTxt({ baseUrl, repository: REPOSITORY, docs, entries }),
-      );
+      )
 
       config.logger.info(
         `[registry] published ${entries.length} entries, ${docs.length} docs → ${baseUrl}llms.txt`,
-      );
+      )
     },
-  };
+  }
 }
 
 function json(value: unknown) {
-  return `${JSON.stringify(value, null, 2)}\n`;
+  return `${JSON.stringify(value, null, 2)}\n`
 }

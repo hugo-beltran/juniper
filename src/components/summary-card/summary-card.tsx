@@ -1,17 +1,17 @@
-import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
-import { Card } from "@/components/card/card";
-import { Sparkline } from "./sparkline";
-import styles from "./summary-card.module.css";
+import type { ReactNode } from "react"
+import { cn } from "@/lib/cn"
+import { Card } from "@/components/card/card"
+import { Sparkline } from "./sparkline"
+import styles from "./summary-card.module.css"
 
 export interface SummaryCardProps {
-  title: string;
-  metric: ReactNode;
+  title: string
+  metric: ReactNode
   /* Optional decorative trend line, drawn beside the metric. */
-  trend?: number[];
+  trend?: number[]
   /* Optional supporting line under the metric (e.g. a callout). */
-  footer?: ReactNode;
-  className?: string;
+  footer?: ReactNode
+  className?: string
 }
 
 export function SummaryCard({
@@ -33,5 +33,5 @@ export function SummaryCard({
       </div>
       {footer && <div className={styles.footer}>{footer}</div>}
     </Card>
-  );
+  )
 }

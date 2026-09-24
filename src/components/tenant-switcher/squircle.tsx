@@ -1,4 +1,4 @@
-import { useId, useMemo, type ComponentProps } from "react";
+import { useId, useMemo, type ComponentProps } from "react"
 
 /* Superellipse (Lamé curve) squircle, after
  * https://observablehq.com/@daformat/draw-squircle-shapes-with-svg-javascript
@@ -8,39 +8,37 @@ import { useId, useMemo, type ComponentProps } from "react";
  * (SVG presentation attributes can't hold var()). Private to tenant-switcher
  * until another component needs it. */
 
-interface SquircleProps extends Omit<
-  ComponentProps<"svg">,
-  "width" | "height"
-> {
+interface SquircleProps
+  extends Omit<ComponentProps<"svg">, "width" | "height"> {
   /** Rendered box in px; also the coordinate space of the path. */
-  size?: number;
+  size?: number
   /** Lamé exponent n: 2 = circle, 5 ≈ the iOS squircle, <1 = star. */
-  exponent?: number;
+  exponent?: number
   /** Sampled points per quadrant. */
-  resolution?: number;
-  glassFrom?: string;
-  glassTo?: string;
-  shadowColor?: string;
-  shadowAlpha?: number;
+  resolution?: number
+  glassFrom?: string
+  glassTo?: string
+  shadowColor?: string
+  shadowAlpha?: number
 }
 
 function lamePath(n: number, size: number, resolution: number) {
-  const a = size / 2;
-  const b = size / 2;
-  const limit = Math.PI / 2;
-  const exp = 2 / n;
-  const points: Array<[number, number]> = [];
-  let d = "";
+  const a = size / 2
+  const b = size / 2
+  const limit = Math.PI / 2
+  const exp = 2 / n
+  const points: Array<[number, number]> = []
+  let d = ""
 
   /* First quadrant, 0 <= t <= π/2 … */
   for (let i = 0; i < resolution; i++) {
-    const t = (i / (resolution - 1)) * limit;
-    const cosT = Math.cos(t);
-    const sinT = Math.sin(t);
-    const x = Math.sign(cosT) * a * Math.abs(cosT) ** exp;
-    const y = Math.sign(sinT) * b * Math.abs(sinT) ** exp;
-    d += i === 0 ? `M ${x + a} ${y + b}` : `L${x + a} ${y + b}`;
-    points.push([x, y]);
+    const t = (i / (resolution - 1)) * limit
+    const cosT = Math.cos(t)
+    const sinT = Math.sin(t)
+    const x = Math.sign(cosT) * a * Math.abs(cosT) ** exp
+    const y = Math.sign(sinT) * b * Math.abs(sinT) ** exp
+    d += i === 0 ? `M ${x + a} ${y + b}` : `L${x + a} ${y + b}`
+    points.push([x, y])
   }
 
   /* … then mirror it through the remaining quadrants: Lamé curves are
@@ -49,15 +47,15 @@ function lamePath(n: number, size: number, resolution: number) {
     [-1, 1],
     [-1, -1],
     [1, -1],
-  ];
+  ]
   for (const [signX, signY] of matrix) {
-    points.reverse();
+    points.reverse()
     for (const [x, y] of points) {
-      d += `L${signX * x + a} ${signY * y + b}`;
+      d += `L${signX * x + a} ${signY * y + b}`
     }
   }
 
-  return `${d}Z`;
+  return `${d}Z`
 }
 
 export function Squircle({
@@ -70,15 +68,15 @@ export function Squircle({
   shadowAlpha = 0.33,
   ...props
 }: SquircleProps) {
-  const id = useId();
+  const id = useId()
   const d = useMemo(
     () => lamePath(exponent, size, resolution),
     [exponent, size, resolution],
-  );
+  )
 
   /* Notebook's derivations, scaled from the shape size. */
-  const blur = Math.min(12, size / 8);
-  const offset = Math.min(4, size / 12);
+  const blur = Math.min(12, size / 8)
+  const offset = Math.min(4, size / 12)
 
   return (
     <svg
@@ -137,5 +135,5 @@ export function Squircle({
         clipPath={`url(#${id}-clip)`}
       />
     </svg>
-  );
+  )
 }

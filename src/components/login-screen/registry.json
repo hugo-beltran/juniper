@@ -46,8 +46,5 @@
     "Copy is overridable through `copy`, defaults in LOGIN_COPY. Keep the tagline a sentence: the voice is quiet and declarative.",
     "The ground gradient and the card are mode-invariant; only the page canvas outside them changes with light-dark(), so both modes need no new decisions."
   ],
-  "docs": [
-    "component-architecture",
-    "theming"
-  ]
+  "docs": ["component-architecture", "theming"]
 }

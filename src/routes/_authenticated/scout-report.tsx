@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Blobatar } from "@blobatar/react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { useState } from "react"
+import { Blobatar } from "@blobatar/react"
+import { Link, createFileRoute } from "@tanstack/react-router"
 import {
   Button,
   Card,
@@ -13,13 +13,13 @@ import {
   PageTitle,
   Select,
   Textarea,
-} from "@/components";
-import { blobatarPalette } from "@/lib/blobatar-palette";
-import styles from "./scout-report.module.css";
+} from "@/components"
+import { blobatarPalette } from "@/lib/blobatar-palette"
+import styles from "./scout-report.module.css"
 
 export const Route = createFileRoute("/_authenticated/scout-report")({
   component: ScoutReportPage,
-});
+})
 
 /* SCOUT report — the demo's stand-in for the qualitative-notes wizard:
  * acronym-keyed dimensions filed in a deliberate order (hence the timeline),
@@ -59,57 +59,65 @@ const DIMENSIONS = [
     placeholder:
       "Where do they fit our roster and timeline? Which current player do they push?",
   },
-] as const;
+] as const
 
 const POSITIONS = [
-  "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "OF", "DH", "UTL", "SP", "RP",
-].map((position) => ({ value: position, label: position }));
+  "C",
+  "1B",
+  "2B",
+  "3B",
+  "SS",
+  "LF",
+  "CF",
+  "RF",
+  "OF",
+  "DH",
+  "UTL",
+  "SP",
+  "RP",
+].map((position) => ({ value: position, label: position }))
 
 const EMPTY_NOTES = Object.fromEntries(
   DIMENSIONS.map((d) => [d.letter, ""]),
-) as Record<string, string>;
+) as Record<string, string>
 
 function ScoutReportPage() {
-  const [player, setPlayer] = useState("");
-  const [position, setPosition] = useState("");
-  const [club, setClub] = useState("");
-  const [ask, setAsk] = useState("");
-  const [notes, setNotes] = useState(EMPTY_NOTES);
-  const [attempted, setAttempted] = useState(false);
-  const [filed, setFiled] = useState(false);
+  const [player, setPlayer] = useState("")
+  const [position, setPosition] = useState("")
+  const [club, setClub] = useState("")
+  const [ask, setAsk] = useState("")
+  const [notes, setNotes] = useState(EMPTY_NOTES)
+  const [attempted, setAttempted] = useState(false)
+  const [filed, setFiled] = useState(false)
 
   const filledCount = DIMENSIONS.filter(
     (d) => notes[d.letter].trim() !== "",
-  ).length;
-  const nextIndex = DIMENSIONS.findIndex((d) => notes[d.letter].trim() === "");
+  ).length
+  const nextIndex = DIMENSIONS.findIndex((d) => notes[d.letter].trim() === "")
 
-  const missingPlayer = player.trim() === "";
-  const missingPosition = position === "";
-  const missingClub = club.trim() === "";
-  const basicsValid = !missingPlayer && !missingPosition && !missingClub;
+  const missingPlayer = player.trim() === ""
+  const missingPosition = position === ""
+  const missingClub = club.trim() === ""
+  const basicsValid = !missingPlayer && !missingPosition && !missingClub
 
   const fileReport = () => {
     if (!basicsValid) {
-      setAttempted(true);
-      return;
+      setAttempted(true)
+      return
     }
-    setFiled(true);
-  };
+    setFiled(true)
+  }
 
   if (filed) {
     return (
       <div className={styles.page}>
         <Card className={styles.confirmation}>
-          <Blobatar
-            name={player}
-            palette={blobatarPalette(player)}
-            size={56}
-          />
+          <Blobatar name={player} palette={blobatarPalette(player)} size={56} />
           <CardHeader>
             <CardTitle level={1}>Report filed</CardTitle>
             <CardDescription>
-              <strong>{player}</strong> ({position} · {club}) enters the pipeline
-              at <strong>Scouted</strong>
+              <strong>{player}</strong> ({position} · {club}) enters the
+              pipeline at <strong>Scouted</strong>
               {ask.trim() !== "" && <> with an ask of {ask}</>}, with{" "}
               {filledCount} of {DIMENSIONS.length} SCOUT dimensions on file.
             </CardDescription>
@@ -119,7 +127,7 @@ function ScoutReportPage() {
           </Button>
         </Card>
       </div>
-    );
+    )
   }
 
   return (
@@ -127,15 +135,17 @@ function ScoutReportPage() {
       <PageHeader>
         <PageTitle>SCOUT Report</PageTitle>
         <PageDescription>
-          File a prospect in five reads, in order — Skillset, Character, Outlook,
-          Upside, Team fit. A report is only as strong as its sequence: each read
-          builds on the one before it.
+          File a prospect in five reads, in order — Skillset, Character,
+          Outlook, Upside, Team fit. A report is only as strong as its sequence:
+          each read builds on the one before it.
         </PageDescription>
       </PageHeader>
 
       <ul className={styles.guides}>
         <li>Lead with what you saw, not what you heard — dates and games.</li>
-        <li>Grade the tool, then the player: separate present from projection.</li>
+        <li>
+          Grade the tool, then the player: separate present from projection.
+        </li>
         <li>End every dimension with the one sentence a GM could act on.</li>
       </ul>
 
@@ -180,7 +190,7 @@ function ScoutReportPage() {
 
       <ol className={styles.timeline}>
         {DIMENSIONS.map((d, index) => {
-          const filledNote = notes[d.letter].trim() !== "";
+          const filledNote = notes[d.letter].trim() !== ""
           return (
             <li
               key={d.letter + index}
@@ -204,7 +214,7 @@ function ScoutReportPage() {
                 />
               </Card>
             </li>
-          );
+          )
         })}
       </ol>
 
@@ -220,5 +230,5 @@ function ScoutReportPage() {
         )}
       </div>
     </div>
-  );
+  )
 }

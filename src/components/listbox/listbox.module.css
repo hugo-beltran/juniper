@@ -104,7 +104,8 @@
  * without react-aria ever setting data-focus-visible, so the global ring
  * rule would win by source order. The native pseudo is named here only to
  * switch the ring off (theming §4.4 exception), never to style a state. */
-.listBox[data-variant="popover"] .item:is([data-focus-visible], :focus-visible) {
+.listBox[data-variant="popover"]
+.item:is([data-focus-visible], :focus-visible) {
   outline: none;
 }
 

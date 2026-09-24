@@ -5,10 +5,10 @@ import {
   type FieldErrorProps,
   type LabelProps,
   type TextProps,
-} from "react-aria-components";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/cn";
-import styles from "./field.module.css";
+} from "react-aria-components"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/cn"
+import styles from "./field.module.css"
 
 /* The chrome every labelled control shares — label above, muted description
  * and heartwood error below — as three react-aria parts so Input, Textarea
@@ -28,25 +28,25 @@ const labelVariants = cva(styles.label, {
     },
   },
   defaultVariants: { variant: "caption" },
-});
+})
 
 export type FieldLabelVariant = NonNullable<
   VariantProps<typeof labelVariants>["variant"]
->;
+>
 
 /* Control heights shared by Input, Textarea and Select. They mirror
  * Button's sizes (mini 1.75rem, small 2rem, medium 2.5rem) so a field and
  * a button sit on one row; each control declares the CSS, Field only names
  * the scale. */
-export type FieldSize = "mini" | "small" | "medium";
+export type FieldSize = "mini" | "small" | "medium"
 
 export function FieldLabel({
   className,
   variant,
   ...props
 }: Omit<LabelProps, "className"> & {
-  className?: string;
-  variant?: FieldLabelVariant;
+  className?: string
+  variant?: FieldLabelVariant
 }) {
   return (
     <AriaLabel
@@ -55,7 +55,7 @@ export function FieldLabel({
       className={cn(labelVariants({ variant }), className)}
       {...props}
     />
-  );
+  )
 }
 
 export function FieldDescription({
@@ -69,7 +69,7 @@ export function FieldDescription({
       className={cn(styles.description, className)}
       {...props}
     />
-  );
+  )
 }
 
 export function FieldError({
@@ -82,5 +82,5 @@ export function FieldError({
       className={cn(styles.error, className)}
       {...props}
     />
-  );
+  )
 }

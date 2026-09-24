@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { useState } from "react"
+import { Link, createFileRoute } from "@tanstack/react-router"
+import { ArrowRightIcon } from "@heroicons/react/24/outline"
 import {
   Button,
   Card,
@@ -12,12 +12,12 @@ import {
   Switch,
   Textarea,
   type SelectOption,
-} from "@/components";
-import styles from "./forms.module.css";
+} from "@/components"
+import styles from "./forms.module.css"
 
 export const Route = createFileRoute("/_authenticated/lab/forms")({
   component: FormsPage,
-});
+})
 
 /* Forms lab — every form primitive the registry publishes, in every state,
  * side by side: the three Button faces, Input, Textarea and Select at the
@@ -30,32 +30,44 @@ const CLUBS: SelectOption[] = [
   { value: "copper", label: "Copper Kings", hint: "7" },
   { value: "river", label: "River Hawks", hint: "3" },
   { value: "harbor", label: "Harbor Cats", hint: "9" },
-];
+]
 
 const POSITIONS: SelectOption[] = [
-  "C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "OF", "DH", "UTL", "SP", "RP",
-].map((p) => ({ value: p, label: p }));
+  "C",
+  "1B",
+  "2B",
+  "3B",
+  "SS",
+  "LF",
+  "CF",
+  "RF",
+  "OF",
+  "DH",
+  "UTL",
+  "SP",
+  "RP",
+].map((p) => ({ value: p, label: p }))
 
-const SIZES = ["mini", "small", "medium"] as const;
+const SIZES = ["mini", "small", "medium"] as const
 
 function FormsPage() {
-  const [club, setClub] = useState("");
-  const [position, setPosition] = useState("");
-  const [name, setName] = useState("");
-  const [note, setNote] = useState("");
-  const [rowValues, setRowValues] = useState<Record<string, string>>({});
-  const [pendingOnly, setPendingOnly] = useState(false);
-  const [notify, setNotify] = useState(true);
+  const [club, setClub] = useState("")
+  const [position, setPosition] = useState("")
+  const [name, setName] = useState("")
+  const [note, setNote] = useState("")
+  const [rowValues, setRowValues] = useState<Record<string, string>>({})
+  const [pendingOnly, setPendingOnly] = useState(false)
+  const [notify, setNotify] = useState(true)
 
   return (
     <div className={styles.page}>
       <PageHeader>
         <PageTitle>Forms</PageTitle>
         <PageDescription>
-          The form primitives — Button, Input, Textarea, Select, Switch — and the
-          Field chrome they share, in every state. Hover, focus, press and type into
-          each one; toggle the colour mode to check both branches. Every control
-          is a registry entry; this page only arranges them.
+          The form primitives — Button, Input, Textarea, Select, Switch — and
+          the Field chrome they share, in every state. Hover, focus, press and
+          type into each one; toggle the colour mode to check both branches.
+          Every control is a registry entry; this page only arranges them.
         </PageDescription>
       </PageHeader>
 
@@ -127,8 +139,8 @@ function FormsPage() {
           <h2>Input</h2>
           <p className={styles.note}>
             Extruded at rest, bloom hairline on hover, sinks while focused.
-            Description and error come from Field and land in
-            aria-describedby; the error is heartwood, the identity's only red.
+            Description and error come from Field and land in aria-describedby;
+            the error is heartwood, the identity's only red.
           </p>
           <div className={styles.stack}>
             <Input
@@ -165,9 +177,9 @@ function FormsPage() {
         <Card className={styles.card}>
           <h2>Textarea</h2>
           <p className={styles.note}>
-            Same material and states as Input; vertical resize only, height
-            from <code>rows</code>. The title label variant is for a field
-            that heads its own card, as in the SCOUT report.
+            Same material and states as Input; vertical resize only, height from{" "}
+            <code>rows</code>. The title label variant is for a field that heads
+            its own card, as in the SCOUT report.
           </p>
           <div className={styles.stack}>
             <Textarea
@@ -219,10 +231,9 @@ function FormsPage() {
         <Card className={styles.card}>
           <h2>Switch</h2>
           <p className={styles.note}>
-            An extruded track at the small-control offsets, inset while
-            pressed; bloom on hover, needle when on. The title names the
-            switch and the hint describes it, so the two lines are never read
-            as one name.
+            An extruded track at the small-control offsets, inset while pressed;
+            bloom on hover, needle when on. The title names the switch and the
+            hint describes it, so the two lines are never read as one name.
           </p>
           <div className={styles.stack}>
             <Switch
@@ -269,5 +280,5 @@ function FormsPage() {
         </Card>
       </section>
     </div>
-  );
+  )
 }

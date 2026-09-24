@@ -1,9 +1,12 @@
-import type { ComponentProps } from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/cn'
-import styles from './button.module.css'
+import type { ComponentProps } from "react"
+import { Slot } from "@radix-ui/react-slot"
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+} from "react-aria-components"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/cn"
+import styles from "./button.module.css"
 
 /* shadcn-style button on the react-aria Button primitive (onPress/isDisabled
  * semantics). Callers pass intent props: `variant` and `size` — never class
@@ -30,24 +33,30 @@ const buttonVariants = cva(styles.button, {
     },
   },
   defaultVariants: {
-    variant: 'primary',
-    size: 'medium',
+    variant: "primary",
+    size: "medium",
   },
 })
 
 export interface ButtonProps
-  extends Omit<AriaButtonProps, 'className'>,
+  extends Omit<AriaButtonProps, "className">,
     VariantProps<typeof buttonVariants> {
   className?: string
   /** Render the child element (a router Link) with the button's props instead of a react-aria Button. */
   asChild?: boolean
 }
 
-export function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
+export function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
+}: ButtonProps) {
   const sharedProps = {
-    'data-slot': 'button',
-    'data-variant': variant ?? 'primary',
-    'data-size': size ?? 'medium',
+    "data-slot": "button",
+    "data-variant": variant ?? "primary",
+    "data-size": size ?? "medium",
     className: cn(buttonVariants({ variant, size }), className),
   }
 

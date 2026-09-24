@@ -10,62 +10,104 @@
  * "berry (retired)" always means the old BLUE ramp, not today's purple
  * --juni-berry-*. */
 
-export type Oklch = readonly [number, number, number]; // lightness %, chroma, hue
+export type Oklch = readonly [number, number, number] // lightness %, chroma, hue
 
-export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+export const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
 
 /* The house lightness ladder (berry donated it; every shipped ramp uses it). */
-const HOUSE_L = [96, 90, 83, 79, 73, 65, 56, 48.18, 44, 38, 26];
+const HOUSE_L = [96, 90, 83, 79, 73, 65, 56, 48.18, 44, 38, 26]
 
-const mix = (a: number, b: number, w: number) => a * (1 - w) + b * w;
+const mix = (a: number, b: number, w: number) => a * (1 - w) + b * w
 
 const normalizedProfile = (ramp: Oklch[]) => {
-  const peak = Math.max(...ramp.map((v) => v[1]));
-  return ramp.map((v) => v[1] / peak);
-};
+  const peak = Math.max(...ramp.map((v) => v[1]))
+  return ramp.map((v) => v[1] / peak)
+}
 
 export const oklch = ([l, c, h]: Oklch) =>
-  `oklch(${+l.toFixed(2)}% ${+c.toFixed(4)} ${+h.toFixed(2)})`;
+  `oklch(${+l.toFixed(2)}% ${+c.toFixed(4)} ${+h.toFixed(2)})`
 
 /* ---- retired ramps ---- */
 
 const LEAF: Oklch[] = [
-  [96, 0.015, 124], [90, 0.019, 125.73], [83, 0.03, 127.93],
-  [79, 0.043, 130.72], [73, 0.054, 134.28], [65, 0.058, 138.8],
-  [56, 0.057, 144.55], [49.22, 0.0534, 151.85], [44, 0.048, 161.15],
-  [38, 0.041, 173], [26, 0.034, 188],
-];
+  [96, 0.015, 124],
+  [90, 0.019, 125.73],
+  [83, 0.03, 127.93],
+  [79, 0.043, 130.72],
+  [73, 0.054, 134.28],
+  [65, 0.058, 138.8],
+  [56, 0.057, 144.55],
+  [49.22, 0.0534, 151.85],
+  [44, 0.048, 161.15],
+  [38, 0.041, 173],
+  [26, 0.034, 188],
+]
 const PEAR: Oklch[] = [
-  [95.5, 0.021, 120], [93, 0.068, 121], [91, 0.165, 122],
-  [82, 0.188, 124], [72, 0.196, 128], [61, 0.172, 132],
-  [52, 0.144, 135], [43, 0.112, 138], [35, 0.082, 148],
-  [28, 0.062, 156], [24, 0.058, 162],
-];
+  [95.5, 0.021, 120],
+  [93, 0.068, 121],
+  [91, 0.165, 122],
+  [82, 0.188, 124],
+  [72, 0.196, 128],
+  [61, 0.172, 132],
+  [52, 0.144, 135],
+  [43, 0.112, 138],
+  [35, 0.082, 148],
+  [28, 0.062, 156],
+  [24, 0.058, 162],
+]
 const BERRY: Oklch[] = [
-  [96, 0.018, 236], [90, 0.0213, 240.2], [83, 0.0299, 244.4],
-  [79, 0.0416, 248.6], [73, 0.0544, 252.8], [65, 0.0661, 257],
-  [56, 0.0747, 261.2], [48.18, 0.078, 265.4], [44, 0.0752, 269.6],
-  [38, 0.0698, 273.8], [26, 0.067, 278],
-];
+  [96, 0.018, 236],
+  [90, 0.0213, 240.2],
+  [83, 0.0299, 244.4],
+  [79, 0.0416, 248.6],
+  [73, 0.0544, 252.8],
+  [65, 0.0661, 257],
+  [56, 0.0747, 261.2],
+  [48.18, 0.078, 265.4],
+  [44, 0.0752, 269.6],
+  [38, 0.0698, 273.8],
+  [26, 0.067, 278],
+]
 const PLUM: Oklch[] = [
-  [96, 0.02, 330.55], [90, 0.028, 330.34], [83, 0.042, 330.01],
-  [79, 0.054, 329.5], [73, 0.066, 328.7], [65, 0.076, 327.47],
-  [56, 0.074, 325.57], [50, 0.069, 322.61], [44, 0.062, 318.03],
-  [38, 0.053, 310.93], [26, 0.044, 299.92],
-];
+  [96, 0.02, 330.55],
+  [90, 0.028, 330.34],
+  [83, 0.042, 330.01],
+  [79, 0.054, 329.5],
+  [73, 0.066, 328.7],
+  [65, 0.076, 327.47],
+  [56, 0.074, 325.57],
+  [50, 0.069, 322.61],
+  [44, 0.062, 318.03],
+  [38, 0.053, 310.93],
+  [26, 0.044, 299.92],
+]
 const MOMO: Oklch[] = [
-  [96.5, 0.02, 50], [90, 0.049, 43.5], [84, 0.0832, 36.5],
-  [78, 0.1262, 29.8], [70, 0.1602, 23.8], [62, 0.1802, 19.33],
-  [52, 0.1442, 21.44], [42, 0.1082, 25.22], [32, 0.0722, 28.56],
-  [23, 0.0422, 31.78], [18, 0.02, 34],
-];
+  [96.5, 0.02, 50],
+  [90, 0.049, 43.5],
+  [84, 0.0832, 36.5],
+  [78, 0.1262, 29.8],
+  [70, 0.1602, 23.8],
+  [62, 0.1802, 19.33],
+  [52, 0.1442, 21.44],
+  [42, 0.1082, 25.22],
+  [32, 0.0722, 28.56],
+  [23, 0.0422, 31.78],
+  [18, 0.02, 34],
+]
 /* oriole's --or-nectarine-*; dark-end hues unwrapped below 0 for blending. */
 const ORIOLE_NECTARINE: Oklch[] = [
-  [96, 0.04, 90], [90, 0.0831, 83.98], [83, 0.118, 76.57],
-  [79, 0.134, 61.11], [73, 0.152, 44.14], [65, 0.1376, 33.29],
-  [56, 0.1227, 22.77], [50, 0.1025, 13.58], [44, 0.0823, 6.14],
-  [38, 0.0674, -0.41], [26, 0.062, -6.95],
-];
+  [96, 0.04, 90],
+  [90, 0.0831, 83.98],
+  [83, 0.118, 76.57],
+  [79, 0.134, 61.11],
+  [73, 0.152, 44.14],
+  [65, 0.1376, 33.29],
+  [56, 0.1227, 22.77],
+  [50, 0.1025, 13.58],
+  [44, 0.0823, 6.14],
+  [38, 0.0674, -0.41],
+  [26, 0.062, -6.95],
+]
 
 /* ---- shipped ramps ----
  * GROVE and REEF mirror juniper-theme.css (needle / bloom). ORCHID is the
@@ -75,51 +117,87 @@ const ORIOLE_NECTARINE: Oklch[] = [
  * the Iris blend (2026-09-09). */
 
 export const GROVE: Oklch[] = [
-  [95.75, 0.0171, 121.4], [91.5, 0.0362, 122.66], [87, 0.0772, 124.08],
-  [80.5, 0.0938, 126.35], [72.5, 0.1037, 130.2], [63, 0.0979, 134.38],
-  [54, 0.0874, 138.34], [46.11, 0.0739, 142.85], [39.5, 0.0599, 152.6],
-  [33, 0.0484, 161.95], [25, 0.0424, 171.1],
-];
+  [95.75, 0.0171, 121.4],
+  [91.5, 0.0362, 122.66],
+  [87, 0.0772, 124.08],
+  [80.5, 0.0938, 126.35],
+  [72.5, 0.1037, 130.2],
+  [63, 0.0979, 134.38],
+  [54, 0.0874, 138.34],
+  [46.11, 0.0739, 142.85],
+  [39.5, 0.0599, 152.6],
+  [33, 0.0484, 161.95],
+  [25, 0.0424, 171.1],
+]
 export const ORCHID: Oklch[] = [
-  [96, 0.0304, 302.19], [90, 0.0394, 303.3], [83, 0.0575, 304.33],
-  [79, 0.0765, 305.23], [73, 0.0963, 305.93], [65, 0.1137, 306.33],
-  [56, 0.119, 306.26], [49.09, 0.1176, 305.45], [44, 0.1098, 303.5],
-  [38, 0.0982, 299.79], [26, 0.0888, 293.34],
-];
+  [96, 0.0304, 302.19],
+  [90, 0.0394, 303.3],
+  [83, 0.0575, 304.33],
+  [79, 0.0765, 305.23],
+  [73, 0.0963, 305.93],
+  [65, 0.1137, 306.33],
+  [56, 0.119, 306.26],
+  [49.09, 0.1176, 305.45],
+  [44, 0.1098, 303.5],
+  [38, 0.0982, 299.79],
+  [26, 0.0888, 293.34],
+]
 export const REEF: Oklch[] = [
-  [96, 0.0173, 221.3], [90, 0.0367, 219.44], [83, 0.0782, 217.06],
-  [79, 0.095, 216.24], [73, 0.105, 214.38], [65, 0.0991, 211.5],
-  [56, 0.0885, 210.02], [48.18, 0.0748, 208.9], [44, 0.0607, 208.89],
-  [38, 0.049, 208.31], [26, 0.0429, 205.9],
-];
+  [96, 0.0173, 221.3],
+  [90, 0.0367, 219.44],
+  [83, 0.0782, 217.06],
+  [79, 0.095, 216.24],
+  [73, 0.105, 214.38],
+  [65, 0.0991, 211.5],
+  [56, 0.0885, 210.02],
+  [48.18, 0.0748, 208.9],
+  [44, 0.0607, 208.89],
+  [38, 0.049, 208.31],
+  [26, 0.0429, 205.9],
+]
 /* bark — the authored neutral (mirrors juniper-theme.css; no exploration). */
 const BARK_RAMP: Oklch[] = [
-  [96, 0.00414, 80], [90, 0.0046, 77.3], [83, 0.0058, 74.71],
-  [79, 0.0076, 72.23], [73, 0.0097, 69.87], [65, 0.0121, 67.61],
-  [56, 0.0144, 65.47], [50, 0.0166, 63.43], [44, 0.0184, 61.51],
-  [38, 0.0196, 59.7], [26, 0.02, 58],
-];
+  [96, 0.00414, 80],
+  [90, 0.0046, 77.3],
+  [83, 0.0058, 74.71],
+  [79, 0.0076, 72.23],
+  [73, 0.0097, 69.87],
+  [65, 0.0121, 67.61],
+  [56, 0.0144, 65.47],
+  [50, 0.0166, 63.43],
+  [44, 0.0184, 61.51],
+  [38, 0.0196, 59.7],
+  [26, 0.02, 58],
+]
 
-const GROVE_PROFILE = normalizedProfile(GROVE);
-const ORCHID_PROFILE = normalizedProfile(ORCHID);
-const MOMO_PROFILE = normalizedProfile(MOMO);
+const GROVE_PROFILE = normalizedProfile(GROVE)
+const ORCHID_PROFILE = normalizedProfile(ORCHID)
+const MOMO_PROFILE = normalizedProfile(MOMO)
 
 /* ---- family builders ---- */
 
 /* grove: leaf × pear — mean lightness, weighted chroma and hue. */
 const groveBlend = (chromaW: number, hueW: number): Oklch[] =>
   LEAF.map((l, i) => {
-    const p = PEAR[i];
-    return [mix(l[0], p[0], 0.5), mix(l[1], p[1], chromaW), mix(l[2], p[2], hueW)];
-  });
+    const p = PEAR[i]
+    return [
+      mix(l[0], p[0], 0.5),
+      mix(l[1], p[1], chromaW),
+      mix(l[2], p[2], hueW),
+    ]
+  })
 
 /* orchid: berry × plum — mean lightness, hue weighted toward plum, mean
  * chroma scaled by a boost. */
 const orchidBlend = (hueW: number, boost: number): Oklch[] =>
   BERRY.map((b, i) => {
-    const p = PLUM[i];
-    return [mix(b[0], p[0], 0.5), mix(b[1], p[1], 0.5) * boost, mix(b[2], p[2], hueW)];
-  });
+    const p = PLUM[i]
+    return [
+      mix(b[0], p[0], 0.5),
+      mix(b[1], p[1], 0.5) * boost,
+      mix(b[2], p[2], hueW),
+    ]
+  })
 
 /* reef: bonito trio expanded onto the house ladder, hue pulled 30% toward
  * berry; chroma from a donor ramp's normalized profile. */
@@ -127,80 +205,94 @@ const BONITO_TRIO: { label: string; value: Oklch }[] = [
   { label: "subtle", value: [73.11, 0.055, 198] },
   { label: "base", value: [65, 0.155, 192] },
   { label: "bold", value: [42, 0.11, 182] },
-];
+]
 const REEF_HUE_ANCHORS: [number, number][] = [
-  [96, 215], [73.11, 198], [65, 192], [42, 182], [26, 175],
-];
+  [96, 215],
+  [73.11, 198],
+  [65, 192],
+  [42, 182],
+  [26, 175],
+]
 const anchored = (anchors: [number, number][], l: number) => {
-  if (l >= anchors[0][0]) return anchors[0][1];
-  if (l <= anchors[anchors.length - 1][0]) return anchors[anchors.length - 1][1];
+  if (l >= anchors[0][0]) return anchors[0][1]
+  if (l <= anchors[anchors.length - 1][0]) return anchors[anchors.length - 1][1]
   for (let i = 0; i < anchors.length - 1; i++) {
-    const [l1, v1] = anchors[i];
-    const [l2, v2] = anchors[i + 1];
-    if (l <= l1 && l >= l2) return v1 + (v2 - v1) * ((l1 - l) / (l1 - l2));
+    const [l1, v1] = anchors[i]
+    const [l2, v2] = anchors[i + 1]
+    if (l <= l1 && l >= l2) return v1 + (v2 - v1) * ((l1 - l) / (l1 - l2))
   }
-  return anchors[0][1];
-};
+  return anchors[0][1]
+}
 const reefBuild = (profile: number[], peak: number): Oklch[] =>
   HOUSE_L.map((l, i) => [
     l,
     profile[i] * peak,
     BERRY[i][2] * 0.3 + anchored(REEF_HUE_ANCHORS, l) * 0.7,
-  ]);
+  ])
 const REEF_OLD_C_ANCHORS: [number, number][] = [
-  [96, 0.02], [73.11, 0.055], [65, 0.155], [42, 0.11], [26, 0.079],
-];
+  [96, 0.02],
+  [73.11, 0.055],
+  [65, 0.155],
+  [42, 0.11],
+  [26, 0.079],
+]
 const REEF_OLD_BLEND: Oklch[] = HOUSE_L.map((l, i) => [
   l,
   BERRY[i][1] * 0.3 + anchored(REEF_OLD_C_ANCHORS, l) * 0.7,
   BERRY[i][2] * 0.3 + anchored(REEF_HUE_ANCHORS, l) * 0.7,
-]);
+])
 
 /* nectarine: momo adjusted along four briefs. */
 const NECT_SOBER: Oklch[] = HOUSE_L.map((l, i) => [
-  l, GROVE_PROFILE[i] * 0.115, MOMO[i][2],
-]);
+  l,
+  GROVE_PROFILE[i] * 0.115,
+  MOMO[i][2],
+])
 const NECT_CHOSEN: Oklch[] = HOUSE_L.map((l, i) => [
   l,
   mix(MOMO[i][1], ORIOLE_NECTARINE[i][1], 0.6) * 0.85,
   ((mix(MOMO[i][2], ORIOLE_NECTARINE[i][2], 0.6) % 360) + 360) % 360,
-]);
+])
 const NECT_TETRAD: Oklch[] = HOUSE_L.map((l, i) => [
-  l, MOMO_PROFILE[i] * 0.13, MOMO[i][2] + 18.7,
-]);
-const NECT_OVER_L = [97, 91, 84, 79, 71, 58, 50, 44, 38, 32, 24];
+  l,
+  MOMO_PROFILE[i] * 0.13,
+  MOMO[i][2] + 18.7,
+])
+const NECT_OVER_L = [97, 91, 84, 79, 71, 58, 50, 44, 38, 32, 24]
 const NECT_OVER: Oklch[] = NECT_OVER_L.map((l, i) => [
-  l, MOMO_PROFILE[i] * 0.155, MOMO[i][2],
-]);
+  l,
+  MOMO_PROFILE[i] * 0.155,
+  MOMO[i][2],
+])
 
 /* ---- family definitions ---- */
 
 export interface RampDef {
-  key: string;
-  name: string;
-  note?: string;
-  ramp: Oklch[];
+  key: string
+  name: string
+  note?: string
+  ramp: Oklch[]
   /** dashed = retired/rejected, dotted = shipped-ramp reference */
-  style?: "dashed" | "dotted";
-  chosen?: boolean;
+  style?: "dashed" | "dotted"
+  chosen?: boolean
   /** present on candidates: names the vars in the values listing */
-  slug?: string;
+  slug?: string
 }
 
 export interface Family {
-  id: string;
-  tab: string;
+  id: string
+  tab: string
   /** the color's job in the system — shown beside the tab name */
-  role: string;
-  intro: string;
-  shippedVar: string;
-  cMax: number;
-  lMin: number;
-  ramps: RampDef[];
+  role: string
+  intro: string
+  shippedVar: string
+  cMax: number
+  lMin: number
+  ramps: RampDef[]
   /** pairing chips under each candidate: beside refs, or rendered on refs[0] */
-  chips?: { kind: "beside" | "on"; refs: { label: string; ramp: Oklch[] }[] };
+  chips?: { kind: "beside" | "on"; refs: { label: string; ramp: Oklch[] }[] }
   /** three-stop trio strip + chart diamonds (reef) */
-  anchors?: { label: string; value: Oklch }[];
+  anchors?: { label: string; value: Oklch }[]
 }
 
 export const FAMILIES: Family[] = [
@@ -216,9 +308,28 @@ export const FAMILIES: Family[] = [
     ramps: [
       { key: "leaf", name: "leaf (retired)", ramp: LEAF, style: "dashed" },
       { key: "pear", name: "pear (retired)", ramp: PEAR, style: "dashed" },
-      { key: "A", slug: "fern", name: "A — Fern (muted)", note: "chroma 35% pear · hue 65% pear", ramp: groveBlend(0.35, 0.65), chosen: true },
-      { key: "B", slug: "willow", name: "B — Willow", note: "chroma 50% pear · hue 65% pear — shipped first, superseded by Fern", ramp: groveBlend(0.5, 0.65) },
-      { key: "C", slug: "chartreuse", name: "C — Chartreuse (vivid)", note: "chroma 70% pear · hue 75% pear", ramp: groveBlend(0.7, 0.75) },
+      {
+        key: "A",
+        slug: "fern",
+        name: "A — Fern (muted)",
+        note: "chroma 35% pear · hue 65% pear",
+        ramp: groveBlend(0.35, 0.65),
+        chosen: true,
+      },
+      {
+        key: "B",
+        slug: "willow",
+        name: "B — Willow",
+        note: "chroma 50% pear · hue 65% pear — shipped first, superseded by Fern",
+        ramp: groveBlend(0.5, 0.65),
+      },
+      {
+        key: "C",
+        slug: "chartreuse",
+        name: "C — Chartreuse (vivid)",
+        note: "chroma 70% pear · hue 75% pear",
+        ramp: groveBlend(0.7, 0.75),
+      },
     ],
   },
   {
@@ -240,11 +351,41 @@ export const FAMILIES: Family[] = [
     anchors: BONITO_TRIO,
     ramps: [
       { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
-      { key: "berry-accent", name: "berry (accent, orchid era)", ramp: ORCHID, style: "dotted" },
-      { key: "old", name: "straight blend (rejected)", note: "trio chroma honored — spikes at the 500 step", ramp: REEF_OLD_BLEND, style: "dashed" },
-      { key: "A", slug: "lagoon", name: "A — Lagoon (calm)", note: "the accent ramp's chroma profile · peak 0.10", ramp: reefBuild(ORCHID_PROFILE, 0.1) },
-      { key: "B", slug: "bonito", name: "B — Bonito (parity)", note: "the accent ramp's chroma profile · peak 0.115", ramp: reefBuild(ORCHID_PROFILE, 0.115) },
-      { key: "C", slug: "reef", name: "C — Reef", note: "the brand ramp's chroma profile · peak 0.105", ramp: reefBuild(GROVE_PROFILE, 0.105), chosen: true },
+      {
+        key: "berry-accent",
+        name: "berry (accent, orchid era)",
+        ramp: ORCHID,
+        style: "dotted",
+      },
+      {
+        key: "old",
+        name: "straight blend (rejected)",
+        note: "trio chroma honored — spikes at the 500 step",
+        ramp: REEF_OLD_BLEND,
+        style: "dashed",
+      },
+      {
+        key: "A",
+        slug: "lagoon",
+        name: "A — Lagoon (calm)",
+        note: "the accent ramp's chroma profile · peak 0.10",
+        ramp: reefBuild(ORCHID_PROFILE, 0.1),
+      },
+      {
+        key: "B",
+        slug: "bonito",
+        name: "B — Bonito (parity)",
+        note: "the accent ramp's chroma profile · peak 0.115",
+        ramp: reefBuild(ORCHID_PROFILE, 0.115),
+      },
+      {
+        key: "C",
+        slug: "reef",
+        name: "C — Reef",
+        note: "the brand ramp's chroma profile · peak 0.105",
+        ramp: reefBuild(GROVE_PROFILE, 0.105),
+        chosen: true,
+      },
     ],
   },
   {
@@ -259,12 +400,42 @@ export const FAMILIES: Family[] = [
     chips: { kind: "beside", refs: [{ label: "needle", ramp: GROVE }] },
     ramps: [
       { key: "needle", name: "needle (brand)", ramp: GROVE, style: "dotted" },
-      { key: "berry", name: "berry (retired, blue)", ramp: BERRY, style: "dashed" },
+      {
+        key: "berry",
+        name: "berry (retired, blue)",
+        ramp: BERRY,
+        style: "dashed",
+      },
       { key: "plum", name: "plum (retired)", ramp: PLUM, style: "dashed" },
-      { key: "A", slug: "iris", name: "A — Iris (true average)", note: "hue 50/50 · chroma ×1.0 — trialed, dropped, then shipped as the revision", ramp: orchidBlend(0.5, 1.0), chosen: true },
-      { key: "B", slug: "violet", name: "B — Violet (vivid average)", note: "hue 50/50 · chroma ×1.8", ramp: orchidBlend(0.5, 1.8) },
-      { key: "C", slug: "orchid", name: "C — Orchid (grove's complement)", note: "hue 70% plum · chroma ×1.6 — shipped first, superseded by Iris", ramp: orchidBlend(0.7, 1.6) },
-      { key: "D", slug: "twilight", name: "D — Twilight (cool foil)", note: "hue 70% berry · chroma ×1.4", ramp: orchidBlend(0.3, 1.4) },
+      {
+        key: "A",
+        slug: "iris",
+        name: "A — Iris (true average)",
+        note: "hue 50/50 · chroma ×1.0 — trialed, dropped, then shipped as the revision",
+        ramp: orchidBlend(0.5, 1.0),
+        chosen: true,
+      },
+      {
+        key: "B",
+        slug: "violet",
+        name: "B — Violet (vivid average)",
+        note: "hue 50/50 · chroma ×1.8",
+        ramp: orchidBlend(0.5, 1.8),
+      },
+      {
+        key: "C",
+        slug: "orchid",
+        name: "C — Orchid (grove's complement)",
+        note: "hue 70% plum · chroma ×1.6 — shipped first, superseded by Iris",
+        ramp: orchidBlend(0.7, 1.6),
+      },
+      {
+        key: "D",
+        slug: "twilight",
+        name: "D — Twilight (cool foil)",
+        note: "hue 70% berry · chroma ×1.4",
+        ramp: orchidBlend(0.3, 1.4),
+      },
     ],
   },
   {
@@ -283,13 +454,42 @@ export const FAMILIES: Family[] = [
       {
         key: "oriole",
         name: "nectarine (oriole project)",
-        ramp: ORIOLE_NECTARINE.map((v) => [v[0], v[1], ((v[2] % 360) + 360) % 360]),
+        ramp: ORIOLE_NECTARINE.map((v) => [
+          v[0],
+          v[1],
+          ((v[2] % 360) + 360) % 360,
+        ]),
         style: "dashed",
       },
-      { key: "1", slug: "sober", name: "1 — Sober", note: "momo hues · grove's chroma profile at peak 0.115", ramp: NECT_SOBER },
-      { key: "2", slug: "nectarine", name: "2 — Nectarine", note: "60% toward oriole's nectarine · chroma ×0.85", ramp: NECT_CHOSEN, chosen: true },
-      { key: "3", slug: "tetrad", name: "3 — Tetrad", note: "hue +18.7 so 500 lands at h38, the wheel gap's midpoint", ramp: NECT_TETRAD },
-      { key: "4", slug: "overgrove", name: "4 — Over grove", note: "darker mids (500 at L58) for separation from grove surfaces", ramp: NECT_OVER },
+      {
+        key: "1",
+        slug: "sober",
+        name: "1 — Sober",
+        note: "momo hues · grove's chroma profile at peak 0.115",
+        ramp: NECT_SOBER,
+      },
+      {
+        key: "2",
+        slug: "nectarine",
+        name: "2 — Nectarine",
+        note: "60% toward oriole's nectarine · chroma ×0.85",
+        ramp: NECT_CHOSEN,
+        chosen: true,
+      },
+      {
+        key: "3",
+        slug: "tetrad",
+        name: "3 — Tetrad",
+        note: "hue +18.7 so 500 lands at h38, the wheel gap's midpoint",
+        ramp: NECT_TETRAD,
+      },
+      {
+        key: "4",
+        slug: "overgrove",
+        name: "4 — Over grove",
+        note: "darker mids (500 at L58) for separation from grove surfaces",
+        ramp: NECT_OVER,
+      },
     ],
   },
   {
@@ -302,7 +502,14 @@ export const FAMILIES: Family[] = [
     intro:
       "The warm gray neutral — muted surfaces, plain content, and the chrome around everything else. Hue drifts warm as it darkens (80→58) so the grays never go cold against the green chrome. It predates the lab (né driftwood, renamed in the juniper-anatomy pass) and had no merge exploration; it is recorded here as the fifth working color of the system.",
     ramps: [
-      { key: "bark", slug: "bark", name: "bark (né driftwood)", note: "authored neutral · hue drifts warm down-scale", ramp: BARK_RAMP, chosen: true },
+      {
+        key: "bark",
+        slug: "bark",
+        name: "bark (né driftwood)",
+        note: "authored neutral · hue drifts warm down-scale",
+        ramp: BARK_RAMP,
+        chosen: true,
+      },
     ],
   },
-];
+]

@@ -1,8 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { productsQuery } from '@/lib/api'
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { productsQuery } from "@/lib/api"
 
-export const Route = createFileRoute('/_authenticated/products')({
+export const Route = createFileRoute("/_authenticated/products")({
   loader: ({ context }) => context.queryClient.ensureQueryData(productsQuery),
   component: ProductsPage,
 })

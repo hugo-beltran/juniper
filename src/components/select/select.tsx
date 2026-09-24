@@ -1,22 +1,22 @@
-import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import {
   Button as AriaButton,
   ButtonContext,
   Popover,
   Select as AriaSelect,
   SelectValue,
-} from "react-aria-components";
-import { cva } from "class-variance-authority";
+} from "react-aria-components"
+import { cva } from "class-variance-authority"
 import {
   FieldDescription,
   FieldError,
   FieldLabel,
   type FieldLabelVariant,
   type FieldSize,
-} from "@/components/field/field";
-import { ListBox, ListBoxItem } from "@/components/listbox/listbox";
-import { cn } from "@/lib/cn";
-import styles from "./select.module.css";
+} from "@/components/field/field"
+import { ListBox, ListBoxItem } from "@/components/listbox/listbox"
+import { cn } from "@/lib/cn"
+import styles from "./select.module.css"
 
 /* House Select on react-aria's Select: labelled trigger wearing the
  * extruded volume (theming §4.6), an anchored popover on the same material
@@ -34,39 +34,39 @@ import styles from "./select.module.css";
  * the form primitives story made it a shared control. */
 
 export interface SelectOption {
-  value: string;
-  label: string;
+  value: string
+  label: string
   /** Muted trailing text in the list (e.g. a count); not shown in the trigger. */
-  hint?: string;
+  hint?: string
 }
 
 export interface SelectProps {
-  label: string;
-  labelVariant?: FieldLabelVariant;
+  label: string
+  labelVariant?: FieldLabelVariant
   /** Selected option value; "" means nothing is selected. */
-  value: string;
-  onChange: (value: string) => void;
-  options: SelectOption[];
+  value: string
+  onChange: (value: string) => void
+  options: SelectOption[]
   /** Trigger text while empty; with `isClearable`, also the "any" row's label. */
-  placeholder?: string;
+  placeholder?: string
   /** Filter mode: a selectable "any" row, a clear button, the needle wash. */
-  isClearable?: boolean;
-  isRequired?: boolean;
-  isInvalid?: boolean;
-  isDisabled?: boolean;
-  description?: string;
+  isClearable?: boolean
+  isRequired?: boolean
+  isInvalid?: boolean
+  isDisabled?: boolean
+  description?: string
   /** Shown (and read) only while `isInvalid`. */
-  errorMessage?: string;
+  errorMessage?: string
   /** Trigger height; mirrors Button sizes so a field and a button share a row. */
-  size?: FieldSize;
+  size?: FieldSize
   /** Form field name, submitted as a hidden input. */
-  name?: string;
-  className?: string;
+  name?: string
+  className?: string
 }
 
 /* The "any" row is a real, selectable item; its key is a sentinel so the
  * consumer keeps working with "" for "nothing selected". */
-const ANY = "__any";
+const ANY = "__any"
 
 const selectVariants = cva(styles.select, {
   variants: {
@@ -77,7 +77,7 @@ const selectVariants = cva(styles.select, {
     },
   },
   defaultVariants: { size: "medium" },
-});
+})
 
 export function Select({
   label,
@@ -96,7 +96,7 @@ export function Select({
   name,
   className,
 }: SelectProps) {
-  const isSet = value !== "";
+  const isSet = value !== ""
   return (
     <AriaSelect
       data-slot="select"
@@ -169,5 +169,5 @@ export function Select({
         </ListBox>
       </Popover>
     </AriaSelect>
-  );
+  )
 }

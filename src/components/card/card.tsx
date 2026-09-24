@@ -1,7 +1,7 @@
-import type { ComponentProps } from "react";
-import { Heading, type HeadingProps } from "react-aria-components";
-import { cn } from "@/lib/cn";
-import styles from "./card.module.css";
+import type { ComponentProps } from "react"
+import { Heading, type HeadingProps } from "react-aria-components"
+import { cn } from "@/lib/cn"
+import styles from "./card.module.css"
 
 /* Generic bordered surface container, with the shadcn Card's named parts
  * ported onto it (component-architecture §8): CardHeader, CardTitle,
@@ -15,7 +15,7 @@ import styles from "./card.module.css";
 export function Card({ className, ...props }: ComponentProps<"div">) {
   return (
     <div data-slot="card" className={cn(styles.card, className)} {...props} />
-  );
+  )
 }
 
 /* Title over description, stacked. */
@@ -26,7 +26,7 @@ export function CardHeader({ className, ...props }: ComponentProps<"div">) {
       className={cn(styles.header, className)}
       {...props}
     />
-  );
+  )
 }
 
 /* react-aria Heading: `level` picks the element. h2 by default; a card that
@@ -43,20 +43,17 @@ export function CardTitle({
       className={cn(styles.title, className)}
       {...props}
     />
-  );
+  )
 }
 
-export function CardDescription({
-  className,
-  ...props
-}: ComponentProps<"p">) {
+export function CardDescription({ className, ...props }: ComponentProps<"p">) {
   return (
     <p
       data-slot="card-description"
       className={cn(styles.description, className)}
       {...props}
     />
-  );
+  )
 }
 
 /* A row of actions by default; a consumer that stacks its actions (the
@@ -68,5 +65,5 @@ export function CardFooter({ className, ...props }: ComponentProps<"div">) {
       className={cn(styles.footer, className)}
       {...props}
     />
-  );
+  )
 }

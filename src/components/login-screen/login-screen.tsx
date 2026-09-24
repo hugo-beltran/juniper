@@ -1,38 +1,38 @@
-import { useState, type ReactNode } from "react";
-import { KeyIcon } from "@heroicons/react/24/outline";
-import { Form } from "react-aria-components";
-import { Button } from "@/components/button/button";
+import { useState, type ReactNode } from "react"
+import { KeyIcon } from "@heroicons/react/24/outline"
+import { Form } from "react-aria-components"
+import { Button } from "@/components/button/button"
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/card/card";
-import { Input } from "@/components/input/input";
-import { Select } from "@/components/select/select";
-import { ScreenOverlay } from "@/components/textures/screen-overlay";
-import { Mark } from "./mark";
-import styles from "./login-screen.module.css";
+} from "@/components/card/card"
+import { Input } from "@/components/input/input"
+import { Select } from "@/components/select/select"
+import { ScreenOverlay } from "@/components/textures/screen-overlay"
+import { Mark } from "./mark"
+import styles from "./login-screen.module.css"
 
 export interface LoginWorkspace {
-  id: string;
-  name: string;
-  plan: string;
+  id: string
+  name: string
+  plan: string
 }
 
 export interface LoginCredentials {
-  email: string;
-  password: string;
-  workspaceId: string;
+  email: string
+  password: string
+  workspaceId: string
 }
 
 export interface LoginCopy {
-  title: string;
-  description: string;
-  formTitle: string;
-  formDescription: string;
-  fine: string;
+  title: string
+  description: string
+  formTitle: string
+  formDescription: string
+  fine: string
 }
 
 export const LOGIN_COPY: LoginCopy = {
@@ -42,18 +42,18 @@ export const LOGIN_COPY: LoginCopy = {
   formTitle: "Sign in",
   formDescription: "Pick your workspace. We'll take you to its first page.",
   fine: "A demo: nothing is stored and no account is created.",
-};
+}
 
 export interface LoginScreenProps {
-  workspaces: LoginWorkspace[];
-  defaultWorkspaceId?: string;
-  onSignIn: (credentials: LoginCredentials) => void;
+  workspaces: LoginWorkspace[]
+  defaultWorkspaceId?: string
+  onSignIn: (credentials: LoginCredentials) => void
   /** Renders the "Continue with SSO" button; receives the chosen workspace. */
-  onSingleSignOn?: (workspaceId: string) => void;
+  onSingleSignOn?: (workspaceId: string) => void
   /** A tertiary action under the buttons: a router Link wearing Button asChild. */
-  secondaryAction?: ReactNode;
-  copy?: Partial<LoginCopy>;
-  className?: string;
+  secondaryAction?: ReactNode
+  copy?: Partial<LoginCopy>
+  className?: string
 }
 
 export function LoginScreen({
@@ -64,12 +64,12 @@ export function LoginScreen({
   secondaryAction,
   copy,
 }: LoginScreenProps) {
-  const text = { ...LOGIN_COPY, ...copy };
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const text = { ...LOGIN_COPY, ...copy }
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [workspaceId, setWorkspaceId] = useState(
     defaultWorkspaceId ?? workspaces[0]?.id ?? "",
-  );
+  )
 
   return (
     <ScreenOverlay data-slot="login-screen">
@@ -88,8 +88,8 @@ export function LoginScreen({
           <Form
             className={styles.form}
             onSubmit={(event) => {
-              event.preventDefault();
-              onSignIn({ email, password, workspaceId });
+              event.preventDefault()
+              onSignIn({ email, password, workspaceId })
             }}
           >
             <CardHeader>
@@ -158,5 +158,5 @@ export function LoginScreen({
         </Card>
       </div>
     </ScreenOverlay>
-  );
+  )
 }

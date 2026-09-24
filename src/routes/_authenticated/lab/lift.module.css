@@ -134,12 +134,12 @@
   background:
     linear-gradient(var(--juni-bark-50), var(--juni-bark-50)) padding-box,
     linear-gradient(
-        150deg,
-        oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
-        var(--juni-bark-300) 55%,
-        var(--juni-bark-400) 100%
-      )
-      border-box;
+      150deg,
+      oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
+      var(--juni-bark-300) 55%,
+      var(--juni-bark-400) 100%
+    )
+    border-box;
   box-shadow: 1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.08);
 }
 
@@ -147,24 +147,24 @@
   background:
     linear-gradient(var(--juni-lichen-50), var(--juni-lichen-50)) padding-box,
     linear-gradient(
-        150deg,
-        oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
-        var(--juni-bark-400) 55%,
-        var(--juni-bark-500) 100%
-      )
-      border-box;
+      150deg,
+      oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
+      var(--juni-bark-400) 55%,
+      var(--juni-bark-500) 100%
+    )
+    border-box;
 }
 
 .edge:active {
   background:
     linear-gradient(var(--juni-bark-100), var(--juni-bark-100)) padding-box,
     linear-gradient(
-        330deg,
-        oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
-        var(--juni-bark-300) 55%,
-        var(--juni-bark-400) 100%
-      )
-      border-box;
+      330deg,
+      oklch(from var(--juni-bark-50) calc(l + 0.03) c h) 0%,
+      var(--juni-bark-300) 55%,
+      var(--juni-bark-400) 100%
+    )
+    border-box;
   box-shadow: inset 1px 1px 2px oklch(from var(--juni-bark-950) l c h / 0.1);
 }
 

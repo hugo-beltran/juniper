@@ -1,19 +1,19 @@
-import { useMemo, useState } from "react";
-import { Blobatar } from "@blobatar/react";
+import { useMemo, useState } from "react"
+import { Blobatar } from "@blobatar/react"
 import {
   createColumnHelper,
   createSortedRowModel,
   rowSortingFeature,
   tableFeatures,
   useTable,
-} from "@tanstack/react-table";
-import { Button } from "@/components/button/button";
-import { Card } from "@/components/card/card";
-import { FilterBar } from "@/components/filter-bar/filter-bar";
-import { Select } from "@/components/select/select";
-import { useSidebarInset } from "@/components/sidebar/sidebar";
-import { blobatarPalette } from "@/lib/blobatar-palette";
-import styles from "./leads-table.module.css";
+} from "@tanstack/react-table"
+import { Button } from "@/components/button/button"
+import { Card } from "@/components/card/card"
+import { FilterBar } from "@/components/filter-bar/filter-bar"
+import { Select } from "@/components/select/select"
+import { useSidebarInset } from "@/components/sidebar/sidebar"
+import { blobatarPalette } from "@/lib/blobatar-palette"
+import styles from "./leads-table.module.css"
 
 export const STAGES = [
   "Scouted",
@@ -21,23 +21,23 @@ export const STAGES = [
   "Workout",
   "Offer",
   "Signed",
-] as const;
-export type Stage = (typeof STAGES)[number];
+] as const
+export type Stage = (typeof STAGES)[number]
 
 /* Funnel position per stage — Stage-column sorting orders by pipeline
  * progress, not alphabet. */
 const STAGE_ORDER = Object.fromEntries(
   STAGES.map((stage, index) => [stage, index]),
-) as Record<Stage, number>;
+) as Record<Stage, number>
 
 /* Filter state the table renders. Controlled by the page (which keeps it
  * in the route's search params) or, when no `filters` prop is passed, held
  * internally. "" means "any" for the select filters. */
 export interface LeadsFilterState {
-  pendingOnly: boolean;
-  stage: Stage | "";
-  club: string;
-  scout: string;
+  pendingOnly: boolean
+  stage: Stage | ""
+  club: string
+  scout: string
 }
 
 export const EMPTY_LEADS_FILTERS: LeadsFilterState = {
@@ -45,26 +45,26 @@ export const EMPTY_LEADS_FILTERS: LeadsFilterState = {
   stage: "",
   club: "",
   scout: "",
-};
+}
 
 export interface Lead {
-  id: string;
-  player: string;
-  position: string;
-  club: string;
-  stage: Stage;
+  id: string
+  player: string
+  position: string
+  club: string
+  stage: Stage
   /** contract ask, USD */
-  ask: number;
+  ask: number
   /** 20-80 scouting grade; absent until the player has been analyzed */
-  grade?: number;
-  scout: string;
-  lastActivity: string;
+  grade?: number
+  scout: string
+  lastActivity: string
 }
 
 const formatAsk = (usd: number) =>
   usd >= 1_000_000
     ? `$${+(usd / 1_000_000).toFixed(1)}M`
-    : `$${Math.round(usd / 1_000)}K`;
+    : `$${Math.round(usd / 1_000)}K`
 
 /* Grade → badge tone (20-80 scale: 60+ is plus). */
 const gradeClass = (grade: number) =>
@@ -72,13 +72,13 @@ const gradeClass = (grade: number) =>
     ? styles.gradePlus
     : grade >= 50
       ? styles.gradeAvg
-      : styles.gradeLow;
+      : styles.gradeLow
 
 const features = tableFeatures({
   rowSortingFeature,
   sortedRowModel: createSortedRowModel(),
-});
-const helper = createColumnHelper<typeof features, Lead>();
+})
+const helper = createColumnHelper<typeof features, Lead>()
 
 const columns = helper.columns([
   helper.accessor("player", {
@@ -101,7 +101,7 @@ const columns = helper.columns([
     sortFn: (rowA, rowB) =>
       STAGE_ORDER[rowA.original.stage] - STAGE_ORDER[rowB.original.stage],
     cell: ({ row }) => {
-      const stageIndex = STAGE_ORDER[row.original.stage];
+      const stageIndex = STAGE_ORDER[row.original.stage]
 
       return (
         <span className={styles.stage}>
@@ -109,7 +109,7 @@ const columns = helper.columns([
           {stageIndex < 4 && "○".repeat(4 - stageIndex)}
           <strong>{row.original.stage}</strong>
         </span>
-      );
+      )
     },
   }),
   helper.accessor("ask", {
@@ -123,7 +123,7 @@ const columns = helper.columns([
     /* Ungraded players sink to the bottom whichever way the column sorts. */
     sortUndefined: "last",
     cell: ({ row }) => {
-      const { grade } = row.original;
+      const { grade } = row.original
       return grade === undefined ? (
         <span className={`${styles.grade} ${styles.gradePending}`}>
           <span aria-hidden>&mdash;</span>
@@ -131,7 +131,7 @@ const columns = helper.columns([
         </span>
       ) : (
         <span className={`${styles.grade} ${gradeClass(grade)}`}>{grade}</span>
-      );
+      )
     },
   }),
   helper.accessor("scout", { header: "Scout" }),
@@ -144,7 +144,7 @@ const columns = helper.columns([
       <span className={styles.activity}>{row.original.lastActivity}</span>
     ),
   }),
-]);
+])
 
 /* Controlled or uncontrolled, like Sidebar and TenantSwitcher: pass
  * `filters` + `onFiltersChange` to own the state (the dashboard keeps it in
@@ -155,25 +155,25 @@ export function LeadsTable({
   filters: filtersProp,
   onFiltersChange,
 }: {
-  leads: Lead[];
-  filters?: LeadsFilterState;
-  onFiltersChange?: (filters: LeadsFilterState) => void;
+  leads: Lead[]
+  filters?: LeadsFilterState
+  onFiltersChange?: (filters: LeadsFilterState) => void
 }) {
   const [internalFilters, setInternalFilters] =
-    useState<LeadsFilterState>(EMPTY_LEADS_FILTERS);
-  const filters = filtersProp ?? internalFilters;
+    useState<LeadsFilterState>(EMPTY_LEADS_FILTERS)
+  const filters = filtersProp ?? internalFilters
   const setFilters = (next: LeadsFilterState) => {
-    if (onFiltersChange) onFiltersChange(next);
-    else setInternalFilters(next);
-  };
+    if (onFiltersChange) onFiltersChange(next)
+    else setInternalFilters(next)
+  }
   const patch = (partial: Partial<LeadsFilterState>) =>
-    setFilters({ ...filters, ...partial });
+    setFilters({ ...filters, ...partial })
   const {
     pendingOnly,
     stage: stageFilter,
     club: clubFilter,
     scout: scoutFilter,
-  } = filters;
+  } = filters
 
   /* Stage options carry their pipeline counts (over all leads, not the
    * filtered set) so the select doubles as a funnel summary. */
@@ -185,17 +185,17 @@ export function LeadsTable({
         hint: String(leads.filter((lead) => lead.stage === stage).length),
       })),
     [leads],
-  );
+  )
 
   const clubs = useMemo(
     () => [...new Set(leads.map((lead) => lead.club))].sort(),
     [leads],
-  );
+  )
 
   const scouts = useMemo(
     () => [...new Set(leads.map((lead) => lead.scout))].sort(),
     [leads],
-  );
+  )
 
   const filtered = useMemo(
     () =>
@@ -207,15 +207,15 @@ export function LeadsTable({
           (scoutFilter === "" || lead.scout === scoutFilter),
       ),
     [leads, pendingOnly, stageFilter, clubFilter, scoutFilter],
-  );
+  )
 
-  const table = useTable({ features, columns, data: filtered });
+  const table = useTable({ features, columns, data: filtered })
 
-  const clearFilters = () => setFilters(EMPTY_LEADS_FILTERS);
+  const clearFilters = () => setFilters(EMPTY_LEADS_FILTERS)
 
   /* The inset's width, not the viewport's and not this element's own: the
    * one scroll container decides. Outside an inset the table stays wide. */
-  const narrow = useSidebarInset();
+  const narrow = useSidebarInset()
 
   /* Card layout's sort control, handed to the FilterBar's drawer: the
    * sortable columns as a Select, the direction as a Button. Both drive
@@ -223,9 +223,9 @@ export function LeadsTable({
    * current sort. */
   const sortableColumns = table
     .getAllLeafColumns()
-    .filter((column) => column.getCanSort());
-  const sortedColumn = sortableColumns.find((column) => column.getIsSorted());
-  const sortDirection = sortedColumn?.getIsSorted() || undefined;
+    .filter((column) => column.getCanSort())
+  const sortedColumn = sortableColumns.find((column) => column.getIsSorted())
+  const sortDirection = sortedColumn?.getIsSorted() || undefined
 
   const sortControl = (
     <>
@@ -240,9 +240,9 @@ export function LeadsTable({
           label: String(column.columnDef.header),
         }))}
         onChange={(id) => {
-          if (id === "") table.setSorting([]);
+          if (id === "") table.setSorting([])
           else if (id !== sortedColumn?.id)
-            table.getColumn(id)?.toggleSorting(false);
+            table.getColumn(id)?.toggleSorting(false)
         }}
       />
       {sortedColumn && (
@@ -259,7 +259,7 @@ export function LeadsTable({
         </Button>
       )}
     </>
-  );
+  )
 
   return (
     <div data-slot="leads-table" data-layout={narrow ? "cards" : "table"}>
@@ -306,7 +306,7 @@ export function LeadsTable({
         <>
           <ul className={styles.cards}>
             {table.getRowModel().rows.map((row) => {
-              const [head, ...fields] = row.getAllCells();
+              const [head, ...fields] = row.getAllCells()
               return (
                 <li key={row.id}>
                   <Card className={styles.card}>
@@ -327,7 +327,7 @@ export function LeadsTable({
                     </dl>
                   </Card>
                 </li>
-              );
+              )
             })}
           </ul>
         </>
@@ -337,7 +337,7 @@ export function LeadsTable({
             {table.getHeaderGroups().map((group) => (
               <tr key={group.id}>
                 {group.headers.map((header) => {
-                  const sorted = header.column.getIsSorted();
+                  const sorted = header.column.getIsSorted()
                   return (
                     <th
                       key={header.id}
@@ -369,7 +369,7 @@ export function LeadsTable({
                         <table.FlexRender header={header} />
                       )}
                     </th>
-                  );
+                  )
                 })}
               </tr>
             ))}
@@ -391,5 +391,5 @@ export function LeadsTable({
         <p className={styles.empty}>No leads match the current filters.</p>
       )}
     </div>
-  );
+  )
 }

@@ -32,8 +32,5 @@
     "The Stage column sorts by funnel position, not alphabet; the Grade column sorts ungraded rows last; the Activity column is unsortable until it carries a real timestamp.",
     "Sticky toolbar height (filter-bar, 4rem) and header top offset (leads-table) are coupled: change one, change both."
   ],
-  "docs": [
-    "component-architecture",
-    "theming"
-  ]
+  "docs": ["component-architecture", "theming"]
 }

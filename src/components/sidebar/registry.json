@@ -51,9 +51,5 @@
     "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut.",
     "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0."
   ],
-  "docs": [
-    "component-architecture",
-    "theming",
-    "light-dark"
-  ]
+  "docs": ["component-architecture", "theming", "light-dark"]
 }

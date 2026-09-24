@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Button, PageDescription, PageHeader, PageTitle } from "@/components";
-import styles from "./lift.module.css";
+import { createFileRoute } from "@tanstack/react-router"
+import { ChevronDownIcon } from "@heroicons/react/24/outline"
+import { Button, PageDescription, PageHeader, PageTitle } from "@/components"
+import styles from "./lift.module.css"
 
 export const Route = createFileRoute("/_authenticated/lab/lift")({
   component: LiftPage,
-});
+})
 
 /* Lift lab — six ways to give a field volume, judged against the primary
  * button's glass-pane recipe (fill lit off-center, 1px translucent inner
@@ -46,16 +46,19 @@ const VARIANTS = [
     title: "6 · Glass pane + keycap press",
     note: "Option 1 at rest, option 4's drop on press. Rest state matches the button's material, the interaction matches its gesture. The initial recommendation; not chosen.",
   },
-] as const;
+] as const
 
-const OPTIONS = ["Any club", "Bayside Nine", "Copper Kings", "River Hawks"];
+const OPTIONS = ["Any club", "Bayside Nine", "Copper Kings", "River Hawks"]
 
 function Sample({ variant }: { variant: string }) {
   return (
     <label className={styles.field}>
       <span className={styles.label}>Club</span>
       <span className={styles.selectWrap}>
-        <select className={`${styles.select} ${styles[variant]}`} defaultValue="">
+        <select
+          className={`${styles.select} ${styles[variant]}`}
+          defaultValue=""
+        >
           {OPTIONS.map((option, index) => (
             <option key={option} value={index === 0 ? "" : option}>
               {option}
@@ -65,7 +68,7 @@ function Sample({ variant }: { variant: string }) {
         <ChevronDownIcon aria-hidden className={styles.chevron} />
       </span>
     </label>
-  );
+  )
 }
 
 function LiftPage() {
@@ -85,8 +88,8 @@ function LiftPage() {
           <h2>Reference · primary button</h2>
           <p className={styles.note}>
             Radial fill lit from 70%/70%, 1px translucent-white inner ring,
-            bloom-tinted drop shadow, press flips the light and pulls the
-            shadow inside.
+            bloom-tinted drop shadow, press flips the light and pulls the shadow
+            inside.
           </p>
           <div className={styles.row}>
             <Button size="small">New SCOUT report</Button>
@@ -98,8 +101,7 @@ function LiftPage() {
         <div className={styles.card}>
           <h2>Reference · current select</h2>
           <p className={styles.note}>
-            Flat: bark-50 fill, bark-300 hairline, lichen-100 hover. No
-            volume.
+            Flat: bark-50 fill, bark-300 hairline, lichen-100 hover. No volume.
           </p>
           <div className={styles.row}>
             <Sample variant="flat" />
@@ -120,5 +122,5 @@ function LiftPage() {
         ))}
       </section>
     </div>
-  );
+  )
 }

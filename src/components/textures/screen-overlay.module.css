@@ -16,7 +16,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: url("https://images.unsplash.com/photo-1762869909580-12e109630a51?auto=format&fit=crop&w=1600&q=80")
+  background:
+    url("https://images.unsplash.com/photo-1762869909580-12e109630a51?auto=format&fit=crop&w=1600&q=80")
     center / cover no-repeat;
   mix-blend-mode: luminosity;
   opacity: 0.075;

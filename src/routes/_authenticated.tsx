@@ -1,4 +1,4 @@
-import { useState, type ComponentType, type SVGProps } from "react";
+import { useState, type ComponentType, type SVGProps } from "react"
 import {
   ArrowRightEndOnRectangleIcon,
   ArrowsRightLeftIcon,
@@ -12,15 +12,15 @@ import {
   RectangleGroupIcon,
   SwatchIcon,
   UsersIcon,
-} from "@heroicons/react/24/outline";
-import { useSuspenseQuery } from "@tanstack/react-query";
+} from "@heroicons/react/24/outline"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import {
   Link,
   Outlet,
   createFileRoute,
   useLocation,
   useNavigate,
-} from "@tanstack/react-router";
+} from "@tanstack/react-router"
 import {
   Sidebar,
   SidebarContent,
@@ -37,7 +37,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
   TenantSwitcher,
-} from "@/components";
+} from "@/components"
 import {
   defaultTenant,
   firstRoute,
@@ -47,8 +47,8 @@ import {
   type NavBadge,
   type NavIcon,
   type NavTenant,
-} from "@/lib/api";
-import styles from "./_authenticated.module.css";
+} from "@/lib/api"
+import styles from "./_authenticated.module.css"
 
 export const Route = createFileRoute("/_authenticated")({
   loader: ({ context }) =>
@@ -57,7 +57,7 @@ export const Route = createFileRoute("/_authenticated")({
       context.queryClient.ensureQueryData(leadsQuery),
     ]),
   component: AuthenticatedLayout,
-});
+})
 
 /* The menu tree comes from the navigation resource (src/lib/nav-tree.json
  * behind navigationQuery, standing in for a server response): every menu
@@ -76,27 +76,27 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   users: UsersIcon,
   "pencil-square": PencilSquareIcon,
   "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
-};
+}
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides
  * the badge. */
 function useNavBadges(): Record<NavBadge, number> {
-  const { data: leads } = useSuspenseQuery(leadsQuery);
-  return { "pending-analysis": pendingAnalysisCount(leads) };
+  const { data: leads } = useSuspenseQuery(leadsQuery)
+  return { "pending-analysis": pendingAnalysisCount(leads) }
 }
 
 const ownsPath = (tenant: NavTenant, pathname: string) =>
   tenant.groups.some((group) =>
     group.items.some((item) => item.to !== undefined && item.to === pathname),
-  );
+  )
 
 function AuthenticatedLayout() {
-  const tree = useSuspenseQuery(navigationQuery).data;
-  const { tenants } = tree;
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const badges = useNavBadges();
-  const [selectedId, setSelectedId] = useState(defaultTenant(tree).id);
+  const tree = useSuspenseQuery(navigationQuery).data
+  const { tenants } = tree
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const badges = useNavBadges()
+  const [selectedId, setSelectedId] = useState(defaultTenant(tree).id)
 
   /* The URL wins: landing on a route a tenant owns selects that tenant, so
    * a deep link never shows one tenant's menu over another's page. The
@@ -105,15 +105,15 @@ function AuthenticatedLayout() {
   const activeTenant =
     tenants.find((tenant) => ownsPath(tenant, pathname)) ??
     tenants.find((tenant) => tenant.id === selectedId) ??
-    defaultTenant(tree);
+    defaultTenant(tree)
 
   const handleTenantChange = (next: { name: string }) => {
-    const tenant = tenants.find((candidate) => candidate.name === next.name);
-    if (!tenant) return;
-    setSelectedId(tenant.id);
-    const to = firstRoute(tenant);
-    if (to) navigate({ to });
-  };
+    const tenant = tenants.find((candidate) => candidate.name === next.name)
+    if (!tenant) return
+    setSelectedId(tenant.id)
+    const to = firstRoute(tenant)
+    if (to) navigate({ to })
+  }
 
   return (
     <SidebarProvider>
@@ -132,11 +132,11 @@ function AuthenticatedLayout() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {group.items.map((item) => {
-                    const Icon = ICONS[item.icon];
-                    const count = item.badge ? badges[item.badge] : 0;
+                    const Icon = ICONS[item.icon]
+                    const count = item.badge ? badges[item.badge] : 0
                     /* The dot goes before the label in DOM order (see
                      * SidebarMenuBadge); the words go inside the label. */
-                    const badge = count > 0 && <SidebarMenuBadge />;
+                    const badge = count > 0 && <SidebarMenuBadge />
                     const labelText = (
                       <>
                         {item.label}
@@ -146,7 +146,7 @@ function AuthenticatedLayout() {
                           </span>
                         )}
                       </>
-                    );
+                    )
                     return (
                       <SidebarMenuItem key={item.label}>
                         <SidebarMenuButton asChild>
@@ -159,8 +159,16 @@ function AuthenticatedLayout() {
                           ) : (
                             <a
                               href={item.href}
-                              target={item.href.startsWith("http") ? "_blank" : undefined}
-                              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                              target={
+                                item.href.startsWith("http")
+                                  ? "_blank"
+                                  : undefined
+                              }
+                              rel={
+                                item.href.startsWith("http")
+                                  ? "noreferrer"
+                                  : undefined
+                              }
                             >
                               <Icon />
                               {badge}
@@ -169,7 +177,7 @@ function AuthenticatedLayout() {
                           )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
-                    );
+                    )
                   })}
                 </SidebarMenu>
               </SidebarGroupContent>
@@ -186,5 +194,5 @@ function AuthenticatedLayout() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

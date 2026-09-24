@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Blobatar } from "@blobatar/react";
-import { KeyIcon } from "@heroicons/react/24/outline";
-import type { Selection } from "react-aria-components";
+import { useState } from "react"
+import { createFileRoute } from "@tanstack/react-router"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Blobatar } from "@blobatar/react"
+import { KeyIcon } from "@heroicons/react/24/outline"
+import type { Selection } from "react-aria-components"
 import {
   Button,
   Card,
@@ -14,16 +14,16 @@ import {
   PageHeader,
   PageTitle,
   Select,
-} from "@/components";
-import { defaultTenant, navigationQuery, type NavTenant } from "@/lib/api";
-import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette";
-import { cn } from "@/lib/cn";
-import Mark from "@/assets/juni.svg?react";
-import styles from "./login.module.css";
+} from "@/components"
+import { defaultTenant, navigationQuery, type NavTenant } from "@/lib/api"
+import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette"
+import { cn } from "@/lib/cn"
+import Mark from "@/assets/juni.svg?react"
+import styles from "./login.module.css"
 
 export const Route = createFileRoute("/_authenticated/lab/login")({
   component: LoginLabPage,
-});
+})
 
 /* Login lab — three structures for the sign-in screen, built from the real
  * primitives (Card, Input, Select, Button, ListBox) so what is tweaked here
@@ -37,15 +37,15 @@ export const Route = createFileRoute("/_authenticated/lab/login")({
  * stay here as the rejected alternatives. Exploration mock, not a shipped
  * component: the form submits nowhere. */
 
-type Layout = "sheet" | "ground" | "picker";
-type Frame = "desktop" | "phone";
+type Layout = "sheet" | "ground" | "picker"
+type Frame = "desktop" | "phone"
 
 const VARIANTS: {
-  id: Layout;
-  title: string;
-  note: string;
-  pros: string;
-  cons: string;
+  id: Layout
+  title: string
+  note: string
+  pros: string
+  cons: string
 }[] = [
   {
     id: "sheet",
@@ -68,7 +68,7 @@ const VARIANTS: {
     pros: "The illustration is the product. One control fewer in the form, and the picker is a real ListBox with arrow keys and typeahead.",
     cons: "Two places for focus to travel between; the form is no longer a single column. Only worth it while workspaces are few.",
   },
-];
+]
 
 function Toggle<T extends string | number>({
   label,
@@ -76,10 +76,10 @@ function Toggle<T extends string | number>({
   options,
   onChange,
 }: {
-  label: string;
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (value: T) => void;
+  label: string
+  value: T
+  options: { value: T; label: string }[]
+  onChange: (value: T) => void
 }) {
   return (
     <div className={styles.toggle} role="group" aria-label={label}>
@@ -96,7 +96,7 @@ function Toggle<T extends string | number>({
         </Button>
       ))}
     </div>
-  );
+  )
 }
 
 /* The form is one thing in every variant; only its surroundings change. */
@@ -106,20 +106,17 @@ function SignInForm({
   tenant,
   onTenantChange,
 }: {
-  layout: Layout;
-  tenants: NavTenant[];
-  tenant: string;
-  onTenantChange: (id: string) => void;
+  layout: Layout
+  tenants: NavTenant[]
+  tenant: string
+  onTenantChange: (id: string) => void
 }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const active = tenants.find((t) => t.id === tenant) ?? tenants[0];
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const active = tenants.find((t) => t.id === tenant) ?? tenants[0]
 
   return (
-    <form
-      className={styles.form}
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
       {layout === "sheet" && (
         <span className={styles.markTile} aria-hidden>
           <Mark />
@@ -179,7 +176,7 @@ function SignInForm({
         A demo: nothing is stored and no account is created.
       </p>
     </form>
-  );
+  )
 }
 
 function WorkspacePicker({
@@ -187,15 +184,15 @@ function WorkspacePicker({
   tenant,
   onTenantChange,
 }: {
-  tenants: NavTenant[];
-  tenant: string;
-  onTenantChange: (id: string) => void;
+  tenants: NavTenant[]
+  tenant: string
+  onTenantChange: (id: string) => void
 }) {
   const handleSelectionChange = (keys: Selection) => {
-    if (keys === "all") return;
-    const key = keys.values().next().value;
-    if (key !== undefined) onTenantChange(String(key));
-  };
+    if (keys === "all") return
+    const key = keys.values().next().value
+    if (key !== undefined) onTenantChange(String(key))
+  }
   return (
     <div className={styles.pickerPanel}>
       <ListBox
@@ -221,7 +218,7 @@ function WorkspacePicker({
         ))}
       </ListBox>
     </div>
-  );
+  )
 }
 
 function LoginMock({
@@ -229,13 +226,13 @@ function LoginMock({
   frame,
   tenants,
 }: {
-  layout: Layout;
-  frame: Frame;
-  tenants: NavTenant[];
+  layout: Layout
+  frame: Frame
+  tenants: NavTenant[]
 }) {
   const [tenant, setTenant] = useState(
     defaultTenant({ defaultTenant: "kingfisher", tenants }).id,
-  );
+  )
   const form = (
     <SignInForm
       layout={layout}
@@ -243,7 +240,7 @@ function LoginMock({
       tenant={tenant}
       onTenantChange={setTenant}
     />
-  );
+  )
 
   if (layout === "sheet") {
     return (
@@ -256,7 +253,7 @@ function LoginMock({
           <div className={styles.sheetForm}>{form}</div>
         </Card>
       </div>
-    );
+    )
   }
 
   return (
@@ -269,7 +266,9 @@ function LoginMock({
               Juniper
             </span>
             <h3 className={styles.groundTitle}>
-              {layout === "picker" ? "Choose a workspace." : "Back to the grove."}
+              {layout === "picker"
+                ? "Choose a workspace."
+                : "Back to the grove."}
             </h3>
             <p className={styles.groundText}>
               {layout === "picker"
@@ -290,12 +289,12 @@ function LoginMock({
         <Card className={styles.groundCard}>{form}</Card>
       </div>
     </div>
-  );
+  )
 }
 
 function LoginLabPage() {
-  const { data: tree } = useSuspenseQuery(navigationQuery);
-  const [frame, setFrame] = useState<Frame>("desktop");
+  const { data: tree } = useSuspenseQuery(navigationQuery)
+  const [frame, setFrame] = useState<Frame>("desktop")
 
   return (
     <div className={styles.lab}>
@@ -305,9 +304,9 @@ function LoginLabPage() {
           Three structures for the sign-in screen, from two references: a pale
           sheet with an image panel beside a narrow form, and a saturated
           rounded ground carrying a white card. In our material the ground is
-          the needle green the shell stands on and the form lives on the
-          bark-50 card, where the extruded controls read. Every control is a
-          registry component; every value a <code>--juni-*</code> step.
+          the needle green the shell stands on and the form lives on the bark-50
+          card, where the extruded controls read. Every control is a registry
+          component; every value a <code>--juni-*</code> step.
         </PageDescription>
       </PageHeader>
       <div className={styles.controls}>
@@ -341,5 +340,5 @@ function LoginLabPage() {
         ))}
       </section>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import { useState, type ReactNode } from "react";
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
-import { Disclosure, DisclosurePanel, Separator } from "react-aria-components";
-import { Button } from "@/components/button/button";
-import { Input } from "@/components/input/input";
-import { Select, type SelectOption } from "@/components/select/select";
-import { useSidebarInset } from "@/components/sidebar/sidebar";
-import { Switch } from "@/components/switch/switch";
-import styles from "./filter-bar.module.css";
+import { useState, type ReactNode } from "react"
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline"
+import { Disclosure, DisclosurePanel, Separator } from "react-aria-components"
+import { Button } from "@/components/button/button"
+import { Input } from "@/components/input/input"
+import { Select, type SelectOption } from "@/components/select/select"
+import { useSidebarInset } from "@/components/sidebar/sidebar"
+import { Switch } from "@/components/switch/switch"
+import styles from "./filter-bar.module.css"
 
 /* Sticky filter toolbar above a table: an optional search Input, house
  * Switch toggles, a Separator, one Select per field (filter mode:
@@ -26,29 +26,29 @@ import styles from "./filter-bar.module.css";
  * count so the state stays visible while the drawer is closed. */
 
 export interface FilterSearch {
-  label: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
+  label: string
+  placeholder?: string
+  value: string
+  onChange: (value: string) => void
 }
 
 export interface FilterField {
-  id: string;
-  label: string;
+  id: string
+  label: string
   /** Selected option value; "" means no filter. */
-  value: string;
+  value: string
   /** `hint` renders muted beside the label in the list (e.g. a count). */
-  options: SelectOption[];
-  onChange: (value: string) => void;
+  options: SelectOption[]
+  onChange: (value: string) => void
 }
 
 export interface FilterToggle {
-  id: string;
-  label: string;
+  id: string
+  label: string
   /** Muted second line under the label; also the switch's description. */
-  description?: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
+  description?: string
+  checked: boolean
+  onChange: (checked: boolean) => void
 }
 
 export function FilterBar({
@@ -60,23 +60,23 @@ export function FilterBar({
   extras,
 }: {
   /** Free-text filter, rendered first. */
-  search?: FilterSearch;
+  search?: FilterSearch
   /** Boolean filters, rendered as switches before the selects. */
-  toggles?: FilterToggle[];
-  fields: FilterField[];
-  onClearAll: () => void;
+  toggles?: FilterToggle[]
+  fields: FilterField[]
+  onClearAll: () => void
   /** Force the narrow layout; defaults to the sidebar inset's own signal. */
-  narrow?: boolean;
+  narrow?: boolean
   /** Controls that belong beside the fields in the drawer (a Sort control). */
-  extras?: ReactNode;
+  extras?: ReactNode
 }) {
-  const insetNarrow = useSidebarInset(900);
-  const narrow = narrowProp ?? insetNarrow;
-  const [open, setOpen] = useState(false);
+  const insetNarrow = useSidebarInset(900)
+  const narrow = narrowProp ?? insetNarrow
+  const [open, setOpen] = useState(false)
   const activeCount =
     (search && search.value.trim() !== "" ? 1 : 0) +
     toggles.filter((toggle) => toggle.checked).length +
-    fields.filter((field) => field.value !== "").length;
+    fields.filter((field) => field.value !== "").length
 
   const searchControl = search && (
     <Input
@@ -87,7 +87,7 @@ export function FilterBar({
       value={search.value}
       onChange={search.onChange}
     />
-  );
+  )
 
   const toggleControls = toggles.map((toggle) => (
     <Switch
@@ -97,7 +97,7 @@ export function FilterBar({
       isSelected={toggle.checked}
       onChange={toggle.onChange}
     />
-  ));
+  ))
 
   const fieldControls = fields.map((field) => (
     <Select
@@ -110,13 +110,13 @@ export function FilterBar({
       options={field.options}
       onChange={field.onChange}
     />
-  ));
+  ))
 
   const clearAll = activeCount > 0 && (
     <Button size="mini" variant="discrete" onPress={onClearAll}>
       Clear all
     </Button>
-  );
+  )
 
   if (narrow) {
     return (
@@ -156,7 +156,7 @@ export function FilterBar({
           {clearAll && <div className={styles.drawerFooter}>{clearAll}</div>}
         </DisclosurePanel>
       </Disclosure>
-    );
+    )
   }
 
   return (
@@ -169,5 +169,5 @@ export function FilterBar({
       {fieldControls}
       {clearAll}
     </div>
-  );
+  )
 }

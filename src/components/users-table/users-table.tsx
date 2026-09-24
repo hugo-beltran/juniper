@@ -1,15 +1,15 @@
-import { useMemo, useState } from "react";
-import { Blobatar } from "@blobatar/react";
+import { useMemo, useState } from "react"
+import { Blobatar } from "@blobatar/react"
 import {
   createColumnHelper,
   createSortedRowModel,
   rowSortingFeature,
   tableFeatures,
   useTable,
-} from "@tanstack/react-table";
-import { FilterBar } from "@/components/filter-bar/filter-bar";
-import { blobatarPalette } from "@/lib/blobatar-palette";
-import styles from "./users-table.module.css";
+} from "@tanstack/react-table"
+import { FilterBar } from "@/components/filter-bar/filter-bar"
+import { blobatarPalette } from "@/lib/blobatar-palette"
+import styles from "./users-table.module.css"
 
 /* Workspace members table for a content-manager tenant: who has access,
  * with what role, and when they were last around. Flat and borderless like
@@ -23,72 +23,72 @@ export const USER_ROLES = [
   "Editor",
   "Contributor",
   "Viewer",
-] as const;
-export type UserRole = (typeof USER_ROLES)[number];
+] as const
+export type UserRole = (typeof USER_ROLES)[number]
 
-export const USER_STATUSES = ["Active", "Invited", "Suspended"] as const;
-export type UserStatus = (typeof USER_STATUSES)[number];
+export const USER_STATUSES = ["Active", "Invited", "Suspended"] as const
+export type UserStatus = (typeof USER_STATUSES)[number]
 
 /* Role sorts by privilege, not alphabet. */
 const ROLE_ORDER = Object.fromEntries(
   USER_ROLES.map((role, index) => [role, index]),
-) as Record<UserRole, number>;
+) as Record<UserRole, number>
 
 export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  status: UserStatus;
+  id: string
+  name: string
+  email: string
+  role: UserRole
+  status: UserStatus
   /** ISO timestamp; absent for an invite that was never accepted. */
-  lastActiveAt?: string;
+  lastActiveAt?: string
   /** ISO date the account was created or invited. */
-  joinedAt: string;
+  joinedAt: string
 }
 
 export interface UsersFilterState {
   /** Matches name or email, case-insensitive. */
-  query: string;
-  role: UserRole | "";
-  status: UserStatus | "";
+  query: string
+  role: UserRole | ""
+  status: UserStatus | ""
 }
 
 export const EMPTY_USERS_FILTERS: UsersFilterState = {
   query: "",
   role: "",
   status: "",
-};
+}
 
-const relative = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+const relative = new Intl.RelativeTimeFormat("en", { numeric: "auto" })
 const dateFormat = new Intl.DateTimeFormat("en", {
   month: "short",
   day: "numeric",
   year: "numeric",
-});
+})
 
 /* "3 days ago", "2 hours ago", "yesterday" — from a timestamp, so the column
  * can sort by time while showing words. */
 function formatRelative(iso: string, now = Date.now()) {
-  const minutes = Math.round((new Date(iso).getTime() - now) / 60_000);
-  if (Math.abs(minutes) < 60) return relative.format(minutes, "minute");
-  const hours = Math.round(minutes / 60);
-  if (Math.abs(hours) < 24) return relative.format(hours, "hour");
-  const days = Math.round(hours / 24);
-  if (Math.abs(days) < 30) return relative.format(days, "day");
-  return relative.format(Math.round(days / 30), "month");
+  const minutes = Math.round((new Date(iso).getTime() - now) / 60_000)
+  if (Math.abs(minutes) < 60) return relative.format(minutes, "minute")
+  const hours = Math.round(minutes / 60)
+  if (Math.abs(hours) < 24) return relative.format(hours, "hour")
+  const days = Math.round(hours / 24)
+  if (Math.abs(days) < 30) return relative.format(days, "day")
+  return relative.format(Math.round(days / 30), "month")
 }
 
 const statusClass: Record<UserStatus, string> = {
   Active: styles.statusActive,
   Invited: styles.statusInvited,
   Suspended: styles.statusSuspended,
-};
+}
 
 const features = tableFeatures({
   rowSortingFeature,
   sortedRowModel: createSortedRowModel(),
-});
-const helper = createColumnHelper<typeof features, User>();
+})
+const helper = createColumnHelper<typeof features, User>()
 
 const columns = helper.columns([
   helper.accessor("name", {
@@ -126,12 +126,12 @@ const columns = helper.columns([
     /* Never-active invitees sink to the bottom whichever way it sorts. */
     sortUndefined: "last",
     cell: ({ row }) => {
-      const { lastActiveAt } = row.original;
+      const { lastActiveAt } = row.original
       return (
         <span className={styles.when}>
           {lastActiveAt ? formatRelative(lastActiveAt) : "Never"}
         </span>
-      );
+      )
     },
   }),
   helper.accessor("joinedAt", {
@@ -142,7 +142,7 @@ const columns = helper.columns([
       </span>
     ),
   }),
-]);
+])
 
 /* Controlled or uncontrolled, like LeadsTable: pass `filters` +
  * `onFiltersChange` to own the state (the users page keeps it in the URL);
@@ -153,20 +153,20 @@ export function UsersTable({
   filters: filtersProp,
   onFiltersChange,
 }: {
-  users: User[];
-  filters?: UsersFilterState;
-  onFiltersChange?: (filters: UsersFilterState) => void;
+  users: User[]
+  filters?: UsersFilterState
+  onFiltersChange?: (filters: UsersFilterState) => void
 }) {
   const [internalFilters, setInternalFilters] =
-    useState<UsersFilterState>(EMPTY_USERS_FILTERS);
-  const filters = filtersProp ?? internalFilters;
+    useState<UsersFilterState>(EMPTY_USERS_FILTERS)
+  const filters = filtersProp ?? internalFilters
   const setFilters = (next: UsersFilterState) => {
-    if (onFiltersChange) onFiltersChange(next);
-    else setInternalFilters(next);
-  };
+    if (onFiltersChange) onFiltersChange(next)
+    else setInternalFilters(next)
+  }
   const patch = (partial: Partial<UsersFilterState>) =>
-    setFilters({ ...filters, ...partial });
-  const { query, role: roleFilter, status: statusFilter } = filters;
+    setFilters({ ...filters, ...partial })
+  const { query, role: roleFilter, status: statusFilter } = filters
 
   /* Role and status options carry their counts over all users, so the
    * selects double as a roster summary. */
@@ -178,7 +178,7 @@ export function UsersTable({
         hint: String(users.filter((user) => user.role === role).length),
       })),
     [users],
-  );
+  )
   const statusOptions = useMemo(
     () =>
       USER_STATUSES.map((status) => ({
@@ -187,10 +187,10 @@ export function UsersTable({
         hint: String(users.filter((user) => user.status === status).length),
       })),
     [users],
-  );
+  )
 
   const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = query.trim().toLowerCase()
     return users.filter(
       (user) =>
         (needle === "" ||
@@ -198,10 +198,10 @@ export function UsersTable({
           user.email.toLowerCase().includes(needle)) &&
         (roleFilter === "" || user.role === roleFilter) &&
         (statusFilter === "" || user.status === statusFilter),
-    );
-  }, [users, query, roleFilter, statusFilter]);
+    )
+  }, [users, query, roleFilter, statusFilter])
 
-  const table = useTable({ features, columns, data: filtered });
+  const table = useTable({ features, columns, data: filtered })
 
   return (
     <div data-slot="users-table">
@@ -225,8 +225,7 @@ export function UsersTable({
             label: "Status",
             value: statusFilter,
             options: statusOptions,
-            onChange: (value) =>
-              patch({ status: value as UserStatus | "" }),
+            onChange: (value) => patch({ status: value as UserStatus | "" }),
           },
         ]}
         onClearAll={() => setFilters(EMPTY_USERS_FILTERS)}
@@ -237,7 +236,7 @@ export function UsersTable({
           {table.getHeaderGroups().map((group) => (
             <tr key={group.id}>
               {group.headers.map((header) => {
-                const sorted = header.column.getIsSorted();
+                const sorted = header.column.getIsSorted()
                 return (
                   <th
                     key={header.id}
@@ -269,7 +268,7 @@ export function UsersTable({
                       <table.FlexRender header={header} />
                     )}
                   </th>
-                );
+                )
               })}
             </tr>
           ))}
@@ -290,5 +289,5 @@ export function UsersTable({
         <p className={styles.empty}>No users match the current filters.</p>
       )}
     </div>
-  );
+  )
 }

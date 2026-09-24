@@ -1,14 +1,14 @@
-import type { DocLink, RegistryEntry } from "./types.ts";
+import type { DocLink, RegistryEntry } from "./types.ts"
 
 /* llms.txt — the crawl entry point (https://llmstxt.org): an H1, a
  * blockquote summary, then H2 sections of `- [title](url): description`
  * links. Absolute URLs so the file is self-sufficient wherever it is read. */
 
 export interface LlmsInput {
-  baseUrl: string;
-  repository: string;
-  docs: DocLink[];
-  entries: RegistryEntry[];
+  baseUrl: string
+  repository: string
+  docs: DocLink[]
+  entries: RegistryEntry[]
 }
 
 export function renderLlmsTxt({
@@ -17,12 +17,12 @@ export function renderLlmsTxt({
   docs,
   entries,
 }: LlmsInput): string {
-  const components = entries.filter((e) => e.type === "component");
-  const libs = entries.filter((e) => e.type === "lib");
-  const theme = entries.find((e) => e.type === "theme");
+  const components = entries.filter((e) => e.type === "component")
+  const libs = entries.filter((e) => e.type === "lib")
+  const theme = entries.find((e) => e.type === "theme")
 
   const link = (title: string, url: string, description: string) =>
-    `- [${title}](${url}): ${description}`;
+    `- [${title}](${url}): ${description}`
 
   const lines = [
     "# Juniper",
@@ -81,6 +81,6 @@ export function renderLlmsTxt({
       "The Juniper dashboard, built from the same components the registry publishes.",
     ),
     "",
-  ];
-  return lines.join("\n");
+  ]
+  return lines.join("\n")
 }

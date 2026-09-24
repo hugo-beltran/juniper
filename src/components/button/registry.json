@@ -3,7 +3,10 @@
   "description": "shadcn-style button on the react-aria Button primitive. Callers pass intent props (variant, size), never class names. Primary is a glass pane lit from off-center; secondary is extruded like a field; discrete is flat text that washes bloom on hover and sinks when pressed. asChild slots a router Link in place of the button.",
   "category": "primitive",
   "anatomy": [
-    { "part": "Button", "description": "The single root element, a react-aria Button — or, with asChild, the slotted child (a router Link) carrying the same props. Carries data-slot=\"button\", data-variant and data-size for styling hooks and tests." }
+    {
+      "part": "Button",
+      "description": "The single root element, a react-aria Button — or, with asChild, the slotted child (a router Link) carrying the same props. Carries data-slot=\"button\", data-variant and data-size for styling hooks and tests."
+    }
   ],
   "usage": [
     "Use onPress and isDisabled (react-aria semantics), not onClick and disabled.",

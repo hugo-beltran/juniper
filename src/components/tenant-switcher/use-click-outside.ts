@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react"
 
 /* Fires when a pointer goes down outside `ref`. The callback rides in a ref
  * so the document listener binds once per `enabled` flip, not per render —
@@ -10,26 +10,26 @@ export function useClickOutside(
   onClickOutside: () => void,
   enabled = true,
 ) {
-  const callbackRef = useRef(onClickOutside);
+  const callbackRef = useRef(onClickOutside)
   useEffect(() => {
-    callbackRef.current = onClickOutside;
-  });
+    callbackRef.current = onClickOutside
+  })
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return
 
     const handlePointerDown = (event: PointerEvent) => {
-      const element = ref.current;
+      const element = ref.current
       if (
         element &&
         event.target instanceof Node &&
         !element.contains(event.target)
       ) {
-        callbackRef.current();
+        callbackRef.current()
       }
-    };
+    }
 
-    document.addEventListener("pointerdown", handlePointerDown);
-    return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [ref, enabled]);
+    document.addEventListener("pointerdown", handlePointerDown)
+    return () => document.removeEventListener("pointerdown", handlePointerDown)
+  }, [ref, enabled])
 }

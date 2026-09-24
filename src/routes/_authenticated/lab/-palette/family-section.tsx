@@ -1,12 +1,12 @@
-import { STEPS, oklch, type Family, type Oklch, type RampDef } from "./data";
-import styles from "../ramp-lab.module.css";
+import { STEPS, oklch, type Family, type Oklch, type RampDef } from "./data"
+import styles from "../ramp-lab.module.css"
 
 /* Renders one palette family's tab panel: the shipped ramp, the exploration
  * strips (with pairing/legibility chips on candidates), the chroma-vs-
  * lightness chart, and the candidates' oklch values. */
 
 const swatchText = (l: number) =>
-  l > 62 ? "oklch(25% 0.01 80)" : "oklch(96% 0.005 80)";
+  l > 62 ? "oklch(25% 0.01 80)" : "oklch(96% 0.005 80)"
 
 function Strip({ ramp }: { ramp: Oklch[] }) {
   return (
@@ -21,12 +21,12 @@ function Strip({ ramp }: { ramp: Oklch[] }) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 /* Candidate steps sitting directly beside the shipped families. */
 function BesideChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
-  const refs = family.chips?.refs ?? [];
+  const refs = family.chips?.refs ?? []
   return (
     <div className={styles.pairs}>
       {[2, 5, 7].map((i) => (
@@ -42,19 +42,19 @@ function BesideChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
         {refs.map((r) => r.label).join(" | ")} | candidate
       </small>
     </div>
-  );
+  )
 }
 
 /* The candidate rendered ON the reference ramp's surfaces — the sidebar
  * test: an alert badge on light, mid, and dark backgrounds. */
 function OnChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
-  const bg = family.chips?.refs[0];
-  if (!bg) return null;
+  const bg = family.chips?.refs[0]
+  if (!bg) return null
   const combos: [Oklch, Oklch][] = [
     [bg.ramp[1], ramp[6]],
     [bg.ramp[4], ramp[1]],
     [bg.ramp[8], ramp[3]],
-  ];
+  ]
   return (
     <div className={styles.pairs}>
       {combos.map(([surface, fg], i) => (
@@ -69,25 +69,25 @@ function OnChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
       ))}
       <small className={styles.pairKey}>on {bg.label}-100 / 400 / 800</small>
     </div>
-  );
+  )
 }
 
-const W = 820;
-const H = 440;
-const MARGIN = { t: 18, r: 16, b: 46, l: 56 };
+const W = 820
+const H = 440
+const MARGIN = { t: 18, r: 16, b: 46, l: 56 }
 
 function Chart({ family }: { family: Family }) {
   const x = (l: number) =>
-    MARGIN.l + ((100 - l) / (100 - family.lMin)) * (W - MARGIN.l - MARGIN.r);
+    MARGIN.l + ((100 - l) / (100 - family.lMin)) * (W - MARGIN.l - MARGIN.r)
   const y = (c: number) =>
     H -
     MARGIN.b -
-    (Math.min(c, family.cMax) / family.cMax) * (H - MARGIN.t - MARGIN.b);
+    (Math.min(c, family.cMax) / family.cMax) * (H - MARGIN.t - MARGIN.b)
 
-  const lTicks = [];
-  for (let l = 100; l >= family.lMin; l -= 10) lTicks.push(l);
-  const cTicks = [];
-  for (let c = 0; c <= family.cMax + 1e-6; c += 0.03) cTicks.push(c);
+  const lTicks = []
+  for (let l = 100; l >= family.lMin; l -= 10) lTicks.push(l)
+  const cTicks = []
+  for (let c = 0; c <= family.cMax + 1e-6; c += 0.03) cTicks.push(c)
 
   return (
     <svg
@@ -152,8 +152,8 @@ function Chart({ family }: { family: Family }) {
         Chroma
       </text>
       {family.ramps.map((r) => {
-        const stroke = oklch(r.ramp[5]);
-        const quiet = r.style !== undefined;
+        const stroke = oklch(r.ramp[5])
+        const quiet = r.style !== undefined
         return (
           <g key={r.key}>
             <polyline
@@ -180,7 +180,7 @@ function Chart({ family }: { family: Family }) {
               />
             ))}
           </g>
-        );
+        )
       })}
       {family.anchors?.map(({ label, value }) => (
         <g key={label}>
@@ -205,10 +205,10 @@ function Chart({ family }: { family: Family }) {
         </g>
       ))}
     </svg>
-  );
+  )
 }
 
-const isCandidate = (r: RampDef) => r.slug !== undefined && !r.style;
+const isCandidate = (r: RampDef) => r.slug !== undefined && !r.style
 
 function valuesListing(family: Family) {
   return family.ramps
@@ -220,16 +220,16 @@ function valuesListing(family: Family) {
           .map((v, i) => `  --juni-${r.slug}-${STEPS[i]}: ${oklch(v)};`)
           .join("\n"),
     )
-    .join("\n\n");
+    .join("\n\n")
 }
 
 export function FamilySection({ family }: { family: Family }) {
-  const chosen = family.ramps.find((r) => r.chosen);
-  if (!chosen) return null;
+  const chosen = family.ramps.find((r) => r.chosen)
+  if (!chosen) return null
 
   /* A family with only its shipped ramp (bark) has no archive to show. */
   const hasExploration =
-    family.anchors !== undefined || family.ramps.some((r) => !r.chosen);
+    family.anchors !== undefined || family.ramps.some((r) => !r.chosen)
 
   return (
     <>
@@ -319,5 +319,5 @@ export function FamilySection({ family }: { family: Family }) {
       <h2>oklch values</h2>
       <pre className={styles.values}>{valuesListing(family)}</pre>
     </>
-  );
+  )
 }

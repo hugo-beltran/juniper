@@ -1,13 +1,12 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Button, LoginScreen } from "@/components";
-import { defaultTenant, firstRoute, navigationQuery } from "@/lib/api";
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router"
+import { Button, LoginScreen } from "@/components"
+import { defaultTenant, firstRoute, navigationQuery } from "@/lib/api"
 
 export const Route = createFileRoute("/login")({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(navigationQuery),
+  loader: ({ context }) => context.queryClient.ensureQueryData(navigationQuery),
   component: LoginPage,
-});
+})
 
 /* The sign-in route is a shell around the LoginScreen demo composition
  * (registry: login-screen): it prefetches the navigation tree, hands the
@@ -15,13 +14,13 @@ export const Route = createFileRoute("/login")({
  * chosen tenant's first route. No auth: Sign in, SSO and the guest link all
  * land in the demo. The route owns data and navigation, never a token. */
 function LoginPage() {
-  const navigate = useNavigate();
-  const { data: tree } = useSuspenseQuery(navigationQuery);
+  const navigate = useNavigate()
+  const { data: tree } = useSuspenseQuery(navigationQuery)
 
   const land = (workspaceId: string) => {
-    const target = tree.tenants.find((tenant) => tenant.id === workspaceId);
-    navigate({ to: (target && firstRoute(target)) ?? "/dashboard" });
-  };
+    const target = tree.tenants.find((tenant) => tenant.id === workspaceId)
+    navigate({ to: (target && firstRoute(target)) ?? "/dashboard" })
+  }
 
   return (
     <LoginScreen
@@ -35,5 +34,5 @@ function LoginPage() {
         </Button>
       }
     />
-  );
+  )
 }
