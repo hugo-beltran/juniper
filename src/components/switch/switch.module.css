@@ -70,6 +70,11 @@
   background-color: var(--juni-bloom-300);
 }
 
+.button[data-focus-visible] .track {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 .button[data-selected] .track {
   background-color: var(--juni-needle-600);
 }
@@ -80,11 +85,6 @@
 
 .button[data-selected] .thumb {
   translate: 0.875rem 0;
-}
-
-.button[data-focus-visible] .track {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
 }
 
 /* The copy truncates rather than wraps when a container squeezes the

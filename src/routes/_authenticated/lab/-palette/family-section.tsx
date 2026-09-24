@@ -57,9 +57,9 @@ function OnChips({ family, ramp }: { family: Family; ramp: Oklch[] }) {
   ]
   return (
     <div className={styles.pairs}>
-      {combos.map(([surface, fg], i) => (
+      {combos.map(([surface, fg]) => (
         <span
-          key={i}
+          key={oklch(surface)}
           className={styles.overChip}
           style={{ background: oklch(surface), color: oklch(fg) }}
         >

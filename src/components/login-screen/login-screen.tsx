@@ -138,7 +138,7 @@ export function LoginScreen({
               </Button>
               {onSingleSignOn && (
                 <>
-                  <div className={styles.divider} role="separator">
+                  <div className={styles.divider}>
                     <span>or</span>
                   </div>
                   <Button

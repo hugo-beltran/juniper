@@ -82,8 +82,8 @@ function Toggle<T extends string | number>({
   onChange: (value: T) => void
 }) {
   return (
-    <div className={styles.toggle} role="group" aria-label={label}>
-      <span className={styles.toggleLabel}>{label}</span>
+    <fieldset className={styles.toggle}>
+      <legend className={styles.toggleLabel}>{label}</legend>
       {options.map((option) => (
         <Button
           key={String(option.value)}
@@ -95,7 +95,7 @@ function Toggle<T extends string | number>({
           {option.label}
         </Button>
       ))}
-    </div>
+    </fieldset>
   )
 }
 
@@ -162,7 +162,7 @@ function SignInForm({
       <Button type="submit" className={styles.wide}>
         Sign in
       </Button>
-      <div className={styles.divider} role="separator">
+      <div className={styles.divider}>
         <span>or</span>
       </div>
       <Button variant="secondary" className={styles.wide}>

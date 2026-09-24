@@ -9,11 +9,11 @@
          light/dark via light-dark(), driven by the color-scheme property. -->
     <script>
       try {
-        var mode = localStorage.getItem('juniper-color-mode')
+        const mode = localStorage.getItem('juniper-color-mode')
         if (mode === 'light' || mode === 'dark') {
           document.documentElement.style.colorScheme = mode
         }
-      } catch (e) {}
+      } catch {}
     </script>
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

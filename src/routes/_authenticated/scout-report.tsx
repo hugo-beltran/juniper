@@ -193,7 +193,7 @@ function ScoutReportPage() {
           const filledNote = notes[d.letter].trim() !== ""
           return (
             <li
-              key={d.letter + index}
+              key={d.letter}
               className={styles.node}
               data-filled={filledNote || undefined}
               data-next={index === nextIndex || undefined}

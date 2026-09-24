@@ -22,13 +22,20 @@
   margin-bottom: 0.5rem;
 }
 
+/* A fieldset so the label is a legend; the resets undo the UA box, and the
+ * float takes the legend out of its special slot so it flows as a flex item. */
 .toggle {
   display: flex;
   align-items: center;
   gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
 }
 
 .toggleLabel {
+  float: left;
   margin-right: 0.25rem;
   font-size: var(--text-xs);
   font-weight: 600;

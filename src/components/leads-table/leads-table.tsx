@@ -303,34 +303,32 @@ export function LeadsTable({
       />
 
       {narrow ? (
-        <>
-          <ul className={styles.cards}>
-            {table.getRowModel().rows.map((row) => {
-              const [head, ...fields] = row.getAllCells()
-              return (
-                <li key={row.id}>
-                  <Card className={styles.card}>
-                    <div className={styles.cardHead}>
-                      <table.FlexRender cell={head} />
-                    </div>
-                    <dl className={styles.cardGrid}>
-                      {fields.map((cell) => (
-                        <div key={cell.id} className={styles.cardField}>
-                          <dt className={styles.cardLabel}>
-                            {String(cell.column.columnDef.header)}
-                          </dt>
-                          <dd className={styles.cardValue}>
-                            <table.FlexRender cell={cell} />
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </Card>
-                </li>
-              )
-            })}
-          </ul>
-        </>
+        <ul className={styles.cards}>
+          {table.getRowModel().rows.map((row) => {
+            const [head, ...fields] = row.getAllCells()
+            return (
+              <li key={row.id}>
+                <Card className={styles.card}>
+                  <div className={styles.cardHead}>
+                    <table.FlexRender cell={head} />
+                  </div>
+                  <dl className={styles.cardGrid}>
+                    {fields.map((cell) => (
+                      <div key={cell.id} className={styles.cardField}>
+                        <dt className={styles.cardLabel}>
+                          {String(cell.column.columnDef.header)}
+                        </dt>
+                        <dd className={styles.cardValue}>
+                          <table.FlexRender cell={cell} />
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </Card>
+              </li>
+            )
+          })}
+        </ul>
       ) : (
         <table className={styles.table}>
           <thead>

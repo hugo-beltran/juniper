@@ -52,6 +52,23 @@ export function TenantSwitcher({
    * Focus stays where the user clicked — no yanking it back to the trigger. */
   useClickOutside(rootRef, () => setExpanded(false), expanded)
 
+  /* Escape inside the open panel closes it and returns focus to the trigger,
+   * the panel's previous sibling. Bound as a listener, not a JSX handler: the
+   * panel is a plain box with no role of its own, and the ListBox inside
+   * owns the keyboard semantics; the keystroke bubbles up to here. */
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel || !expanded) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+      setExpanded(false)
+      const trigger = panel.previousElementSibling
+      if (trigger instanceof HTMLElement) trigger.focus()
+    }
+    panel.addEventListener("keydown", onKeyDown)
+    return () => panel.removeEventListener("keydown", onKeyDown)
+  }, [expanded])
+
   if (!activeTenant) {
     return null
   }
@@ -122,12 +139,6 @@ export function TenantSwitcher({
         className={styles.panel}
         data-expanded={expanded || undefined}
         inert={!expanded}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") {
-            setExpanded(false)
-            focusTrigger()
-          }
-        }}
       >
         <div className={styles.panelInner}>
           <div className={styles.panelContent}>
