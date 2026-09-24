@@ -45,10 +45,12 @@ src/components/
   switch/                       labelled Switch, extruded track
   filter-bar/                   sticky search / switch / select toolbar
   users-table/                  demo composition: FilterBar + flat table
+  background-noise/             background layer: film grain for a ground
+  full-bleed-canvas/            the ground for screens outside the shell: photograph, grain, credit
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
   image-overlay/                standalone background layer: fills its positioned container behind its siblings
-  login-screen/                 demo composition: the sign-in screen (ImageOverlay, brand, Card of fields)
+  login-screen/                 demo composition: the sign-in Card on the FullBleedCanvas
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -227,33 +229,43 @@ together; the inset measures before paint so the layout never flashes.
 Never fork the data or the column definitions for a mobile variant. The
 leads table is the reference.
 
-4.7. **Reference compositions.** Registry entries in the `demo` category
-are screens or screen-sized parts assembled from the primitives, published
-so a consumer copies the structure rather than the component. The
-`login-screen` entry is the reference for a whole screen: a positioned screen
-root filled from behind by `ImageOverlay` (the shell's needle gradient, a
-photograph, its credit), carrying a bark-50 Card, the brand on the ground, the form on the card (the extruded
-controls only read on bark-50), Card parts for the title and actions, react-aria native
-validation, and a controlled API (`workspaces`, `onSignIn`) with the router
-kept in the route. A demo entry MUST NOT import the router or the mock data
+4.7. **Reference compositions.** Registry entries in the `demo` category are
+screens or screen-sized parts assembled from the primitives, published so a
+consumer copies the structure rather than the component. The `login-screen`
+entry is the reference for a whole screen: on the `FullBleedCanvas` (the
+ground for screens outside the shell: `ImageOverlay` edge to edge, film grain
+over the photograph, the credit in the corner), a Card centred above the
+layers (the extruded controls only read on bark-50), Card parts for the title
+and actions, react-aria native validation, and a controlled API (`onSignIn`
+with the credentials, nothing else) with the router kept in the route, which
+needs no CSS of its own. One composition serves phone and desktop: the layers
+fill whatever the viewport is and the card takes the width but a gutter below
+40rem of the canvas. A demo entry MUST NOT import the router or the mock data
 in `src/lib`; a route shell passes data and links in. The registry inlines
-source files, not assets, so the ground's photograph is an `img` from its
-CDN, credited on screen by `ImageOverlay`, so nothing ships in the bundle, and the blend keeps it
-inside the palette rather than adding to it. The alternatives a shipped
-composition was chosen from stay under `/lab` as the archive (`/lab/login`).
+source files, not assets, so the ground's photograph is an `img` from its CDN,
+credited on screen by `ImageOverlay`, so nothing ships in the bundle, and the
+blend keeps it inside the palette rather than adding to it. The alternatives a
+shipped composition was chosen from stay under `/lab` as the archive
+(`/lab/login`).
 
 4.8. **Background layers are standalone.** A component that paints a ground
-(`ImageOverlay`: gradient, photograph, credit) takes no children and never
-assumes the viewport. It is absolutely positioned at `inset: 0`, full width
-and height, rendered as the first child of a positioned container, so the
-siblings that follow paint above it in DOM order. The consumer owns the
-container, its position and its size, which is what lets the same layer
-ground a whole screen (a root with `min-height: 100svh`), a card or a panel.
-Two consequences for the consumer: narrow-layout container queries are
-declared on the consumer's container, not on the layer; and a layout that
-covers the whole ground lets pointer events through its bare areas so the
-layer's own controls (the credit link) stay reachable. Wrapping content in
-a background component is the anti-pattern this rule replaces.
+(`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)
+takes no children and never assumes the viewport. It is absolutely positioned
+at `inset: 0`, full width and height, rendered as a first child of a
+positioned container, so the siblings that follow paint above it in DOM order
+(a layer with no controls of its own, the grain, also takes `z-index: -1`
+inside an isolating container, so nothing can land on top of content). The
+consumer owns the container, its position and its size, which is what lets the
+same layer ground a whole screen, a panel or a card. `FullBleedCanvas` is the
+composed ground for screens outside the shell: it renders the overlay and then
+the grain and decides their order itself (photograph at -2, grain at -1,
+content above), which a consumer never re-stacks. Two consequences for the
+consumer: narrow-layout container queries are declared on the consumer's
+container (a screen on the canvas queries `full-bleed-canvas`), not on the
+layer; and a layout that covers the whole ground lets pointer events through
+its bare areas so the layer's own controls (the credit link) stay reachable.
+Wrapping content in a background component, and painting a ground from route
+CSS, are the anti-patterns this rule replaces.
 
 ## 5. Accessibility baseline
 
@@ -292,6 +304,17 @@ controlled, receiving the state and a change callback (`filters` /
 `onFiltersChange`), and MAY fall back to internal state when no props are
 passed. Filter tweaks navigate with `replace: true` so they do not pile up
 history entries.
+
+6.4. **Nothing user-scoped before sign-in.** A screen that renders before
+authentication (the login) MUST NOT load, ask for or show data that depends
+on who the user is: which workspaces exist, their names or plans, where the
+user will land. That is an answer the API gives after sign-in, and showing
+it earlier would reveal it to anyone. The pre-authentication route loads
+nothing and navigates to the app's root; the authenticated layout resolves
+the tenant from the navigation tree once it knows who signed in
+(`_authenticated/index.tsx`). The login's workspace picker was removed for
+this reason on 2026-09-24; the `/lab/login` mocks that still show one are
+the archive of the earlier structure, not the rule.
 
 ## 7. Adding a component
 

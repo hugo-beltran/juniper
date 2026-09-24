@@ -22,7 +22,7 @@
    * in every transition instead of hardcoding a keyword or curve. */
   --ease: ease-in-out;
 
-  /* Type scale: seven text steps and two display sizes, binned 2026-09-17
+  /* Type scale: seven text steps and three display sizes, binned 2026-09-17
    * from the 21 free values then in use (docs/theming.md §4.2). Every
    * font-size in component CSS MUST be one of these (or inherit); the
    * registry build enforces it. Pixel values assume the 16px root. */
@@ -35,7 +35,7 @@
   --text-xl: 1.125rem; /* 18px — emphasized names, h3 */
   --display-sm: 1.375rem; /* 22px — section headings, h2 */
   --display-lg: 2rem; /* 32px — page titles, KPI metrics, h1 */
-  --display-xl: 2.5rem; /* 40px — page titles, KPI metrics, h1 */
+  --display-xl: 2.5rem; /* 40px — hero titles: a brand tagline on a ground (2026-09-24) */
 }
 
 *,

@@ -792,6 +792,7 @@ export type NavIcon =
   | "users"
   | "pencil-square"
   | "arrow-right-end-on-rectangle"
+  | "sparkles"
 
 /* A badge the shell resolves to a live count; the tree only names the
  * source, the shell decides how to compute it. */

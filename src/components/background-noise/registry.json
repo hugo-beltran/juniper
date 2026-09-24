@@ -1,0 +1,26 @@
+{
+  "title": "Background noise",
+  "description": "Film grain for a ground: an SVG turbulence filter over a full-size rect at 3% opacity, desaturated so it adds texture and no colour of its own. A background layer: it takes no children and fills the positioned container it is rendered into, behind the siblings that follow, so the grain lands on the ground and never on the content.",
+  "category": "layout",
+  "anatomy": [
+    {
+      "part": "BackgroundNoise",
+      "description": "An svg with data-slot=\"background-noise\", aria-hidden: absolute, inset 0, width and height 100%, z-index -1, pointer-events none. Accepts svg props and a className."
+    },
+    {
+      "part": "Filter",
+      "description": "feTurbulence (fractalNoise, base frequency 0.35, five octaves, stitched), feColorMatrix saturate 0, feBlend overlay; the id comes from useId so several instances can coexist."
+    },
+    {
+      "part": "Rect",
+      "description": "A full-size rect carrying the filter at opacity 0.03: the grain's strength lives here."
+    }
+  ],
+  "usage": [
+    "Render it as the first child of a positioned container that isolates (position: relative; isolation: isolate); it fills that container and paints above its background and below its other children. FullBleedCanvas does this for the page ground, with the photograph pushed one layer deeper so the grain lands on it.",
+    "It carries no colour: the filter is desaturated and the rect is near-transparent, so the palette stays the only colour source and the grain reads the same in light and dark.",
+    "Strength is the rect's opacity (0.03); frequency and octaves set the grain's size. Change them here, never per consumer.",
+    "Never render it above content: grain over text or controls is noise in the wrong sense. It is a ground treatment."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

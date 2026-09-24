@@ -1,0 +1,20 @@
+/* A positioned, isolated ground so the layers' negative z-indexes stay inside
+ * it; a column that centres its content; the viewport's height at least. No
+ * background of its own: the ImageOverlay is the ground. */
+.canvas {
+  container: full-bleed-canvas / inline-size;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+}
+
+/* Layer order, bottom to top: the photograph, the grain, the content. The
+ * grain sits at -1; the overlay goes one deeper so the grain lands on the
+ * photograph rather than under its gradient. */
+.canvas > [data-slot="image-overlay"] {
+  z-index: -2;
+}

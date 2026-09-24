@@ -1,11 +1,11 @@
 {
   "title": "Image overlay",
-  "description": "A standalone background layer: the shell's needle gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at a whisper of opacity, and the photograph's credit pinned to the bottom-right corner. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
+  "description": "A standalone background layer: the shell's needle gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at a whisper of opacity, and the photograph's credit at the bottom-left. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
   "category": "layout",
   "anatomy": [
     {
       "part": "ImageOverlay",
-      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the needle-400 to needle-700 gradient, isolated, and an inline-size container named image-overlay. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together. No children."
+      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the needle-400 to needle-700 gradient, isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together. No children."
     },
     {
       "part": "Image",
@@ -13,7 +13,7 @@
     },
     {
       "part": "Credit",
-      "description": "A p with a link to the photograph's page, absolute at the bottom-right: text-2xs, needle-100; bloom-200 on hover, the sidebar's outline step (--nav-outline) on focus."
+      "description": "A p with a link to the photograph's page, placed bottom-left by the container's flex alignment (align-items end, 0.125rem 1rem padding): text-xs, bloom-950; bloom-200 on hover, the sidebar's outline step (--nav-outline) on focus."
     }
   ],
   "usage": [

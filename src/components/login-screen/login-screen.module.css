@@ -1,88 +1,13 @@
-/* The sign-in screen: a positioned root that ImageOverlay fills from behind
- * (the ground, its photograph and the credit are the overlay's), carrying
- * the brand column and the card. The root is the inline-size container the
- * narrow queries below read. */
-.screen {
-  container: login-screen / inline-size;
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex: 1;
-  min-height: 100svh;
-}
-
-/* One height for both columns: the card is a fixed-height sheet centred in
- * its column, and the brand takes the same height on the same axis, so the
- * copy starts at the card's top edge. */
-.layout {
-  --login-card-height: 770px;
-  display: grid;
-  position: relative;
-  flex: 1;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 0;
-  /* The layout paints above the overlay but owns no pointer events of its
-   * own: the bare ground between brand and card belongs to the overlay, so
-   * its credit stays clickable. The columns take their events back. */
-  pointer-events: none;
-}
-
-.layout > * {
-  pointer-events: auto;
-}
-
-/* Brand side: the copy top-left, on the card's height. */
-.brand {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 1.5rem;
-  height: var(--login-card-height);
-  padding: 2rem 0 2rem 2rem;
-  overflow: hidden;
-  align-items: flex-end;
-  text-align: end;
-}
-
-.copy {
-  display: flex;
-  flex-direction: column;
-}
-
-.tagline {
-  margin: 0.75rem 0 0.5rem;
-  font-size: var(--display-xl);
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--juni-bloom-950);
-}
-
-.lede {
-  margin: 0;
-  max-width: 30ch;
-  font-size: var(--text-lg);
-  line-height: 1.5;
-  color: var(--juni-bark-50);
-}
-
-/* The card is the inset: the same radius, no hairline against the ground. It
- * positions the mark in its own bottom-right corner. */
+/* The card floats on the canvas, centred by it: 80% of the canvas up to
+ * 30rem, the form centred inside at 22rem. */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 2.5rem;
-  border-color: transparent;
-  border-radius: var(--radius-md);
-  overflow: auto;
-  height: var(--login-card-height);
-  margin: auto;
   width: 80%;
-  min-width: 420px;
+  max-width: 30rem;
 }
 
 .form {
@@ -133,48 +58,11 @@
   color: var(--juni-bark-500);
 }
 
-/* Narrow: the brand becomes a header strip, the card takes the rest. The
- * threshold is where the card's 420px floor plus a readable brand column no
- * longer fit side by side. */
-@container (max-width: 48rem) {
-  .layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  .brand {
-    height: auto;
-    padding: 1.25rem 1rem 0.75rem;
-    gap: 1rem;
-  }
-
-  .tagline {
-    margin: 0.5rem 0 0.25rem;
-    font-size: var(--display-sm);
-  }
-
-  .lede {
-    max-width: none;
-    font-size: var(--text-base);
-  }
-
-  /* Stacked on a tablet the card still floats, at 70% with the 420px floor. */
+/* Narrow: the card takes the width but a gutter, and tightens its padding;
+ * the canvas's layers do the rest. Queried against the canvas. */
+@container full-bleed-canvas (max-width: 40rem) {
   .card {
-    justify-content: flex-start;
-    width: 70%;
-    min-width: 420px;
-    margin: 0 auto;
-  }
-}
-
-/* Phone: the 420px floor no longer fits, so the card spans the width, hugs
- * its content and fills the row. */
-@container (max-width: 30rem) {
-  .card {
-    width: 100%;
-    min-width: 0;
-    height: auto;
-    margin: 0;
+    width: calc(100% - 2rem);
     padding: 1.5rem 1.25rem;
   }
 }

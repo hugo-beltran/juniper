@@ -84,7 +84,7 @@ consumer needs the same resolved value:
 | `--radius-sm/md/lg/xl` | 6 / 8 / 10 / 14 px | Corner radii |
 | `--ease` | `ease-in-out` | Transition timing |
 | `--font-sans`, `--font-mono` | Geist, Geist Mono | Typography |
-| `--text-2xs` … `--text-xl`, `--display-sm`, `--display-lg` | 10 / 11 / 12 / 13 / 14 / 16 / 18 px, 22 / 32 px | The type scale ([Theming rules](./theming.md) 4.2.1) |
+| `--text-2xs` … `--text-xl`, `--display-sm`, `--display-lg`, `--display-xl` | 10 / 11 / 12 / 13 / 14 / 16 / 18 px, 22 / 32 / 40 px | The type scale ([Theming rules](./theming.md) 4.2.1) |
 
 4.1. A new semantic token MAY be added only when a second consumer needs the
 same resolved value (see [Theming rules](./theming.md), 1.3). The token's

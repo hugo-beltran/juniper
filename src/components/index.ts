@@ -2,10 +2,12 @@
  * families keep direct imports — a family importing the barrel would create
  * an import cycle. */
 
+export * from "./background-noise/background-noise"
 export * from "./button/button"
 export * from "./card/card"
 export * from "./field/field"
 export * from "./filter-bar/filter-bar"
+export * from "./full-bleed-canvas/full-bleed-canvas"
 export * from "./image-overlay/image-overlay"
 export * from "./input/input"
 export * from "./leads-table/leads-table"

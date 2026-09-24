@@ -91,7 +91,7 @@ these tokens for corner radii; fully round pills MAY use `999px`.
 (`font-family: inherit`) rather than restate it. Hierarchy is weight-driven;
 there is no second display face.
 
-4.2.1. **Type scale.** Every `font-size` MUST be one of the nine tokens
+4.2.1. **Type scale.** Every `font-size` MUST be one of the ten tokens
 below or `inherit`. No free values: the scale was binned on 2026-09-17
 from 21 values then in use, most of them within half a pixel of a
 neighbour. Headings sit on it too (`h1` display-lg, `h2` display-sm, `h3`
@@ -108,6 +108,7 @@ text-xl, `h4`–`h6` text-base).
 | `--text-xl` | 18px | Emphasized names, `h3` |
 | `--display-sm` | 22px | Section headings, `h2` |
 | `--display-lg` | 32px | Page titles, KPI metrics, `h1` |
+| `--display-xl` | 40px | Hero titles: a brand tagline on a ground (added 2026-09-24) |
 
 Choose the nearest step; if a design wants a size between two steps, that
 is a conversation about the scale, not a new value in a component.
@@ -168,6 +169,15 @@ never by shadow.
 - The discrete button is the one neutral trigger with no volume at rest: it
   is inline text until touched. It MUST still take the surface fill and
   sink (inset) when pressed or open, so every control shares the press.
+- A card that floats on a ground (a Card on the FullBleedCanvas) MAY wear
+  the **glass** variant: the primary button's pane on a surface, a radial
+  fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
+  specular line along the top edge, the translucent ring, and a
+  bloom-tinted drop at equal x and y offsets, so card and button are lit by
+  one lamp. Flat stays the default and the only material for a card inside
+  the shell's inset. Chosen on 2026-09-24 at `/lab/glass` over a lighter
+  baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
+  stay there as the archive.
 - The primary action keeps its own material: the chromatic **glass pane**
   (radial fill lit off-center, 1px translucent inner ring, bloom-tinted
   drop shadow with equal x/y offset, press flips the light and pulls the

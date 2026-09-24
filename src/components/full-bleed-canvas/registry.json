@@ -1,0 +1,31 @@
+{
+  "title": "Full-bleed canvas",
+  "description": "The full-bleed ground for a screen outside the sidebar shell: ImageOverlay (the needle gradient, the photograph, its credit) across the whole canvas, BackgroundNoise grain over the photograph, and the screen's content centred above both at the viewport's height. The login's card stands on it. An inline-size container named full-bleed-canvas, so a screen on it can query the canvas's width. Phone and desktop are one composition.",
+  "category": "layout",
+  "anatomy": [
+    {
+      "part": "FullBleedCanvas",
+      "description": "Root div with data-slot=\"full-bleed-canvas\": position relative, isolated, a column that centres its children, min-height 100svh, no background of its own, and an inline-size container named full-bleed-canvas. Accepts div props and a className."
+    },
+    {
+      "part": "ImageOverlay",
+      "description": "Rendered first and pushed to z-index -2 by the canvas: the ground itself, gradient, photograph and credit, edge to edge."
+    },
+    {
+      "part": "BackgroundNoise",
+      "description": "Rendered second, at z-index -1: film grain over the photograph, under the content."
+    },
+    {
+      "part": "Children",
+      "description": "The screen's own composition (the LoginScreen card), centred above the layers."
+    }
+  ],
+  "usage": [
+    "Use it as the root of a route that renders outside the sidebar shell; the route then needs no CSS module of its own. Route code never paints a ground (theming §1.6).",
+    "Layer order is the canvas's decision: photograph at -2, grain at -1, content above. A consumer never re-stacks the layers; a canvas without the photograph or without the grain is a variant here.",
+    "A screen on the canvas queries the canvas for its narrow layout: @container full-bleed-canvas (max-width: …) in the screen's module, never a media query.",
+    "The ground is mode-invariant (the overlay's gradient is); a dark-mode canvas is a light-dark() decision in ImageOverlay, not in a consumer.",
+    "Do not nest it inside the shell: the sidebar wrapper is its own ground."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

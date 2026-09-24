@@ -1,23 +1,23 @@
 {
   "title": "Card",
-  "description": "Generic bordered surface container with the shadcn Card's named parts: CardHeader stacks a CardTitle (react-aria Heading, level picks the element) over a CardDescription, and CardFooter rows up the actions. Promoted out of the summary-card family when the SCOUT report timeline became its second consumer; the parts arrived with the login screen.",
+  "description": "Generic surface container with the shadcn Card's named parts: CardHeader stacks a centred CardTitle (react-aria Heading, level picks the element; display-lg, bloom-800) over a centred CardDescription, and CardFooter rows up the actions. Two materials by variant: flat (default), the bark-50 sheet with a bark-200 hairline; glass, for a card floating on a ground: the primary button's pane on a surface, a radial fill lit from the top-left over a backdrop blur, a specular top edge, the translucent ring and a bloom-tinted drop.",
   "category": "layout",
   "anatomy": [
     {
       "part": "Card",
-      "description": "A div with data-slot=\"card\": bark-50 surface, bark-200 hairline border, the house radius. Accepts any div props and a className to extend."
+      "description": "A div with data-slot=\"card\" and data-variant. flat: bark-50 surface, bark-200 hairline border, the house radius. glass: a radial fill of bark-50 lit from the top-left (92% there, 62% at the edge) over a 16px backdrop blur, a needle-50 border, a 1px needle-50 specular line along the top edge, a 1px translucent inner ring, and a 6px/6px 18px bloom-700 drop at 22%. Accepts any div props and a className to extend."
     },
     {
       "part": "CardHeader",
-      "description": "data-slot=\"card-header\": a column with 0.25rem gap for the title and description."
+      "description": "data-slot=\"card-header\": a column with 0.125rem gap and 0.5rem below, for the title and description."
     },
     {
       "part": "CardTitle",
-      "description": "react-aria Heading with data-slot=\"card-title\": display-sm, weight 700, needle-600. `level` picks the element (h2 by default; a card that is the page's main content passes 1)."
+      "description": "react-aria Heading with data-slot=\"card-title\": display-lg, weight 700, bloom-800, centred and balanced (text-wrap: balance). `level` picks the element (h2 by default; a card that is the page's main content passes 1)."
     },
     {
       "part": "CardDescription",
-      "description": "A p with data-slot=\"card-description\": text-base, bark-600, the muted intro under a title."
+      "description": "A p with data-slot=\"card-description\": text-base, bark-600, centred, the muted intro under a title."
     },
     {
       "part": "CardFooter",
@@ -26,6 +26,8 @@
   ],
   "usage": [
     "Compose content inside; Card owns only the surface, border and radius, never padding conventions of its children.",
+    "Pick the material by placement: flat inside the shell's inset, where a card separates by border and tint; glass only for a card that floats on a ground (the FullBleedCanvas), where the photograph should show through. Never glass on a flat page.",
+    "The glass recipe is the pane chosen at /lab/glass on 2026-09-24 (the primary button's light on a surface); the baseline and the three other alternatives stay there as the archive. A change to the recipe is made there first, then here.",
     "Prefer extending Card over drawing a bordered box in a route or feature module.",
     "A card's title and intro are CardTitle and CardDescription inside CardHeader; never restate their size or colour in route CSS (theming §1.6).",
     "CardContent is deliberately not ported: Card already pads. Put the body straight inside Card between the header and the footer.",

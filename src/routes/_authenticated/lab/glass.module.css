@@ -1,0 +1,109 @@
+/* Glass lab. Layout, and the five materials under comparison; every colour
+ * a --juni-* step or a derivation from one. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 880px;
+}
+
+.page h2 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.45;
+  color: var(--juni-bark-600);
+}
+
+/* A framed panel the ImageOverlay fills (component-architecture §4.8), the
+ * sample card centred on it. */
+.frame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  height: 22rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.sample {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 15rem;
+  padding: 1.25rem;
+}
+
+.wide {
+  width: 100%;
+}
+
+/* 0 · baseline: the first recipe, kept as the archive. */
+.frame .baseline {
+  background: oklch(from var(--juni-bark-50) l c h / 0.72);
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.25),
+    -2px -2px 6px var(--lift-highlight),
+    3px 3px 10px var(--lift-shade);
+}
+
+/* 1 · slab: deeper extrusion and a bevel. */
+.frame .slab {
+  background-color: oklch(from var(--juni-bark-50) l c h / 0.85);
+  box-shadow:
+    inset 1px 1px 0 oklch(from var(--juni-needle-50) l c h / 0.8),
+    inset -1px -1px 0 oklch(from var(--juni-bloom-700) l c h / 0.12),
+    -6px -6px 14px var(--lift-highlight),
+    6px 6px 16px var(--lift-shade),
+    0 20px 40px oklch(from var(--juni-bloom-700) l c h / 0.14);
+}
+
+/* 2 · well: the sheet sunk, the controls left raised. */
+.frame .well {
+  background-color: oklch(from var(--juni-bark-50) l c h / 0.6);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.4);
+  box-shadow:
+    inset 3px 3px 8px var(--lift-shade),
+    inset -3px -3px 8px var(--lift-highlight);
+}
+
+/* 3 · pane: the shipped recipe, nothing added (no rule of its own). */
+
+/* 4 · rim: an edge-lit gradient border under a translucent fill. */
+.frame .rim {
+  border-color: transparent;
+  background:
+    linear-gradient(
+      oklch(from var(--juni-bark-50) l c h / 0.7),
+      oklch(from var(--juni-bark-50) l c h / 0.7)
+    )
+    padding-box,
+    linear-gradient(
+      135deg,
+      oklch(from var(--juni-needle-50) l c h / 0.95) 0%,
+      oklch(from var(--juni-bark-300) l c h / 0.5) 55%,
+      oklch(from var(--juni-bloom-700) l c h / 0.4) 100%
+    )
+    border-box;
+  box-shadow:
+    -3px -3px 8px var(--lift-highlight),
+    4px 4px 12px var(--lift-shade);
+}

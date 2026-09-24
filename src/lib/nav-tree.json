@@ -28,6 +28,11 @@
               "label": "Login",
               "to": "/lab/login",
               "icon": "arrow-right-end-on-rectangle"
+            },
+            {
+              "label": "Glass",
+              "to": "/lab/glass",
+              "icon": "sparkles"
             }
           ]
         },

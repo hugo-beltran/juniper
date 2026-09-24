@@ -9,6 +9,7 @@ import {
   LifebuoyIcon,
   PencilSquareIcon,
   RectangleGroupIcon,
+  SparklesIcon,
   SwatchIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline"
@@ -76,6 +77,7 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   users: UsersIcon,
   "pencil-square": PencilSquareIcon,
   "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
+  sparkles: SparklesIcon,
 }
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides

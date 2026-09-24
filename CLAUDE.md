@@ -17,7 +17,7 @@ docs disagree, the docs win; fix this file.
 3. Style with raw `--juni-*` palette steps in the component's CSS module.
    No hex, rgb, hsl or bare oklch literals; derive tweaks with
    `oklch(from var(--juni-…) …)`. Font sizes are type-scale tokens only
-   (`--text-2xs` … `--text-xl`, `--display-sm`, `--display-lg`; see
+   (`--text-2xs` … `--text-xl`, `--display-sm`, `--display-lg`, `--display-xl`; see
    `docs/theming.md` §4.2.1), never a raw rem or px. Route code never
    touches a token.
 4. Interactive controls carry volume: the extruded recipe from
