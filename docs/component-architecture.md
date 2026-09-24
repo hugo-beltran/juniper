@@ -252,21 +252,23 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
-entry is the reference for a whole screen: on the `FullBleedCanvas` (the
-ground for screens outside the shell: `ImageOverlay` edge to edge, film grain
-over the photograph, the credit in the corner), a Card centred above the
-layers (the extruded controls only read on bark-50), Card parts for the title
-and actions, react-aria native validation, and a controlled API (`onSignIn`
-with the credentials, nothing else) with the router kept in the route, which
-needs no CSS of its own. One composition serves phone and desktop: the layers
-fill whatever the viewport is and the card takes the width but a gutter below
-40rem of the canvas. A demo entry MUST NOT import the router or the mock data
-in `src/lib`; a route shell passes data and links in. The registry inlines
-source files, not assets, so the ground's photograph is an `img` from its CDN,
-credited on screen by `ImageOverlay`, so nothing ships in the bundle, and the
-blend keeps it inside the palette rather than adding to it. The alternatives a
+entry is the reference for a whole screen, in parts the route arranges: on the
+`FullBleedCanvas` (the ground for screens outside the shell: `ImageOverlay`
+edge to edge, film grain over the photograph, the credit in the corner), a
+`LoginCard` (the glass Card centred above the layers; the extruded controls
+only read on bark-50) whose header the route fills from Card's own parts (the
+wordmark as the title, a lede), and a `LoginForm` (the fields and the actions,
+react-aria native validation, a controlled API of `onSignIn` with the
+credentials and nothing else) with the router kept in the route, which needs
+no CSS of its own. One composition serves phone and desktop: the layers fill
+whatever the viewport is and the card takes the width but a gutter below 40rem
+of the canvas. A demo entry MUST NOT import the router or the mock data in
+`src/lib`; a route shell passes data, links and the brand in. The registry
+inlines source files, not assets, so the ground's photograph is an `img` from
+its CDN, credited on screen by `ImageOverlay`, and the wordmark is an asset
+the route imports; nothing of either ships in the entry. The alternatives a
 shipped composition was chosen from stay under `/lab` as the archive
-(`/lab/login`).
+(`/lab/login`, `/lab/glass`).
 
 4.8. **Background layers are standalone.** A component that paints a ground
 (`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)

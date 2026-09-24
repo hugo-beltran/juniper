@@ -12,8 +12,9 @@
 }
 
 /* Glass: a pane on a ground, lit by the primary button's lamp (theming
- * §4.6): a radial fill of the surface lit from the top-left (opaque there,
- * 65% at the far edge) over a 16px backdrop blur so the photograph shows
+ * §4.6): a radial fill of the surface lit from beyond the top-left corner
+ * (95% there, 75% at the far edge) over a 16px backdrop blur so the
+ * photograph shows
  * through softened, a 1px specular line along the top edge, the 1px
  * translucent ring, and a bloom-tinted drop at equal x and y offsets. One
  * light for buttons and cards. Chosen 2026-09-24 from /lab/glass (3 · pane);
@@ -21,8 +22,8 @@
 .glass {
   background: radial-gradient(
     circle at 30% 20%,
-    oklch(from var(--juni-bark-50) l c h) 0%,
-    oklch(from var(--juni-bark-50) l c h / 0.65) 80%
+    oklch(from var(--juni-bark-50) l c h / 0.95) -20%,
+    oklch(from var(--juni-bark-50) l c h / 0.75) 80%
   );
   border-color: oklch(from var(--juni-needle-50) l c h / 0.5);
   backdrop-filter: blur(16px);

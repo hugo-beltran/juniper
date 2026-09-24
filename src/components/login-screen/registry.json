@@ -1,19 +1,19 @@
 {
   "title": "Login screen",
-  "description": "The sign-in screen as the reference composition for a whole screen built from the contract: a glass Card (the pane) floating on the FullBleedCanvas (the needle ground with its photograph, grain and credit edge to edge). The card carries CardHeader (Juniper UI over a one-line lede), two required Inputs, and a stacked CardFooter of primary Sign in, an or-divider, a secondary SSO button, a slotted tertiary link and fine print. One composition for phone and desktop: the card is 80% of the canvas up to 30rem, and takes the width but a gutter below 40rem.",
+  "description": "The sign-in screen as the reference composition for a whole screen built from the contract, in two parts the route arranges: LoginCard, a glass Card (the pane) floating on the FullBleedCanvas, and LoginForm, two required Inputs and a stacked CardFooter of primary Sign in, an or-divider, a secondary SSO button, a slotted tertiary link and fine print. The route fills the card's header from Card's own parts (the wordmark as the title, a one-line lede) and places the form under it. One composition for phone and desktop: the card is 80% of the canvas up to 30rem, and takes the width but a gutter below 40rem.",
   "category": "demo",
   "anatomy": [
     {
-      "part": "LoginScreen",
-      "description": "The house Card in its glass variant as the root (data-slot=\"card\", data-variant=\"glass\"): the pane lit by the primary button's lamp over the photograph, 80% of the canvas up to 30rem, centred by the canvas; the form centred inside at 22rem. Accepts a className."
+      "part": "LoginCard",
+      "description": "The house Card in its glass variant (data-slot=\"card\", data-variant=\"glass\"): 80% of the canvas up to 30rem, centred by the canvas, with children. Its module gives the card's header 2rem below and sizes an svg inside the title to 60% of the width, so a wordmark can stand where the text would."
     },
     {
       "part": "CardHeader",
-      "description": "CardTitle (Juniper UI) over a one-line CardDescription lede, both centred by Card's own parts."
+      "description": "Composed by the route from Card's parts: CardTitle carrying the Juniper wordmark (the svg from src/assets, currentColor) over a one-line CardDescription lede."
     },
     {
-      "part": "Form",
-      "description": "react-aria Form with native validation: isRequired blocks the submit, the first empty field takes focus and FieldError shows the message; onSubmit hands the credentials to the caller."
+      "part": "LoginForm",
+      "description": "react-aria Form with native validation: isRequired blocks the submit, the first empty field takes focus and FieldError shows the message; onSubmit hands the credentials to the caller. Centred at 22rem."
     },
     {
       "part": "Fields",
@@ -25,14 +25,14 @@
     }
   ],
   "usage": [
-    "A reference composition, not a reusable primitive: copy the structure (FullBleedCanvas as the ground, a Card centred on it, controls composed from Field) rather than the component.",
+    "A reference composition, not a reusable primitive: copy the structure (FullBleedCanvas as the ground, a glass Card centred on it, the header from Card's parts, the form from Field-composed controls) rather than the components.",
+    "The route arranges: <FullBleedCanvas><LoginCard><CardHeader>…</CardHeader><LoginForm … /></LoginCard></FullBleedCanvas>. The card's title and lede are the route's words (or its wordmark); the form's fine print is the form's own.",
     "Render it on FullBleedCanvas: the card's width and its narrow rule are relative to the canvas (@container full-bleed-canvas), and the route needs no CSS of its own.",
     "Controlled: onSignIn({ email, password }) is all the form reports and the component never navigates; the route decides where a sign-in lands. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
     "Pass onSingleSignOn (no arguments) to render the SSO button; leave it out and the divider goes with it. Pass the guest or sign-up link as secondaryAction so the router stays in the route.",
     "The card wears glass because it floats on a ground (theming §4.6); the form lives on it because the extruded controls only read on a bark-50 surface. Never move fields onto the ground.",
     "Validation is react-aria's native behaviour; do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
-    "The ground, its photograph, grain and credit come from FullBleedCanvas; change them there, never in this module.",
-    "The copy (title, lede, fine print) is the card's own; a screen with other words is a variant, not a prop."
+    "The ground, its photograph, grain and credit come from FullBleedCanvas; change them there, never in this module."
   ],
   "docs": ["component-architecture", "theming"]
 }

@@ -17,7 +17,7 @@
     },
     {
       "part": "Children",
-      "description": "The screen's own composition (the LoginScreen card), centred above the layers."
+      "description": "The screen's own composition (the LoginCard), centred above the layers."
     }
   ],
   "usage": [

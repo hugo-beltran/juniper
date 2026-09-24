@@ -169,12 +169,15 @@
 
 /* On a glass card the same lamp reads differently: the surface is
  * translucent over the green ground, so the needle-tinted highlight comes
- * through green and loud. Inside glass the highlight is re-tuned to a
- * neutral, quieter glow (bark-50 at chroma 0, 60%); the shade is unchanged.
+ * through green and loud, and the full shade too heavy on a lighter,
+ * translucent surface. Inside glass both are re-tuned: the highlight to a
+ * neutral, quieter glow (bark-50 at chroma 0, 30%), the shade to half
+ * strength (bloom-700 at 10%).
  * :where keeps the rule at zero specificity, so it only sets the inherited
  * token and never competes with a component's own declarations. */
 :where([data-slot="card"][data-variant="glass"]) {
-  --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.6);
+  --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.3);
+  --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.1);
 }
 
 :root ::selection {
