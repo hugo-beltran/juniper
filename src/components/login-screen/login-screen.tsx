@@ -9,11 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/card/card"
+import { ImageOverlay } from "@/components/image-overlay/image-overlay"
 import { Input } from "@/components/input/input"
-import { ScreenOverlay } from "@/components/screen-overlay/screen-overlay"
 import { Select } from "@/components/select/select"
+import { cn } from "@/lib/cn"
 import styles from "./login-screen.module.css"
-import { Mark } from "./mark"
 
 export interface LoginWorkspace {
   id: string
@@ -73,7 +73,8 @@ export function LoginScreen({
   )
 
   return (
-    <ScreenOverlay data-slot="login-screen" className={className}>
+    <div data-slot="login-screen" className={cn(styles.screen, className)}>
+      <ImageOverlay />
       <div className={styles.layout}>
         <div className={styles.brand}>
           <div className={styles.copy}>
@@ -104,7 +105,7 @@ export function LoginScreen({
               autoComplete="username"
               placeholder="you@club.example"
               /* The first field takes focus on arrival, as a sign-in page
-                 should. */
+              should. */
               autoFocus
               value={email}
               onChange={setEmail}
@@ -155,9 +156,8 @@ export function LoginScreen({
               <p className={styles.fine}>{text.fine}</p>
             </CardFooter>
           </Form>
-          <Mark className={styles.watermark} />
         </Card>
       </div>
-    </ScreenOverlay>
+    </div>
   )
 }

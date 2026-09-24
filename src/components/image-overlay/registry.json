@@ -1,0 +1,30 @@
+{
+  "title": "Image overlay",
+  "description": "A standalone background layer: the shell's needle gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at a whisper of opacity, and the photograph's credit pinned to the bottom-right corner. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
+  "category": "layout",
+  "anatomy": [
+    {
+      "part": "ImageOverlay",
+      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the needle-400 to needle-700 gradient, isolated, and an inline-size container named image-overlay. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together. No children."
+    },
+    {
+      "part": "Image",
+      "description": "A decorative img (alt=\"\", async decoding, high fetch priority) covering the ground at z-index -1 inside the isolated root: object-fit cover, luminosity blend, 7.5% opacity, pointer-events none. An element, not a CSS url(): CSS cannot take a URL from a data attribute."
+    },
+    {
+      "part": "Credit",
+      "description": "A p with a link to the photograph's page, absolute at the bottom-right: text-2xs, needle-100; bloom-200 on hover, the sidebar's outline step (--nav-outline) on focus."
+    }
+  ],
+  "usage": [
+    "A background, not a wrapper: it takes no children. Render it as the first child of a positioned container (position: relative or absolute) and put the content after it; it fills the container's full width and height and the later siblings paint above it in DOM order.",
+    "It never assumes the viewport. The consumer owns the container, its position and its size: a full screen (min-height 100svh, as the login screen does), a card or a panel all work the same way.",
+    "Query narrow layouts against the consumer's container, not the overlay: declare container-type inline-size on the positioned container and write the queries on its children.",
+    "A sibling layout that covers the whole ground must give its bare areas pointer-events: none (and its columns pointer-events: auto), or the credit link beneath cannot be clicked.",
+    "Pass `image` to change the photograph and the credit changes with it; keep the licence satisfied through the caption. The default is an Unsplash photograph loaded from its CDN, so nothing ships in the bundle.",
+    "Keep the blend and the low opacity: luminosity takes the ground's green so the palette stays the only colour source; higher opacity washes out bark-50 copy on the ground.",
+    "Do not hide the overlay from assistive tech: the credit is a real link and must stay reachable; the img already carries alt=\"\".",
+    "Route code never styles the ground; a surface that needs a different ground is a variant here, not a rule in a route module."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

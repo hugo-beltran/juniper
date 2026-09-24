@@ -47,9 +47,8 @@ src/components/
   users-table/                  demo composition: FilterBar + flat table
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
-  screen-overlay/               the ground a screen stands on: gradient, CDN photograph, credit
-  login-screen/                 demo composition: the sign-in screen (ScreenOverlay, brand, Card of fields)
-    mark.tsx                    private descendant: the glyph as inline SVG
+  image-overlay/                standalone background layer: fills its positioned container behind its siblings
+  login-screen/                 demo composition: the sign-in screen (ImageOverlay, brand, Card of fields)
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -231,18 +230,30 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category
 are screens or screen-sized parts assembled from the primitives, published
 so a consumer copies the structure rather than the component. The
-`login-screen` entry is the reference for a whole screen: a `ScreenOverlay`
-ground (the shell's needle gradient, a photograph, its credit) carrying a
-bark-50 Card, the brand on the ground, the form on the card (the extruded
+`login-screen` entry is the reference for a whole screen: a positioned screen
+root filled from behind by `ImageOverlay` (the shell's needle gradient, a
+photograph, its credit), carrying a bark-50 Card, the brand on the ground, the form on the card (the extruded
 controls only read on bark-50), Card parts for the title and actions, react-aria native
 validation, and a controlled API (`workspaces`, `onSignIn`) with the router
 kept in the route. A demo entry MUST NOT import the router or the mock data
-in `src/lib`; a route shell passes data and links in. Its own assets ship
-inline (an SVG glyph as JSX), because the registry inlines source files, not
-assets; the ground's photograph is a `url()` to its CDN, credited on screen
-by `ScreenOverlay`, so nothing ships in the bundle, and the blend keeps it
+in `src/lib`; a route shell passes data and links in. The registry inlines
+source files, not assets, so the ground's photograph is an `img` from its
+CDN, credited on screen by `ImageOverlay`, so nothing ships in the bundle, and the blend keeps it
 inside the palette rather than adding to it. The alternatives a shipped
 composition was chosen from stay under `/lab` as the archive (`/lab/login`).
+
+4.8. **Background layers are standalone.** A component that paints a ground
+(`ImageOverlay`: gradient, photograph, credit) takes no children and never
+assumes the viewport. It is absolutely positioned at `inset: 0`, full width
+and height, rendered as the first child of a positioned container, so the
+siblings that follow paint above it in DOM order. The consumer owns the
+container, its position and its size, which is what lets the same layer
+ground a whole screen (a root with `min-height: 100svh`), a card or a panel.
+Two consequences for the consumer: narrow-layout container queries are
+declared on the consumer's container, not on the layer; and a layout that
+covers the whole ground lets pointer events through its bare areas so the
+layer's own controls (the credit link) stay reachable. Wrapping content in
+a background component is the anti-pattern this rule replaces.
 
 ## 5. Accessibility baseline
 

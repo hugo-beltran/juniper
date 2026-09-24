@@ -5,19 +5,15 @@
   "anatomy": [
     {
       "part": "LoginScreen",
-      "description": "Root with data-slot=\"login-screen\": the ground gradient, its own inline-size container, so the two columns stack below 48rem of the screen's width, not the viewport's, and the card spans the width below 30rem."
+      "description": "Root div with data-slot=\"login-screen\": position relative, min-height 100svh, an inline-size container, with ImageOverlay as its first child filling it from behind. The two columns stack below 48rem of the root's width and the card spans the width below 30rem. The layout passes pointer events through its bare ground so the overlay's credit stays clickable."
     },
     {
       "part": "Brand",
       "description": "The ground column, the card's height and centred with it: tagline (display-lg, bark-50, a p not a heading: the page's one heading is the card's title) and lede (text-lg, needle-100, 30ch). The ground's photograph (juniper branches and berries, Hansheng Zhao on Unsplash, loaded from the Unsplash CDN) covers the whole screen in luminosity blend at low opacity; the card covers its half. The credit link sits in the layout's bottom-right corner beneath the card (text-2xs, needle-100; bloom on hover, the sidebar's outline step on focus)."
     },
     {
-      "part": "Mark",
-      "description": "Private descendant: the juniper glyph as inline SVG JSX filling currentColor, so the entry ships without an asset."
-    },
-    {
       "part": "Card",
-      "description": "The house Card as the inset: radius-md, no hairline, the form centred at 22rem, and the Mark quiet in its bottom-right corner (bark-200 at 50%, inside the padding box so the scrolling card draws no scrollbar)."
+      "description": "The house Card as the inset: radius-md, no hairline, the form centred at 22rem."
     },
     {
       "part": "Form",

@@ -1,6 +1,15 @@
-/* Layout of the sign-in screen on the ScreenOverlay ground: the brand column
- * and the card. The ground, its photograph and the credit are the overlay's;
- * the container queries below read the overlay's inline size. */
+/* The sign-in screen: a positioned root that ImageOverlay fills from behind
+ * (the ground, its photograph and the credit are the overlay's), carrying
+ * the brand column and the card. The root is the inline-size container the
+ * narrow queries below read. */
+.screen {
+  container: login-screen / inline-size;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1;
+  min-height: 100svh;
+}
 
 /* One height for both columns: the card is a fixed-height sheet centred in
  * its column, and the brand takes the same height on the same axis, so the
@@ -14,6 +23,14 @@
   align-items: center;
   gap: 0.5rem;
   min-height: 0;
+  /* The layout paints above the overlay but owns no pointer events of its
+   * own: the bare ground between brand and card belongs to the overlay, so
+   * its credit stays clickable. The columns take their events back. */
+  pointer-events: none;
+}
+
+.layout > * {
+  pointer-events: auto;
 }
 
 /* Brand side: the copy top-left, on the card's height. */
@@ -66,20 +83,6 @@
   margin: auto;
   width: 80%;
   min-width: 420px;
-}
-
-/* The mark, quiet in the card's bottom-right corner. It stays inside the
- * padding box: the card scrolls on short viewports, and a bleed would draw a
- * scrollbar. */
-.watermark {
-  position: absolute;
-  right: 0rem;
-  bottom: 0.15rem;
-  width: 5rem;
-  height: auto;
-  color: var(--juni-bark-200);
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 .form {
