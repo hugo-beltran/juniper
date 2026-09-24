@@ -204,9 +204,13 @@ never by shadow.
 answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
 the primary button, a clear ×  — keep their own needle fill on hover: they
 act rather than point): a bloom hairline on a trigger
-or a text field (`bloom-400`), a bloom wash on a list row or a discrete
-button (`bloom-100`, text `bloom-950`), a bloom track on a hovered switch
-(`bloom-300`). Selection and the active
+or a text field (`bloom-400`), a bloom wash on a list row (`bloom-100`,
+text `bloom-950`) or a discrete button (`bloom-500` at 40%, text
+`bloom-950`), a bloom track on a hovered switch (`bloom-300`). A wash on a
+control that can land on any surface (the discrete button sits on glass
+and on photographs as well as on bark-50) MUST be a translucent derivation
+of a mid step, which keeps its contrast wherever it lands; the opaque tint
+is for rows inside an opaque list. Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you
 are" never blurs with "what is chosen"; when both land on one element,
 MIX the two washes rather than picking a third step:

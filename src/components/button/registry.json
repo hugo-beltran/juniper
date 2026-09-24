@@ -10,7 +10,7 @@
   ],
   "usage": [
     "Use onPress and isDisabled (react-aria semantics), not onClick and disabled.",
-    "Variants: primary (default, one per view; the glass pane), secondary (supporting actions; the extruded recipe on bark-50, bloom hairline on hover, inset when pressed), discrete (toolbar and inline triggers; flat at rest, bloom wash on hover, inset when pressed or open). Sizes: mini, small, medium (default).",
+    "Variants: primary (default, one per view; the glass pane), secondary (supporting actions; the extruded recipe on bark-50, bloom hairline on hover, inset when pressed), discrete (toolbar and inline triggers; flat at rest, a translucent bloom wash on hover so it reads on any surface, inset when pressed or open). Sizes: mini, small, medium (default).",
     "Navigation wears asChild: <Button asChild variant=\"discrete\"><Link to=\"/dashboard\">Discard</Link></Button> keeps anchor semantics under the button's face. Only the slotted element is styled with :hover/:active; react-aria buttons keep data-hovered/data-pressed.",
     "State styling keys off react-aria data attributes (data-hovered, data-pressed, data-disabled), so hover stays correct across pointer types.",
     "Field sizes (Input, Textarea, Select) mirror these heights, so a field and a button sit on one row at the same size name.",

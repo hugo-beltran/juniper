@@ -5,7 +5,7 @@
   "anatomy": [
     {
       "part": "Card",
-      "description": "A div with data-slot=\"card\" and data-variant. flat: bark-50 surface, bark-200 hairline border, the house radius. glass: a radial fill of bark-50 lit from the top-left (92% there, 62% at the edge) over a 16px backdrop blur, a needle-50 border, a 1px needle-50 specular line along the top edge, a 1px translucent inner ring, and a 6px/6px 18px bloom-700 drop at 22%. Accepts any div props and a className to extend."
+      "description": "A div with data-slot=\"card\" and data-variant. flat: bark-50 surface, bark-200 hairline border, the house radius. glass: a radial fill of bark-50 lit from the top-left (opaque there, 65% at the edge) over a 16px backdrop blur, a needle-50 border, a 1px needle-50 specular line along the top edge, a 1px translucent inner ring, and a 6px/6px 18px bloom-700 drop at 22%. Accepts any div props and a className to extend."
     },
     {
       "part": "CardHeader",

@@ -132,16 +132,18 @@
 }
 
 /* Discrete — inline text that becomes a control on approach. Flat at rest
- * (it carries no weight until touched); hover washes it in bloom (§4.7);
- * pressed or open it takes the surface fill and sinks (inset) like every
- * other neutral control. */
+ * (it carries no weight until touched); hover washes it in bloom (§4.7), a
+ * translucent wash (bloom-500 at 40%) rather than the opaque bloom-100
+ * tint, so it keeps its contrast on a glass card or a photograph as well
+ * as on bark-50; pressed or open it takes the surface fill and sinks
+ * (inset) like every other neutral control. */
 .discrete {
   background-color: transparent;
   color: var(--juni-needle-800);
 }
 
 .discrete:is([data-hovered], :not([data-rac]):hover) {
-  background-color: var(--juni-bloom-100);
+  background-color: oklch(from var(--juni-bloom-500) l c h / 0.4);
   color: var(--juni-bloom-950);
 }
 
