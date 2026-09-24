@@ -26,11 +26,17 @@ docs disagree, the docs win; fix this file.
    Static surfaces stay flat. Compare alternatives at `/lab/lift`. Hover,
    focus and the focus ring (`--ring`) answer in bloom; selection answers
    in needle (§4.4, §4.7). Never draw a green focus ring.
-5. Every component exported from `src/components/index.ts` MUST carry a
+5. Context lives in CSS, not in React. A component that must differ by
+   where it sits (inside a glass card, on the sidebar, in a narrow inset)
+   says so in CSS against data attributes, custom properties and container
+   queries, never with a prop, a context or a render branch. The virtual
+   DOM stays one tree; the cascade specialises
+   (`docs/component-architecture.md` §3.9).
+6. Every component exported from `src/components/index.ts` MUST carry a
    `registry.json` sidecar (title, description, category, anatomy, usage,
    docs). Directories not in the barrel are private and need none. The
    schema and an example are in `docs/registry-schema.md`.
-6. When a change alters a convention, update the governing doc in `docs/`
+7. When a change alters a convention, update the governing doc in `docs/`
    in the same change. The docs describe what the code does, so they must
    move together.
 

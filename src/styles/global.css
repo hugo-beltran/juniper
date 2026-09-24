@@ -8,6 +8,10 @@
   --foreground: var(--juni-bark-800);
 
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Display titles (a card's title, a hero tagline) point at their own
+   * token so the face can diverge later without touching components; today
+   * it resolves to the same Geist (docs/theming.md §4.2). */
+  --font-display: var(--font-sans);
   --font-mono:
     "Geist Mono", source-code-pro, Menlo, Consolas, "DejaVu Sans Mono",
     monospace;

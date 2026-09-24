@@ -28,6 +28,7 @@
     "Compose content inside; Card owns only the surface, border and radius, never padding conventions of its children.",
     "Pick the material by placement: flat inside the shell's inset, where a card separates by border and tint; glass only for a card that floats on a ground (the FullBleedCanvas), where the photograph should show through. Never glass on a flat page.",
     "The glass recipe is the pane chosen at /lab/glass on 2026-09-24 (the primary button's light on a surface); the baseline and the three other alternatives stay there as the archive. A change to the recipe is made there first, then here.",
+    "Controls inside a glass card keep the extruded recipe, but the theme re-tunes --lift-highlight for them (a :where() rule on the glass surface: neutral bark-50 at chroma 0, 60%) because the needle tint reads green through the translucent surface. Nothing to do in a consumer; never override the token per control.",
     "Prefer extending Card over drawing a bordered box in a route or feature module.",
     "A card's title and intro are CardTitle and CardDescription inside CardHeader; never restate their size or colour in route CSS (theming §1.6).",
     "CardContent is deliberately not ported: Card already pads. Put the body straight inside Card between the header and the footer.",

@@ -88,8 +88,12 @@ these tokens for corner radii; fully round pills MAY use `999px`.
 
 4.2. The typeface is Geist with Geist Mono for code, set through
 `--font-sans` and `--font-mono`. Components MUST inherit the font
-(`font-family: inherit`) rather than restate it. Hierarchy is weight-driven;
-there is no second display face.
+(`font-family: inherit`) rather than restate it. Hierarchy is weight-driven.
+Display titles (a card's title, a hero tagline) MAY point at
+`--font-display` instead, a token that today resolves to the same Geist: it
+names the one place a display face could diverge later without touching
+components, and until it does there is still no second face on screen. A
+component MUST NOT restate a family name; it inherits or uses the token.
 
 4.2.1. **Type scale.** Every `font-size` MUST be one of the ten tokens
 below or `inherit`. No free values: the scale was binned on 2026-09-17
@@ -187,8 +191,14 @@ never by shadow.
   `--lift-shade` take the primary button's own light: its needle-50 inner
   ring and its bloom-700 drop shadow, so every control is lit by the same
   lamp (the highlight lifts lightness and alpha to stay visible on
-  bark-50). Do not introduce a third material. The chosen recipe and the
-  five rejected alternatives are archived at `/lab/lift` in the demo app.
+  bark-50). Inside a glass card the highlight is re-tuned by the theme, not
+  by the controls: a `:where()` rule on the glass surface (zero specificity,
+  so it only sets the inherited token) makes `--lift-highlight` a neutral,
+  quieter glow (bark-50 at chroma 0, 60%), because the needle tint reads
+  green and loud through a translucent surface over the ground; the shade
+  is unchanged. Do not introduce a third material. The chosen recipe and
+  the five rejected alternatives are archived at `/lab/lift` in the demo
+  app.
 
 4.7. **Pointer colour.** Hover and keyboard focus on a neutral control
 answer in `--juni-bloom-*`, the complementary (chromatic action buttons —

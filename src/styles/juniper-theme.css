@@ -167,6 +167,16 @@
   --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.2);
 }
 
+/* On a glass card the same lamp reads differently: the surface is
+ * translucent over the green ground, so the needle-tinted highlight comes
+ * through green and loud. Inside glass the highlight is re-tuned to a
+ * neutral, quieter glow (bark-50 at chroma 0, 60%); the shade is unchanged.
+ * :where keeps the rule at zero specificity, so it only sets the inherited
+ * token and never competes with a component's own declarations. */
+:where([data-slot="card"][data-variant="glass"]) {
+  --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.6);
+}
+
 :root ::selection {
   background-color: oklch(from var(--juni-needle-200) l c h / 0.65);
 }

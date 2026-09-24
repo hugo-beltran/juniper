@@ -149,6 +149,26 @@ share the size names `mini` (1.75rem), `small` (2rem) and `medium` (2.5rem,
 default), so a field and a button placed on one row at the same size name
 align without consumer CSS.
 
+3.9. **Context lives in CSS, not in React.** When a component must look or
+behave differently because of where it sits (inside a glass card, on the
+dark sidebar, in a narrow inset, while hovered by a pointer), the rule MUST
+be expressed in CSS against the context's data attributes, custom
+properties and container queries, never as a prop threaded down, a context
+read, or a branch in the render. The virtual DOM stays one tree of the
+same elements everywhere; the cascade does the specialising. The cost of
+the alternative is real: a `variant` prop for every surface a control can
+land on, providers for every ancestor that matters, and a render that
+re-runs to change a shadow. Precedents: the theme re-tunes
+`--lift-highlight` for every control inside a glass card through a
+`:where([data-slot="card"][data-variant="glass"])` rule, at zero
+specificity, and no control knows it happened; `ListBox` styles its rows
+through the root's `data-variant` so items take no prop; the sidebar
+inset publishes `data-narrow` and consumers query it; hover for a slotted
+link is `:not([data-rac]):hover`, not a wrapper. Reach for React only when
+CSS cannot know the fact (data, selection, a measurement), and then
+publish the fact as a data attribute or custom property once (4.0) so the
+rest stays CSS.
+
 ## 4. Composition patterns
 
 4.0. **The inset scrolls, not the page.** `SidebarInset` is the single
