@@ -1,5 +1,6 @@
 import { useState, type ComponentType, type SVGProps } from "react";
 import {
+  ArrowRightEndOnRectangleIcon,
   ArrowsRightLeftIcon,
   BookOpenIcon,
   ChartPieIcon,
@@ -74,6 +75,7 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   cube: CubeIcon,
   users: UsersIcon,
   "pencil-square": PencilSquareIcon,
+  "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
 };
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides

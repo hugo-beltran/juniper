@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Button } from "@/components";
+import { Button, PageDescription, PageHeader, PageTitle } from "@/components";
 import styles from "./lift.module.css";
 
 export const Route = createFileRoute("/_authenticated/lab/lift")({
@@ -71,12 +71,14 @@ function Sample({ variant }: { variant: string }) {
 function LiftPage() {
   return (
     <div className={styles.page}>
-      <h1>Lift</h1>
-      <p className={styles.sub}>
-        Six ways to raise a select off the surface, beside the primary button
-        they should feel kin to. Hover, focus and press each one. Every value
-        is a <code>--juni-*</code> step or a derivation from one.
-      </p>
+      <PageHeader>
+        <PageTitle>Lift</PageTitle>
+        <PageDescription>
+          Six ways to raise a select off the surface, beside the primary button
+          they should feel kin to. Hover, focus and press each one. Every value
+          is a <code>--juni-*</code> step or a derivation from one.
+        </PageDescription>
+      </PageHeader>
 
       <section className={styles.reference}>
         <div className={styles.card}>

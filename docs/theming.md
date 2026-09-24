@@ -38,7 +38,11 @@ step with a literal, and do not mix more than two steps.
 
 1.6. Route and page code MUST NOT reference tokens or palette steps. If a
 view needs a themed surface, a component is missing. Callers pass intent
-props (`variant`, `size`), never token names or class names.
+props (`variant`, `size`), never token names or class names. A route's title
+and intro are the `page` parts (`PageHeader`, `PageTitle`,
+`PageDescription`); a card's are Card's (`CardTitle`, `CardDescription`).
+A muted paragraph styled from route CSS is the tell that one of these was
+skipped.
 
 ## 2. Ramps carry one function each
 

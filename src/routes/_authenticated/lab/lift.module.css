@@ -5,24 +5,9 @@
   max-width: 880px;
 }
 
-.page h1 {
-  margin: 0;
-}
-
 .page h2 {
   margin: 0;
   font-size: var(--text-base);
-}
-
-.sub {
-  margin: 0 0 0.5rem;
-  max-width: 62ch;
-  font-size: var(--text-base);
-  color: var(--juni-bark-600);
-}
-
-.sub code {
-  font-size: var(--text-sm);
 }
 
 .reference,

@@ -1,0 +1,26 @@
+/* Title over intro. The intro caps its measure so a long sentence stays
+ * readable on a wide inset. */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--display-lg);
+  line-height: 1.2;
+  color: var(--juni-needle-600);
+}
+
+.description {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--juni-bark-600);
+}
+
+.description code {
+  font-size: var(--text-sm);
+}

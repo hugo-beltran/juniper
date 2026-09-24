@@ -22,6 +22,7 @@ import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authen
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticated/lab/forms'
 import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
+import { Route as AuthenticatedLabLoginRouteImport } from './routes/_authenticated/lab/login'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -90,6 +91,11 @@ const AuthenticatedLabLiftRoute = AuthenticatedLabLiftRouteImport.update({
   path: '/lab/lift',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLabLoginRoute = AuthenticatedLabLoginRouteImport.update({
+  id: '/lab/login',
+  path: '/lab/login',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
   id: '/lab/palette',
   path: '/lab/palette',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof AuthenticatedUsersRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/lab/login': typeof AuthenticatedLabLoginRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesByTo {
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/lab/login': typeof AuthenticatedLabLoginRoute
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesById {
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/lab/forms': typeof AuthenticatedLabFormsRoute
   '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/_authenticated/lab/login': typeof AuthenticatedLabLoginRoute
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRouteTypes {
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/lab/forms'
     | '/lab/lift'
+    | '/lab/login'
     | '/lab/palette'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/'
     | '/lab/forms'
     | '/lab/lift'
+    | '/lab/login'
     | '/lab/palette'
   id:
     | '__root__'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/lab/forms'
     | '/_authenticated/lab/lift'
+    | '/_authenticated/lab/login'
     | '/_authenticated/lab/palette'
   fileRoutesById: FileRoutesById
 }
@@ -290,6 +302,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLabLiftRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/login': {
+      id: '/_authenticated/lab/login'
+      path: '/lab/login'
+      fullPath: '/lab/login'
+      preLoaderRoute: typeof AuthenticatedLabLoginRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/palette': {
       id: '/_authenticated/lab/palette'
       path: '/lab/palette'
@@ -312,6 +331,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedLabFormsRoute: typeof AuthenticatedLabFormsRoute
   AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
+  AuthenticatedLabLoginRoute: typeof AuthenticatedLabLoginRoute
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
 }
 
@@ -327,6 +347,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedLabFormsRoute: AuthenticatedLabFormsRoute,
   AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
+  AuthenticatedLabLoginRoute: AuthenticatedLabLoginRoute,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
 }
 

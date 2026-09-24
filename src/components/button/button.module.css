@@ -105,16 +105,17 @@
  * up-left and shade down-right. Hover pushes further out with a bloom
  * hairline (§4.7); pressed, or open as a menu trigger, sinks it. */
 .secondary {
-  background-color: var(--juni-bark-50);
-  color: var(--juni-needle-950);
-  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+  background-color: oklch(from var(--juni-bark-100) 93% c h);
+  color: var(--juni-bloom-800);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.75);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);
 }
 
 .secondary:is([data-hovered], [data-focus-visible], :not([data-rac]):hover) {
-  border-color: var(--juni-bloom-400);
+  border-color: oklch(from var(--juni-needle-500) l c h / 0.75);
+  color: var(--juni-needle-700);
 }
 
 .secondary:is([data-hovered], :not([data-rac]):hover) {
@@ -127,6 +128,7 @@
   box-shadow:
     inset -1px -1px 2px var(--lift-highlight),
     inset 1px 1px 3px var(--lift-shade);
+  color: var(--juni-bloom-900);
 }
 
 /* Discrete — inline text that becomes a control on approach. Flat at rest

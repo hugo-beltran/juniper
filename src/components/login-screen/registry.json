@@ -1,0 +1,53 @@
+{
+  "title": "Login screen",
+  "description": "The sign-in screen as the reference composition for a whole screen built from the contract: the shell's needle ground at the sidebar's 0.5rem margin carrying a bark-50 Card. The brand takes the ground (tagline and lede on the card's height, the photograph's credit in the corner); the form takes the card: CardHeader, two required Inputs, a Workspace Select, and a stacked CardFooter of primary Sign in, an or-divider, a secondary SSO button, a slotted tertiary link and fine print.",
+  "category": "demo",
+  "anatomy": [
+    {
+      "part": "LoginScreen",
+      "description": "Root with data-slot=\"login-screen\": the ground gradient, its own inline-size container, so the two columns stack below 48rem of the screen's width, not the viewport's, and the card spans the width below 30rem."
+    },
+    {
+      "part": "Brand",
+      "description": "The ground column, the card's height and centred with it: tagline (display-lg, bark-50, a p not a heading: the page's one heading is the card's title) and lede (text-lg, needle-100, 30ch). The ground's photograph (juniper branches and berries, Hansheng Zhao on Unsplash, loaded from the Unsplash CDN) covers the whole screen in luminosity blend at low opacity; the card covers its half. The credit link sits in the layout's bottom-right corner beneath the card (text-2xs, needle-100; bloom on hover, the sidebar's outline step on focus)."
+    },
+    {
+      "part": "Mark",
+      "description": "Private descendant: the juniper glyph as inline SVG JSX filling currentColor, so the entry ships without an asset."
+    },
+    {
+      "part": "Card",
+      "description": "The house Card as the inset: radius-md, no hairline, the form centred at 22rem, and the Mark quiet in its bottom-right corner (bark-200 at 50%, inside the padding box so the scrolling card draws no scrollbar)."
+    },
+    {
+      "part": "Form",
+      "description": "react-aria Form with native validation: isRequired blocks the submit, the first empty field takes focus and FieldError shows the message; onSubmit hands the credentials to the caller."
+    },
+    {
+      "part": "CardHeader",
+      "description": "CardTitle at level 1 (Sign in) over a CardDescription."
+    },
+    {
+      "part": "Fields",
+      "description": "Email Input (type email, autocomplete username, autoFocus), Password Input (autocomplete current-password), Workspace Select with the plan as the list hint."
+    },
+    {
+      "part": "CardFooter",
+      "description": "Stacked: the primary submit, an or-divider, the secondary Continue with SSO button (only with onSingleSignOn), the slotted secondaryAction (a discrete Button asChild around a router Link) and the fine print."
+    }
+  ],
+  "usage": [
+    "A reference composition, not a reusable primitive: copy the structure (ground carrying a card, brand on the ground, form on the card, controls composed from Field) rather than the component.",
+    "Controlled: pass workspaces ({ id, name, plan }), an optional defaultWorkspaceId and onSignIn({ email, password, workspaceId }). The component never navigates; the route decides where a sign-in lands.",
+    "Pass onSingleSignOn to render the SSO button; leave it out and the divider goes with it. Pass the guest or sign-up link as secondaryAction so the router stays in the route.",
+    "The form lives on the card because the extruded controls only read on bark-50 (theming §4.6); never move fields onto the ground.",
+    "Validation is react-aria's native behaviour; do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
+    "The photograph is a url() to the Unsplash CDN in the module's CSS (licence noted in the module, credited under the mark through `copy.credit` / `copy.creditHref`), so the entry ships self-contained with no asset to copy; swap the URL and the credit together. Keep the blend and a low opacity: luminosity takes the ground's green so no colour outside the palette enters; at full opacity it washes the copy out.",
+    "Copy is overridable through `copy`, defaults in LOGIN_COPY. Keep the tagline a sentence: the voice is quiet and declarative.",
+    "The ground gradient and the card are mode-invariant; only the page canvas outside them changes with light-dark(), so both modes need no new decisions."
+  ],
+  "docs": [
+    "component-architecture",
+    "theming"
+  ]
+}

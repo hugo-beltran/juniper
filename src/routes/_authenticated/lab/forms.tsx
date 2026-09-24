@@ -5,6 +5,9 @@ import {
   Button,
   Card,
   Input,
+  PageDescription,
+  PageHeader,
+  PageTitle,
   Select,
   Switch,
   Textarea,
@@ -46,13 +49,15 @@ function FormsPage() {
 
   return (
     <div className={styles.page}>
-      <h1>Forms</h1>
-      <p className={styles.sub}>
-        The form primitives — Button, Input, Textarea, Select, Switch — and the
-        Field chrome they share, in every state. Hover, focus, press and type into
-        each one; toggle the colour mode to check both branches. Every control
-        is a registry entry; this page only arranges them.
-      </p>
+      <PageHeader>
+        <PageTitle>Forms</PageTitle>
+        <PageDescription>
+          The form primitives — Button, Input, Textarea, Select, Switch — and the
+          Field chrome they share, in every state. Hover, focus, press and type into
+          each one; toggle the colour mode to check both branches. Every control
+          is a registry entry; this page only arranges them.
+        </PageDescription>
+      </PageHeader>
 
       <section className={styles.grid}>
         <Card className={styles.card}>

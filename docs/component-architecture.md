@@ -45,6 +45,10 @@ src/components/
   switch/                       labelled Switch, extruded track
   filter-bar/                   sticky search / switch / select toolbar
   users-table/                  demo composition: FilterBar + flat table
+  card/                         surface container with header, title, description, footer parts
+  page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
+  login-screen/                 demo composition: the sign-in screen (ground, brand, Card of fields)
+    mark.tsx                    private descendant: the glyph as inline SVG
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -167,7 +171,12 @@ only hold content in the wrong layout mid-resize.
 layout (Sidebar) exposes named parts (`SidebarHeader`, `SidebarMenu`,
 `SidebarMenuButton`) the consumer arranges as JSX, instead of one component
 with a large prop API. The consumer owns arrangement; each part owns its
-chrome.
+chrome. Card (`CardHeader`, `CardTitle`, `CardDescription`, `CardFooter`)
+and Page (`PageHeader`, `PageTitle`, `PageDescription`) follow the same
+shape: the route arranges the parts and never restates their type or
+colour. `CardTitle` and `PageTitle` are react-aria `Heading`s whose `level`
+picks the element, so a card that is the page's main content can carry
+the h1.
 
 4.2. **Inline over overlay.** Disclosure grows in place and pushes content
 (the tenant switcher's panel) rather than floating a dialog, drawer or
@@ -217,6 +226,22 @@ space a table has and every component inside the inset must switch
 together; the inset measures before paint so the layout never flashes.
 Never fork the data or the column definitions for a mobile variant. The
 leads table is the reference.
+
+4.7. **Reference compositions.** Registry entries in the `demo` category
+are screens or screen-sized parts assembled from the primitives, published
+so a consumer copies the structure rather than the component. The
+`login-screen` entry is the reference for a whole screen: the shell's
+needle ground at the sidebar's 0.5rem margin carrying a bark-50 Card, the
+brand on the ground, the form on the card (the extruded controls only read
+on bark-50), Card parts for the title and actions, react-aria native
+validation, and a controlled API (`workspaces`, `onSignIn`) with the router
+kept in the route. A demo entry MUST NOT import the router or the mock data
+in `src/lib`; a route shell passes data and links in. Its own assets ship
+inline (an SVG glyph as JSX), because the registry inlines source files, not
+assets; a photograph is a `url()` to its CDN in the module's CSS, credited on
+screen, so nothing ships in the bundle, and the blend keeps it inside the
+palette rather than adding to it. The alternatives a shipped composition was chosen from stay under
+`/lab` as the archive (`/lab/login`).
 
 ## 5. Accessibility baseline
 

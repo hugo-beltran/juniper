@@ -1,0 +1,260 @@
+/* The shell's ground (the sidebar wrapper's gradient) at the sidebar's own
+ * 0.5rem margin, carrying the card. The screen is its own inline-size
+ * container so the two columns stack from the space the screen has, not
+ * from the viewport. */
+.screen {
+  container: login-screen / inline-size;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1;
+  min-height: 100svh;
+  padding: 0.5rem;
+  background: linear-gradient(
+    to bottom,
+    var(--juni-needle-400),
+    var(--juni-needle-700) 120%
+  );
+}
+
+/* The ground's photograph, straight from the Unsplash CDN: juniper branches
+ * and berries ("Close-up of evergreen branches with blurred colorful
+ * background", Hansheng Zhao, https://unsplash.com/photos/GEya108yMh8,
+ * Unsplash licence; credited under the mark). 1600px wide, cropped to fit,
+ * format negotiated by the CDN (auto=format), so nothing ships in the
+ * bundle and the registry entry stays self-contained. Laid over the whole
+ * screen in luminosity blend at low opacity: the photograph lends only a
+ * whisper of its light and takes the ground's green, so no colour outside
+ * the palette enters and the copy stays on the gradient. Multiply is the
+ * alternative that darkens instead of lightens; at full opacity luminosity
+ * washed the copy out, which is why the opacity stays low. The screen
+ * isolates, so the blend sees the gradient beneath; the card is opaque and
+ * covers its half. */
+.screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1762869909580-12e109630a51?auto=format&fit=crop&w=1600&q=80")
+    center / cover no-repeat;
+  mix-blend-mode: luminosity;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* One height for both columns: the card is a fixed-height sheet centred in
+ * its column, and the brand takes the same height on the same axis, so the
+ * copy starts at the card's top edge. */
+.layout {
+  --login-card-height: 770px;
+  display: grid;
+  position: relative;
+  flex: 1;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+/* Brand side: the copy top-left, on the card's height. */
+.brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  height: var(--login-card-height);
+  padding: 2rem 0 2rem 2rem;
+  overflow: hidden;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.tagline {
+  margin: 0.75rem 0 0.5rem;
+  font-size: var(--display-xl);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--juni-bloom-950);
+}
+
+.lede {
+  margin: 0;
+  max-width: 30ch;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--juni-bark-50);
+}
+
+/* The photograph's credit, in the layout's bottom-right corner beneath the
+ * card. */
+.corner {
+  position: absolute;
+  right: 0;
+  bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+/* The credit is a link on the ground: needle-100 at rest, bloom on hover
+ * (theming §4.7), the sidebar's outline step for focus (§4.4). */
+.credit {
+  margin: 0;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--juni-needle-100);
+}
+
+.credit a {
+  color: inherit;
+  text-decoration-color: oklch(from var(--juni-needle-100) l c h / 0.5);
+  text-underline-offset: 0.15em;
+}
+
+.credit a:hover {
+  color: var(--juni-bloom-200);
+  text-decoration-color: currentColor;
+}
+
+.credit a:focus-visible {
+  outline-color: var(--nav-outline);
+}
+
+/* The card is the inset: the same radius, no hairline against the ground. It
+ * positions the mark in its own bottom-right corner. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem;
+  border-color: transparent;
+  border-radius: var(--radius-md);
+  overflow: auto;
+  height: var(--login-card-height);
+  margin: auto;
+  width: 80%;
+  min-width: 420px;
+}
+
+/* The mark, quiet in the card's bottom-right corner. It stays inside the
+ * padding box: the card scrolls on short viewports, and a bleed would draw a
+ * scrollbar. */
+.watermark {
+  position: absolute;
+  right: 0rem;
+  bottom: 0.15rem;
+  width: 5rem;
+  height: auto;
+  color: var(--juni-bark-200);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+/* The footer stacks: primary, divider, SSO, the slotted link, fine print. */
+.footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.wide {
+  width: 100%;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--juni-bark-200);
+}
+
+.fine {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--juni-bark-500);
+}
+
+/* Narrow: the brand becomes a header strip, the card takes the rest. The
+ * threshold is where the card's 420px floor plus a readable brand column no
+ * longer fit side by side. */
+@container login-screen (max-width: 48rem) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .brand {
+    height: auto;
+    padding: 1.25rem 1rem 0.75rem;
+    gap: 1rem;
+  }
+
+  .tagline {
+    margin: 0.5rem 0 0.25rem;
+    font-size: var(--display-sm);
+  }
+
+  .lede {
+    max-width: none;
+    font-size: var(--text-base);
+  }
+
+  /* The credit becomes a last row beneath the card, right-aligned. */
+  .corner {
+    position: static;
+    align-self: flex-end;
+    padding-top: 0.25rem;
+  }
+
+  /* Stacked on a tablet the card still floats, at 70% with the 420px floor. */
+  .card {
+    justify-content: flex-start;
+    width: 70%;
+    min-width: 420px;
+    margin: 0 auto;
+  }
+}
+
+/* Phone: the 420px floor no longer fits, so the card spans the width, hugs
+ * its content and fills the row. */
+@container login-screen (max-width: 30rem) {
+  .card {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 1.5rem 1.25rem;
+  }
+}

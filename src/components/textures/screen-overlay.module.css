@@ -1,0 +1,55 @@
+.screen {
+  container: screen-overlay / inline-size;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1;
+  min-height: 100svh;
+  background: linear-gradient(
+    to bottom,
+    var(--juni-needle-400),
+    var(--juni-needle-700) 120%
+  );
+}
+
+.screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1762869909580-12e109630a51?auto=format&fit=crop&w=1600&q=80")
+    center / cover no-repeat;
+  mix-blend-mode: luminosity;
+  opacity: 0.075;
+  pointer-events: none;
+}
+
+/* The photograph's credit, in the layout's bottom-right corner beneath the
+ * card. */
+.credit {
+  position: absolute;
+  right: 0;
+  bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  color: var(--juni-needle-100);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.credit a {
+  color: inherit;
+  text-decoration-color: oklch(from var(--juni-needle-100) l c h / 0.5);
+  text-underline-offset: 0.15em;
+}
+
+.credit a:hover {
+  color: var(--juni-bloom-200);
+  text-decoration-color: currentColor;
+}
+
+.credit a:focus-visible {
+  outline-color: var(--nav-outline);
+}

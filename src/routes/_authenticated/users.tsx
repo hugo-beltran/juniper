@@ -2,6 +2,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import {
+  PageDescription,
+  PageHeader,
+  PageTitle,
   USER_ROLES,
   USER_STATUSES,
   UsersTable,
@@ -54,13 +57,13 @@ function UsersPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <h1>Users</h1>
-        <p className={styles.sub}>
-          Everyone with access to this workspace, their role and when they
-          were last active.
-        </p>
-      </div>
+      <PageHeader>
+        <PageTitle>Users</PageTitle>
+        <PageDescription>
+            Everyone with access to this workspace, their role and when they
+            were last active.
+        </PageDescription>
+      </PageHeader>
       <UsersTable
         users={users}
         filters={toFilters(search)}

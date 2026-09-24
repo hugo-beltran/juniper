@@ -1,14 +1,20 @@
 {
   "title": "Card",
-  "description": "Generic bordered surface container. Promoted out of the summary-card family when the SCOUT report timeline became its second consumer.",
+  "description": "Generic bordered surface container with the shadcn Card's named parts: CardHeader stacks a CardTitle (react-aria Heading, level picks the element) over a CardDescription, and CardFooter rows up the actions. Promoted out of the summary-card family when the SCOUT report timeline became its second consumer; the parts arrived with the login screen.",
   "category": "layout",
   "anatomy": [
-    { "part": "Card", "description": "A div with data-slot=\"card\": bark-50 surface, bark-200 hairline border, the house radius. Accepts any div props and a className to extend." }
+    { "part": "Card", "description": "A div with data-slot=\"card\": bark-50 surface, bark-200 hairline border, the house radius. Accepts any div props and a className to extend." },
+    { "part": "CardHeader", "description": "data-slot=\"card-header\": a column with 0.25rem gap for the title and description." },
+    { "part": "CardTitle", "description": "react-aria Heading with data-slot=\"card-title\": display-sm, weight 700, needle-600. `level` picks the element (h2 by default; a card that is the page's main content passes 1)." },
+    { "part": "CardDescription", "description": "A p with data-slot=\"card-description\": text-base, bark-600, the muted intro under a title." },
+    { "part": "CardFooter", "description": "data-slot=\"card-footer\": a row of actions with 0.5rem gap; extend it to stack actions." }
   ],
   "usage": [
     "Compose content inside; Card owns only the surface, border and radius, never padding conventions of its children.",
     "Prefer extending Card over drawing a bordered box in a route or feature module.",
+    "A card's title and intro are CardTitle and CardDescription inside CardHeader; never restate their size or colour in route CSS (theming §1.6).",
+    "CardContent is deliberately not ported: Card already pads. Put the body straight inside Card between the header and the footer.",
     "Promotion precedent: a private descendant becomes a top-level component like this one when a second, unrelated component needs it."
   ],
-  "docs": ["component-architecture"]
+  "docs": ["component-architecture", "theming"]
 }

@@ -23,6 +23,11 @@
               "label": "Forms",
               "to": "/lab/forms",
               "icon": "pencil-square"
+            },
+            {
+              "label": "Login",
+              "to": "/lab/login",
+              "icon": "arrow-right-end-on-rectangle"
             }
           ]
         },

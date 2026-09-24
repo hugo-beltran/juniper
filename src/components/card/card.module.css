@@ -4,3 +4,33 @@
   border-radius: var(--radius-lg);
   padding: 1rem;
 }
+
+/* Parts. Each owns its own type and colour; the consumer owns arrangement
+ * (component-architecture §4.1). */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--display-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--juni-needle-600);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--juni-bark-600);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

@@ -1,7 +1,19 @@
 import { useState } from "react";
 import { Blobatar } from "@blobatar/react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Button, Card, Input, Select, Textarea } from "@/components";
+import {
+  Button,
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  PageDescription,
+  PageHeader,
+  PageTitle,
+  Select,
+  Textarea,
+} from "@/components";
 import { blobatarPalette } from "@/lib/blobatar-palette";
 import styles from "./scout-report.module.css";
 
@@ -93,13 +105,15 @@ function ScoutReportPage() {
             palette={blobatarPalette(player)}
             size={56}
           />
-          <h1>Report filed</h1>
-          <p className={styles.sub}>
-            <strong>{player}</strong> ({position} · {club}) enters the pipeline
-            at <strong>Scouted</strong>
-            {ask.trim() !== "" && <> with an ask of {ask}</>}, with{" "}
-            {filledCount} of {DIMENSIONS.length} SCOUT dimensions on file.
-          </p>
+          <CardHeader>
+            <CardTitle level={1}>Report filed</CardTitle>
+            <CardDescription>
+              <strong>{player}</strong> ({position} · {club}) enters the pipeline
+              at <strong>Scouted</strong>
+              {ask.trim() !== "" && <> with an ask of {ask}</>}, with{" "}
+              {filledCount} of {DIMENSIONS.length} SCOUT dimensions on file.
+            </CardDescription>
+          </CardHeader>
           <Button asChild>
             <Link to="/dashboard">Back to pipeline</Link>
           </Button>
@@ -110,12 +124,14 @@ function ScoutReportPage() {
 
   return (
     <div className={styles.page}>
-      <h1>SCOUT Report</h1>
-      <p className={styles.sub}>
-        File a prospect in five reads, in order — Skillset, Character, Outlook,
-        Upside, Team fit. A report is only as strong as its sequence: each read
-        builds on the one before it.
-      </p>
+      <PageHeader>
+        <PageTitle>SCOUT Report</PageTitle>
+        <PageDescription>
+          File a prospect in five reads, in order — Skillset, Character, Outlook,
+          Upside, Team fit. A report is only as strong as its sequence: each read
+          builds on the one before it.
+        </PageDescription>
+      </PageHeader>
 
       <ul className={styles.guides}>
         <li>Lead with what you saw, not what you heard — dates and games.</li>

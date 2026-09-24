@@ -5,15 +5,13 @@
   max-width: 880px;
 }
 
-.page h1 {
-  margin: 0;
-}
-
 .page h2 {
   margin: 1.5rem 0 0;
   font-size: var(--text-lg);
 }
 
+/* Per-family intro inside a tab panel (family-section.tsx); the page header
+ * itself is the Page parts. */
 .sub {
   margin: 0 0 1rem;
   max-width: 62ch;

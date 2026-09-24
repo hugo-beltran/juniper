@@ -1,0 +1,17 @@
+{
+  "title": "Page",
+  "description": "The title and intro at the top of a route: PageHeader stacks a PageTitle (react-aria Heading, h1 by default) over a PageDescription, one copy of the h1-plus-muted-paragraph recipe that route modules used to restate with palette steps of their own.",
+  "category": "layout",
+  "anatomy": [
+    { "part": "PageHeader", "description": "data-slot=\"page-header\": a column with 0.25rem gap." },
+    { "part": "PageTitle", "description": "react-aria Heading with data-slot=\"page-title\": display-lg, needle-600. `level` picks the element; 1 by default because a page has one title." },
+    { "part": "PageDescription", "description": "A p with data-slot=\"page-description\": text-base, bark-600, measure capped at 62ch; inline code inside it drops to text-sm." }
+  ],
+  "usage": [
+    "Every route that has a title and an intro renders these parts; never style an h1 or a muted paragraph from route CSS (theming §1.6).",
+    "The route owns the page column (its flex, gap and max-width); the header owns only the title and intro.",
+    "For a title inside a Card use CardTitle and CardDescription instead; these parts are page chrome.",
+    "Keep the intro to a sentence or two; longer guidance belongs in the body."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

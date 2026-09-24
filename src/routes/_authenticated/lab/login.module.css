@@ -1,0 +1,409 @@
+/* Login lab. Static frames holding three sign-in structures; every color is
+ * a --juni-* step or a derivation from one, every font-size a type-scale
+ * token. Frame geometry is in px on purpose: a frame is a viewport, not a
+ * fluid layout. */
+
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 880px;
+}
+
+.lab h2 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.toggleLabel {
+  margin-right: 0.25rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.variants {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.45;
+  color: var(--juni-bark-600);
+}
+
+.verdict {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0 0 0.25rem;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.verdict dt {
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-size: var(--text-2xs);
+  color: var(--juni-bark-500);
+  padding-top: 0.15rem;
+}
+
+.verdict dd {
+  margin: 0;
+  color: var(--juni-bark-700);
+}
+
+/* Frames — a viewport, clipped. */
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--juni-bark-300);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 12px 32px oklch(from var(--juni-bark-950) l c h / 0.18);
+}
+
+.desktop {
+  width: 100%;
+  height: 600px;
+}
+
+.phone {
+  width: 375px;
+  height: 760px;
+  align-self: center;
+}
+
+/* A · the page canvas, one sheet on it. */
+
+.canvas {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background-color: var(--body);
+}
+
+.phone.canvas {
+  padding: 0.75rem;
+}
+
+.sheet {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+}
+
+.phone .sheet {
+  grid-template-columns: 1fr;
+  grid-template-rows: 8rem 1fr;
+  gap: 1.25rem;
+  padding: 1rem;
+}
+
+.panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--juni-lichen-100);
+}
+
+.panelMark {
+  width: 72%;
+  height: auto;
+  color: var(--juni-needle-200);
+}
+
+.phone .panelMark {
+  width: auto;
+  height: 140%;
+}
+
+.panelMark path,
+.hero path,
+.eyebrowMark path,
+.markTile path {
+  fill: currentColor;
+}
+
+.claim {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1rem;
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--juni-needle-800);
+}
+
+.phone .claim {
+  left: 1rem;
+  bottom: 0.75rem;
+  font-size: var(--text-base);
+}
+
+.sheetForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.markTile {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  border-radius: var(--radius-md);
+  background-color: var(--juni-needle-100);
+  color: var(--juni-needle-700);
+}
+
+.markTile svg {
+  width: 1.5rem;
+  height: auto;
+}
+
+/* B, C · the shell's ground with the card on it. */
+
+.ground {
+  padding: 0.5rem;
+  background: linear-gradient(
+    to bottom,
+    var(--juni-needle-400),
+    var(--juni-needle-700) 120%
+  );
+}
+
+.groundLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.phone .groundLayout {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+.groundSide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.5rem 2.5rem 2rem;
+  overflow: hidden;
+}
+
+.phone .groundSide {
+  padding: 1.25rem 1rem 0.75rem;
+  gap: 1rem;
+}
+
+.groundCopy {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-needle-100);
+}
+
+.eyebrowMark {
+  width: 1.25rem;
+  height: auto;
+  color: var(--juni-needle-50);
+}
+
+.groundTitle {
+  margin: 0.75rem 0 0.5rem;
+  font-size: var(--display-lg);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--juni-bark-50);
+}
+
+.phone .groundTitle {
+  margin: 0.5rem 0 0.25rem;
+  font-size: var(--display-sm);
+}
+
+.groundText {
+  margin: 0;
+  max-width: 30ch;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--juni-needle-100);
+}
+
+.phone .groundText {
+  font-size: var(--text-base);
+  max-width: none;
+}
+
+/* The mark as a watermark, bleeding off the ground's corner. */
+.hero {
+  position: absolute;
+  right: -8%;
+  bottom: -6%;
+  width: 66%;
+  height: auto;
+  color: var(--juni-needle-300);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.phone .hero {
+  display: none;
+}
+
+.groundCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: 2.5rem;
+  border-color: transparent;
+  border-radius: var(--radius-md);
+  overflow: auto;
+}
+
+.phone .groundCard {
+  justify-content: flex-start;
+  padding: 1.5rem 1.25rem;
+}
+
+/* C · the workspace list on the ground, the tenant switcher's rows. */
+
+.pickerPanel {
+  position: relative;
+  padding: 0.375rem;
+  border-radius: var(--radius-md);
+  background-color: oklch(from var(--juni-needle-50) l c h / 0.85);
+}
+
+.pickerTile {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+.pickerTile img,
+.pickerTile svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pickerPlan {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--juni-needle-700);
+}
+
+/* The form, one thing in every variant. */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+.formHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: var(--display-sm);
+  color: var(--juni-needle-600);
+}
+
+.formSub {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--juni-bark-600);
+}
+
+.wide {
+  width: 100%;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--juni-bark-200);
+}
+
+.fine {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--juni-bark-500);
+}
