@@ -47,7 +47,8 @@ src/components/
   users-table/                  demo composition: FilterBar + flat table
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
-  login-screen/                 demo composition: the sign-in screen (ground, brand, Card of fields)
+  screen-overlay/               the ground a screen stands on: gradient, CDN photograph, credit
+  login-screen/                 demo composition: the sign-in screen (ScreenOverlay, brand, Card of fields)
     mark.tsx                    private descendant: the glyph as inline SVG
   summary-card/
     summary-card.tsx
@@ -230,18 +231,18 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category
 are screens or screen-sized parts assembled from the primitives, published
 so a consumer copies the structure rather than the component. The
-`login-screen` entry is the reference for a whole screen: the shell's
-needle ground at the sidebar's 0.5rem margin carrying a bark-50 Card, the
-brand on the ground, the form on the card (the extruded controls only read
-on bark-50), Card parts for the title and actions, react-aria native
+`login-screen` entry is the reference for a whole screen: a `ScreenOverlay`
+ground (the shell's needle gradient, a photograph, its credit) carrying a
+bark-50 Card, the brand on the ground, the form on the card (the extruded
+controls only read on bark-50), Card parts for the title and actions, react-aria native
 validation, and a controlled API (`workspaces`, `onSignIn`) with the router
 kept in the route. A demo entry MUST NOT import the router or the mock data
 in `src/lib`; a route shell passes data and links in. Its own assets ship
 inline (an SVG glyph as JSX), because the registry inlines source files, not
-assets; a photograph is a `url()` to its CDN in the module's CSS, credited on
-screen, so nothing ships in the bundle, and the blend keeps it inside the
-palette rather than adding to it. The alternatives a shipped composition was chosen from stay under
-`/lab` as the archive (`/lab/login`).
+assets; the ground's photograph is a `url()` to its CDN, credited on screen
+by `ScreenOverlay`, so nothing ships in the bundle, and the blend keeps it
+inside the palette rather than adding to it. The alternatives a shipped
+composition was chosen from stay under `/lab` as the archive (`/lab/login`).
 
 ## 5. Accessibility baseline
 

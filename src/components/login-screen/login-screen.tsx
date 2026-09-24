@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from "react"
 import { KeyIcon } from "@heroicons/react/24/outline"
+import { type ReactNode, useState } from "react"
 import { Form } from "react-aria-components"
 import { Button } from "@/components/button/button"
 import {
@@ -10,10 +10,10 @@ import {
   CardTitle,
 } from "@/components/card/card"
 import { Input } from "@/components/input/input"
+import { ScreenOverlay } from "@/components/screen-overlay/screen-overlay"
 import { Select } from "@/components/select/select"
-import { ScreenOverlay } from "@/components/textures/screen-overlay"
-import { Mark } from "./mark"
 import styles from "./login-screen.module.css"
+import { Mark } from "./mark"
 
 export interface LoginWorkspace {
   id: string
@@ -63,6 +63,7 @@ export function LoginScreen({
   onSingleSignOn,
   secondaryAction,
   copy,
+  className,
 }: LoginScreenProps) {
   const text = { ...LOGIN_COPY, ...copy }
   const [email, setEmail] = useState("")
@@ -72,7 +73,7 @@ export function LoginScreen({
   )
 
   return (
-    <ScreenOverlay data-slot="login-screen">
+    <ScreenOverlay data-slot="login-screen" className={className}>
       <div className={styles.layout}>
         <div className={styles.brand}>
           <div className={styles.copy}>

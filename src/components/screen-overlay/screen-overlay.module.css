@@ -1,3 +1,5 @@
+/* The shell's ground (the sidebar wrapper's gradient). An inline-size
+ * container, so consumers query the ground's width, not the viewport's. */
 .screen {
   container: screen-overlay / inline-size;
   position: relative;
@@ -12,20 +14,23 @@
   );
 }
 
+/* The photograph, from --image-url set by the component: luminosity blend at
+ * a whisper of opacity, so it lends texture and light and takes the ground's
+ * green; no colour outside the palette enters. The screen isolates, so the
+ * blend sees the gradient beneath. */
 .screen::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    url("https://images.unsplash.com/photo-1762869909580-12e109630a51?auto=format&fit=crop&w=1600&q=80")
-    center / cover no-repeat;
+  background: var(--image-url) center / cover no-repeat;
   mix-blend-mode: luminosity;
   opacity: 0.075;
   pointer-events: none;
 }
 
-/* The photograph's credit, in the layout's bottom-right corner beneath the
- * card. */
+/* The credit, a link pinned to the ground's bottom-right corner: needle-100
+ * at rest, bloom on hover (theming §4.7), the sidebar's outline step for
+ * focus (§4.4). */
 .credit {
   position: absolute;
   right: 0;
