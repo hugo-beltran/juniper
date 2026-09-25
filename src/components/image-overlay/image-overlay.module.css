@@ -32,8 +32,27 @@
   height: 100%;
   object-fit: cover;
   mix-blend-mode: luminosity;
-  opacity: 0.1;
   pointer-events: none;
+}
+
+/* Clarity: the photograph's opacity, low for texture, mid for a ground,
+ * high where the photograph is the point. */
+.lowClarity {
+  .image {
+    opacity: 0.1;
+  }
+}
+
+.mediumClarity {
+  .image {
+    opacity: 0.333;
+  }
+}
+
+.highClarity {
+  .image {
+    opacity: 0.75;
+  }
 }
 
 /* The credit, a link the container's flex alignment places at the bottom-left

@@ -50,7 +50,7 @@ src/components/
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
   image-overlay/                standalone background layer: fills its positioned container behind its siblings
-  login-screen/                 demo composition: the sign-in Card on the FullBleedCanvas
+  login-screen/                 demo composition: the sign-in stage (bar, card, footer)
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -252,23 +252,27 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
-entry is the reference for a whole screen, in parts the route arranges: on the
-`FullBleedCanvas` (the ground for screens outside the shell: `ImageOverlay`
-edge to edge, film grain over the photograph, the credit in the corner), a
-`LoginCard` (the glass Card centred above the layers; the extruded controls
-only read on bark-50) whose header the route fills from Card's own parts (the
-wordmark as the title, a lede), and a `LoginForm` (the fields and the actions,
-react-aria native validation, a controlled API of `onSignIn` with the
-credentials and nothing else) with the router kept in the route, which needs
-no CSS of its own. One composition serves phone and desktop: the layers fill
-whatever the viewport is and the card takes the width but a gutter below 40rem
-of the canvas. A demo entry MUST NOT import the router or the mock data in
-`src/lib`; a route shell passes data, links and the brand in. The registry
-inlines source files, not assets, so the ground's photograph is an `img` from
-its CDN, credited on screen by `ImageOverlay`, and the wordmark is an asset
-the route imports; nothing of either ships in the entry. The alternatives a
-shipped composition was chosen from stay under `/lab` as the archive
-(`/lab/login`, `/lab/glass`).
+entry is the reference for a whole screen, in parts the route arranges: a
+`LoginStage` (the bark-100 ground at the viewport's height in three rows; the
+stage owns the ground, the route paints nothing), a `LoginBar` holding
+`LoginBrand` (the wordmark, sized and coloured by the part) and `LoginNav`
+(the visitor's actions as Buttons asChild around router Links), a `LoginCard`
+(the flat Card centred in the middle row; flat because the ground is flat, and
+the extruded controls read on bark-50) whose header the route fills from
+Card's own parts (a title at level 1, a lede), a `LoginForm` (the fields, a
+slotted help link and the actions, react-aria native validation, a controlled
+API of `onSignIn` with the credentials and nothing else) and a `LoginFooter`
+(one line), with the router kept in the route, which needs no CSS of its own.
+One composition serves phone and desktop: the stage tightens its gutters and
+the card takes the width below 40rem of the stage. A demo entry MUST NOT
+import the router or the mock data in `src/lib`; a route shell passes data,
+links and the brand in. The registry inlines source files, not assets, so the
+wordmark is an asset the route imports and nothing of it ships in the entry.
+The alternatives a shipped composition was chosen from stay under `/lab` as
+the archive (`/lab/login`, `/lab/login-2`, `/lab/glass`): the stage was chosen
+on 2026-09-25 over a photo panel beside the form, a framed sheet and a dark
+pane on the photograph. `FullBleedCanvas` and `ImageOverlay` remain the ground
+for a screen that wants the photograph.
 
 4.8. **Background layers are standalone.** A component that paints a ground
 (`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)

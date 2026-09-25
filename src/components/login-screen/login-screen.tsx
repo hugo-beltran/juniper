@@ -1,5 +1,5 @@
 import { KeyIcon } from "@heroicons/react/24/outline"
-import { type ReactNode, useState } from "react"
+import { type ComponentProps, type ReactNode, useState } from "react"
 import { Form } from "react-aria-components"
 import { Button } from "@/components/button/button"
 import { Card, CardFooter } from "@/components/card/card"
@@ -15,20 +15,64 @@ export interface LoginCredentials {
   password: string
 }
 
-/* The sign-in screen in two parts the route arranges (component-architecture
- * §4.1): LoginCard, the glass Card floating on the FullBleedCanvas, and
- * LoginForm, the fields and the actions. What goes in the card's header (the
- * wordmark, a lede) is the route's to compose from Card's parts, so the same
- * form can sit under another brand. The ground, its photograph, grain and
- * credit are the canvas's. Controlled: the form reports the credentials and
- * the route decides where a sign-in lands. */
+/* The sign-in screen as a stage (chosen 2026-09-25 at /lab/login-2, C), in
+ * parts the route arranges (component-architecture §4.1, §4.7): LoginStage,
+ * the bark-100 ground at the viewport's height in three rows; LoginBar with
+ * LoginBrand (the wordmark) and LoginNav (the visitor's actions); LoginCard,
+ * the flat Card centred in the middle row, whose header the route fills from
+ * Card's parts (a title, a lede); LoginForm, the fields and the actions; and
+ * LoginFooter, one line at the foot. No photograph: flat on flat, so nothing
+ * depends on blur or blend. Controlled: the form reports the credentials
+ * and the route decides where a sign-in lands. */
 
 export interface LoginFormProps {
   onSignIn: (credentials: LoginCredentials) => void
-  /** Renders the "Continue with SSO" button. */
+  /** Renders the "or sign in with" rule and the SSO button. */
   onSingleSignOn?: () => void
-  /** A tertiary action under the buttons: a router Link wearing Button asChild. */
-  secondaryAction?: ReactNode
+  /** Right-aligned under the fields: a discrete Button asChild around a Link. */
+  helpAction?: ReactNode
+  /** The line at the form's foot ("Don't have an account? Request now"). */
+  footnote?: ReactNode
+}
+
+export function LoginStage({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="login-stage"
+      className={cn(styles.stage, className)}
+      {...props}
+    />
+  )
+}
+
+export function LoginBar({ className, ...props }: ComponentProps<"header">) {
+  return (
+    <header
+      data-slot="login-bar"
+      className={cn(styles.bar, className)}
+      {...props}
+    />
+  )
+}
+
+export function LoginBrand({ className, ...props }: ComponentProps<"span">) {
+  return (
+    <span
+      data-slot="login-brand"
+      className={cn(styles.brand, className)}
+      {...props}
+    />
+  )
+}
+
+export function LoginNav({ className, ...props }: ComponentProps<"nav">) {
+  return (
+    <nav
+      data-slot="login-nav"
+      className={cn(styles.nav, className)}
+      {...props}
+    />
+  )
 }
 
 export function LoginCard({
@@ -38,17 +82,24 @@ export function LoginCard({
   children: ReactNode
   className?: string
 }) {
+  return <Card className={cn(styles.card, className)}>{children}</Card>
+}
+
+export function LoginFooter({ className, ...props }: ComponentProps<"p">) {
   return (
-    <Card variant="glass" className={cn(styles.card, className)}>
-      {children}
-    </Card>
+    <p
+      data-slot="login-footer"
+      className={cn(styles.siteFooter, className)}
+      {...props}
+    />
   )
 }
 
 export function LoginForm({
   onSignIn,
   onSingleSignOn,
-  secondaryAction,
+  helpAction,
+  footnote,
 }: LoginFormProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -83,6 +134,7 @@ export function LoginForm({
         isRequired
         errorMessage="Enter your password"
       />
+      {helpAction && <div className={styles.help}>{helpAction}</div>}
       <CardFooter className={styles.footer}>
         <Button type="submit" className={styles.wide}>
           Sign in
@@ -90,7 +142,7 @@ export function LoginForm({
         {onSingleSignOn && (
           <>
             <div className={styles.divider}>
-              <span>or</span>
+              <span>or sign in with</span>
             </div>
             <Button
               variant="secondary"
@@ -98,14 +150,11 @@ export function LoginForm({
               onPress={() => onSingleSignOn()}
             >
               <KeyIcon />
-              Continue with SSO
+              Single sign-on
             </Button>
           </>
         )}
-        {secondaryAction}
-        <p className={styles.fine}>
-          Demo page: nothing is stored and no account is created.
-        </p>
+        {footnote && <p className={styles.fine}>{footnote}</p>}
       </CardFooter>
     </Form>
   )

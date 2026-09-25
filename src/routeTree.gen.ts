@@ -24,6 +24,7 @@ import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedLabGlassRouteImport } from './routes/_authenticated/lab/glass'
 import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
 import { Route as AuthenticatedLabLoginRouteImport } from './routes/_authenticated/lab/login'
+import { Route as AuthenticatedLabLogin2RouteImport } from './routes/_authenticated/lab/login-2'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -102,6 +103,11 @@ const AuthenticatedLabLoginRoute = AuthenticatedLabLoginRouteImport.update({
   path: '/lab/login',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLabLogin2Route = AuthenticatedLabLogin2RouteImport.update({
+  id: '/lab/login-2',
+  path: '/lab/login-2',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
   id: '/lab/palette',
   path: '/lab/palette',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/lab/glass': typeof AuthenticatedLabGlassRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/login': typeof AuthenticatedLabLoginRoute
+  '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesByTo {
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/lab/glass': typeof AuthenticatedLabGlassRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
   '/lab/login': typeof AuthenticatedLabLoginRoute
+  '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesById {
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/_authenticated/lab/glass': typeof AuthenticatedLabGlassRoute
   '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
   '/_authenticated/lab/login': typeof AuthenticatedLabLoginRoute
+  '/_authenticated/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRouteTypes {
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/lab/glass'
     | '/lab/lift'
     | '/lab/login'
+    | '/lab/login-2'
     | '/lab/palette'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/lab/glass'
     | '/lab/lift'
     | '/lab/login'
+    | '/lab/login-2'
     | '/lab/palette'
   id:
     | '__root__'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lab/glass'
     | '/_authenticated/lab/lift'
     | '/_authenticated/lab/login'
+    | '/_authenticated/lab/login-2'
     | '/_authenticated/lab/palette'
   fileRoutesById: FileRoutesById
 }
@@ -328,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLabLoginRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/login-2': {
+      id: '/_authenticated/lab/login-2'
+      path: '/lab/login-2'
+      fullPath: '/lab/login-2'
+      preLoaderRoute: typeof AuthenticatedLabLogin2RouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/palette': {
       id: '/_authenticated/lab/palette'
       path: '/lab/palette'
@@ -352,6 +371,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLabGlassRoute: typeof AuthenticatedLabGlassRoute
   AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
   AuthenticatedLabLoginRoute: typeof AuthenticatedLabLoginRoute
+  AuthenticatedLabLogin2Route: typeof AuthenticatedLabLogin2Route
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
 }
 
@@ -369,6 +389,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLabGlassRoute: AuthenticatedLabGlassRoute,
   AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
   AuthenticatedLabLoginRoute: AuthenticatedLabLoginRoute,
+  AuthenticatedLabLogin2Route: AuthenticatedLabLogin2Route,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
 }
 

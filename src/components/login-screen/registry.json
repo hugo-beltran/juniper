@@ -1,15 +1,31 @@
 {
   "title": "Login screen",
-  "description": "The sign-in screen as the reference composition for a whole screen built from the contract, in two parts the route arranges: LoginCard, a glass Card (the pane) floating on the FullBleedCanvas, and LoginForm, two required Inputs and a stacked CardFooter of primary Sign in, an or-divider, a secondary SSO button, a slotted tertiary link and fine print. The route fills the card's header from Card's own parts (the wordmark as the title, a one-line lede) and places the form under it. One composition for phone and desktop: the card is 80% of the canvas up to 30rem, and takes the width but a gutter below 40rem.",
+  "description": "The sign-in screen as the reference composition for a whole screen built from the contract: a stage (chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane), in parts the route arranges. LoginStage is the bark-100 ground at the viewport's height in three rows; LoginBar holds LoginBrand (the wordmark) and LoginNav (the visitor's actions); LoginCard is the flat Card centred in the middle row, whose header the route fills from Card's own parts (a title, a lede); LoginForm is two required Inputs, a slotted help link and a stacked CardFooter of primary Sign in, an 'or sign in with' rule, the SSO button and a slotted footnote; LoginFooter is one line at the foot. No photograph: flat on flat. One composition for phone and desktop, tightened below 40rem of the stage.",
   "category": "demo",
   "anatomy": [
     {
+      "part": "LoginStage",
+      "description": "Root div with data-slot=\"login-stage\": a grid of three rows (auto, 1fr, auto), min-height 100svh, bark-100, 1.25rem 2rem 1rem padding, an inline-size container named login-stage. It owns the ground; the route paints nothing (theming §1.6)."
+    },
+    {
+      "part": "LoginBar",
+      "description": "A header with data-slot=\"login-bar\": a flex row, space-between, for LoginBrand on the left and LoginNav on the right."
+    },
+    {
+      "part": "LoginBrand",
+      "description": "A span with data-slot=\"login-brand\" that sizes the svg inside it (6.5rem wide, 5.5rem below 40rem) and colours it needle-800 through currentColor. The route imports the wordmark asset and drops it in."
+    },
+    {
+      "part": "LoginNav",
+      "description": "A nav with data-slot=\"login-nav\": a 0.5rem row for the visitor's actions, Buttons asChild around router Links (a discrete link and the one primary of the bar)."
+    },
+    {
       "part": "LoginCard",
-      "description": "The house Card in its glass variant (data-slot=\"card\", data-variant=\"glass\"): 80% of the canvas up to 30rem, centred by the canvas, with children. Its module gives the card's header 2rem below and sizes an svg inside the title to 60% of the width, so a wordmark can stand where the text would."
+      "description": "The house Card in its flat variant (data-slot=\"card\", data-variant=\"flat\"), centred in the middle row: the width up to 26rem, 1.75rem 2rem padding (1.5rem 1.25rem below 40rem), the xl radius, the bark-200 hairline at 60%. Its module gives the card's header 1.25rem below."
     },
     {
       "part": "CardHeader",
-      "description": "Composed by the route from Card's parts: CardTitle carrying the Juniper wordmark (the svg from src/assets, currentColor) over a one-line CardDescription lede."
+      "description": "Composed by the route from Card's parts: CardTitle at level 1 (the page's main content) over a one-line CardDescription lede."
     },
     {
       "part": "LoginForm",
@@ -17,22 +33,25 @@
     },
     {
       "part": "Fields",
-      "description": "Email Input (type email, autocomplete username, autoFocus) and Password Input (autocomplete current-password). Nothing user-scoped: which workspaces exist is an answer the API gives after sign-in, so no workspace picker before it (component-architecture §6.4)."
+      "description": "Email Input (type email, autocomplete username, autoFocus) and Password Input (autocomplete current-password), then the slotted helpAction right-aligned beneath them. Nothing user-scoped: which workspaces exist is an answer the API gives after sign-in, so no workspace picker before it (component-architecture §6.4)."
     },
     {
       "part": "CardFooter",
-      "description": "Stacked: the primary submit, an or-divider, the secondary Continue with SSO button (only with onSingleSignOn), the slotted secondaryAction (a discrete Button asChild around a router Link) and the fine print."
+      "description": "Stacked: the primary submit, the 'or sign in with' rule and the secondary Single sign-on button (only with onSingleSignOn), and the footnote (a p at text-sm, bark-500, whose links are needle-800 and answer in bloom on hover)."
+    },
+    {
+      "part": "LoginFooter",
+      "description": "A p with data-slot=\"login-footer\": one centred line at text-sm, bark-600, in the stage's last row (the copyright, a privacy link, the demo's disclaimer)."
     }
   ],
   "usage": [
-    "A reference composition, not a reusable primitive: copy the structure (FullBleedCanvas as the ground, a glass Card centred on it, the header from Card's parts, the form from Field-composed controls) rather than the components.",
-    "The route arranges: <FullBleedCanvas><LoginCard><CardHeader>…</CardHeader><LoginForm … /></LoginCard></FullBleedCanvas>. The card's title and lede are the route's words (or its wordmark); the form's fine print is the form's own.",
-    "Render it on FullBleedCanvas: the card's width and its narrow rule are relative to the canvas (@container full-bleed-canvas), and the route needs no CSS of its own.",
+    "A reference composition, not a reusable primitive: copy the structure (a stage in three rows, a flat Card in the middle, the header from Card's parts, the form from Field-composed controls) rather than the components.",
+    "The route arranges: <LoginStage><LoginBar><LoginBrand>…</LoginBrand><LoginNav>…</LoginNav></LoginBar><LoginCard><CardHeader>…</CardHeader><LoginForm … /></LoginCard><LoginFooter>…</LoginFooter></LoginStage>. The title, the lede, the bar's actions, the help link, the footnote and the footer are the route's words and links; the route needs no CSS of its own.",
     "Controlled: onSignIn({ email, password }) is all the form reports and the component never navigates; the route decides where a sign-in lands. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
-    "Pass onSingleSignOn (no arguments) to render the SSO button; leave it out and the divider goes with it. Pass the guest or sign-up link as secondaryAction so the router stays in the route.",
-    "The card wears glass because it floats on a ground (theming §4.6); the form lives on it because the extruded controls only read on a bark-50 surface. Never move fields onto the ground.",
+    "Pass onSingleSignOn (no arguments) to render the SSO button; leave it out and the rule goes with it. Pass helpAction and footnote as nodes built from Button asChild and router Links so the router stays in the route.",
+    "The card is flat because the ground is flat (theming §4.6): a card separates from bark-100 by tint and hairline. Glass is for a card on a photograph, and this screen has none; the FullBleedCanvas and ImageOverlay stay in the registry for screens that do.",
     "Validation is react-aria's native behaviour; do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
-    "The ground, its photograph, grain and credit come from FullBleedCanvas; change them there, never in this module."
+    "The alternatives this was chosen from (a photo panel beside the form, a framed sheet, the dark pane) stay at /lab/login-2 as the archive; the first round at /lab/login."
   ],
   "docs": ["component-architecture", "theming"]
 }

@@ -23,6 +23,7 @@ const cardVariants = cva(styles.card, {
     variant: {
       flat: styles.flat,
       glass: styles.glass,
+      "dark-glass": styles.darkGlass,
     },
   },
   defaultVariants: { variant: "flat" },

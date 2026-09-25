@@ -33,6 +33,11 @@
               "label": "Glass",
               "to": "/lab/glass",
               "icon": "sparkles"
+            },
+            {
+              "label": "Login \u00b7 round 2",
+              "to": "/lab/login-2",
+              "icon": "arrow-right-end-on-rectangle"
             }
           ]
         },

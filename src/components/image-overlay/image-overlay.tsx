@@ -1,3 +1,4 @@
+import { cva, type VariantProps } from "class-variance-authority"
 import type { ComponentProps } from "react"
 import { cn } from "@/lib/cn"
 import styles from "./image-overlay.module.css"
@@ -7,7 +8,10 @@ import styles from "./image-overlay.module.css"
  * container's full width and height and sits behind the siblings that follow it,
  * so the same layer can ground a whole screen, a card or a panel.
  * The photograph is a real img (alt="", decorative) rather than a CSS url(),
- * and an element lets the browser fetch and decode it like any image. */
+ * and an element lets the browser fetch and decode it like any image.
+ * `clarity` sets how much of it shows through the gradient: low (10%) for
+ * a texture under copy, mid (33%, the default) for a ground, high (75%)
+ * where the photograph is the point. */
 
 export interface ImageResource {
   url: string
@@ -27,17 +31,31 @@ export interface ImageOverlayProps extends ComponentProps<"div"> {
   image?: ImageResource
 }
 
+const imageOverlayVariants = cva(styles.container, {
+  variants: {
+    clarity: {
+      low: styles.lowClarity,
+      mid: styles.mediumClarity,
+      high: styles.highClarity,
+    },
+  },
+  defaultVariants: {
+    clarity: "mid",
+  },
+})
+
 export function ImageOverlay({
   className,
+  clarity,
   image = DEFAULT_IMAGE,
   ...props
-}: ImageOverlayProps) {
+}: ImageOverlayProps & VariantProps<typeof imageOverlayVariants>) {
   const { url, creditHref, caption } = image
 
   return (
     <div
       data-slot="image-overlay"
-      className={cn(styles.container, className)}
+      className={cn(imageOverlayVariants({ clarity }), className)}
       {...props}
     >
       <img

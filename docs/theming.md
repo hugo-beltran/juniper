@@ -178,8 +178,15 @@ never by shadow.
   fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
   specular line along the top edge, the translucent ring, and a
   bloom-tinted drop at equal x and y offsets, so card and button are lit by
-  one lamp. Flat stays the default and the only material for a card inside
-  the shell's inset. Chosen on 2026-09-24 at `/lab/glass` over a lighter
+  one lamp. The same pane comes in the dark ramp as **dark-glass**
+  (bloom-900 into bloom-950, the light turned down) for a card whose copy
+  is light; its title and description are re-tuned to the light ramp by
+  the surface, not the consumer (component-architecture §3.9). The dark ramp
+  gives the Button its **rich** variant too: the primary's pane from
+  bloom-800 into bloom-900 with needle-50 copy, for a light sheet where the
+  green pane would shout; it stands in for the primary, never beside it.
+  Flat stays the default and the only material for a card inside the
+  shell's inset, and for a card on a flat ground such as the login's stage. Chosen on 2026-09-24 at `/lab/glass` over a lighter
   baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
   stay there as the archive.
 - The primary action keeps its own material: the chromatic **glass pane**
