@@ -4,10 +4,12 @@ import {
   ArrowsRightLeftIcon,
   BookOpenIcon,
   ChartPieIcon,
+  CircleStackIcon,
   Cog6ToothIcon,
   CubeIcon,
   CubeTransparentIcon,
   LifebuoyIcon,
+  MapIcon,
   PencilSquareIcon,
   RectangleGroupIcon,
   SparklesIcon,
@@ -15,6 +17,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline"
 import { useSuspenseQuery } from "@tanstack/react-query"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import {
   createFileRoute,
   Link,
@@ -22,7 +25,13 @@ import {
   useLocation,
   useNavigate,
 } from "@tanstack/react-router"
-import { type ComponentType, type SVGProps, useState } from "react"
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import {
+  type ComponentType,
+  type KeyboardEvent,
+  type SVGProps,
+  useState,
+} from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -89,6 +98,17 @@ function useNavBadges(): Record<NavBadge, number> {
   return { "pending-analysis": pendingAnalysisCount(leads) }
 }
 
+/* The two TanStack devtools, in development only: each is a row in the
+ * sidebar footer that opens its panel in a dock at the foot of the inset,
+ * one at a time, instead of the libraries' own floating corner buttons.
+ * The row is a disclosure (aria-expanded, aria-controls): the sidebar reads
+ * an open one like the active item, indicator included, but leaves it
+ * pressable so the same press closes it (an active item takes no pointer).
+ * The panels compile to nothing outside development; the rows go with
+ * them. */
+type Devtool = "query" | "router"
+const DEVTOOLS_DOCK_ID = "devtools-dock"
+
 const ownsPath = (tenant: NavTenant, pathname: string) =>
   tenant.groups.some((group) =>
     group.items.some((item) => item.to !== undefined && item.to === pathname),
@@ -101,6 +121,28 @@ function AuthenticatedLayout() {
   const navigate = useNavigate()
   const badges = useNavBadges()
   const [selectedId, setSelectedId] = useState(defaultTenant(tree).id)
+  const [devtool, setDevtool] = useState<Devtool | null>(null)
+
+  const toggleDevtool = (next: Devtool) =>
+    setDevtool((current) => (current === next ? null : next))
+
+  /* Closing from the dock (its close button, Escape) returns focus to the
+   * row that opened it (component-architecture §5.3). */
+  const closeDevtools = () => {
+    document
+      .querySelector<HTMLElement>(
+        `[aria-controls="${DEVTOOLS_DOCK_ID}"][aria-expanded="true"]`,
+      )
+      ?.focus()
+    setDevtool(null)
+  }
+
+  const onDockKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      event.stopPropagation()
+      closeDevtools()
+    }
+  }
 
   /* The URL wins: landing on a route a tenant owns selects that tenant, so
    * a deep link never shows one tenant's menu over another's page. The
@@ -196,6 +238,30 @@ function AuthenticatedLayout() {
          * alone (component-architecture §3.10). */}
         <SidebarFooter>
           <SidebarMenu>
+            {import.meta.env.DEV && (
+              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "query"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("query")}
+                  >
+                    <CircleStackIcon />
+                    <span>Query devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "router"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("router")}
+                  >
+                    <MapIcon />
+                    <span>Router devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </>
+            )}
             <SidebarMenuItem>
               <SidebarMenuButton onPress={() => navigate({ to: "/login" })}>
                 <ArrowLeftStartOnRectangleIcon />
@@ -212,6 +278,31 @@ function AuthenticatedLayout() {
         <div className={styles.main}>
           <Outlet />
         </div>
+        {devtool && (
+          <aside
+            id={DEVTOOLS_DOCK_ID}
+            aria-label={
+              devtool === "query" ? "Query devtools" : "Router devtools"
+            }
+            className={styles.devtools}
+            onKeyDown={onDockKeyDown}
+          >
+            {devtool === "query" ? (
+              <ReactQueryDevtoolsPanel
+                style={{ height: "100%" }}
+                onClose={closeDevtools}
+              />
+            ) : (
+              <TanStackRouterDevtoolsPanel
+                style={{ height: "100%" }}
+                isOpen
+                setIsOpen={(open) => {
+                  if (!open) closeDevtools()
+                }}
+              />
+            )}
+          </aside>
+        )}
       </SidebarInset>
     </SidebarProvider>
   )

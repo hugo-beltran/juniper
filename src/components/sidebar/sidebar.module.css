@@ -213,18 +213,30 @@
 /* Hover = attention, not decoration: rows idle at 0.9, the pointed-at row
  * bumps to 1, and the remaining candidates recede. Active elements never
  * dim — the current page is a landmark, not part of the hover conversation.
- * Keyboard focus mirrors hover. */
+ * Keyboard focus mirrors hover. An open disclosure row (aria-expanded="true")
+ * stands with the active item in every rule below. */
 .menuButton:hover,
 .menuButton:focus-visible,
 .menuButton[data-active],
-.menuButton[aria-current="page"] {
+.menuButton[aria-current="page"],
+.menuButton[aria-expanded="true"] {
   color: var(--juni-needle-900);
 }
 
 .menu:has(.menuButton:hover)
-  .menuButton:not(:hover, [data-active], [aria-current="page"]),
+  .menuButton:not(
+    :hover,
+    [data-active],
+    [aria-current="page"],
+    [aria-expanded="true"]
+  ),
 .menu:has(.menuButton:focus-visible)
-  .menuButton:not(:focus-visible, [data-active], [aria-current="page"]) {
+  .menuButton:not(
+    :focus-visible,
+    [data-active],
+    [aria-current="page"],
+    [aria-expanded="true"]
+  ) {
   color: var(--juni-needle-700);
   opacity: 0.75;
 }
@@ -257,11 +269,19 @@
 }
 
 /* Active via explicit prop (data-active) or a TanStack Router link's own
- * aria-current="page" — no extra wiring needed at call sites. */
+ * aria-current="page" — no extra wiring needed at call sites. The current
+ * page is a landmark, so it takes no pointer. */
 .menuButton[data-active],
 .menuButton[aria-current="page"] {
   color: var(--juni-bloom-700);
   pointer-events: none;
+}
+
+/* A disclosure row that is open (aria-expanded="true", the shell's devtools
+ * rows) reads exactly like the active item, and keeps its pointer: pressing
+ * it again is how the panel closes (component-architecture §5.3). */
+.menuButton[aria-expanded="true"] {
+  color: var(--juni-bloom-700);
 }
 
 /* Trailing reveal: a chevron slides in at the row's end on hover/focus.
@@ -288,7 +308,8 @@
 
 .menuButton:is(:hover, :focus-visible):not(
   [data-active],
-  [aria-current="page"]
+  [aria-current="page"],
+  [aria-expanded]
 )::after {
   opacity: 1;
   transform: translateX(0);

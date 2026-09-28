@@ -374,9 +374,10 @@ export function SidebarMenu({
    * inset panel begins — and a clip-path carves a browser-tab silhouette
    * (rounded left corners, concave flares at the junction) so the active item
    * reads as part of the inset surface. Measured against whichever item is
-   * active (a router link's aria-current="page", or an explicit data-active);
-   * a MutationObserver keeps it router-agnostic, a ResizeObserver re-seats it
-   * through the collapse animation. */
+   * active (a router link's aria-current="page", an explicit data-active, or
+   * a disclosure row that is open, aria-expanded="true"); a MutationObserver
+   * keeps it router-agnostic, a ResizeObserver re-seats it through the
+   * collapse animation. */
   useEffect(() => {
     const list = listRef.current
     const indicator = indicatorRef.current
@@ -406,7 +407,7 @@ export function SidebarMenu({
 
     const position = () => {
       const active = list.querySelector<HTMLElement>(
-        '[aria-current="page"], [data-active]',
+        '[aria-current="page"], [data-active], [aria-expanded="true"]',
       )
       if (!active) {
         indicator.style.opacity = "0"
@@ -445,7 +446,7 @@ export function SidebarMenu({
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ["aria-current", "data-active"],
+      attributeFilter: ["aria-current", "data-active", "aria-expanded"],
     })
     const resizes = new ResizeObserver(position)
     resizes.observe(list)
