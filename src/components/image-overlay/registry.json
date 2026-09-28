@@ -1,15 +1,15 @@
 {
   "title": "Image overlay",
-  "description": "A standalone background layer: the shell's needle gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at one of three clarities (low, mid, high), and the photograph's credit at the bottom-left. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
+  "description": "A standalone background layer: a pale bark-100 to needle-400 gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at one of three clarities (low, mid, high), and the photograph's credit at the bottom-left. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
   "category": "layout",
   "anatomy": [
     {
       "part": "ImageOverlay",
-      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the needle-400 to needle-700 gradient, isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together; `clarity` (low | mid | high, mid by default) sets how much of it shows. No children."
+      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the bark-100 to needle-400 gradient (needle reached at 150%, so the ground stays pale; retuned 2026-09-28 from needle-400 into needle-700), isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together; `clarity` (low | mid | high, mid by default) sets how much of it shows. No children."
     },
     {
       "part": "Image",
-      "description": "A decorative img (alt=\"\", async decoding, high fetch priority) covering the ground at z-index -1 inside the isolated root: object-fit cover, luminosity blend, opacity by clarity (low 10%, mid 33%, high 75%), pointer-events none. An element, not a CSS url(): CSS cannot take a URL from a data attribute."
+      "description": "A decorative img (alt=\"\", async decoding, high fetch priority) covering the ground at z-index -1 inside the isolated root: object-fit cover, luminosity blend, opacity by clarity (low 7.5%, mid 25%, high 50%; turned down 2026-09-28 with the paler ground), pointer-events none. An element, not a CSS url(): CSS cannot take a URL from a data attribute."
     },
     {
       "part": "Credit",

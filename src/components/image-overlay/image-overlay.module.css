@@ -13,8 +13,8 @@
   flex: 1;
   background: linear-gradient(
     to bottom,
-    var(--juni-needle-400),
-    var(--juni-needle-700) 120%
+    var(--juni-bark-100),
+    var(--juni-needle-400) 150%
   );
   justify-items: start;
   align-items: end;
@@ -39,19 +39,19 @@
  * high where the photograph is the point. */
 .lowClarity {
   .image {
-    opacity: 0.1;
+    opacity: 0.075;
   }
 }
 
 .mediumClarity {
   .image {
-    opacity: 0.333;
+    opacity: 0.25;
   }
 }
 
 .highClarity {
   .image {
-    opacity: 0.75;
+    opacity: 0.5;
   }
 }
 

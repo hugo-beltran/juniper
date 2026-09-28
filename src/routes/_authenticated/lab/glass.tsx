@@ -59,7 +59,7 @@ function Sample({ alt }: { alt: (typeof ALTERNATIVES)[number]["id"] }) {
   return (
     <div className={styles.frame}>
       <ImageOverlay />
-      <Card variant="glass" className={cn(styles.sample, styles[alt])}>
+      <Card material="glass" className={cn(styles.sample, styles[alt])}>
         <CardHeader>
           <CardTitle level={3}>Sign in</CardTitle>
           <CardDescription>Inspired by nature's clarity.</CardDescription>

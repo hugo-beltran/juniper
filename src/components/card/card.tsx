@@ -7,8 +7,10 @@ import styles from "./card.module.css"
 /* Generic surface container, with the shadcn Card's named parts ported
  * onto it (component-architecture §8): CardHeader, CardTitle,
  * CardDescription and CardFooter. CardContent is deliberately not ported:
- * Card already pads, and a content wrapper would only restate it. Two
- * materials by `variant`: `flat` (default), the bark-50 sheet with a
+ * Card already pads, and a content wrapper would only restate it. Three
+ * materials by `material` (the axis is what the card is made of, not a
+ * role, so it is not called `variant`; mirrored as data-material per
+ * component-architecture §3.4): `flat` (default), the bark-50 sheet with a
  * bark-200 hairline that separates by border and tint (theming §4.6), and
  * `glass`, for a card that floats on a ground: the primary button's pane on
  * a surface, a radial fill lit from the top-left over a backdrop blur, a
@@ -20,25 +22,25 @@ import styles from "./card.module.css"
 
 const cardVariants = cva(styles.card, {
   variants: {
-    variant: {
+    material: {
       flat: styles.flat,
       glass: styles.glass,
       "dark-glass": styles.darkGlass,
     },
   },
-  defaultVariants: { variant: "flat" },
+  defaultVariants: { material: "flat" },
 })
 
 export interface CardProps
   extends ComponentProps<"div">,
     VariantProps<typeof cardVariants> {}
 
-export function Card({ className, variant, ...props }: CardProps) {
+export function Card({ className, material, ...props }: CardProps) {
   return (
     <div
       data-slot="card"
-      data-variant={variant ?? "flat"}
-      className={cn(cardVariants({ variant }), className)}
+      data-material={material ?? "flat"}
+      className={cn(cardVariants({ material }), className)}
       {...props}
     />
   )

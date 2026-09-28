@@ -12,7 +12,7 @@
 }
 
 /* Glass: a pane on a ground, lit by the primary button's lamp (theming
- * §4.6). The two glass variants share one recipe and differ only in the
+ * §4.6). The two glass materials share one recipe and differ only in the
  * ramp: a radial fill lit from beyond the top-left corner (50% there, 20%
  * at the far edge) over a 0.25rem backdrop blur so the ground shows
  * through, a hairline, a 1px specular line along the top edge, a 1px inner
@@ -26,8 +26,8 @@
 .glass {
   background: radial-gradient(
     circle at 30% 20%,
-    oklch(from var(--juni-bark-50) l c h / 0.5) -20%,
-    oklch(from var(--juni-bark-100) l c h / 0.2) 80%
+    oklch(from var(--juni-bark-50) l c h / 0.9) -20%,
+    oklch(from var(--juni-bark-100) l c h / 0.6) 80%
   );
   border-color: oklch(from var(--juni-bark-200) l c h / 0.2);
   backdrop-filter: blur(0.5rem);
@@ -66,7 +66,7 @@
 .title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--display-lg);
+  font-size: var(--display-md);
   font-weight: 700;
   line-height: 1.2;
   color: var(--juni-bloom-800);
@@ -76,9 +76,9 @@
 
 .description {
   margin: 0;
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   line-height: 1.5;
-  color: var(--juni-bark-600);
+  color: var(--juni-bark-700);
   text-align: center;
 }
 

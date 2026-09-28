@@ -175,7 +175,7 @@
  * strength (bloom-700 at 10%).
  * :where keeps the rule at zero specificity, so it only sets the inherited
  * token and never competes with a component's own declarations. */
-:where([data-slot="card"][data-variant="glass"]) {
+:where([data-slot="card"][data-material="glass"]) {
   --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.3);
   --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.1);
 }

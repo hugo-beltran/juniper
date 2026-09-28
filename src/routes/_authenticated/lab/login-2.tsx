@@ -305,7 +305,7 @@ function PaneMock({ frame }: { frame: Frame }) {
   return (
     <div className={cn(styles.frame, styles[frame])}>
       <Ground clarity="high" />
-      <Card variant="dark-glass" className={cn(styles.pane, styles.dark)}>
+      <Card material="dark-glass" className={cn(styles.pane, styles.dark)}>
         <Mark className={styles.paneMark} aria-hidden />
         <Form>
           <div className={styles.head}>

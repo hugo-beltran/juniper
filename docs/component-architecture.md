@@ -124,7 +124,10 @@ const buttonVariants = cva(styles.button, {
 3.4. The root element of every component and of every named part MUST carry
 `data-slot="<kebab-name>"`. Variant and size MUST be mirrored as
 `data-variant` / `data-size`. These are the stable hooks for tests, parents
-and consumer overrides.
+and consumer overrides. A CVA axis that is not a role is named for what it
+is and mirrored under that name: `Card` picks what the surface is made of,
+so its axis is `material`, mirrored as `data-material` (renamed from
+`variant` on 2026-09-28); the theme's glass re-tune keys on it (3.9).
 
 3.5. Use react-aria semantics: `onPress` not `onClick`, `isDisabled` not
 `disabled`, `isSelected`, `selectedKeys`. State styling in CSS MUST use the
@@ -160,7 +163,7 @@ the alternative is real: a `variant` prop for every surface a control can
 land on, providers for every ancestor that matters, and a render that
 re-runs to change a shadow. Precedents: the theme re-tunes
 `--lift-highlight` for every control inside a glass card through a
-`:where([data-slot="card"][data-variant="glass"])` rule, at zero
+`:where([data-slot="card"][data-material="glass"])` rule, at zero
 specificity, and no control knows it happened; `ListBox` styles its rows
 through the root's `data-variant` so items take no prop; the sidebar
 inset publishes `data-narrow` and consumers query it; hover for a slotted
@@ -168,6 +171,18 @@ link is `:not([data-rac]):hover`, not a wrapper. Reach for React only when
 CSS cannot know the fact (data, selection, a measurement), and then
 publish the fact as a data attribute or custom property once (4.0) so the
 rest stays CSS.
+
+3.10. **Icons are rare.** An icon earns its place when it carries a
+meaning the words beside it do not (a status glyph, a tool in a toolbar
+with no room for words); it MUST NOT decorate a control whose label already
+says what it does. A row of labelled buttons each wearing a glyph reads as
+a gimmick, not a system. Where an action points somewhere, prefer the
+typographic arrow inside the label (`→`, `←`, `›`) to an icon: it sets in
+the text's own size, weight and colour, needs no sizing rule and no
+`aria-hidden`. Decided 2026-09-28 on the login screen, whose single
+sign-on button lost its key and whose panel switches became
+`Use your credentials →` and `← Use single sign-on`; heroicons stays the
+source for the icons that remain (1).
 
 ## 4. Composition patterns
 

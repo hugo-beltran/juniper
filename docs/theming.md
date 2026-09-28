@@ -95,7 +95,7 @@ names the one place a display face could diverge later without touching
 components, and until it does there is still no second face on screen. A
 component MUST NOT restate a family name; it inherits or uses the token.
 
-4.2.1. **Type scale.** Every `font-size` MUST be one of the ten tokens
+4.2.1. **Type scale.** Every `font-size` MUST be one of the eleven tokens
 below or `inherit`. No free values: the scale was binned on 2026-09-17
 from 21 values then in use, most of them within half a pixel of a
 neighbour. Headings sit on it too (`h1` display-lg, `h2` display-sm, `h3`
@@ -111,6 +111,7 @@ text-xl, `h4`–`h6` text-base).
 | `--text-lg` | 16px | Document body, intros |
 | `--text-xl` | 18px | Emphasized names, `h3` |
 | `--display-sm` | 22px | Section headings, `h2` |
+| `--display-md` | 24px | A card's title: the `h1` of a screen that is one card, the login (added 2026-09-28) |
 | `--display-lg` | 32px | Page titles, KPI metrics, `h1` |
 | `--display-xl` | 40px | Hero titles: a brand tagline on a ground (added 2026-09-24) |
 

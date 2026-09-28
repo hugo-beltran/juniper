@@ -38,6 +38,7 @@
   --text-lg: 1rem; /* 16px — document body, intros */
   --text-xl: 1.125rem; /* 18px — emphasized names, h3 */
   --display-sm: 1.375rem; /* 22px — section headings, h2 */
+  --display-md: 1.5rem; /* 24px — page titles, KPI metrics, h1 */
   --display-lg: 2rem; /* 32px — page titles, KPI metrics, h1 */
   --display-xl: 2.5rem; /* 40px — hero titles: a brand tagline on a ground (2026-09-24) */
 }
