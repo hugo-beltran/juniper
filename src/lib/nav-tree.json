@@ -38,6 +38,11 @@
               "label": "Login \u00b7 round 2",
               "to": "/lab/login-2",
               "icon": "arrow-right-end-on-rectangle"
+            },
+            {
+              "label": "Dock",
+              "to": "/lab/dock",
+              "icon": "device-phone-mobile"
             }
           ]
         },

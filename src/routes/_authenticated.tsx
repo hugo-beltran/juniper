@@ -8,6 +8,7 @@ import {
   Cog6ToothIcon,
   CubeIcon,
   CubeTransparentIcon,
+  DevicePhoneMobileIcon,
   LifebuoyIcon,
   MapIcon,
   PencilSquareIcon,
@@ -89,6 +90,7 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   "pencil-square": PencilSquareIcon,
   "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
   sparkles: SparklesIcon,
+  "device-phone-mobile": DevicePhoneMobileIcon,
 }
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides
