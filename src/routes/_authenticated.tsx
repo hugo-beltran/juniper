@@ -1,4 +1,5 @@
 import {
+  ArrowLeftStartOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
   ArrowsRightLeftIcon,
   BookOpenIcon,
@@ -25,6 +26,7 @@ import { type ComponentType, type SVGProps, useState } from "react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -186,6 +188,22 @@ function AuthenticatedLayout() {
             </SidebarGroup>
           ))}
         </SidebarContent>
+        {/* The session's one exit, a menu row in the footer so it wears the
+         * nav's face, its icon and its collapsed-rail label. A Button, not a
+         * link: logging out is an action on the session, and the shell owns
+         * where it lands. The demo has no auth, so landing on /login is all
+         * it does. The icon is the rail's: collapsed, a row is its icon
+         * alone (component-architecture §3.10). */}
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton onPress={() => navigate({ to: "/login" })}>
+                <ArrowLeftStartOnRectangleIcon />
+                <span>Log out</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <SidebarInsetHeader>

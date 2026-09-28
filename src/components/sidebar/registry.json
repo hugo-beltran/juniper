@@ -25,7 +25,7 @@
     },
     {
       "part": "SidebarHeader / SidebarContent / SidebarFooter",
-      "description": "Vertical regions of the column."
+      "description": "Vertical regions of the column: the header holds the TenantSwitcher, the content the tenant's groups and scrolls, the footer the session's exit (a Log out row in its own SidebarMenu, added 2026-09-28) pinned at the foot."
     },
     {
       "part": "SidebarGroup / SidebarGroupLabel / SidebarGroupContent",
@@ -49,7 +49,8 @@
     "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
     "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
     "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut.",
-    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0."
+    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0.",
+    "Actions on the session (Log out) go in SidebarFooter as a SidebarMenu row rendered as a react-aria Button (no asChild), so they wear the nav's face, collapse to their icon with the rail and keep the label as the collapsed tooltip. The shell owns where a log-out lands; the row only reports the press. Rows in the rail are the one place an icon is required (component-architecture §3.10): collapsed, the icon is all that shows."
   ],
   "docs": ["component-architecture", "theming", "light-dark"]
 }
