@@ -3,9 +3,9 @@ import {
   ListBoxItem as AriaListBoxItem,
   type ListBoxItemProps,
   type ListBoxProps,
-} from "react-aria-components";
-import { cn } from "@/lib/cn";
-import styles from "./listbox.module.css";
+} from "react-aria-components"
+import { cn } from "@/lib/cn"
+import styles from "./listbox.module.css"
 
 /* House react-aria ListBox. Full keyboard navigation, typeahead and
  * selection semantics come from react-aria; the module styles two settings
@@ -21,15 +21,15 @@ import styles from "./listbox.module.css";
  * Promoted from tenant-switcher when Select became its second consumer
  * (component-architecture §2.3). */
 
-export type ListBoxVariant = "inline" | "popover";
+export type ListBoxVariant = "inline" | "popover"
 
 export function ListBox<T extends object>({
   className,
   variant = "inline",
   ...props
 }: Omit<ListBoxProps<T>, "className"> & {
-  className?: string;
-  variant?: ListBoxVariant;
+  className?: string
+  variant?: ListBoxVariant
 }) {
   return (
     <AriaListBox
@@ -38,7 +38,7 @@ export function ListBox<T extends object>({
       className={cn(styles.listBox, className)}
       {...props}
     />
-  );
+  )
 }
 
 export function ListBoxItem({
@@ -51,5 +51,5 @@ export function ListBoxItem({
       className={cn(styles.item, className)}
       {...props}
     />
-  );
+  )
 }

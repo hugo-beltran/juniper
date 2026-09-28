@@ -1,0 +1,83 @@
+/* The ground (the sidebar wrapper's gradient), filling the positioned
+ * container it is rendered into: absolute, inset 0, full width and height.
+ * It isolates, so the photograph's negative z-index stays inside it, above
+ * the gradient. Siblings rendered after it paint above it. */
+.container {
+  container: image-overlay / inline-size;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+  display: flex;
+  flex: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--juni-bark-100),
+    var(--juni-needle-400) 150%
+  );
+  justify-items: start;
+  align-items: end;
+  padding: 0.125rem 1rem;
+}
+
+/* The photograph: a decorative img covering the ground, luminosity blend at
+ * a whisper of opacity, so it lends texture and light and takes the
+ * ground's green; no colour outside the palette enters. */
+.image {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+
+/* Clarity: the photograph's opacity, low for texture, mid for a ground,
+ * high where the photograph is the point. */
+.lowClarity {
+  .image {
+    opacity: 0.075;
+  }
+}
+
+.mediumClarity {
+  .image {
+    opacity: 0.25;
+  }
+}
+
+.highClarity {
+  .image {
+    opacity: 0.5;
+  }
+}
+
+/* The credit, a link the container's flex alignment places at the bottom-left
+ * (align-items end, the container's padding as its inset): bloom-950 at
+ * rest, bloom on hover (theming §4.7), the sidebar's outline step for focus
+ * (§4.4). A sibling that covers the ground must let pointer events through
+ * where it is bare, or the link cannot be reached. */
+.credit {
+  color: var(--juni-bloom-950);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.credit a {
+  color: inherit;
+  text-decoration-color: oklch(from var(--juni-bloom-950) l c h / 0.5);
+  text-underline-offset: 0.15em;
+}
+
+.credit a:hover {
+  color: var(--juni-bloom-200);
+  text-decoration-color: currentColor;
+}
+
+.credit a:focus-visible {
+  outline-color: var(--nav-outline);
+}

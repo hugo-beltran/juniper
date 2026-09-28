@@ -1,0 +1,30 @@
+{
+  "title": "Image overlay",
+  "description": "A standalone background layer: a pale bark-100 to needle-400 gradient with a decorative photograph (a real img from its CDN) laid over it in luminosity blend at one of three clarities (low, mid, high), and the photograph's credit at the bottom-left. It takes no children and never assumes the viewport: as the first child of a positioned container it fills that container's full width and height and sits behind the siblings that follow, so it can ground a whole screen, a card or a panel.",
+  "category": "layout",
+  "anatomy": [
+    {
+      "part": "ImageOverlay",
+      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the bark-100 to needle-400 gradient (needle reached at 150%, so the ground stays pale; retuned 2026-09-28 from needle-400 into needle-700), isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together; `clarity` (low | mid | high, mid by default) sets how much of it shows. No children."
+    },
+    {
+      "part": "Image",
+      "description": "A decorative img (alt=\"\", async decoding, high fetch priority) covering the ground at z-index -1 inside the isolated root: object-fit cover, luminosity blend, opacity by clarity (low 7.5%, mid 25%, high 50%; turned down 2026-09-28 with the paler ground), pointer-events none. An element, not a CSS url(): CSS cannot take a URL from a data attribute."
+    },
+    {
+      "part": "Credit",
+      "description": "A p with a link to the photograph's page, placed bottom-left by the container's flex alignment (align-items end, 0.125rem 1rem padding): text-xs, bloom-950; bloom-200 on hover, the sidebar's outline step (--nav-outline) on focus."
+    }
+  ],
+  "usage": [
+    "A background, not a wrapper: it takes no children. Render it as the first child of a positioned container (position: relative or absolute) and put the content after it; it fills the container's full width and height and the later siblings paint above it in DOM order.",
+    "It never assumes the viewport. The consumer owns the container, its position and its size: a full screen (min-height 100svh, as the login screen does), a card or a panel all work the same way.",
+    "Query narrow layouts against the consumer's container, not the overlay: declare container-type inline-size on the positioned container and write the queries on its children.",
+    "A sibling layout that covers the whole ground must give its bare areas pointer-events: none (and its columns pointer-events: auto), or the credit link beneath cannot be clicked.",
+    "Pass `image` to change the photograph and the credit changes with it; keep the licence satisfied through the caption. The default is an Unsplash photograph loaded from its CDN, so nothing ships in the bundle.",
+    "Keep the blend: luminosity takes the ground's green so the palette stays the only colour source. Pick clarity by what sits on it: low under copy on the ground, mid (default) under a card, high where the photograph is the point and nothing but a card's copy lands on it.",
+    "Do not hide the overlay from assistive tech: the credit is a real link and must stay reachable; the img already carries alt=\"\".",
+    "Route code never styles the ground; a surface that needs a different ground is a variant here, not a rule in a route module."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

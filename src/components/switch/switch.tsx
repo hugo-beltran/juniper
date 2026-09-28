@@ -1,11 +1,11 @@
-import { useId } from "react";
+import { useId } from "react"
 import {
   SwitchButton,
   SwitchField,
   type SwitchFieldProps,
-} from "react-aria-components";
-import { cn } from "@/lib/cn";
-import styles from "./switch.module.css";
+} from "react-aria-components"
+import { cn } from "@/lib/cn"
+import styles from "./switch.module.css"
 
 /* House Switch on react-aria's SwitchField + SwitchButton (the older
  * single `Switch` is deprecated in react-aria-components 1.21): an
@@ -22,10 +22,10 @@ import styles from "./switch.module.css";
 
 export interface SwitchProps
   extends Omit<SwitchFieldProps, "className" | "children"> {
-  label: string;
+  label: string
   /** Muted second line under the label; also the switch's description. */
-  description?: string;
-  className?: string;
+  description?: string
+  className?: string
 }
 
 export function Switch({
@@ -34,9 +34,9 @@ export function Switch({
   className,
   ...props
 }: SwitchProps) {
-  const id = useId();
-  const titleId = `${id}-title`;
-  const hintId = `${id}-hint`;
+  const id = useId()
+  const titleId = `${id}-title`
+  const hintId = `${id}-hint`
   return (
     <SwitchField
       data-slot="switch"
@@ -61,5 +61,5 @@ export function Switch({
         </span>
       </SwitchButton>
     </SwitchField>
-  );
+  )
 }

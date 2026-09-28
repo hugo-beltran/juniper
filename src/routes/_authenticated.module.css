@@ -7,3 +7,25 @@
   margin: 0 auto;
   padding: 1.5rem 1.5rem 3rem 0;
 }
+
+/* The devtools dock: the inset's last child, stuck to the foot of the
+ * scrollport, so it stays put while the page scrolls above it and follows
+ * the inset's width as the sidebar opens and closes. It cancels the inset's
+ * trigger gutter to span the full width and sits over sticky toolbars. The
+ * panels bring their own chrome; this is only their place. */
+.devtools {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  height: 40svh;
+  margin-left: calc(-1 * var(--sidebar-inset-gutter));
+  overflow: hidden;
+}
+
+/* Both panels size themselves against their parent, and each wraps itself
+ * in a plain div first, so the dock's children take its full height and
+ * the panels' own columns scroll inside it. */
+.devtools > * {
+  height: 100%;
+}

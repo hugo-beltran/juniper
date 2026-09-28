@@ -1,29 +1,42 @@
-import { useState, type ComponentType, type SVGProps } from "react";
 import {
+  ArrowLeftStartOnRectangleIcon,
+  ArrowRightEndOnRectangleIcon,
   ArrowsRightLeftIcon,
   BookOpenIcon,
   ChartPieIcon,
+  CircleStackIcon,
   Cog6ToothIcon,
   CubeIcon,
   CubeTransparentIcon,
   DevicePhoneMobileIcon,
   LifebuoyIcon,
+  MapIcon,
   PencilSquareIcon,
   RectangleGroupIcon,
+  SparklesIcon,
   SwatchIcon,
   UsersIcon,
-} from "@heroicons/react/24/outline";
-import { useSuspenseQuery } from "@tanstack/react-query";
+} from "@heroicons/react/24/outline"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools"
 import {
+  createFileRoute,
   Link,
   Outlet,
-  createFileRoute,
   useLocation,
   useNavigate,
-} from "@tanstack/react-router";
+} from "@tanstack/react-router"
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import {
+  type ComponentType,
+  type KeyboardEvent,
+  type SVGProps,
+  useState,
+} from "react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -37,18 +50,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
   TenantSwitcher,
-} from "@/components";
+} from "@/components"
 import {
   defaultTenant,
   firstRoute,
   leadsQuery,
-  navigationQuery,
-  pendingAnalysisCount,
   type NavBadge,
   type NavIcon,
   type NavTenant,
-} from "@/lib/api";
-import styles from "./_authenticated.module.css";
+  navigationQuery,
+  pendingAnalysisCount,
+} from "@/lib/api"
+import styles from "./_authenticated.module.css"
 
 export const Route = createFileRoute("/_authenticated")({
   loader: ({ context }) =>
@@ -57,7 +70,7 @@ export const Route = createFileRoute("/_authenticated")({
       context.queryClient.ensureQueryData(leadsQuery),
     ]),
   component: AuthenticatedLayout,
-});
+})
 
 /* The menu tree comes from the navigation resource (src/lib/nav-tree.json
  * behind navigationQuery, standing in for a server response): every menu
@@ -75,28 +88,63 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   cube: CubeIcon,
   users: UsersIcon,
   "pencil-square": PencilSquareIcon,
+  "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
+  sparkles: SparklesIcon,
   "device-phone-mobile": DevicePhoneMobileIcon,
-};
+}
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides
  * the badge. */
 function useNavBadges(): Record<NavBadge, number> {
-  const { data: leads } = useSuspenseQuery(leadsQuery);
-  return { "pending-analysis": pendingAnalysisCount(leads) };
+  const { data: leads } = useSuspenseQuery(leadsQuery)
+  return { "pending-analysis": pendingAnalysisCount(leads) }
 }
+
+/* The two TanStack devtools, in development only: each is a row in the
+ * sidebar footer that opens its panel in a dock at the foot of the inset,
+ * one at a time, instead of the libraries' own floating corner buttons.
+ * The row is a disclosure (aria-expanded, aria-controls): the sidebar reads
+ * an open one like the active item, indicator included, but leaves it
+ * pressable so the same press closes it (an active item takes no pointer).
+ * The panels compile to nothing outside development; the rows go with
+ * them. */
+type Devtool = "query" | "router"
+const DEVTOOLS_DOCK_ID = "devtools-dock"
 
 const ownsPath = (tenant: NavTenant, pathname: string) =>
   tenant.groups.some((group) =>
     group.items.some((item) => item.to !== undefined && item.to === pathname),
-  );
+  )
 
 function AuthenticatedLayout() {
-  const tree = useSuspenseQuery(navigationQuery).data;
-  const { tenants } = tree;
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const badges = useNavBadges();
-  const [selectedId, setSelectedId] = useState(defaultTenant(tree).id);
+  const tree = useSuspenseQuery(navigationQuery).data
+  const { tenants } = tree
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const badges = useNavBadges()
+  const [selectedId, setSelectedId] = useState(defaultTenant(tree).id)
+  const [devtool, setDevtool] = useState<Devtool | null>(null)
+
+  const toggleDevtool = (next: Devtool) =>
+    setDevtool((current) => (current === next ? null : next))
+
+  /* Closing from the dock (its close button, Escape) returns focus to the
+   * row that opened it (component-architecture §5.3). */
+  const closeDevtools = () => {
+    document
+      .querySelector<HTMLElement>(
+        `[aria-controls="${DEVTOOLS_DOCK_ID}"][aria-expanded="true"]`,
+      )
+      ?.focus()
+    setDevtool(null)
+  }
+
+  const onDockKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      event.stopPropagation()
+      closeDevtools()
+    }
+  }
 
   /* The URL wins: landing on a route a tenant owns selects that tenant, so
    * a deep link never shows one tenant's menu over another's page. The
@@ -105,15 +153,15 @@ function AuthenticatedLayout() {
   const activeTenant =
     tenants.find((tenant) => ownsPath(tenant, pathname)) ??
     tenants.find((tenant) => tenant.id === selectedId) ??
-    defaultTenant(tree);
+    defaultTenant(tree)
 
   const handleTenantChange = (next: { name: string }) => {
-    const tenant = tenants.find((candidate) => candidate.name === next.name);
-    if (!tenant) return;
-    setSelectedId(tenant.id);
-    const to = firstRoute(tenant);
-    if (to) navigate({ to });
-  };
+    const tenant = tenants.find((candidate) => candidate.name === next.name)
+    if (!tenant) return
+    setSelectedId(tenant.id)
+    const to = firstRoute(tenant)
+    if (to) navigate({ to })
+  }
 
   return (
     <SidebarProvider>
@@ -132,11 +180,11 @@ function AuthenticatedLayout() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {group.items.map((item) => {
-                    const Icon = ICONS[item.icon];
-                    const count = item.badge ? badges[item.badge] : 0;
+                    const Icon = ICONS[item.icon]
+                    const count = item.badge ? badges[item.badge] : 0
                     /* The dot goes before the label in DOM order (see
                      * SidebarMenuBadge); the words go inside the label. */
-                    const badge = count > 0 && <SidebarMenuBadge />;
+                    const badge = count > 0 && <SidebarMenuBadge />
                     const labelText = (
                       <>
                         {item.label}
@@ -146,7 +194,7 @@ function AuthenticatedLayout() {
                           </span>
                         )}
                       </>
-                    );
+                    )
                     return (
                       <SidebarMenuItem key={item.label}>
                         <SidebarMenuButton asChild>
@@ -159,8 +207,16 @@ function AuthenticatedLayout() {
                           ) : (
                             <a
                               href={item.href}
-                              target={item.href.startsWith("http") ? "_blank" : undefined}
-                              rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                              target={
+                                item.href.startsWith("http")
+                                  ? "_blank"
+                                  : undefined
+                              }
+                              rel={
+                                item.href.startsWith("http")
+                                  ? "noreferrer"
+                                  : undefined
+                              }
                             >
                               <Icon />
                               {badge}
@@ -169,13 +225,53 @@ function AuthenticatedLayout() {
                           )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
-                    );
+                    )
                   })}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
           ))}
         </SidebarContent>
+        {/* The session's one exit, a menu row in the footer so it wears the
+         * nav's face, its icon and its collapsed-rail label. A Button, not a
+         * link: logging out is an action on the session, and the shell owns
+         * where it lands. The demo has no auth, so landing on /login is all
+         * it does. The icon is the rail's: collapsed, a row is its icon
+         * alone (component-architecture §3.10). */}
+        <SidebarFooter>
+          <SidebarMenu>
+            {import.meta.env.DEV && (
+              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "query"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("query")}
+                  >
+                    <CircleStackIcon />
+                    <span>Query devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "router"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("router")}
+                  >
+                    <MapIcon />
+                    <span>Router devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </>
+            )}
+            <SidebarMenuItem>
+              <SidebarMenuButton onPress={() => navigate({ to: "/login" })}>
+                <ArrowLeftStartOnRectangleIcon />
+                <span>Log out</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <SidebarInsetHeader>
@@ -184,7 +280,32 @@ function AuthenticatedLayout() {
         <div className={styles.main}>
           <Outlet />
         </div>
+        {devtool && (
+          <aside
+            id={DEVTOOLS_DOCK_ID}
+            aria-label={
+              devtool === "query" ? "Query devtools" : "Router devtools"
+            }
+            className={styles.devtools}
+            onKeyDown={onDockKeyDown}
+          >
+            {devtool === "query" ? (
+              <ReactQueryDevtoolsPanel
+                style={{ height: "100%" }}
+                onClose={closeDevtools}
+              />
+            ) : (
+              <TanStackRouterDevtoolsPanel
+                style={{ height: "100%" }}
+                isOpen
+                setIsOpen={(open) => {
+                  if (!open) closeDevtools()
+                }}
+              />
+            )}
+          </aside>
+        )}
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

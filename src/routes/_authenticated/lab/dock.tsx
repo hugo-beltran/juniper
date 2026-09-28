@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Blobatar } from "@blobatar/react";
+import { Blobatar } from "@blobatar/react"
 import {
   ArrowsRightLeftIcon,
   ArrowTopRightOnSquareIcon,
@@ -12,14 +10,16 @@ import {
   LifebuoyIcon,
   RectangleGroupIcon,
   Squares2X2Icon,
-} from "@heroicons/react/24/outline";
-import { Button } from "@/components";
-import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette";
-import styles from "./dock.module.css";
+} from "@heroicons/react/24/outline"
+import { createFileRoute } from "@tanstack/react-router"
+import { useState } from "react"
+import { Button } from "@/components"
+import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette"
+import styles from "./dock.module.css"
 
 export const Route = createFileRoute("/_authenticated/lab/dock")({
   component: DockPage,
-});
+})
 
 /* Dock lab — where the brand (the tenant switcher: identity plus a rare
  * control, built as an inline disclosure) lives once the shell's navigation
@@ -32,18 +32,18 @@ export const Route = createFileRoute("/_authenticated/lab/dock")({
  * Exploration mock, not a shipped component. The dock's items are
  * illustrative: a tenant richer than any in the demo tree. */
 
-type Variant = "A" | "B" | "Bprime" | "D";
-type Indicator = "connector" | "pill";
-type Height = 812 | 667;
+type Variant = "A" | "B" | "Bprime" | "D"
+type Indicator = "connector" | "pill"
+type Height = 812 | 667
 
-const TENANT = { name: "Kingfisher", plan: "Fantasy League" };
+const TENANT = { name: "Kingfisher", plan: "Fantasy League" }
 
 const VARIANTS: {
-  id: Variant;
-  title: string;
-  note: string;
-  pros: string;
-  cons: string;
+  id: Variant
+  title: string
+  note: string
+  pros: string
+  cons: string
 }[] = [
   {
     id: "A",
@@ -73,7 +73,7 @@ const VARIANTS: {
     pros: "Solves overflow and switching in one gesture; nothing permanent on screen.",
     cons: "Tenant identity is invisible until you look for it.",
   },
-];
+]
 
 function Tile({ size = "md" }: { size?: "sm" | "md" }) {
   return (
@@ -88,7 +88,7 @@ function Tile({ size = "md" }: { size?: "sm" | "md" }) {
         title={TENANT.name}
       />
     </span>
-  );
+  )
 }
 
 /* The switcher's trigger as it looks today: tile, name, plan, chevron. */
@@ -102,14 +102,35 @@ function Brand({ onBark = false }: { onBark?: boolean }) {
       </span>
       <ChevronUpDownIcon className={styles.brandChevron} aria-hidden />
     </div>
-  );
+  )
 }
 
 const LEADS = [
-  { name: "T. Okafor", pos: "SP", club: "River Hawks", stage: 5, ask: "$32M", grade: 70 },
-  { name: "D. Whitlock", pos: "OF", club: "Bayside Nine", stage: 4, ask: "$24M", grade: 65 },
-  { name: "A. Sandoval", pos: "1B", club: "Copper Kings", stage: 3, ask: "$15M", grade: 60 },
-];
+  {
+    name: "T. Okafor",
+    pos: "SP",
+    club: "River Hawks",
+    stage: 5,
+    ask: "$32M",
+    grade: 70,
+  },
+  {
+    name: "D. Whitlock",
+    pos: "OF",
+    club: "Bayside Nine",
+    stage: 4,
+    ask: "$24M",
+    grade: 65,
+  },
+  {
+    name: "A. Sandoval",
+    pos: "1B",
+    club: "Copper Kings",
+    stage: 3,
+    ask: "$15M",
+    grade: 60,
+  },
+]
 
 function Page() {
   return (
@@ -161,7 +182,7 @@ function Page() {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 const DOCK_ITEMS = [
@@ -169,21 +190,21 @@ const DOCK_ITEMS = [
   { label: "Trades", Icon: ArrowsRightLeftIcon },
   { label: "Analytics", Icon: ChartPieIcon },
   { label: "Settings", Icon: Cog6ToothIcon },
-];
+]
 
 const MORE_ITEMS = [
   { label: "Documentation", Icon: BookOpenIcon, external: true },
   { label: "Support", Icon: LifebuoyIcon, external: true },
-];
+]
 
 function Dock({
   variant,
   indicator,
 }: {
-  variant: Variant;
-  indicator: Indicator;
+  variant: Variant
+  indicator: Indicator
 }) {
-  const expanded = variant === "D";
+  const expanded = variant === "D"
   return (
     <div className={styles.dock} data-indicator={indicator}>
       {expanded && (
@@ -233,10 +254,7 @@ function Dock({
             <span className={styles.dockLabel}>{TENANT.name}</span>
           </span>
         ) : (
-          <span
-            className={styles.dockItem}
-            data-open={expanded || undefined}
-          >
+          <span className={styles.dockItem} data-open={expanded || undefined}>
             <span className={styles.dockIcon}>
               <Squares2X2Icon aria-hidden />
             </span>
@@ -246,7 +264,7 @@ function Dock({
       </div>
       <span className={styles.homeIndicator} aria-hidden />
     </div>
-  );
+  )
 }
 
 function Phone({
@@ -254,9 +272,9 @@ function Phone({
   indicator,
   height,
 }: {
-  variant: Variant;
-  indicator: Indicator;
-  height: Height;
+  variant: Variant
+  indicator: Indicator
+  height: Height
 }) {
   return (
     <div className={styles.phone} style={{ height }}>
@@ -273,7 +291,7 @@ function Phone({
         <Dock variant={variant} indicator={indicator} />
       </div>
     </div>
-  );
+  )
 }
 
 function Toggle<T extends string | number>({
@@ -282,10 +300,10 @@ function Toggle<T extends string | number>({
   options,
   onChange,
 }: {
-  label: string;
-  value: T;
-  options: { value: T; label: string }[];
-  onChange: (value: T) => void;
+  label: string
+  value: T
+  options: { value: T; label: string }[]
+  onChange: (value: T) => void
 }) {
   return (
     <div className={styles.toggle} role="group" aria-label={label}>
@@ -302,12 +320,12 @@ function Toggle<T extends string | number>({
         </Button>
       ))}
     </div>
-  );
+  )
 }
 
 function DockPage() {
-  const [height, setHeight] = useState<Height>(812);
-  const [indicator, setIndicator] = useState<Indicator>("connector");
+  const [height, setHeight] = useState<Height>(812)
+  const [indicator, setIndicator] = useState<Indicator>("connector")
 
   return (
     <div className={styles.lab}>
@@ -315,9 +333,9 @@ function DockPage() {
       <p className={styles.sub}>
         Four homes for the tenant switcher once the sidebar becomes a bottom
         dock. Everything else is held constant: the same page, the same five
-        slots, the same ground. The dock items are illustrative, a tenant
-        richer than any in the demo tree. Every value is a{" "}
-        <code>--juni-*</code> step or a derivation from one.
+        slots, the same ground. The dock items are illustrative, a tenant richer
+        than any in the demo tree. Every value is a <code>--juni-*</code> step
+        or a derivation from one.
       </p>
       <div className={styles.controls}>
         <Toggle
@@ -364,14 +382,14 @@ function DockPage() {
           </li>
           <li>
             Indicator: connector tab chosen on 2026-09-23. Rotated to meet the
-            inset's bottom edge it still reads as part of the inset surface,
-            so the dock keeps the sidebar's signature. The pill stays here as
-            the rejected alternative.
+            inset's bottom edge it still reads as part of the inset surface, so
+            the dock keeps the sidebar's signature. The pill stays here as the
+            rejected alternative.
           </li>
           <li>
-            More: a disclosure growing upward (shown in D) keeps components
-            off the router and reuses the switcher's grid-rows mechanism. A
-            route is the alternative.
+            More: a disclosure growing upward (shown in D) keeps components off
+            the router and reuses the switcher's grid-rows mechanism. A route is
+            the alternative.
           </li>
           <li>
             Overflow rule: four tagged items plus More whenever the tenant has
@@ -381,5 +399,5 @@ function DockPage() {
         </ul>
       </section>
     </div>
-  );
+  )
 }

@@ -1,0 +1,68 @@
+{
+  "title": "Login screen",
+  "description": "The sign-in screen as the reference composition for a whole screen built from the contract: a stage (chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane), in parts the route arranges. LoginStage is the bark-200 ground at the viewport's height in three rows under a low-clarity ImageOverlay and the BackgroundNoise; LoginBar holds LoginBrand (the wordmark) and LoginNav (the visitor's actions); LoginCard is the glass Card centred in the middle row, whose header the route fills from Card's own parts (a title, a lede); LoginForm is the two ways in as two panels in one horizontal scroll-snap track (added 2026-09-28): single sign-on first with a switch to the credentials, then the two required Inputs, a slotted help link, the primary Sign in and the switch back, with a slotted footnote under the track; LoginFooter is one line at the foot. One composition for phone and desktop, tightened below 40rem of the stage; on a touch screen the panels swipe.",
+  "category": "demo",
+  "anatomy": [
+    {
+      "part": "LoginStage",
+      "description": "Root div with data-slot=\"login-stage\": a grid of three rows (auto, 1fr, auto), min-height 100svh, bark-200, 1.25rem 2rem 1rem padding, an inline-size container named login-stage. It lays the ImageOverlay at low clarity and the BackgroundNoise under its children and owns the ground; the route paints nothing (theming §1.6)."
+    },
+    {
+      "part": "LoginBar",
+      "description": "A header with data-slot=\"login-bar\": a flex row, space-between, for LoginBrand on the left and LoginNav on the right."
+    },
+    {
+      "part": "LoginBrand",
+      "description": "A span with data-slot=\"login-brand\" that sizes the svg inside it (7.5rem wide, 5.5rem below 40rem) and colours it needle-900 through currentColor. The route imports the wordmark asset and drops it in."
+    },
+    {
+      "part": "LoginNav",
+      "description": "A nav with data-slot=\"login-nav\": a 0.5rem row for the visitor's actions, Buttons asChild around router Links (a discrete link and the one primary of the bar)."
+    },
+    {
+      "part": "LoginCard",
+      "description": "The house Card in glass (data-slot=\"card\", data-material=\"glass\"; chosen 2026-09-28 once the stage took the photograph), centred in the middle row: the width up to 26rem, 1.75rem 2rem padding (1.5rem 1.25rem below 40rem), the md radius, the bark-200 hairline at 60%. Its module gives the card's header 1.25rem below."
+    },
+    {
+      "part": "CardHeader",
+      "description": "Composed by the route from Card's parts: CardTitle at level 1 (the page's main content) over a one-line CardDescription lede."
+    },
+    {
+      "part": "LoginForm",
+      "description": "react-aria Form with data-slot=\"login-form\" and data-panel (\"sso\" | \"credentials\"), the fact React reads from the track's scroll position once it rests on a snap point and publishes for the cascade (component-architecture §3.9). Native validation: isRequired blocks the submit, the first empty field takes focus and FieldError shows the message; onSubmit hands the credentials to the caller. Centred at 22rem."
+    },
+    {
+      "part": "LoginTrack",
+      "description": "A div with data-slot=\"login-track\": a flex row that scrolls on x with scroll-snap-type x mandatory, no scrollbar (scrollbar-width none), overscroll contained, smooth scroll-behavior only under prefers-reduced-motion: no-preference. Its height is --login-panel-height, the snapped panel's measured height that the form publishes (a ResizeObserver on the panels keeps it true when a validation message appears), with a 160ms height transition; the panel not shown is clipped. A quarter-rem negative margin, matched by the panels' padding, keeps a focus ring at a panel's edge inside the clip."
+    },
+    {
+      "part": "Panels",
+      "description": "Two sections with data-slot=\"login-panel\" and data-panel, each flex 0 0 100%, scroll-snap-align start, scroll-snap-stop always, a 1rem column. The one not snapped carries the inert attribute so Tab, screen readers and clicks never reach the off-screen panel. Single sign-on (only with onSingleSignOn): the primary Single sign-on button, no icon (component-architecture §3.10), then the switch 'Use your credentials →'. Credentials: Email Input (type email, autocomplete username; autoFocus only when it is the sole panel) and Password Input (autocomplete current-password), the slotted helpAction right-aligned beneath them, the primary submit, then the switch '← Use single sign-on'. Nothing user-scoped: which workspaces exist is an answer the API gives after sign-in, so no workspace picker before it (component-architecture §6.4)."
+    },
+    {
+      "part": "Switch",
+      "description": "A discrete Button centred under the panel's action, bark-600, a typographic arrow in the label (→ to the credentials, ← back) pointing the way the track moves: no icon, per component-architecture §3.10. It scrolls the track to the other panel (the CSS decides whether smoothly) and, once that panel has rendered as the active one, focuses its first control with preventScroll so focus never fights the scroll."
+    },
+    {
+      "part": "CardFooter",
+      "description": "Under the track, only with a footnote: the footnote (a p at text-sm, bark-900, whose links are needle-800 and answer in bloom on hover)."
+    },
+    {
+      "part": "LoginFooter",
+      "description": "A p with data-slot=\"login-footer\": one centred line at text-sm, bloom-800, in the stage's last row (the copyright, a privacy link, the demo's disclaimer)."
+    }
+  ],
+  "usage": [
+    "A reference composition, not a reusable primitive: copy the structure (a stage in three rows, a glass Card in the middle, the header from Card's parts, the form from Field-composed controls) rather than the components.",
+    "The route arranges: <LoginStage><LoginBar><LoginBrand>…</LoginBrand><LoginNav>…</LoginNav></LoginBar><LoginCard><CardHeader>…</CardHeader><LoginForm … /></LoginCard><LoginFooter>…</LoginFooter></LoginStage>. The title, the lede, the bar's actions, the help link, the footnote and the footer are the route's words and links; the route needs no CSS of its own and never touches the panels.",
+    "Controlled: onSignIn({ email, password }) is all the form reports and the component never navigates; the route decides where a sign-in lands. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
+    "Pass onSingleSignOn (no arguments) to render the single sign-on panel first and the switch links between the two panels; leave it out and the form is the credentials panel alone, with the email focused on load. Pass helpAction and footnote as nodes built from Button asChild and router Links so the router stays in the route.",
+    "The slide is the browser's scroll snap, not an animated transform: the track is a real horizontal scroller, so a touch screen swipes between the panels and the switch links only call scrollTo. Keep it that way; do not add a carousel library or a translateX. Reduced motion turns the smooth scroll and the height transition off.",
+    "Keep the panel that is not shown inert (the component does) so keyboard focus, assistive tech and the submit's native validation only ever see the panel on screen. Add a third way in by adding a panel to the track and a value to LoginPanel; the snap, the measurement and the inert rule need no change.",
+    "The card is glass because the stage carries a photograph: LoginStage lays the ImageOverlay at low clarity and the BackgroundNoise under everything (2026-09-28), and a card on a photograph is glass, never flat (Card's usage). Nothing in the composition depends on the photograph loading: the ground under it is the overlay's own gradient.",
+    "Validation is react-aria's native behaviour; do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
+    "The alternatives this was chosen from (a photo panel beside the form, a framed sheet, the dark pane) stay at /lab/login-2 as the archive; the first round at /lab/login.",
+    "Few icons: the SSO button is words alone and the switches point with a typographic arrow in the label, not a chevron icon (component-architecture §3.10). Add an icon here only for a meaning the words do not carry."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

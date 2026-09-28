@@ -105,16 +105,17 @@
  * up-left and shade down-right. Hover pushes further out with a bloom
  * hairline (§4.7); pressed, or open as a menu trigger, sinks it. */
 .secondary {
-  background-color: var(--juni-bark-50);
-  color: var(--juni-needle-950);
-  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+  background-color: oklch(from var(--juni-bark-100) 93% c h);
+  color: var(--juni-bloom-800);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.75);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);
 }
 
 .secondary:is([data-hovered], [data-focus-visible], :not([data-rac]):hover) {
-  border-color: var(--juni-bloom-400);
+  border-color: oklch(from var(--juni-needle-500) l c h / 0.75);
+  color: var(--juni-needle-700);
 }
 
 .secondary:is([data-hovered], :not([data-rac]):hover) {
@@ -127,19 +128,22 @@
   box-shadow:
     inset -1px -1px 2px var(--lift-highlight),
     inset 1px 1px 3px var(--lift-shade);
+  color: var(--juni-bloom-900);
 }
 
 /* Discrete — inline text that becomes a control on approach. Flat at rest
- * (it carries no weight until touched); hover washes it in bloom (§4.7);
- * pressed or open it takes the surface fill and sinks (inset) like every
- * other neutral control. */
+ * (it carries no weight until touched); hover washes it in bloom (§4.7), a
+ * translucent wash (bloom-500 at 40%) rather than the opaque bloom-100
+ * tint, so it keeps its contrast on a glass card or a photograph as well
+ * as on bark-50; pressed or open it takes the surface fill and sinks
+ * (inset) like every other neutral control. */
 .discrete {
   background-color: transparent;
   color: var(--juni-needle-800);
 }
 
 .discrete:is([data-hovered], :not([data-rac]):hover) {
-  background-color: var(--juni-bloom-100);
+  background-color: oklch(from var(--juni-bloom-500) l c h / 0.4);
   color: var(--juni-bloom-950);
 }
 
@@ -151,6 +155,46 @@
     inset 1px 1px 3px var(--lift-shade);
 }
 
+/* Rich — the primary's pane in the dark ramp (bloom-800 into bloom-900,
+ * needle-50 copy, the same rim and bloom drop): for a light sheet where the
+ * green pane would shout. Hover lifts the light toward bloom-600; pressed
+ * sinks to bloom-950. Still one primary per view: rich stands in for it,
+ * never beside it. */
+.rich {
+  background: radial-gradient(
+    circle at 70% 50%,
+    var(--juni-bloom-800) 10%,
+    var(--juni-bloom-900) 145%
+  );
+  color: var(--juni-needle-50);
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-bloom-50) l c h / 0.15),
+    2px 2px 6px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  transition:
+    box-shadow 120ms var(--ease),
+    transform 120ms var(--ease);
+}
+
+.rich:is([data-hovered], :not([data-rac]):hover) {
+  color: var(--juni-needle-50);
+  background: radial-gradient(
+    circle at 70% 70%,
+    var(--juni-bloom-600) -50%,
+    var(--juni-bloom-900) 55%
+  );
+  box-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-bloom-50) l c h / 0.15),
+    1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
+}
+
+.rich:is([data-pressed], :not([data-rac]):active) {
+  color: var(--juni-needle-100);
+  background: radial-gradient(
+    circle at 70% 70%,
+    var(--juni-bloom-800) 10%,
+    var(--juni-bloom-950) 145%
+  );
+}
 /* Sizes */
 
 .mini {

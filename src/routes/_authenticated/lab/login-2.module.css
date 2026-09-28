@@ -1,0 +1,475 @@
+/* Login lab, round two. Framed viewports holding four sign-in structures;
+ * every colour a --juni-* step or a derivation from one, every font-size a
+ * type-scale token. Frame geometry is in px on purpose: a frame is a
+ * viewport, not a fluid layout. */
+
+.lab {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 880px;
+}
+
+.lab h2 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* A fieldset so the label is a legend; the resets undo the UA box, and the
+ * float takes the legend out of its special slot so it flows as a flex item. */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.toggleLabel {
+  float: left;
+  margin-right: 0.25rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.variants {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.45;
+  color: var(--juni-bark-600);
+}
+
+.verdict {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0 0 0.25rem;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.verdict dt {
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-size: var(--text-2xs);
+  color: var(--juni-bark-500);
+  padding-top: 0.15rem;
+}
+
+.verdict dd {
+  margin: 0;
+  color: var(--juni-bark-700);
+}
+
+/* Frames — a viewport, clipped. Positioned and isolated so the ground's
+ * layers stay inside: the FullBleedCanvas's own arrangement (the overlay
+ * one step below the grain) at a frame's height instead of the viewport's. */
+.frame {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--juni-bark-300);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 12px 32px oklch(from var(--juni-bark-950) l c h / 0.18);
+}
+
+.frame > [data-slot="image-overlay"] {
+  z-index: -2;
+}
+
+.desktop {
+  width: 100%;
+  height: 680px;
+}
+
+.phone {
+  width: 375px;
+  height: 760px;
+  align-self: center;
+}
+
+/* Shared type: the hierarchy the references have in common. A display title
+ * over a lede, or a caps eyebrow where the sheet keeps its voice down. */
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--display-lg);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--juni-needle-900);
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: var(--juni-bark-600);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--juni-needle-800);
+}
+
+.centered {
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.wide {
+  width: 100%;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* The help row: the discrete link pulled up under the fields, right-aligned. */
+.between {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: -0.5rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--juni-bark-200);
+}
+
+.fine {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--juni-bark-500);
+}
+
+.fine a,
+.legal a {
+  color: var(--juni-needle-800);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fine a:hover,
+.legal a:hover {
+  color: var(--juni-bloom-700);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Where the ground is only a rim (B) or the panel credits the same
+ * photograph (A), the ground's own credit line is hidden. */
+.splitFrame > [data-slot="image-overlay"] > p,
+.sheetFrame > [data-slot="image-overlay"] > p {
+  display: none;
+}
+
+/* A · Split. One flat card, the photograph twice: soft on the ground, sharp
+ * in the card's left panel. */
+
+.split {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: 1.5rem;
+  width: calc(100% - 3rem);
+  height: calc(100% - 3rem);
+  padding: 0.75rem;
+  border-radius: var(--radius-xl);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+}
+
+.phone .split {
+  grid-template-columns: 1fr;
+  grid-template-rows: 9rem 1fr;
+  gap: 1rem;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 1.5rem);
+  padding: 0.5rem;
+}
+
+/* The panel: an ImageOverlay filling it (§4.8), the wordmark and the claim
+ * above the overlay's own credit line. */
+.photo {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  overflow: hidden;
+  padding: 1.5rem 1.5rem 2.5rem;
+  border-radius: var(--radius-lg);
+}
+
+.photo > [data-slot="image-overlay"] {
+  z-index: -1;
+}
+
+.photoMark {
+  width: 45%;
+  height: auto;
+  color: var(--juni-needle-50);
+}
+
+.photoClaim {
+  margin: 0;
+  max-width: 18ch;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--juni-needle-50);
+}
+
+.phone .photo {
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+.phone .photoMark {
+  width: 40%;
+}
+
+.phone .photoClaim {
+  display: none;
+}
+
+.splitForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  overflow: auto;
+  padding: 1rem 1.5rem 1rem 0.25rem;
+}
+
+.phone .splitForm {
+  justify-content: flex-start;
+  padding: 0.75rem 0.5rem 1rem;
+}
+
+/* B · Sheet. The frame is the sheet, inset on the ground by a rim. */
+.sheetFrame {
+  padding: 1.25rem;
+}
+
+.phone.sheetFrame {
+  padding: 0.75rem;
+}
+
+.sheet {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-xl);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+}
+
+.phone .sheet {
+  padding: 1.25rem;
+}
+
+.sheetMark {
+  justify-self: start;
+  width: 6.5rem;
+  height: auto;
+  color: var(--juni-needle-800);
+}
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  overflow: auto;
+}
+
+.legal {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--juni-bark-500);
+}
+
+/* C · Stage. No photograph: a bark-100 stage, the bar, the card, the footer. */
+.stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5rem;
+  padding: 1.25rem 2rem 1rem;
+  background-color: var(--juni-bark-100);
+}
+
+.phone .stage {
+  padding: 1rem 0.75rem 0.75rem;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.barMark {
+  width: 6.5rem;
+  height: auto;
+  color: var(--juni-needle-800);
+}
+
+.phone .barMark {
+  width: 5.5rem;
+}
+
+.barNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stageBody {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  overflow: auto;
+}
+
+.stageCard {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius-xl);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+}
+
+.phone .stageCard {
+  padding: 1.5rem 1.25rem;
+}
+
+.stageFooter {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--juni-bark-600);
+}
+
+/* D · Pane. This pass's dark-glass card on the sharp photograph; the copy
+ * on it re-tuned for dark. */
+.pane {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 27rem;
+  padding: 2rem 2.25rem;
+}
+
+.phone .pane {
+  width: calc(100% - 2rem);
+  padding: 1.75rem 1.25rem;
+}
+
+.paneMark {
+  width: 42%;
+  height: auto;
+  margin-bottom: 1.25rem;
+  color: var(--juni-needle-50);
+}
+
+.dark .title {
+  color: var(--juni-needle-50);
+}
+
+.dark .lede {
+  color: var(--juni-needle-100);
+}
+
+.dark label {
+  color: var(--juni-needle-100);
+}
+
+.dark .divider {
+  color: oklch(from var(--juni-needle-50) l c h / 0.7);
+}
+
+.dark .divider::before,
+.dark .divider::after {
+  background-color: oklch(from var(--juni-needle-50) l c h / 0.25);
+}
+
+.dark .fine {
+  color: oklch(from var(--juni-needle-50) l c h / 0.7);
+}

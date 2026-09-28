@@ -38,7 +38,11 @@ step with a literal, and do not mix more than two steps.
 
 1.6. Route and page code MUST NOT reference tokens or palette steps. If a
 view needs a themed surface, a component is missing. Callers pass intent
-props (`variant`, `size`), never token names or class names.
+props (`variant`, `size`), never token names or class names. A route's title
+and intro are the `page` parts (`PageHeader`, `PageTitle`,
+`PageDescription`); a card's are Card's (`CardTitle`, `CardDescription`).
+A muted paragraph styled from route CSS is the tell that one of these was
+skipped.
 
 ## 2. Ramps carry one function each
 
@@ -84,10 +88,14 @@ these tokens for corner radii; fully round pills MAY use `999px`.
 
 4.2. The typeface is Geist with Geist Mono for code, set through
 `--font-sans` and `--font-mono`. Components MUST inherit the font
-(`font-family: inherit`) rather than restate it. Hierarchy is weight-driven;
-there is no second display face.
+(`font-family: inherit`) rather than restate it. Hierarchy is weight-driven.
+Display titles (a card's title, a hero tagline) MAY point at
+`--font-display` instead, a token that today resolves to the same Geist: it
+names the one place a display face could diverge later without touching
+components, and until it does there is still no second face on screen. A
+component MUST NOT restate a family name; it inherits or uses the token.
 
-4.2.1. **Type scale.** Every `font-size` MUST be one of the nine tokens
+4.2.1. **Type scale.** Every `font-size` MUST be one of the eleven tokens
 below or `inherit`. No free values: the scale was binned on 2026-09-17
 from 21 values then in use, most of them within half a pixel of a
 neighbour. Headings sit on it too (`h1` display-lg, `h2` display-sm, `h3`
@@ -103,7 +111,9 @@ text-xl, `h4`–`h6` text-base).
 | `--text-lg` | 16px | Document body, intros |
 | `--text-xl` | 18px | Emphasized names, `h3` |
 | `--display-sm` | 22px | Section headings, `h2` |
+| `--display-md` | 24px | A card's title: the `h1` of a screen that is one card, the login (added 2026-09-28) |
 | `--display-lg` | 32px | Page titles, KPI metrics, `h1` |
+| `--display-xl` | 40px | Hero titles: a brand tagline on a ground (added 2026-09-24) |
 
 Choose the nearest step; if a design wants a size between two steps, that
 is a conversation about the scale, not a new value in a component.
@@ -164,6 +174,22 @@ never by shadow.
 - The discrete button is the one neutral trigger with no volume at rest: it
   is inline text until touched. It MUST still take the surface fill and
   sink (inset) when pressed or open, so every control shares the press.
+- A card that floats on a ground (a Card on the FullBleedCanvas) MAY wear
+  the **glass** variant: the primary button's pane on a surface, a radial
+  fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
+  specular line along the top edge, the translucent ring, and a
+  bloom-tinted drop at equal x and y offsets, so card and button are lit by
+  one lamp. The same pane comes in the dark ramp as **dark-glass**
+  (bloom-900 into bloom-950, the light turned down) for a card whose copy
+  is light; its title and description are re-tuned to the light ramp by
+  the surface, not the consumer (component-architecture §3.9). The dark ramp
+  gives the Button its **rich** variant too: the primary's pane from
+  bloom-800 into bloom-900 with needle-50 copy, for a light sheet where the
+  green pane would shout; it stands in for the primary, never beside it.
+  Flat stays the default and the only material for a card inside the
+  shell's inset, and for a card on a flat ground such as the login's stage. Chosen on 2026-09-24 at `/lab/glass` over a lighter
+  baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
+  stay there as the archive.
 - The primary action keeps its own material: the chromatic **glass pane**
   (radial fill lit off-center, 1px translucent inner ring, bloom-tinted
   drop shadow with equal x/y offset, press flips the light and pulls the
@@ -173,16 +199,27 @@ never by shadow.
   `--lift-shade` take the primary button's own light: its needle-50 inner
   ring and its bloom-700 drop shadow, so every control is lit by the same
   lamp (the highlight lifts lightness and alpha to stay visible on
-  bark-50). Do not introduce a third material. The chosen recipe and the
-  five rejected alternatives are archived at `/lab/lift` in the demo app.
+  bark-50). Inside a glass card the highlight is re-tuned by the theme, not
+  by the controls: a `:where()` rule on the glass surface (zero specificity,
+  so it only sets the inherited tokens) makes `--lift-highlight` a neutral,
+  quieter glow (bark-50 at chroma 0, 30%) and halves `--lift-shade`
+  (bloom-700 at 10%), because the needle tint reads green and loud through
+  a translucent surface over the ground and the full shade too heavy on
+  it. Do not introduce a third material. The chosen recipe and
+  the five rejected alternatives are archived at `/lab/lift` in the demo
+  app.
 
 4.7. **Pointer colour.** Hover and keyboard focus on a neutral control
 answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
 the primary button, a clear ×  — keep their own needle fill on hover: they
 act rather than point): a bloom hairline on a trigger
-or a text field (`bloom-400`), a bloom wash on a list row or a discrete
-button (`bloom-100`, text `bloom-950`), a bloom track on a hovered switch
-(`bloom-300`). Selection and the active
+or a text field (`bloom-400`), a bloom wash on a list row (`bloom-100`,
+text `bloom-950`) or a discrete button (`bloom-500` at 40%, text
+`bloom-950`), a bloom track on a hovered switch (`bloom-300`). A wash on a
+control that can land on any surface (the discrete button sits on glass
+and on photographs as well as on bark-50) MUST be a translucent derivation
+of a mid step, which keeps its contrast wherever it lands; the opaque tint
+is for rows inside an opaque list. Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you
 are" never blurs with "what is chosen"; when both land on one element,
 MIX the two washes rather than picking a third step:

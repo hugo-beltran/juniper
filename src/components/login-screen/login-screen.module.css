@@ -1,0 +1,197 @@
+/* The stage: a bark-100 ground at the viewport's height in three rows (the
+ * bar, the card centred in the middle, the footer), an inline-size container
+ * the narrow rules query. Flat on flat: the card separates by tint and
+ * hairline, never by shadow (theming §4.6). */
+.stage {
+  container: login-stage / inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5rem;
+  min-height: 100svh;
+  padding: 1.25rem 2rem 1rem;
+  background-color: var(--juni-bark-200);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* The wordmark, sized here so the route imports the asset and nothing else. */
+.brand {
+  display: inline-flex;
+  color: var(--juni-needle-900);
+}
+
+.brand svg {
+  width: 7.5rem;
+  height: auto;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The card, centred in the middle row: the width but a floor of 26rem, the
+ * house card with the larger radius and a softer hairline. */
+.card {
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  max-width: 26rem;
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius-md);
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
+  position: relative;
+
+  & [data-slot="card-header"] {
+    gap: 0.375rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+/* The track: the two ways in as two panels in one horizontal scroll-snap
+ * row. A real scroller, so a touch screen swipes it and the browser owns
+ * the snap; no scrollbar, because the switch links and the swipe are the
+ * controls, not a bar. The height follows the snapped panel through the
+ * measurement the form publishes (--login-panel-height), so the card is as
+ * tall as what it shows; the other panel is clipped, and inert. The
+ * quarter-rem bleed (margin in, padding on the panel) keeps a focus ring
+ * at a panel's edge inside the clip. Smooth only when motion is wanted. */
+.track {
+  display: flex;
+  align-items: flex-start;
+  margin: -0.25rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  height: var(--login-panel-height, auto);
+  transition: height 160ms var(--ease);
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .track {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+}
+
+.panel {
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* The help link, pulled up under the fields and set to the right. */
+.help {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -0.5rem;
+}
+
+/* The footnote, under the track. */
+.footer {
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.wide {
+  width: 100%;
+}
+
+/* The switch between the two ways in: a discrete button centred under the
+ * panel's action, the chevron pointing the way the track will move. */
+.switch {
+  align-self: center;
+  color: var(--juni-bark-600);
+}
+
+.fine {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--juni-bark-900);
+}
+
+.fine a {
+  color: var(--juni-needle-800);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fine a:hover {
+  color: var(--juni-bloom-700);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.siteFooter {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  color: var(--juni-bloom-800);
+  position: relative;
+}
+
+/* Narrow: the stage tightens its gutters, the bar and its actions may wrap
+ * (the column is minmax(0, 1fr), so a wide bar never widens the stage), the
+ * wordmark shrinks a step and the card takes the width with tighter padding.
+ * Queried against the stage. */
+@container login-stage (max-width: 40rem) {
+  .stage {
+    padding: 1rem 0.75rem 0.75rem;
+  }
+
+  .bar,
+  .nav {
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    justify-content: flex-end;
+  }
+
+  .brand svg {
+    width: 5.5rem;
+  }
+
+  .card {
+    padding: 1.5rem 1.25rem;
+  }
+}

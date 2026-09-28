@@ -8,6 +8,10 @@
   --foreground: var(--juni-bark-800);
 
   --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Display titles (a card's title, a hero tagline) point at their own
+   * token so the face can diverge later without touching components; today
+   * it resolves to the same Geist (docs/theming.md §4.2). */
+  --font-display: var(--font-sans);
   --font-mono:
     "Geist Mono", source-code-pro, Menlo, Consolas, "DejaVu Sans Mono",
     monospace;
@@ -22,7 +26,7 @@
    * in every transition instead of hardcoding a keyword or curve. */
   --ease: ease-in-out;
 
-  /* Type scale: seven text steps and two display sizes, binned 2026-09-17
+  /* Type scale: seven text steps and three display sizes, binned 2026-09-17
    * from the 21 free values then in use (docs/theming.md §4.2). Every
    * font-size in component CSS MUST be one of these (or inherit); the
    * registry build enforces it. Pixel values assume the 16px root. */
@@ -34,7 +38,9 @@
   --text-lg: 1rem; /* 16px — document body, intros */
   --text-xl: 1.125rem; /* 18px — emphasized names, h3 */
   --display-sm: 1.375rem; /* 22px — section headings, h2 */
+  --display-md: 1.5rem; /* 24px — page titles, KPI metrics, h1 */
   --display-lg: 2rem; /* 32px — page titles, KPI metrics, h1 */
+  --display-xl: 2.5rem; /* 40px — hero titles: a brand tagline on a ground (2026-09-24) */
 }
 
 *,

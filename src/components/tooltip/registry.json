@@ -3,9 +3,18 @@
   "description": "react-aria-components tooltip with the house surface. Re-exports TooltipTrigger and Focusable so consumers compose without importing react-aria directly.",
   "category": "primitive",
   "anatomy": [
-    { "part": "TooltipTrigger", "description": "Re-exported from react-aria-components; wraps the trigger and the Tooltip. No provider needed." },
-    { "part": "Tooltip", "description": "The floating label; offset defaults to 6px, className extends the surface." },
-    { "part": "Focusable", "description": "Re-exported wrapper for non-react-aria triggers such as a router link." }
+    {
+      "part": "TooltipTrigger",
+      "description": "Re-exported from react-aria-components; wraps the trigger and the Tooltip. No provider needed."
+    },
+    {
+      "part": "Tooltip",
+      "description": "The floating label; offset defaults to 6px, className extends the surface."
+    },
+    {
+      "part": "Focusable",
+      "description": "Re-exported wrapper for non-react-aria triggers such as a router link."
+    }
   ],
   "usage": [
     "Compose as <TooltipTrigger><Button/><Tooltip>label</Tooltip></TooltipTrigger>.",

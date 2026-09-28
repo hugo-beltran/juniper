@@ -5,17 +5,6 @@
   max-width: 44rem;
 }
 
-.page h1 {
-  margin: 0;
-}
-
-.sub {
-  margin: 0;
-  max-width: 60ch;
-  font-size: var(--text-base);
-  color: var(--juni-bark-600);
-}
-
 /* How-to-write guides — static, directly under the subheading. */
 .guides {
   margin: 0;

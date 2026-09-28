@@ -1,18 +1,18 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { Blobatar } from "@blobatar/react";
-import "blobatar/motion.css";
-import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
-import { Button as AriaButton, type Selection } from "react-aria-components";
-import { useSidebar } from "@/components/sidebar/sidebar";
-import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette";
-import { ListBox, ListBoxItem } from "@/components/listbox/listbox";
-import { Squircle } from "./squircle";
-import { useClickOutside } from "./use-click-outside";
-import styles from "./tenant-switcher.module.css";
+import { Blobatar } from "@blobatar/react"
+import { useEffect, useId, useRef, useState } from "react"
+import "blobatar/motion.css"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
+import { Button as AriaButton, type Selection } from "react-aria-components"
+import { ListBox, ListBoxItem } from "@/components/listbox/listbox"
+import { useSidebar } from "@/components/sidebar/sidebar"
+import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette"
+import { Squircle } from "./squircle"
+import styles from "./tenant-switcher.module.css"
+import { useClickOutside } from "./use-click-outside"
 
 export interface Tenant {
-  name: string;
-  plan: string;
+  name: string
+  plan: string
 }
 
 /* Inline disclosure switcher — no popover, per the project's UX philosophy:
@@ -25,56 +25,73 @@ export function TenantSwitcher({
   activeTenant: activeTenantProp,
   onActiveTenantChange,
 }: {
-  tenants: Tenant[];
-  activeTenant?: Tenant;
-  onActiveTenantChange?: (tenant: Tenant) => void;
+  tenants: Tenant[]
+  activeTenant?: Tenant
+  onActiveTenantChange?: (tenant: Tenant) => void
 }) {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
-  const [internalActiveTenant, setInternalActiveTenant] = useState(tenants[0]);
-  const activeTenant = activeTenantProp ?? internalActiveTenant;
+  const { state } = useSidebar()
+  const collapsed = state === "collapsed"
+  const [internalActiveTenant, setInternalActiveTenant] = useState(tenants[0])
+  const activeTenant = activeTenantProp ?? internalActiveTenant
   const setActiveTenant = (tenant: Tenant) => {
-    if (onActiveTenantChange) onActiveTenantChange(tenant);
-    else setInternalActiveTenant(tenant);
-  };
-  const [expanded, setExpanded] = useState(false);
-  const panelId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
-  const rootRef = useRef<HTMLDivElement>(null);
+    if (onActiveTenantChange) onActiveTenantChange(tenant)
+    else setInternalActiveTenant(tenant)
+  }
+  const [expanded, setExpanded] = useState(false)
+  const panelId = useId()
+  const panelRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
 
   /* Collapsing the sidebar closes the switcher — the rail has no room for
    * the list, and the read-only tile has no way to reopen it. */
   useEffect(() => {
-    if (collapsed) setExpanded(false);
-  }, [collapsed]);
+    if (collapsed) setExpanded(false)
+  }, [collapsed])
 
   /* A press anywhere outside the switcher (trigger + panel) dismisses it.
    * Focus stays where the user clicked — no yanking it back to the trigger. */
-  useClickOutside(rootRef, () => setExpanded(false), expanded);
+  useClickOutside(rootRef, () => setExpanded(false), expanded)
+
+  /* Escape inside the open panel closes it and returns focus to the trigger,
+   * the panel's previous sibling. Bound as a listener, not a JSX handler: the
+   * panel is a plain box with no role of its own, and the ListBox inside
+   * owns the keyboard semantics; the keystroke bubbles up to here. */
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel || !expanded) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+      setExpanded(false)
+      const trigger = panel.previousElementSibling
+      if (trigger instanceof HTMLElement) trigger.focus()
+    }
+    panel.addEventListener("keydown", onKeyDown)
+    return () => panel.removeEventListener("keydown", onKeyDown)
+  }, [expanded])
 
   if (!activeTenant) {
-    return null;
+    return null
   }
 
   /* The trigger is the panel's immediate previous sibling; focus returns to
    * it when the panel closes underneath the focused item. */
   const focusTrigger = () => {
-    const trigger = panelRef.current?.previousElementSibling;
-    if (trigger instanceof HTMLElement) trigger.focus();
-  };
+    const trigger = panelRef.current?.previousElementSibling
+    if (trigger instanceof HTMLElement) trigger.focus()
+  }
 
   const handleSelectionChange = (keys: Selection) => {
-    if (keys === "all") return;
-    const key = keys.values().next().value;
-    const tenant = tenants.find((candidate) => candidate.name === key);
+    if (keys === "all") return
+    const key = keys.values().next().value
+    const tenant = tenants.find((candidate) => candidate.name === key)
     if (tenant) {
-      setActiveTenant(tenant);
-      setExpanded(false);
-      focusTrigger();
+      setActiveTenant(tenant)
+      setExpanded(false)
+      focusTrigger()
     }
-  };
+  }
 
-  const { name } = activeTenant;
+  const { name } = activeTenant
 
   return (
     /* Fully encapsulated: no SidebarMenu scaffolding, no shared menuButton —
@@ -122,12 +139,6 @@ export function TenantSwitcher({
         className={styles.panel}
         data-expanded={expanded || undefined}
         inert={!expanded}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") {
-            setExpanded(false);
-            focusTrigger();
-          }
-        }}
       >
         <div className={styles.panelInner}>
           <div className={styles.panelContent}>
@@ -153,5 +164,5 @@ export function TenantSwitcher({
         </div>
       </div>
     </div>
-  );
+  )
 }

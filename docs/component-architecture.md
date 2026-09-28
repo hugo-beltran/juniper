@@ -45,6 +45,12 @@ src/components/
   switch/                       labelled Switch, extruded track
   filter-bar/                   sticky search / switch / select toolbar
   users-table/                  demo composition: FilterBar + flat table
+  background-noise/             background layer: film grain for a ground
+  full-bleed-canvas/            the ground for screens outside the shell: photograph, grain, credit
+  card/                         surface container with header, title, description, footer parts
+  page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
+  image-overlay/                standalone background layer: fills its positioned container behind its siblings
+  login-screen/                 demo composition: the sign-in stage (bar, card, footer)
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -118,7 +124,10 @@ const buttonVariants = cva(styles.button, {
 3.4. The root element of every component and of every named part MUST carry
 `data-slot="<kebab-name>"`. Variant and size MUST be mirrored as
 `data-variant` / `data-size`. These are the stable hooks for tests, parents
-and consumer overrides.
+and consumer overrides. A CVA axis that is not a role is named for what it
+is and mirrored under that name: `Card` picks what the surface is made of,
+so its axis is `material`, mirrored as `data-material` (renamed from
+`variant` on 2026-09-28); the theme's glass re-tune keys on it (3.9).
 
 3.5. Use react-aria semantics: `onPress` not `onClick`, `isDisabled` not
 `disabled`, `isSelected`, `selectedKeys`. State styling in CSS MUST use the
@@ -142,6 +151,38 @@ keeps 3.5 intact for the react-aria path.
 share the size names `mini` (1.75rem), `small` (2rem) and `medium` (2.5rem,
 default), so a field and a button placed on one row at the same size name
 align without consumer CSS.
+
+3.9. **Context lives in CSS, not in React.** When a component must look or
+behave differently because of where it sits (inside a glass card, on the
+dark sidebar, in a narrow inset, while hovered by a pointer), the rule MUST
+be expressed in CSS against the context's data attributes, custom
+properties and container queries, never as a prop threaded down, a context
+read, or a branch in the render. The virtual DOM stays one tree of the
+same elements everywhere; the cascade does the specialising. The cost of
+the alternative is real: a `variant` prop for every surface a control can
+land on, providers for every ancestor that matters, and a render that
+re-runs to change a shadow. Precedents: the theme re-tunes
+`--lift-highlight` for every control inside a glass card through a
+`:where([data-slot="card"][data-material="glass"])` rule, at zero
+specificity, and no control knows it happened; `ListBox` styles its rows
+through the root's `data-variant` so items take no prop; the sidebar
+inset publishes `data-narrow` and consumers query it; hover for a slotted
+link is `:not([data-rac]):hover`, not a wrapper. Reach for React only when
+CSS cannot know the fact (data, selection, a measurement), and then
+publish the fact as a data attribute or custom property once (4.0) so the
+rest stays CSS.
+
+3.10. **Icons are rare.** An icon earns its place when it carries a
+meaning the words beside it do not (a status glyph, a tool in a toolbar
+with no room for words); it MUST NOT decorate a control whose label already
+says what it does. A row of labelled buttons each wearing a glyph reads as
+a gimmick, not a system. Where an action points somewhere, prefer the
+typographic arrow inside the label (`→`, `←`, `›`) to an icon: it sets in
+the text's own size, weight and colour, needs no sizing rule and no
+`aria-hidden`. Decided 2026-09-28 on the login screen, whose single
+sign-on button lost its key and whose panel switches became
+`Use your credentials →` and `← Use single sign-on`; heroicons stays the
+source for the icons that remain (1).
 
 ## 4. Composition patterns
 
@@ -167,7 +208,12 @@ only hold content in the wrong layout mid-resize.
 layout (Sidebar) exposes named parts (`SidebarHeader`, `SidebarMenu`,
 `SidebarMenuButton`) the consumer arranges as JSX, instead of one component
 with a large prop API. The consumer owns arrangement; each part owns its
-chrome.
+chrome. Card (`CardHeader`, `CardTitle`, `CardDescription`, `CardFooter`)
+and Page (`PageHeader`, `PageTitle`, `PageDescription`) follow the same
+shape: the route arranges the parts and never restates their type or
+colour. `CardTitle` and `PageTitle` are react-aria `Heading`s whose `level`
+picks the element, so a card that is the page's main content can carry
+the h1.
 
 4.2. **Inline over overlay.** Disclosure grows in place and pushes content
 (the tenant switcher's panel) rather than floating a dialog, drawer or
@@ -218,6 +264,50 @@ together; the inset measures before paint so the layout never flashes.
 Never fork the data or the column definitions for a mobile variant. The
 leads table is the reference.
 
+4.7. **Reference compositions.** Registry entries in the `demo` category are
+screens or screen-sized parts assembled from the primitives, published so a
+consumer copies the structure rather than the component. The `login-screen`
+entry is the reference for a whole screen, in parts the route arranges: a
+`LoginStage` (the bark-100 ground at the viewport's height in three rows; the
+stage owns the ground, the route paints nothing), a `LoginBar` holding
+`LoginBrand` (the wordmark, sized and coloured by the part) and `LoginNav`
+(the visitor's actions as Buttons asChild around router Links), a `LoginCard`
+(the flat Card centred in the middle row; flat because the ground is flat, and
+the extruded controls read on bark-50) whose header the route fills from
+Card's own parts (a title at level 1, a lede), a `LoginForm` (the fields, a
+slotted help link and the actions, react-aria native validation, a controlled
+API of `onSignIn` with the credentials and nothing else) and a `LoginFooter`
+(one line), with the router kept in the route, which needs no CSS of its own.
+One composition serves phone and desktop: the stage tightens its gutters and
+the card takes the width below 40rem of the stage. A demo entry MUST NOT
+import the router or the mock data in `src/lib`; a route shell passes data,
+links and the brand in. The registry inlines source files, not assets, so the
+wordmark is an asset the route imports and nothing of it ships in the entry.
+The alternatives a shipped composition was chosen from stay under `/lab` as
+the archive (`/lab/login`, `/lab/login-2`, `/lab/glass`): the stage was chosen
+on 2026-09-25 over a photo panel beside the form, a framed sheet and a dark
+pane on the photograph. `FullBleedCanvas` and `ImageOverlay` remain the ground
+for a screen that wants the photograph.
+
+4.8. **Background layers are standalone.** A component that paints a ground
+(`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)
+takes no children and never assumes the viewport. It is absolutely positioned
+at `inset: 0`, full width and height, rendered as a first child of a
+positioned container, so the siblings that follow paint above it in DOM order
+(a layer with no controls of its own, the grain, also takes `z-index: -1`
+inside an isolating container, so nothing can land on top of content). The
+consumer owns the container, its position and its size, which is what lets the
+same layer ground a whole screen, a panel or a card. `FullBleedCanvas` is the
+composed ground for screens outside the shell: it renders the overlay and then
+the grain and decides their order itself (photograph at -2, grain at -1,
+content above), which a consumer never re-stacks. Two consequences for the
+consumer: narrow-layout container queries are declared on the consumer's
+container (a screen on the canvas queries `full-bleed-canvas`), not on the
+layer; and a layout that covers the whole ground lets pointer events through
+its bare areas so the layer's own controls (the credit link) stay reachable.
+Wrapping content in a background component, and painting a ground from route
+CSS, are the anti-patterns this rule replaces.
+
 ## 5. Accessibility baseline
 
 5.1. Icon-only controls MUST have a text label, visually hidden with the
@@ -255,6 +345,17 @@ controlled, receiving the state and a change callback (`filters` /
 `onFiltersChange`), and MAY fall back to internal state when no props are
 passed. Filter tweaks navigate with `replace: true` so they do not pile up
 history entries.
+
+6.4. **Nothing user-scoped before sign-in.** A screen that renders before
+authentication (the login) MUST NOT load, ask for or show data that depends
+on who the user is: which workspaces exist, their names or plans, where the
+user will land. That is an answer the API gives after sign-in, and showing
+it earlier would reveal it to anyone. The pre-authentication route loads
+nothing and navigates to the app's root; the authenticated layout resolves
+the tenant from the navigation tree once it knows who signed in
+(`_authenticated/index.tsx`). The login's workspace picker was removed for
+this reason on 2026-09-24; the `/lab/login` mocks that still show one are
+the archive of the earlier structure, not the rule.
 
 ## 7. Adding a component
 

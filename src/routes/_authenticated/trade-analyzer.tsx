@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { SummaryCard } from "@/components";
-import styles from "./trade-analyzer.module.css";
+import { createFileRoute } from "@tanstack/react-router"
+import { SummaryCard } from "@/components"
+import styles from "./trade-analyzer.module.css"
 
 export const Route = createFileRoute("/_authenticated/trade-analyzer")({
   component: TradeAnalyzerPage,
-});
+})
 
 /* Fantasy baseball trade dashboard — players exchanged between two teams.
  * Metrics are static placeholders until the trade state exists. */
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/trade-analyzer")({
 /* Grizzlies combined batting average by week, season to date. */
 const GRIZZLIES_AVG_TREND = [
   0.259, 0.263, 0.258, 0.254, 0.256, 0.262, 0.266, 0.264, 0.268, 0.267,
-];
+]
 
 function TradeAnalyzerPage() {
   return (
@@ -62,5 +62,5 @@ function TradeAnalyzerPage() {
         />
       </div>
     </div>
-  );
+  )
 }

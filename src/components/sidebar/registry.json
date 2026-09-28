@@ -25,7 +25,7 @@
     },
     {
       "part": "SidebarHeader / SidebarContent / SidebarFooter",
-      "description": "Vertical regions of the column."
+      "description": "Vertical regions of the column: the header holds the TenantSwitcher, the content the tenant's groups and scrolls, the footer the session's exit (a Log out row in its own SidebarMenu, added 2026-09-28) pinned at the foot."
     },
     {
       "part": "SidebarGroup / SidebarGroupLabel / SidebarGroupContent",
@@ -33,7 +33,7 @@
     },
     {
       "part": "SidebarMenu / SidebarMenuItem / SidebarMenuButton",
-      "description": "The nav list. SidebarMenu draws a sliding indicator shaped as an inset-connector tab under the active item; SidebarMenuButton slots a router link with asChild or renders a react-aria Button."
+      "description": "The nav list. SidebarMenu draws a sliding indicator shaped as an inset-connector tab under the active item (aria-current=\"page\" or data-active) or under an open disclosure row (aria-expanded=\"true\"); SidebarMenuButton slots a router link with asChild or renders a react-aria Button."
     },
     {
       "part": "SidebarMenuBadge",
@@ -46,14 +46,11 @@
     "Read useSidebarInset(threshold) to adapt a component to the space it actually has (the leads table becomes cards, the filter bar folds into a drawer). The inset publishes the fact (its width); each consumer owns the policy (its threshold) as a named constant beside its content, defaulting to the house value so the common case switches together. Outside an inset the hook reports wide.",
     "Never debounce the inset signal: ResizeObserver already coalesces to one notification per frame and the selector re-renders a consumer only when its boolean flips, so a delay would only leave content in the wrong layout mid-resize.",
     "Sticky content inside the inset pins to top: 0; the floating trigger lives in the inset's left gutter, so nothing needs to offset for it.",
-    "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling.",
+    "Mark the active item with the router's aria-current=\"page\" (or data-active); the indicator observes both and needs no router coupling. The active item takes no pointer: it is the current page. A row that discloses a panel sets aria-expanded and aria-controls instead (component-architecture §5.3): open, it reads like the active item and takes the indicator, but stays pressable so the same press closes it.",
     "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
     "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet, rail/input/separator, badges, submenus, cookie persistence, keyboard shortcut.",
-    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0."
+    "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0.",
+    "Actions on the session (Log out) go in SidebarFooter as a SidebarMenu row rendered as a react-aria Button (no asChild), so they wear the nav's face, collapse to their icon with the rail and keep the label as the collapsed tooltip. The shell owns where a log-out lands; the row only reports the press. Rows in the rail are the one place an icon is required (component-architecture §3.10): collapsed, the icon is all that shows. Development tooling follows the same pattern: the shell's query and router devtools are footer rows above Log out that disclose (aria-expanded, aria-controls; never isActive, which would take the pointer away) a dock stuck to the foot of the inset, in place of the libraries' floating corner buttons."
   ],
-  "docs": [
-    "component-architecture",
-    "theming",
-    "light-dark"
-  ]
+  "docs": ["component-architecture", "theming", "light-dark"]
 }

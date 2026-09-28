@@ -22,7 +22,10 @@ import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authen
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedLabDockRouteImport } from './routes/_authenticated/lab/dock'
 import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticated/lab/forms'
+import { Route as AuthenticatedLabGlassRouteImport } from './routes/_authenticated/lab/glass'
 import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticated/lab/lift'
+import { Route as AuthenticatedLabLoginRouteImport } from './routes/_authenticated/lab/login'
+import { Route as AuthenticatedLabLogin2RouteImport } from './routes/_authenticated/lab/login-2'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -91,9 +94,24 @@ const AuthenticatedLabFormsRoute = AuthenticatedLabFormsRouteImport.update({
   path: '/lab/forms',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLabGlassRoute = AuthenticatedLabGlassRouteImport.update({
+  id: '/lab/glass',
+  path: '/lab/glass',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedLabLiftRoute = AuthenticatedLabLiftRouteImport.update({
   id: '/lab/lift',
   path: '/lab/lift',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedLabLoginRoute = AuthenticatedLabLoginRouteImport.update({
+  id: '/lab/login',
+  path: '/lab/login',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedLabLogin2Route = AuthenticatedLabLogin2RouteImport.update({
+  id: '/lab/login-2',
+  path: '/lab/login-2',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
@@ -115,7 +133,10 @@ export interface FileRoutesByFullPath {
   '/users': typeof AuthenticatedUsersRoute
   '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
+  '/lab/glass': typeof AuthenticatedLabGlassRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/lab/login': typeof AuthenticatedLabLoginRoute
+  '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesByTo {
@@ -131,7 +152,10 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
+  '/lab/glass': typeof AuthenticatedLabGlassRoute
   '/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/lab/login': typeof AuthenticatedLabLoginRoute
+  '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRoutesById {
@@ -149,7 +173,10 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/lab/dock': typeof AuthenticatedLabDockRoute
   '/_authenticated/lab/forms': typeof AuthenticatedLabFormsRoute
+  '/_authenticated/lab/glass': typeof AuthenticatedLabGlassRoute
   '/_authenticated/lab/lift': typeof AuthenticatedLabLiftRoute
+  '/_authenticated/lab/login': typeof AuthenticatedLabLoginRoute
+  '/_authenticated/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
 }
 export interface FileRouteTypes {
@@ -167,7 +194,10 @@ export interface FileRouteTypes {
     | '/users'
     | '/lab/dock'
     | '/lab/forms'
+    | '/lab/glass'
     | '/lab/lift'
+    | '/lab/login'
+    | '/lab/login-2'
     | '/lab/palette'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -183,7 +213,10 @@ export interface FileRouteTypes {
     | '/'
     | '/lab/dock'
     | '/lab/forms'
+    | '/lab/glass'
     | '/lab/lift'
+    | '/lab/login'
+    | '/lab/login-2'
     | '/lab/palette'
   id:
     | '__root__'
@@ -200,7 +233,10 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/lab/dock'
     | '/_authenticated/lab/forms'
+    | '/_authenticated/lab/glass'
     | '/_authenticated/lab/lift'
+    | '/_authenticated/lab/login'
+    | '/_authenticated/lab/login-2'
     | '/_authenticated/lab/palette'
   fileRoutesById: FileRoutesById
 }
@@ -302,11 +338,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLabFormsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/glass': {
+      id: '/_authenticated/lab/glass'
+      path: '/lab/glass'
+      fullPath: '/lab/glass'
+      preLoaderRoute: typeof AuthenticatedLabGlassRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/lift': {
       id: '/_authenticated/lab/lift'
       path: '/lab/lift'
       fullPath: '/lab/lift'
       preLoaderRoute: typeof AuthenticatedLabLiftRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lab/login': {
+      id: '/_authenticated/lab/login'
+      path: '/lab/login'
+      fullPath: '/lab/login'
+      preLoaderRoute: typeof AuthenticatedLabLoginRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lab/login-2': {
+      id: '/_authenticated/lab/login-2'
+      path: '/lab/login-2'
+      fullPath: '/lab/login-2'
+      preLoaderRoute: typeof AuthenticatedLabLogin2RouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/lab/palette': {
@@ -331,7 +388,10 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedLabDockRoute: typeof AuthenticatedLabDockRoute
   AuthenticatedLabFormsRoute: typeof AuthenticatedLabFormsRoute
+  AuthenticatedLabGlassRoute: typeof AuthenticatedLabGlassRoute
   AuthenticatedLabLiftRoute: typeof AuthenticatedLabLiftRoute
+  AuthenticatedLabLoginRoute: typeof AuthenticatedLabLoginRoute
+  AuthenticatedLabLogin2Route: typeof AuthenticatedLabLogin2Route
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
 }
 
@@ -347,7 +407,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedLabDockRoute: AuthenticatedLabDockRoute,
   AuthenticatedLabFormsRoute: AuthenticatedLabFormsRoute,
+  AuthenticatedLabGlassRoute: AuthenticatedLabGlassRoute,
   AuthenticatedLabLiftRoute: AuthenticatedLabLiftRoute,
+  AuthenticatedLabLoginRoute: AuthenticatedLabLoginRoute,
+  AuthenticatedLabLogin2Route: AuthenticatedLabLogin2Route,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
 }
 

@@ -29,7 +29,7 @@
   min-width: 0;
   border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
   border-radius: var(--radius-md);
-  background-color: var(--juni-bark-50);
+  background-color: oklch(from var(--juni-bark-50) 98% c h);
   color: var(--juni-needle-950);
   font: inherit;
   text-align: left;
