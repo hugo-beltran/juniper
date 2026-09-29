@@ -13,7 +13,7 @@
     },
     {
       "part": "Box",
-      "description": "The react-aria TextArea: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid; vertical resize only."
+      "description": "The react-aria TextArea: --control-fill and --control-hairline from the theme, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid; vertical resize only."
     }
   ],
   "usage": [

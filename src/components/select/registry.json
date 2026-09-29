@@ -13,7 +13,7 @@
     },
     {
       "part": "Trigger",
-      "description": "react-aria Button wearing the extruded recipe: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while pressed or open. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
+      "description": "react-aria Button wearing the extruded recipe: --control-fill and --control-hairline from the theme, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while pressed or open. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
     },
     {
       "part": "SelectValue",

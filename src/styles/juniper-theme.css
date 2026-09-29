@@ -1,16 +1,6 @@
-/* Juniper — palette scales plus the few semantic tokens the app consumes.
- *
- * Values are oklch; light/dark resolves per token via light-dark() under
- * `color-scheme: light dark`. Scales are prefixed --juni-* and components
- * reference them directly in their CSS modules (house convention: direct
- * palette usage, no semantic contract layer). Semantic tokens below exist
- * only where more than one consumer needs the same resolved value — add new
- * ones on the second consumer, not the first.
- *
- * Naming: ramps are juniper anatomy — needle (foliage green), bloom (the
- * waxy teal coating on the berries), berry (ripe purple), heartwood (the
- * red wood), with bark and lichen as the neutrals. Renamed 2026-09-08 from
- * grove/reef/orchid/nectarine/driftwood/olive. */
+/* Juniper palette: --juni-* oklch ramps (light-dark() per step) that
+ * components reference directly, plus semantic tokens added only on a
+ * second consumer. Ramps are juniper anatomy; see docs/palette.md. */
 
 :root {
   /* bark — warm gray neutral for muted surfaces and plain content (hue
@@ -27,11 +17,8 @@
   --juni-bark-900: oklch(38% 0.0196 59.7);
   --juni-bark-950: oklch(26% 0.02 58);
 
-  /* heartwood — warm apricot-to-crimson for outliers and attention
-   * catchers; the identity's ONLY red (destructive/error). Born by pulling
-   * the retired momo 60% toward the
-   * oriole project's nectarine ramp (chroma ×0.85, house lightness ladder) —
-   * tints lean gold, depths lean crimson. Shipped as "nectarine"; renamed.
+  /* heartwood — apricot-to-crimson, the identity's only red (error,
+   * destructive). Blend: momo pulled 60% toward nectarine, chroma ×0.85.
    * Archived at /lab/palette. */
   --juni-heartwood-50: oklch(96% 0.0272 74);
   --juni-heartwood-100: oklch(90% 0.059 67.79);
@@ -45,11 +32,9 @@
   --juni-heartwood-900: oklch(38% 0.0487 12.47);
   --juni-heartwood-950: oklch(26% 0.0384 9.43);
 
-  /* needle — warm yellow-green, the brand anchor; also links, focus,
-   * success. Born as the merge of the retired leaf and pear ramps ("Fern":
-   * mean lightness, chroma 35% pear, hue 65% pear — yellow-leaning but
-   * muted; revised down from the initial "Willow" 50%-chroma blend).
-   * Shipped as "grove"; renamed. Archived at /lab/palette. */
+  /* needle — warm yellow-green, the brand anchor (links, selection,
+   * success). Blend: leaf/pear, chroma 35% pear, hue 65% pear.
+   * Archived at /lab/palette. */
   --juni-needle-50: oklch(95.75% 0.0171 121.4);
   --juni-needle-100: oklch(91.5% 0.0362 122.66);
   --juni-needle-200: oklch(87% 0.0772 124.08);
@@ -75,13 +60,8 @@
   --juni-lichen-900: oklch(22.8% 0.013 107.4);
   --juni-lichen-950: oklch(15.3% 0.006 107.1);
 
-  /* berry — cool violet accent (hue ~292). Born as the merge of the retired
-   * blue "berry" and "plum" ramps: the vivid "Orchid" blend (hue 70% plum,
-   * chroma ×1.6) shipped first as "orchid"; revised to "Iris", the true
-   * per-step average of the sources — quieter, and the opposing hue drifts
-   * cancel into a stable violet. The family inherits the retired blue
-   * ramp's name (ripe juniper berries are purple). Archived at
-   * /lab/palette. */
+  /* berry — cool violet accent (hue ~292). Blend: per-step average of the
+   * retired blue berry and plum ramps. Archived at /lab/palette. */
   --juni-berry-50: oklch(96% 0.019 283.27);
   --juni-berry-100: oklch(90% 0.0246 285.27);
   --juni-berry-200: oklch(83% 0.036 287.2);
@@ -94,13 +74,9 @@
   --juni-berry-900: oklch(38% 0.0614 292.37);
   --juni-berry-950: oklch(26% 0.0555 288.96);
 
-  /* bloom — cool teal, the brand's complementary (needle ~130, bloom ~211,
-   * berry ~292 — a loose triad). Born by promoting the retired bonito trio
-   * to a full ramp ("Reef": bonito's hues interpolated onto the house
-   * lightness ladder and pulled 30% toward the retired blue berry; chroma
-   * follows needle's normalized profile at peak 0.105 — a straight blend
-   * honoring the trio's chroma spiked at the 500 step and was rejected).
-   * Shipped as "reef"; renamed. Archived at /lab/palette. */
+  /* bloom — cool teal (hue ~211), needle's complementary: hover, focus,
+   * glass. Blend: bonito pulled 30% toward blue berry, chroma peak 0.105.
+   * Archived at /lab/palette. */
   --juni-bloom-50: oklch(96% 0.0173 221.3);
   --juni-bloom-100: oklch(90% 0.0367 219.44);
   --juni-bloom-200: oklch(83% 0.0782 217.06);
@@ -130,12 +106,8 @@
   /* Page canvas. (Dark stop was spruce-800; needle-900 is its closest match.) */
   --body: light-dark(var(--juni-bark-200), var(--juni-needle-900));
 
-  /* Focus ring (consumed by the global :focus-visible rule and the few
-   * components that draw the outline on a proxy element). Bloom, the
-   * complementary, by decision (2026-09-17): focus is a pointer state, and
-   * pointer states answer in bloom while selection answers in needle
-   * (docs/theming.md §4.7) — so a focused control can never be mistaken
-   * for a selected one. */
+  /* Focus ring for the global :focus-visible rule and proxy outlines.
+   * Bloom, never needle: focus is a pointer state (theming §4.4, §4.7). */
   --ring: var(--juni-bloom-600);
 
   /* Links — private base feeds both states. */
@@ -153,28 +125,22 @@
    * bloom decision as --ring, lifted to a step that clears needle-900. */
   --nav-outline: var(--juni-bloom-400);
 
-  /* Volume — the extruded recipe neutral controls wear (docs/theming.md
-   * §4.6): a highlight cast up-left and a shade cast down-right. The colors
-   * are the primary button's own (its needle-50 inner ring and bloom-700
-   * drop shadow), so every control is lit by the same lamp. The highlight
-   * lifts lightness and alpha because it must show against bark-50, where
-   * needle-50 at 15% would vanish; the button's ring sits on a needle-400
-   * fill. Pressed/open inverts them (inset). Chosen 2026-09-17 from the
-      * /lab/lift exploration. Consumers: Input, Textarea and Select (box,
-   * trigger and popover), the secondary and discrete Button, and the
-   * Switch track. */
+  /* Lift pair for the extruded recipe (theming §4.6): highlight up-left,
+   * shade down-right, inset when pressed. The primary button's own light
+   * (needle-50 ring, bloom-700 drop). Alternatives archived at /lab/lift. */
   --lift-highlight: oklch(from var(--juni-needle-50) calc(l + 0.03) c h / 0.9);
   --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.2);
+
+  /* Control surface under the lift pair (theming §4.6): one fill and one
+   * hairline for every neutral control box, so they cannot drift apart.
+   * Hairline dimmed 2026-09-29 from 60% to 75%. */
+  --control-fill: oklch(from var(--juni-bark-50) 95% c h);
+  --control-hairline: oklch(from var(--juni-bark-200) l c h / 0.75);
 }
 
-/* On a glass card the same lamp reads differently: the surface is
- * translucent over the green ground, so the needle-tinted highlight comes
- * through green and loud, and the full shade too heavy on a lighter,
- * translucent surface. Inside glass both are re-tuned: the highlight to a
- * neutral, quieter glow (bark-50 at chroma 0, 30%), the shade to half
- * strength (bloom-700 at 10%).
- * :where keeps the rule at zero specificity, so it only sets the inherited
- * token and never competes with a component's own declarations. */
+/* Inside glass the lift pair is re-tuned (theming §4.6): neutral highlight
+ * at chroma 0, shade at half strength, because the needle tint reads green
+ * through a translucent surface. :where keeps it at zero specificity. */
 :where([data-slot="card"][data-material="glass"]) {
   --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.3);
   --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.1);

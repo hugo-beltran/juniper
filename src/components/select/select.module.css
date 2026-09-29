@@ -15,10 +15,8 @@
   display: flex;
 }
 
-/* Trigger — extruded (theming §4.6): the surface pushed out, faint
- * hairline, highlight up-left, shade down-right. Hover pushes further out;
- * pressed or open sinks it, and it stays sunk while the list is open so the
- * pair reads as one body: a sunken cap over a raised list. */
+/* Trigger — extruded (theming §4.6). Hover pushes further out; pressed or
+ * open sinks it and stays sunk while the list is open. */
 .trigger {
   display: inline-flex;
   flex: 1;
@@ -27,9 +25,9 @@
   gap: 0.5rem;
   position: relative;
   min-width: 0;
-  border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
+  border: 1px solid var(--control-hairline);
   border-radius: var(--radius-md);
-  background-color: oklch(from var(--juni-bark-50) 98% c h);
+  background-color: var(--control-fill);
   color: var(--juni-needle-950);
   font: inherit;
   text-align: left;
@@ -133,10 +131,8 @@
   translate: 0 -50%;
 }
 
-/* Clear (×) — shown only while a value is set; sits over the trigger's
- * right end ahead of the chevron. Hover fills with needle like a small
- * primary action (it acts, it does not merely point — §4.7 covers neutral
- * controls). */
+/* Clear (×) — shown only while a value is set, over the trigger's right
+ * end ahead of the chevron. Hover fills with needle: it acts (§4.7). */
 .clear {
   position: absolute;
   top: 50%;
@@ -173,17 +169,15 @@
   color: var(--juni-bark-50);
 }
 
-/* Popover — the same extruded material as the trigger, anchored
- * bottom-start at exactly the trigger's width, so it reads as the control
- * grown downward rather than a floating panel. Vertical inset only: the
- * list (ListBox variant="popover") carries the horizontal inset so its
- * scrollbar sits at the popover's edge instead of floating inside it. */
+/* Popover — the trigger's material at the trigger's width, so the open
+ * pair reads as one body (§4.6). Vertical inset only; the ListBox carries
+ * the horizontal inset so its scrollbar sits at the edge. */
 .popover {
   width: var(--trigger-width);
   padding: 0.25rem 0;
-  border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
+  border: 1px solid var(--control-hairline);
   border-radius: var(--radius-md);
-  background-color: var(--juni-bark-50);
+  background-color: var(--control-fill);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);

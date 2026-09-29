@@ -47,15 +47,9 @@
 
 /* Roles */
 
-/* Primary — glass pane after the Squircle's recipe (squircle.tsx): a radial
- * gradient lit from off-center (deepest at 70%/70%, easing light toward the
- * top-left, far stop pushed past the edge like the SVG's 145% offset), the
- * rim as a uniform 1px translucent-white inner ring (the CSS analog of its
- * centered 2px stroke clipped to the shape), and a diagonally offset
- * needle-tinted drop shadow (the SVG filter offsets dx = dy). Pressing moves
- * the gradient's light source to the top-left and swaps the drop shadow for
- * an inner one — the pane pushes in. The one control that carries color,
- * so the one that carries light (theming §4.6). */
+/* Primary — glass pane (theming §4.6), after the Squircle's recipe: radial
+ * fill lit off-center, 1px translucent inner ring, needle-tinted drop
+ * shadow at equal x/y. The one control with colour, so the one with light. */
 .primary {
   background: radial-gradient(
     circle at 70% 70%,
@@ -83,10 +77,8 @@
     1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
 }
 
-/* Pressed: hover brightens, so the push-in goes the other way — one step
- * deeper than idle, light source flipped to the top-left, the pane's own
- * shadow pulled inside. The residual contact shadow keeps idle's bloom
- * tint. */
+/* Pressed: one step deeper than idle, light flipped to the top-left, the
+ * drop shadow pulled inside. */
 .primary:is([data-pressed], :not([data-rac]):active) {
   color: var(--juni-bark-50);
   background: radial-gradient(
@@ -100,14 +92,13 @@
     1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.15);
 }
 
-/* Secondary — extruded (theming §4.6), the same material as a field or a
- * select trigger: the surface's own bark-50 fill, faint hairline, highlight
- * up-left and shade down-right. Hover pushes further out with a bloom
- * hairline (§4.7); pressed, or open as a menu trigger, sinks it. */
+/* Secondary — extruded (theming §4.6) on the shared control surface, the
+ * same material as a field. Hover pushes out in bloom (§4.7); pressed or
+ * open sinks it. */
 .secondary {
-  background-color: oklch(from var(--juni-bark-100) 93% c h);
+  background-color: var(--control-fill);
   color: var(--juni-bloom-800);
-  border-color: oklch(from var(--juni-bark-200) l c h / 0.75);
+  border-color: var(--control-hairline);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);
@@ -131,12 +122,9 @@
   color: var(--juni-bloom-900);
 }
 
-/* Discrete — inline text that becomes a control on approach. Flat at rest
- * (it carries no weight until touched); hover washes it in bloom (§4.7), a
- * translucent wash (bloom-500 at 40%) rather than the opaque bloom-100
- * tint, so it keeps its contrast on a glass card or a photograph as well
- * as on bark-50; pressed or open it takes the surface fill and sinks
- * (inset) like every other neutral control. */
+/* Discrete — flat inline text at rest. Hover is a translucent bloom wash
+ * (§4.7) so it holds on glass and photographs; pressed or open takes the
+ * control fill and sinks (§4.6). */
 .discrete {
   background-color: transparent;
   color: var(--juni-needle-800);
@@ -148,18 +136,16 @@
 }
 
 .discrete:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
-  background-color: var(--juni-bark-50);
+  background-color: var(--control-fill);
   color: var(--juni-needle-950);
   box-shadow:
     inset -1px -1px 2px var(--lift-highlight),
     inset 1px 1px 3px var(--lift-shade);
 }
 
-/* Rich — the primary's pane in the dark ramp (bloom-800 into bloom-900,
- * needle-50 copy, the same rim and bloom drop): for a light sheet where the
- * green pane would shout. Hover lifts the light toward bloom-600; pressed
- * sinks to bloom-950. Still one primary per view: rich stands in for it,
- * never beside it. */
+/* Rich — the primary's pane in the dark ramp (bloom-800 → bloom-900,
+ * needle-50 copy) for a light sheet. Stands in for primary, never beside
+ * it (§4.6). */
 .rich {
   background: radial-gradient(
     circle at 70% 50%,

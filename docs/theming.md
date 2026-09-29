@@ -153,18 +153,26 @@ surfaces (cards, tables, panels) stay flat and separate by border and tint,
 never by shadow.
 
 - Neutral controls (text fields, textareas, select triggers, switch tracks,
-  secondary buttons) MUST use the **extruded** recipe: the control keeps the
-  surface's own fill, a faint hairline
-  (`oklch(from var(--juni-bark-200) l c h / 0.6)`), a highlight cast
-  up-left and a shade cast down-right from the shared tokens:
+  secondary buttons) MUST use the **extruded** recipe: the control box
+  takes its fill and its faint hairline from the shared surface tokens
+  `--control-fill` (bark-50 held at 95% lightness) and `--control-hairline`
+  (bark-200 at 75%), then a highlight cast up-left and a shade cast
+  down-right from the shared lift tokens:
 
   ```css
+  background-color: var(--control-fill);
+  border: 1px solid var(--control-hairline);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);
   ```
 
-    Hover MAY push further out (larger offsets). Pressed or open MUST invert
+  Every neutral control MUST read the surface tokens rather than restate
+  the derivation: Input, Textarea, Select (trigger and popover) and the
+  secondary Button take both; the discrete Button takes the fill when
+  pressed or open; the Switch thumb takes the fill (its track is state,
+  not surface: bark-300 off, bloom on hover, needle selected). The theme
+  owns the material, the control owns its geometry and states. Hover MAY push further out (larger offsets). Pressed or open MUST invert
   both shadows to `inset` so the control sinks; a text field counts as
   pressed while it holds focus, so typing reads as pressing into the
   surface. Smaller controls scale the offsets down (the switch track uses

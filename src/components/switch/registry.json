@@ -17,7 +17,7 @@
     },
     {
       "part": "Thumb",
-      "description": "0.875rem bark-50 disc with its own small shade, translated right when selected."
+      "description": "0.875rem disc in --control-fill with its own small shade, translated right when selected."
     },
     {
       "part": "Copy",

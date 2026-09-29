@@ -9,9 +9,9 @@
 
 .textarea {
   width: 100%;
-  border: 1px solid oklch(from var(--juni-bark-200) l c h / 0.6);
+  border: 1px solid var(--control-hairline);
   border-radius: var(--radius-md);
-  background-color: var(--juni-bark-50);
+  background-color: var(--control-fill);
   color: var(--juni-needle-950);
   font: inherit;
   line-height: 1.45;

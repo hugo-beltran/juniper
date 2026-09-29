@@ -13,7 +13,7 @@
     },
     {
       "part": "Box",
-      "description": "The react-aria Input: bark-50 fill, faint hairline, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
+      "description": "The react-aria Input: --control-fill and --control-hairline from the theme, --lift-highlight up-left and --lift-shade down-right; bloom hairline on hover and focus; inset while focused; heartwood hairline while invalid. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
     }
   ],
   "usage": [

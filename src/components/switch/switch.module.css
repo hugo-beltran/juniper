@@ -27,9 +27,9 @@
   opacity: 0.5;
 }
 
-/* Track carries the house volume (theming §4.6): extruded off the surface
- * by the shared highlight/shade pair at the small-control offsets; the
- * thumb sits on it with its own small shade. */
+/* Track — extruded (theming §4.6) at the small-control offsets. Its fill
+ * is state (bark-300 off, bloom hover, needle selected); the thumb is the
+ * surface, in the shared control fill. */
 .track {
   position: relative;
   display: inline-block;
@@ -53,7 +53,7 @@
   width: 0.875rem;
   height: 0.875rem;
   border-radius: 50%;
-  background-color: var(--juni-bark-50);
+  background-color: var(--control-fill);
   box-shadow: 1px 1px 2px var(--lift-shade);
   transition: translate 120ms var(--ease);
 }
