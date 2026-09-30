@@ -1,0 +1,202 @@
+/* The dock: the shell's navigation as a bottom strip of the exposed ground
+ * on narrow viewports (component-architecture §4.0.1). It speaks the
+ * sidebar's grammar — needle-950 at rest, bloom-700 on the active item, the
+ * bloom outline on focus, the heartwood dot — laid out as icon over label in
+ * equal cells. The active cell answers in needle: the icon alone on a
+ * needle-200 pill, the label on the ground (theming §4.7). */
+
+/* The panel comes after the row in DOM order (Tab reaches it from More) and
+ * sits above it on screen. The bottom padding is the phone's safe area. */
+.dock {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column-reverse;
+  padding: 0 0.25rem env(safe-area-inset-bottom, 0px);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  transition:
+    background-color 200ms var(--ease),
+    box-shadow 200ms var(--ease),
+    translate 200ms var(--ease),
+    margin-bottom 200ms var(--ease);
+}
+
+/* Scroll-away. The inset publishes its scroll direction on the wrapper as
+ * data-scroll (only ever "down" once the content exceeds the inset by more
+ * than a dock's worth): scrolling down slides the dock under the screen's
+ * edge and gives the inset its row; scrolling up, or reaching the top,
+ * brings it back. The safe-area padding is not reclaimed, so content never
+ * runs under the home indicator. Never while More is open, and never while
+ * a cell holds focus: a keyboard user scrolling with the arrows must not
+ * lose the row they are on. */
+[data-scroll="down"] .dock:not([data-expanded], :focus-within) {
+  translate: 0 100%;
+  margin-bottom: -3.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock {
+    transition:
+      background-color 200ms var(--ease),
+      box-shadow 200ms var(--ease);
+  }
+}
+
+/* More open: the dock becomes the switcher's blob — the same glass the
+ * expanded TenantSwitcher wears, grown to hold the panel — so the shell's
+ * two disclosures read as one material. */
+.dock[data-expanded] {
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-500) l c h / 0.6),
+    oklch(from var(--juni-needle-500) l c h / 0.8)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.55),
+    inset 0 -1px 0 oklch(from var(--juni-berry-800) l c h / 0.15);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  height: 3.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.button {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--juni-needle-950);
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 120ms var(--ease);
+}
+
+.button:focus-visible {
+  outline-color: var(--nav-outline);
+  outline-offset: -2px;
+}
+
+.button:hover,
+.button:focus-visible {
+  color: var(--juni-needle-900);
+}
+
+/* Active via the router's aria-current="page" or an explicit data-active:
+ * selection in the selection ramp, needle-950 copy, and the icon on its
+ * pill below. The current page is a landmark: no pointer. */
+.button[data-active],
+.button[aria-current="page"] {
+  color: var(--juni-needle-950);
+  pointer-events: none;
+}
+
+/* More while open: light copy on the blob, like the switcher's trigger. */
+.button[aria-expanded="true"] {
+  color: var(--juni-needle-50);
+}
+
+.button > svg {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  transition:
+    width 150ms var(--ease),
+    background-color 150ms var(--ease);
+}
+
+/* The needle pill: the active cell's icon grows a 3.25 × 1.75rem pill of
+ * needle-200 around itself (the glyph keeps its 1.375rem inside the
+ * padding), lit by a needle-50 line along its top edge. Chosen 2026-09-30
+ * at /lab/dock over the connector tab, which stays there as the
+ * alternative. */
+.button:is([aria-current="page"], [data-active]) > svg {
+  width: 3.25rem;
+  height: 1.75rem;
+  padding: 0.1875rem 0.9375rem;
+  background-color: var(--juni-needle-200);
+  box-shadow: inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button > svg {
+    transition: none;
+  }
+}
+
+.button > span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The badge is the sidebar's own part, placed as in the collapsed rail: on
+ * the glyph's top-right corner, positioned against the cell. Ringed in the
+ * ground's green; no ring on the active item, where it sits on the pill. */
+.item [data-slot="sidebar-menu-badge"] {
+  position: absolute;
+  top: 0.5rem;
+  left: calc(50% + 0.5rem);
+  translate: none;
+}
+
+.button:is([aria-current="page"], [data-active])
+  [data-slot="sidebar-menu-badge"] {
+  box-shadow: none;
+}
+
+/* More's panel: the switcher's grid-rows disclosure, growing the dock
+ * upward and pushing the inset up (component-architecture §4.2). Inert
+ * while closed. Its rows are the sidebar's own menu parts; the menu's
+ * sliding tab has no inset edge to meet here, so only the rows show. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 250ms var(--ease);
+}
+
+.panel[data-expanded] {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panelContent {
+  padding: 0.5rem 0.25rem 0;
+}
+
+.panel [data-slot="sidebar-menu-indicator"] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}

@@ -8,6 +8,12 @@
   padding: 1.5rem 1.5rem 3rem 0;
 }
 
+/* Dock layout: no gutter to lean on, and a phone's width to spend, so the
+ * page takes an even, tighter margin on both sides. */
+[data-layout="dock"] .main {
+  padding: 1rem 0.875rem 1.5rem;
+}
+
 /* The devtools dock: the inset's last child, stuck to the foot of the
  * scrollport, so it stays put while the page scrolls above it and follows
  * the inset's width as the sidebar opens and closes. It cancels the inset's

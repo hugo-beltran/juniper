@@ -11,6 +11,11 @@
     var(--juni-needle-400),
     var(--juni-needle-700) 120%
   );
+  /* Left gutter the inset reserves for the floating SidebarTrigger. Content
+   * never enters it, so the trigger can share a row with sticky toolbars and
+   * table headers without offsets. Declared here, not inline, so the dock
+   * layout below can zero it: there is no trigger to float. */
+  --sidebar-inset-gutter: 3rem;
 }
 
 .container {
@@ -100,6 +105,37 @@
   position: absolute;
   top: 1.125rem;
   left: 0.625rem;
+}
+
+/* Dock layout (component-architecture §4.0.1), keyed on the layout the
+ * provider measured and published as data-layout: the wrapper is a column —
+ * strip, inset, dock — and the inset floats with 0.5rem of ground on every
+ * side, so its corners show against the green above the dock and at the
+ * screen's edge once the dock has scrolled away. Width goes back to auto:
+ * in a column, a 100% width would ignore the side margins and overflow the
+ * wrapper, which clips the right margin and corner. The trigger's gutter
+ * and its sticky anchor go. Everything else about the inset (the one scroll
+ * container, the width store, data-narrow) is unchanged. */
+.wrapper[data-layout="dock"] {
+  flex-direction: column;
+  --sidebar-inset-gutter: 0px;
+}
+
+.wrapper[data-layout="dock"] .inset {
+  width: auto;
+  margin: 0.5rem;
+}
+
+.wrapper[data-layout="dock"] .insetHeader {
+  display: none;
+}
+
+/* The band of ground above the inset that holds the brand in dock layout:
+ * a permanent cost on every screen, so it is one tight row (the switcher
+ * compacts itself for it, tenant-switcher.module.css). */
+.strip {
+  flex-shrink: 0;
+  padding: 0.5rem 0.5rem 0;
 }
 
 .header {

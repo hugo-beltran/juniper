@@ -22,53 +22,62 @@ import styles from "./sidebar.module.css"
 
 /* Trimmed port of the shadcn sidebar (aria-nova style), inset variant only,
  * icon collapse only. Deliberately dropped: sidebar/floating variants, right
- * side, offcanvas mode, the mobile Sheet, SidebarRail/Input/Separator, menu
- * actions/badges/skeletons/submenus, cookie persistence, and the keyboard
+ * side, offcanvas mode, the mobile Sheet (narrow shells switch to the Dock
+ * in dock.tsx instead), SidebarRail/Input/Separator, menu
+ * actions/skeletons/submenus, cookie persistence, and the keyboard
  * shortcut. Nav items render TanStack Router links via `asChild` (Radix
  * Slot) — active styling keys off the link's aria-current="page". */
 
 const SIDEBAR_WIDTH = "15rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
-/* Left gutter the inset reserves for the floating SidebarTrigger, published
- * as --sidebar-inset-gutter. Content never enters it, so the trigger can
- * share a row with sticky toolbars and table headers without offsets. */
-const SIDEBAR_INSET_GUTTER = "3rem"
 /* Below this many pixels of the inset's width, content inside it takes its
  * narrow layout (tables become cards, the filter bar folds its selects into
  * a drawer). 44rem: 40rem of content beside the 3rem gutter and the page's
  * own inset padding. Published through useSidebarInset(). */
 export const SIDEBAR_INSET_NARROW_WIDTH = 704
+/* Below this many pixels of the wrapper's width (the viewport, in the shell)
+ * the navigation leaves the left column for a bottom dock: the shell's
+ * second layout (component-architecture §4.0.1). 40rem. Width alone decides;
+ * a narrow desktop window gets the dock too. Published as `layout` through
+ * useSidebar() and mirrored as data-layout on the wrapper, so every other
+ * difference between the two layouts is CSS. */
+export const SIDEBAR_DOCK_BELOW = 640
+
+export type SidebarLayout = "sidebar" | "dock"
 
 interface SidebarContextValue {
   state: "expanded" | "collapsed"
   open: boolean
   setOpen: (open: boolean | ((open: boolean) => boolean)) => void
   toggleSidebar: () => void
+  /** Where the navigation renders: the left column or the bottom dock. */
+  layout: SidebarLayout
 }
 
 const SidebarContext = createContext<SidebarContextValue | null>(null)
 
-/* The inset's measured width, published to everything rendered inside it
- * as a small external store rather than a context value. The inset is the
- * one scroll container, so its width — not the viewport's and not each
- * component's own — is the signal a table or toolbar adapts to. Consumers
- * subscribe through useSidebarInset(threshold) with a selector that yields
- * only their boolean, so a resize re-renders a consumer exactly when its
- * own threshold is crossed, not on every pixel. */
-interface InsetWidthStore {
-  get: () => number | undefined
-  set: (width: number) => void
+/* A measured width, published as a small external store rather than a
+ * context value. Two elements publish one: the inset (to everything rendered
+ * inside it: the inset is the one scroll container, so its width — not the
+ * viewport's and not each component's own — is the signal a table or toolbar
+ * adapts to) and the wrapper (to the provider, which turns it into the
+ * layout). Consumers subscribe with a selector that yields only their
+ * boolean, so a resize re-renders a consumer exactly when its own threshold
+ * is crossed, not on every pixel. */
+interface Store<T> {
+  get: () => T
+  set: (value: T) => void
   subscribe: (listener: () => void) => () => void
 }
 
-function createInsetWidthStore(): InsetWidthStore {
-  let width: number | undefined
+function createStore<T>(initial: T): Store<T> {
+  let value = initial
   const listeners = new Set<() => void>()
   return {
-    get: () => width,
+    get: () => value,
     set: (next) => {
-      if (next === width) return
-      width = next
+      if (next === value) return
+      value = next
       for (const listener of listeners) listener()
     },
     subscribe: (listener) => {
@@ -78,16 +87,60 @@ function createInsetWidthStore(): InsetWidthStore {
   }
 }
 
+type WidthStore = Store<number | undefined>
+const createWidthStore = () => createStore<number | undefined>(undefined)
+
+/* The inset's scroll direction, published for the dock (component-
+ * architecture §4.0.1): the wrapper mirrors it as data-scroll, and the
+ * dock's CSS slides itself away on "down" and back on "up". Only the
+ * inset scrolls, so only it knows; it reports "down" once the user has
+ * scrolled down more than SCROLL_TURN px since the last turn, and only when
+ * the content exceeds the inset by more than SCROLL_HIDE_MIN_OVERFLOW px
+ * (a dock's height plus a turn), so a page that barely overflows keeps its
+ * dock and the inset growing into the dock's room cannot flip the answer
+ * back; "up" once scrolled back up as much, or within SCROLL_TOP of the top. */
+export type SidebarScroll = "up" | "down"
+const SCROLL_TURN = 12
+const SCROLL_TOP = 8
+const SCROLL_HIDE_MIN_OVERFLOW = 72
+
+/* Outside a provider: nothing listens. */
+const NO_SCROLL: Store<SidebarScroll> = {
+  get: () => "up",
+  set: () => {},
+  subscribe: () => () => {},
+}
+
+const SidebarScrollContext = createContext<Store<SidebarScroll>>(NO_SCROLL)
+
+/* Measures `element`'s width into `store`: first in a layout effect, so a
+ * layout is chosen before the first paint; then a ResizeObserver, which
+ * already coalesces to one notification per frame. Never debounced. */
+function useMeasureWidth(
+  ref: { current: HTMLElement | null },
+  store: WidthStore,
+) {
+  useLayoutEffect(() => {
+    const element = ref.current
+    if (!element) return
+    const update = () => store.set(element.clientWidth)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [ref, store])
+}
+
 /* Outside an inset: never measured, never narrow. */
-const OUTSIDE_INSET: InsetWidthStore = {
+const OUTSIDE_INSET: WidthStore = {
   get: () => undefined,
   set: () => {},
   subscribe: () => () => {},
 }
 
-const SidebarInsetContext = createContext<InsetWidthStore>(OUTSIDE_INSET)
+const SidebarInsetContext = createContext<WidthStore>(OUTSIDE_INSET)
 
-function useInsetNarrow(store: InsetWidthStore, narrowBelow: number) {
+function useInsetNarrow(store: WidthStore, narrowBelow: number) {
   return useSyncExternalStore(
     store.subscribe,
     () => {
@@ -144,6 +197,36 @@ export function SidebarProvider({
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
   const open = openProp ?? internalOpen
 
+  /* The wrapper's width decides the layout. Measured like the inset, into a
+   * store read with a selector, so the provider re-renders only when the
+   * layout flips. Unmeasured (never, after the first layout effect) reads as
+   * the sidebar. */
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const widthRef = useRef<WidthStore>(null)
+  widthRef.current ??= createWidthStore()
+  const widthStore = widthRef.current
+  useMeasureWidth(wrapperRef, widthStore)
+  const layout = useSyncExternalStore<SidebarLayout>(
+    widthStore.subscribe,
+    () => {
+      const width = widthStore.get()
+      return width !== undefined && width < SIDEBAR_DOCK_BELOW
+        ? "dock"
+        : "sidebar"
+    },
+    () => "sidebar",
+  )
+
+  /* The inset's scroll direction, mirrored on the wrapper for the dock. */
+  const scrollRef = useRef<Store<SidebarScroll>>(null)
+  scrollRef.current ??= createStore<SidebarScroll>("up")
+  const scrollStore = scrollRef.current
+  const scroll = useSyncExternalStore(
+    scrollStore.subscribe,
+    scrollStore.get,
+    () => "up" as const,
+  )
+
   const setOpen = useCallback(
     (value: boolean | ((open: boolean) => boolean)) => {
       const next = typeof value === "function" ? value(open) : value
@@ -158,30 +241,38 @@ export function SidebarProvider({
     [setOpen],
   )
 
-  const state = open ? "expanded" : "collapsed"
+  /* The dock has no collapsed form: the strip above the inset always shows
+   * the full switcher, whatever `open` says. `open` itself is kept, so a
+   * sidebar collapsed before the viewport narrowed is still collapsed when
+   * it widens again. */
+  const state = open || layout === "dock" ? "expanded" : "collapsed"
 
   const contextValue = useMemo<SidebarContextValue>(
-    () => ({ state, open, setOpen, toggleSidebar }),
-    [state, open, setOpen, toggleSidebar],
+    () => ({ state, open, setOpen, toggleSidebar, layout }),
+    [state, open, setOpen, toggleSidebar, layout],
   )
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <div
-        data-slot="sidebar-wrapper"
-        style={
-          {
-            "--sidebar-width": SIDEBAR_WIDTH,
-            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
-            "--sidebar-inset-gutter": SIDEBAR_INSET_GUTTER,
-            ...style,
-          } as CSSProperties
-        }
-        className={cn(styles.wrapper, className)}
-        {...props}
-      >
-        {children}
-      </div>
+      <SidebarScrollContext.Provider value={scrollStore}>
+        <div
+          ref={wrapperRef}
+          data-slot="sidebar-wrapper"
+          data-layout={layout}
+          data-scroll={scroll}
+          style={
+            {
+              "--sidebar-width": SIDEBAR_WIDTH,
+              "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+              ...style,
+            } as CSSProperties
+          }
+          className={cn(styles.wrapper, className)}
+          {...props}
+        >
+          {children}
+        </div>
+      </SidebarScrollContext.Provider>
     </SidebarContext.Provider>
   )
 }
@@ -247,19 +338,46 @@ export function SidebarTrigger({
  * mirrors the house-threshold boolean for styling hooks. */
 export function SidebarInset({ className, ...props }: ComponentProps<"main">) {
   const ref = useRef<HTMLElement>(null)
-  const storeRef = useRef<InsetWidthStore>(null)
-  storeRef.current ??= createInsetWidthStore()
+  const storeRef = useRef<WidthStore>(null)
+  storeRef.current ??= createWidthStore()
   const store = storeRef.current
+  useMeasureWidth(ref, store)
 
-  useLayoutEffect(() => {
+  const scrollStore = useContext(SidebarScrollContext)
+  useEffect(() => {
     const element = ref.current
     if (!element) return
-    const update = () => store.set(element.clientWidth)
-    update()
-    const observer = new ResizeObserver(update)
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [store])
+    let direction: SidebarScroll = "up"
+    /* The farthest point reached in the current direction; a turn counts
+     * once the user has come back SCROLL_TURN px from it. */
+    let extreme = element.scrollTop
+    const publish = (next: SidebarScroll) => {
+      direction = next
+      extreme = element.scrollTop
+      scrollStore.set(next)
+    }
+    const onScroll = () => {
+      const top = element.scrollTop
+      if (top <= SCROLL_TOP) {
+        if (direction === "down") publish("up")
+        else extreme = top
+        return
+      }
+      if (direction === "down") {
+        if (top > extreme) extreme = top
+        else if (extreme - top > SCROLL_TURN) publish("up")
+        return
+      }
+      if (top < extreme) extreme = top
+      else if (
+        top - extreme > SCROLL_TURN &&
+        element.scrollHeight - element.clientHeight > SCROLL_HIDE_MIN_OVERFLOW
+      )
+        publish("down")
+    }
+    element.addEventListener("scroll", onScroll, { passive: true })
+    return () => element.removeEventListener("scroll", onScroll)
+  }, [scrollStore])
 
   const narrow = useInsetNarrow(store, SIDEBAR_INSET_NARROW_WIDTH)
 
@@ -290,6 +408,22 @@ export function SidebarInsetHeader({
     <header
       data-slot="sidebar-inset-header"
       className={cn(styles.insetHeader, className)}
+      {...props}
+    />
+  )
+}
+
+/* The band of ground above the inset in dock layout, where the brand (the
+ * TenantSwitcher) lives once there is no sidebar header to hold it: the
+ * wrapper becomes strip, inset, dock, and the switcher keeps its own green
+ * surface and its inline disclosure, which pushes the inset down. Chosen on
+ * 2026-09-23 at /lab/dock (B′) over a row inside the inset, a dock slot and
+ * a home behind More. */
+export function SidebarStrip({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="sidebar-strip"
+      className={cn(styles.strip, className)}
       {...props}
     />
   )

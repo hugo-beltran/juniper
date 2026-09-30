@@ -2,7 +2,12 @@
 <html lang="en" data-theme="juniper">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover: the shell's dock pads itself with the bottom safe
+         area on notched phones instead of the browser letterboxing it. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Juniper Dashboard</title>
     <!-- Pre-paint color-mode preference: runs before any stylesheet or bundle
          so there is never a flash of the wrong mode. Theme tokens resolve

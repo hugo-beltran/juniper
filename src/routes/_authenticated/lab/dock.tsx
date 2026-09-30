@@ -28,7 +28,8 @@ export const Route = createFileRoute("/_authenticated/lab/dock")({
  * frames; only the brand's home changes. The indicator toggle compares the
  * sidebar's connector tab, rotated to meet the inset's bottom edge, against a
  * plain needle pill. Decided on 2026-09-23: B′ (identity strip on the
- * ground) and the connector tab; kept as the reference for the dock build.
+ * ground) and the connector tab; the indicator was revised to the pill on
+ * 2026-09-30 during the build. Kept as the reference for the dock.
  * Exploration mock, not a shipped component. The dock's items are
  * illustrative: a tenant richer than any in the demo tree. */
 
@@ -325,7 +326,7 @@ function Toggle<T extends string | number>({
 
 function DockPage() {
   const [height, setHeight] = useState<Height>(812)
-  const [indicator, setIndicator] = useState<Indicator>("connector")
+  const [indicator, setIndicator] = useState<Indicator>("pill")
 
   return (
     <div className={styles.lab}>
@@ -381,10 +382,11 @@ function DockPage() {
             surface.
           </li>
           <li>
-            Indicator: connector tab chosen on 2026-09-23. Rotated to meet the
-            inset's bottom edge it still reads as part of the inset surface, so
-            the dock keeps the sidebar's signature. The pill stays here as the
-            rejected alternative.
+            Indicator: connector tab chosen on 2026-09-23, revised to the needle
+            pill on 2026-09-30 during the build. The tab has to meet the inset's
+            edge, and once More's panel sits between the row and the inset it
+            has nowhere to go; the pill answers in the selection ramp and holds
+            through the disclosure. The tab stays here as the alternative.
           </li>
           <li>
             More: a disclosure growing upward (shown in D) keeps components off
@@ -395,6 +397,13 @@ function DockPage() {
             Overflow rule: four tagged items plus More whenever the tenant has
             items the dock does not show; a badge hidden behind More moves to
             More.
+          </li>
+          <li>
+            Built 2026-09-30: the live shell takes the dock below 40rem of
+            viewport width. Narrow this window past it, or open the app on a
+            phone, to see these frames as the shell itself; the More panel also
+            holds Log out, which the footer gained after these frames were
+            drawn.
           </li>
         </ul>
       </section>

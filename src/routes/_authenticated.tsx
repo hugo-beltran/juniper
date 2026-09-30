@@ -28,12 +28,22 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import {
+  type ComponentProps,
   type ComponentType,
+  type FocusEvent,
   type KeyboardEvent,
+  type ReactNode,
   type SVGProps,
+  useLayoutEffect,
+  useRef,
   useState,
 } from "react"
 import {
+  Dock,
+  DockItem,
+  DockMore,
+  DockPanel,
+  DockRow,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -48,15 +58,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarStrip,
   SidebarTrigger,
   TenantSwitcher,
+  useSidebar,
 } from "@/components"
 import {
   defaultTenant,
+  dockItems,
   firstRoute,
   leadsQuery,
   type NavBadge,
   type NavIcon,
+  type NavItem,
   type NavTenant,
   navigationQuery,
   pendingAnalysisCount,
@@ -95,9 +109,71 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides
  * the badge. */
-function useNavBadges(): Record<NavBadge, number> {
+type Badges = Record<NavBadge, number>
+
+function useNavBadges(): Badges {
   const { data: leads } = useSuspenseQuery(leadsQuery)
   return { "pending-analysis": pendingAnalysisCount(leads) }
+}
+
+const badgeCount = (item: NavItem, badges: Badges) =>
+  item.badge ? badges[item.badge] : 0
+
+/* The words a badge carries for screen readers, inside the label so the
+ * row reads "Scouting, 8 leads pending analysis" in that order. */
+const badgeWords = (count: number) =>
+  count > 0 && (
+    <span className="sr-only">{`, ${count} leads pending analysis`}</span>
+  )
+
+/* An item's link: a router Link for a route, an anchor for an external
+ * href. Slotted into SidebarMenuButton or DockItem with asChild, which
+ * pass their props down through this component. */
+function NavLink({
+  item,
+  ...props
+}: { item: NavItem } & Omit<ComponentProps<"a">, "href" | "target" | "rel">) {
+  return item.to !== undefined ? (
+    <Link to={item.to} {...props} />
+  ) : (
+    <a
+      href={item.href}
+      target={item.href.startsWith("http") ? "_blank" : undefined}
+      rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+      {...props}
+    />
+  )
+}
+
+/* What every nav row and dock cell holds: the icon, the dot (before the
+ * label in DOM order, see SidebarMenuBadge; the CSS places it) and the
+ * label with the badge's words inside. */
+function NavItemContent({ item, badges }: { item: NavItem; badges: Badges }) {
+  const Icon = ICONS[item.icon]
+  const count = badgeCount(item, badges)
+  return (
+    <>
+      <Icon />
+      {count > 0 && <SidebarMenuBadge />}
+      <span>
+        {item.label}
+        {badgeWords(count)}
+      </span>
+    </>
+  )
+}
+
+/* A sidebar row (in the column, or behind More in the dock's panel). */
+function NavMenuRow({ item, badges }: { item: NavItem; badges: Badges }) {
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <NavLink item={item}>
+          <NavItemContent item={item} badges={badges} />
+        </NavLink>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
 }
 
 /* The two TanStack devtools, in development only: each is a row in the
@@ -107,7 +183,7 @@ function useNavBadges(): Record<NavBadge, number> {
  * an open one like the active item, indicator included, but leaves it
  * pressable so the same press closes it (an active item takes no pointer).
  * The panels compile to nothing outside development; the rows go with
- * them. */
+ * them. Sidebar only: the dock has no footer. */
 type Devtool = "query" | "router"
 const DEVTOOLS_DOCK_ID = "devtools-dock"
 
@@ -121,30 +197,7 @@ function AuthenticatedLayout() {
   const { tenants } = tree
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const badges = useNavBadges()
   const [selectedId, setSelectedId] = useState(defaultTenant(tree).id)
-  const [devtool, setDevtool] = useState<Devtool | null>(null)
-
-  const toggleDevtool = (next: Devtool) =>
-    setDevtool((current) => (current === next ? null : next))
-
-  /* Closing from the dock (its close button, Escape) returns focus to the
-   * row that opened it (component-architecture §5.3). */
-  const closeDevtools = () => {
-    document
-      .querySelector<HTMLElement>(
-        `[aria-controls="${DEVTOOLS_DOCK_ID}"][aria-expanded="true"]`,
-      )
-      ?.focus()
-    setDevtool(null)
-  }
-
-  const onDockKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Escape") {
-      event.stopPropagation()
-      closeDevtools()
-    }
-  }
 
   /* The URL wins: landing on a route a tenant owns selects that tenant, so
    * a deep link never shows one tenant's menu over another's page. The
@@ -165,114 +218,171 @@ function AuthenticatedLayout() {
 
   return (
     <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
+      <Shell
+        tenant={activeTenant}
+        switcher={
           <TenantSwitcher
             tenants={tenants}
             activeTenant={activeTenant}
             onActiveTenantChange={handleTenantChange}
           />
-        </SidebarHeader>
-        <SidebarContent>
-          {activeTenant?.groups.map((group) => (
-            <SidebarGroup key={group.label}>
-              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {group.items.map((item) => {
-                    const Icon = ICONS[item.icon]
-                    const count = item.badge ? badges[item.badge] : 0
-                    /* The dot goes before the label in DOM order (see
-                     * SidebarMenuBadge); the words go inside the label. */
-                    const badge = count > 0 && <SidebarMenuBadge />
-                    const labelText = (
-                      <>
-                        {item.label}
-                        {count > 0 && (
-                          <span className="sr-only">
-                            {`, ${count} leads pending analysis`}
-                          </span>
-                        )}
-                      </>
-                    )
-                    return (
-                      <SidebarMenuItem key={item.label}>
-                        <SidebarMenuButton asChild>
-                          {item.to !== undefined ? (
-                            <Link to={item.to}>
-                              <Icon />
-                              {badge}
-                              <span>{labelText}</span>
-                            </Link>
-                          ) : (
-                            <a
-                              href={item.href}
-                              target={
-                                item.href.startsWith("http")
-                                  ? "_blank"
-                                  : undefined
-                              }
-                              rel={
-                                item.href.startsWith("http")
-                                  ? "noreferrer"
-                                  : undefined
-                              }
-                            >
-                              <Icon />
-                              {badge}
-                              <span>{labelText}</span>
-                            </a>
-                          )}
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    )
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
-        </SidebarContent>
-        {/* The session's one exit, a menu row in the footer so it wears the
-         * nav's face, its icon and its collapsed-rail label. A Button, not a
-         * link: logging out is an action on the session, and the shell owns
-         * where it lands. The demo has no auth, so landing on /login is all
-         * it does. The icon is the rail's: collapsed, a row is its icon
-         * alone (component-architecture §3.10). */}
-        <SidebarFooter>
-          <SidebarMenu>
-            {import.meta.env.DEV && (
-              <>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    aria-expanded={devtool === "query"}
-                    aria-controls={DEVTOOLS_DOCK_ID}
-                    onPress={() => toggleDevtool("query")}
-                  >
-                    <CircleStackIcon />
-                    <span>Query devtools</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    aria-expanded={devtool === "router"}
-                    aria-controls={DEVTOOLS_DOCK_ID}
-                    onPress={() => toggleDevtool("router")}
-                  >
-                    <MapIcon />
-                    <span>Router devtools</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </>
-            )}
-            <SidebarMenuItem>
-              <SidebarMenuButton onPress={() => navigate({ to: "/login" })}>
-                <ArrowLeftStartOnRectangleIcon />
-                <span>Log out</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+        }
+        onLogOut={() => navigate({ to: "/login" })}
+      />
+    </SidebarProvider>
+  )
+}
+
+/* One shell, two layouts (component-architecture §4.0.1). The provider
+ * measures the wrapper and publishes `layout`; the shell renders the
+ * Sidebar, or the strip and the Dock, never both. The inset is the same
+ * element in both, so its scroll position, width store and data-narrow
+ * survive the swap; the differences in its chrome are CSS against the
+ * wrapper's data-layout. */
+function Shell({
+  tenant,
+  switcher,
+  onLogOut,
+}: {
+  tenant: NavTenant
+  switcher: ReactNode
+  onLogOut: () => void
+}) {
+  const { layout } = useSidebar()
+  const badges = useNavBadges()
+  const [devtool, setDevtool] = useState<Devtool | null>(null)
+
+  const toggleDevtool = (next: Devtool) =>
+    setDevtool((current) => (current === next ? null : next))
+
+  /* Closing from the dock (its close button, Escape) returns focus to the
+   * row that opened it (component-architecture §5.3). */
+  const closeDevtools = () => {
+    document
+      .querySelector<HTMLElement>(
+        `[aria-controls="${DEVTOOLS_DOCK_ID}"][aria-expanded="true"]`,
+      )
+      ?.focus()
+    setDevtool(null)
+  }
+
+  const onDevtoolsKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      event.stopPropagation()
+      closeDevtools()
+    }
+  }
+
+  /* Focus handoff. A layout swap unmounts the navigation that had focus
+   * and drops it on the body. The nav records whether it held focus (a
+   * removed element fires no blur, so the record survives the swap); after
+   * a swap that record moves focus to the active item of the new nav, or
+   * its first item, so a keyboard user resizing across the breakpoint is
+   * not sent back to the top of the document. */
+  const navHadFocus = useRef(false)
+  const trackFocus = {
+    onFocus: () => {
+      navHadFocus.current = true
+    },
+    onBlur: (event: FocusEvent<HTMLElement>) => {
+      if (
+        event.relatedTarget &&
+        !event.currentTarget.contains(event.relatedTarget)
+      )
+        navHadFocus.current = false
+    },
+  }
+  const previousLayout = useRef(layout)
+  useLayoutEffect(() => {
+    if (previousLayout.current === layout) return
+    previousLayout.current = layout
+    if (!navHadFocus.current) return
+    const nav = document.querySelector<HTMLElement>(
+      layout === "dock" ? '[data-slot="dock"]' : '[data-slot="sidebar"]',
+    )
+    if (!nav) return
+    const candidates = [
+      ...nav.querySelectorAll<HTMLElement>('[aria-current="page"], a, button'),
+    ].filter((element) => !element.closest("[inert]"))
+    candidates[0]?.focus({ preventScroll: true })
+  }, [layout])
+
+  /* Four cells plus More whenever the tenant has items the row does not
+   * show; a badge hidden behind More moves to More. Log out has no cell of
+   * its own, so More is always there in the dock. */
+  const { row, more } = dockItems(tenant)
+  const moreCount = more.reduce(
+    (sum, item) => sum + badgeCount(item, badges),
+    0,
+  )
+
+  return (
+    <>
+      {layout === "sidebar" ? (
+        <Sidebar {...trackFocus}>
+          <SidebarHeader>{switcher}</SidebarHeader>
+          <SidebarContent>
+            {tenant.groups.map((group) => (
+              <SidebarGroup key={group.label}>
+                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {group.items.map((item) => (
+                      <NavMenuRow
+                        key={item.label}
+                        item={item}
+                        badges={badges}
+                      />
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+          </SidebarContent>
+          {/* The session's one exit, a menu row in the footer so it wears the
+           * nav's face, its icon and its collapsed-rail label. A Button, not a
+           * link: logging out is an action on the session, and the shell owns
+           * where it lands. The demo has no auth, so landing on /login is all
+           * it does. The icon is the rail's: collapsed, a row is its icon
+           * alone (component-architecture §3.10). */}
+          <SidebarFooter>
+            <SidebarMenu>
+              {import.meta.env.DEV && (
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      aria-expanded={devtool === "query"}
+                      aria-controls={DEVTOOLS_DOCK_ID}
+                      onPress={() => toggleDevtool("query")}
+                    >
+                      <CircleStackIcon />
+                      <span>Query devtools</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      aria-expanded={devtool === "router"}
+                      aria-controls={DEVTOOLS_DOCK_ID}
+                      onPress={() => toggleDevtool("router")}
+                    >
+                      <MapIcon />
+                      <span>Router devtools</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
+              )}
+              <SidebarMenuItem>
+                <SidebarMenuButton onPress={onLogOut}>
+                  <ArrowLeftStartOnRectangleIcon />
+                  <span>Log out</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+      ) : (
+        <SidebarStrip>{switcher}</SidebarStrip>
+      )}
       <SidebarInset>
         <SidebarInsetHeader>
           <SidebarTrigger />
@@ -287,7 +397,7 @@ function AuthenticatedLayout() {
               devtool === "query" ? "Query devtools" : "Router devtools"
             }
             className={styles.devtools}
-            onKeyDown={onDockKeyDown}
+            onKeyDown={onDevtoolsKeyDown}
           >
             {devtool === "query" ? (
               <ReactQueryDevtoolsPanel
@@ -306,6 +416,55 @@ function AuthenticatedLayout() {
           </aside>
         )}
       </SidebarInset>
-    </SidebarProvider>
+      {layout === "dock" && (
+        <Dock {...trackFocus}>
+          <DockRow>
+            {row.map((item) => (
+              <DockItem key={item.label} asChild>
+                <NavLink item={item}>
+                  <NavItemContent item={item} badges={badges} />
+                </NavLink>
+              </DockItem>
+            ))}
+            <DockMore badge={moreCount > 0 && <SidebarMenuBadge />}>
+              More
+              {badgeWords(moreCount)}
+            </DockMore>
+          </DockRow>
+          {/* Behind More: the items the row does not show, as the sidebar's
+           * own rows, then the session's exit. The devtools rows stay in the
+           * sidebar. */}
+          <DockPanel>
+            {more.length > 0 && (
+              <SidebarGroup>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {more.map((item) => (
+                      <NavMenuRow
+                        key={item.label}
+                        item={item}
+                        badges={badges}
+                      />
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            )}
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton onPress={onLogOut}>
+                      <ArrowLeftStartOnRectangleIcon />
+                      <span>Log out</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </DockPanel>
+        </Dock>
+      )}
+    </>
   )
 }

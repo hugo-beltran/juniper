@@ -12,17 +12,20 @@
             {
               "label": "Palette",
               "to": "/lab/palette",
-              "icon": "swatch"
+              "icon": "swatch",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Lift",
               "to": "/lab/lift",
-              "icon": "cube-transparent"
+              "icon": "cube-transparent",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Forms",
               "to": "/lab/forms",
-              "icon": "pencil-square"
+              "icon": "pencil-square",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Login",
@@ -35,14 +38,15 @@
               "icon": "sparkles"
             },
             {
-              "label": "Login \u00b7 round 2",
+              "label": "Login · round 2",
               "to": "/lab/login-2",
               "icon": "arrow-right-end-on-rectangle"
             },
             {
               "label": "Dock",
               "to": "/lab/dock",
-              "icon": "device-phone-mobile"
+              "icon": "device-phone-mobile",
+              "surfaces": ["sidebar", "dock"]
             }
           ]
         },
@@ -75,12 +79,14 @@
               "label": "Scouting",
               "to": "/dashboard",
               "icon": "rectangle-group",
-              "badge": "pending-analysis"
+              "badge": "pending-analysis",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Trade Analyzer",
               "to": "/trade-analyzer",
-              "icon": "arrows-right-left"
+              "icon": "arrows-right-left",
+              "surfaces": ["sidebar", "dock"]
             }
           ]
         }
@@ -97,17 +103,20 @@
             {
               "label": "Users",
               "to": "/users",
-              "icon": "users"
+              "icon": "users",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Analytics",
               "to": "/analytics",
-              "icon": "chart-pie"
+              "icon": "chart-pie",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Settings",
               "to": "/settings",
-              "icon": "cog"
+              "icon": "cog",
+              "surfaces": ["sidebar", "dock"]
             }
           ]
         }
@@ -124,12 +133,14 @@
             {
               "label": "Products",
               "to": "/products",
-              "icon": "cube"
+              "icon": "cube",
+              "surfaces": ["sidebar", "dock"]
             },
             {
               "label": "Customers",
               "to": "/customers",
-              "icon": "users"
+              "icon": "users",
+              "surfaces": ["sidebar", "dock"]
             }
           ]
         }
