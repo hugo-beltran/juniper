@@ -124,8 +124,8 @@ is a conversation about the scale, not a new value in a component.
 4.4. Focus is the native outline drawn by the global `:focus-visible` rule
 with `--ring`. Components MUST NOT emulate focus rings with `box-shadow` and
 MUST NOT remove the outline. **The ring is bloom** (`--ring` = `bloom-600`
-on light surfaces, `--nav-outline` = `bloom-400` on the dark sidebar), not
-the brand green: focus is a pointer state (4.7), and a focused control MUST
+on light surfaces, `--nav-outline` = `bloom-400` on the exposed green
+ground: the sidebar and the dock), not the brand green: focus is a pointer state (4.7), and a focused control MUST
 be distinguishable from a selected one at a glance. A component that has to
 draw the outline on a proxy element, because its real input is visually
 hidden (a switch track), MUST still use `--ring`. One exception: options

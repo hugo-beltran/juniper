@@ -799,12 +799,20 @@ export type NavIcon =
  * source, the shell decides how to compute it. */
 export type NavBadge = "pending-analysis"
 
+/* Where an item may appear. The sidebar shows every item; the dock (the
+ * shell's narrow layout, component-architecture §4.0.1) shows only items
+ * tagged for it, at most four, and reaches the rest through More. One tree
+ * drives both surfaces: consumers tag, they do not fork. */
+export type NavSurface = "sidebar" | "dock"
+
 export type NavItem =
   | {
       label: string
       to: string
       icon: NavIcon
       badge?: NavBadge
+      /** Defaults to ["sidebar"]. */
+      surfaces?: NavSurface[]
       href?: undefined
     }
   | {
@@ -812,6 +820,8 @@ export type NavItem =
       href: string
       icon: NavIcon
       badge?: NavBadge
+      /** Defaults to ["sidebar"]. */
+      surfaces?: NavSurface[]
       to?: undefined
     }
 
@@ -840,6 +850,26 @@ export const defaultTenant = (tree: NavTree) =>
 /** First in-app route of a tenant's menu — where switching to it lands. */
 export const firstRoute = (tenant: NavTenant) =>
   tenant.groups.flatMap((group) => group.items).find((item) => item.to)?.to
+
+/** Does an item belong on a surface? Untagged items are sidebar-only. */
+export const onSurface = (item: NavItem, surface: NavSurface) =>
+  (item.surfaces ?? ["sidebar"]).includes(surface)
+
+/** How many items the dock shows before the rest go behind More. */
+export const DOCK_SLOTS = 4
+
+/** A tenant's items in dock order: tagged items first, in tree order, then
+ * the rest. The shell takes the first DOCK_SLOTS for the dock row and puts
+ * whatever remains behind More, so a sidebar-only item stays reachable. */
+export const dockItems = (tenant: NavTenant) => {
+  const items = tenant.groups.flatMap((group) => group.items)
+  const tagged = items.filter((item) => onSurface(item, "dock"))
+  const rest = items.filter((item) => !onSurface(item, "dock"))
+  return {
+    row: tagged.slice(0, DOCK_SLOTS),
+    more: [...tagged.slice(DOCK_SLOTS), ...rest],
+  }
+}
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))

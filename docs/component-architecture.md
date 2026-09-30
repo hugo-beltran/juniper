@@ -44,6 +44,7 @@ src/components/
   listbox/                      ListBox, inline and popover variants
   switch/                       labelled Switch, extruded track
   filter-bar/                   sticky search / switch / select toolbar
+  sidebar/                      the shell: Sidebar parts, Dock parts (dock.tsx)
   users-table/                  demo composition: FilterBar + flat table
   background-noise/             background layer: film grain for a ground
   full-bleed-canvas/            the ground for screens outside the shell: photograph, grain, credit
@@ -182,7 +183,9 @@ the text's own size, weight and colour, needs no sizing rule and no
 `aria-hidden`. Decided 2026-09-28 on the login screen, whose single
 sign-on button lost its key and whose panel switches became
 `Use your credentials →` and `← Use single sign-on`; heroicons stays the
-source for the icons that remain (1).
+source for the icons that remain (1). Two places require an icon: the
+collapsed rail, where a row is its icon alone, and the dock, where a cell
+is its icon over a word (4.0.1).
 
 ## 4. Composition patterns
 
@@ -204,6 +207,54 @@ value so the common case switches together. The signal is never
 debounced: the observer already coalesces per frame, and a delay would
 only hold content in the wrong layout mid-resize.
 
+4.0.1. **One shell, two layouts.** Below `SIDEBAR_DOCK_BELOW` (40rem of
+the wrapper's width, which in the shell is the viewport) the navigation
+leaves the left column for a bottom dock. `SidebarProvider` measures the
+wrapper the way the inset measures itself (a layout effect, then a
+ResizeObserver, into a store read with a selector; never debounced) and
+publishes the fact once: `layout: "sidebar" | "dock"` through
+`useSidebar()`, mirrored as `data-layout` on the wrapper. The shell renders
+`Sidebar`, or `SidebarStrip` (the brand's band of ground above the inset,
+holding the unchanged `TenantSwitcher`) and `Dock`, never both. The inset is
+the same element in both layouts, so its scroll position, its width store
+and `data-narrow` survive the swap; every difference in its chrome is CSS
+against `data-layout` (3.9): the trigger's gutter resolves to 0,
+`SidebarInsetHeader` renders nothing, and the inset floats with 0.5rem of
+ground on every side so its corners stay visible above the dock and at the
+screen's edge once the dock has scrolled away. The two signals are
+separate facts: the shell decides where the nav goes from the space it has;
+content decides its own layout from the inset's width, as in 4.0. Width
+alone picks the layout: a narrow desktop window gets the dock, tablet
+portrait keeps the sidebar. The dock is not a second navigation with its
+own data. `NavItem.surfaces` tags where an item may appear (`sidebar` by
+default, `dock`, or both; groups and their labels are sidebar-only); the
+dock shows tagged items in tree order, four at most, and a fifth cell,
+**More**, whenever there is anything the row does not show, which discloses
+the remaining items and the session's exit as the sidebar's own menu rows
+in a panel that grows the dock upward (4.2). A badge hidden behind More
+moves to More. The active cell keys off `aria-current="page"` (5.2) and
+answers in needle ([Theming rules](./theming.md) 4.7): the icon alone on a
+needle-200 pill, the label on the ground, pure CSS on the cell. Decided at
+`/lab/dock`, which stays as the archive: the strip (B′) on 2026-09-23 over a
+row inside the inset, a dock slot and a home behind More; the needle pill on
+2026-09-30, revising the connector tab picked on 2026-09-23, because a tab
+that must meet the inset's edge has nowhere to go once More's panel sits
+between the row and the inset. Two more facts the shell publishes for this
+layout, both as CSS hooks. The strip is a permanent band on a phone's
+screen, so the `TenantSwitcher` compacts itself on it through
+`[data-layout="dock"]` rules in its own module (one row, tile and name and
+plan inline, the chevron always shown because touch has no hover); the
+switcher's tree is the same. And the dock scrolls away: the inset, the one
+element that scrolls, publishes its scroll direction the way it publishes
+its width, the wrapper mirrors it as `data-scroll`, and the dock's CSS
+slides itself under the screen's edge on `down` and back on `up` or at the
+top, giving the inset its row meanwhile. The inset reports `down` only once
+the content exceeds it by more than a dock's height plus a turn
+(`SCROLL_HIDE_MIN_OVERFLOW`), so a page that barely overflows keeps its
+dock and the inset growing into the dock's room cannot flip the answer
+back; the dock never hides while More is open or while one of its cells
+holds focus.
+
 4.1. **Compound components for owned layouts.** A component that owns a
 layout (Sidebar) exposes named parts (`SidebarHeader`, `SidebarMenu`,
 `SidebarMenuButton`) the consumer arranges as JSX, instead of one component
@@ -216,7 +267,8 @@ picks the element, so a card that is the page's main content can carry
 the h1.
 
 4.2. **Inline over overlay.** Disclosure grows in place and pushes content
-(the tenant switcher's panel) rather than floating a dialog, drawer or
+(the tenant switcher's panel; the dock's More panel, which grows the dock
+upward and pushes the inset up) rather than floating a dialog, drawer or
 free-floating menu, wherever the layout allows. When in-place expansion is
 needed, use react-aria `Disclosure`/`DisclosurePanel` (the filter bar's
 narrow layout folds its selects and sort control into a `DisclosurePanel`

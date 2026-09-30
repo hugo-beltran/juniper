@@ -201,3 +201,46 @@
     transition: none;
   }
 }
+
+/* On the strip above the inset (the shell's dock layout, component-
+ * architecture §4.0.1) the switcher is a permanent band on a phone's
+ * screen, so it compacts to one row: a smaller tile, name and plan on one
+ * line, no closed-panel padding, and the chevron always showing, because a
+ * touch screen has no hover to reveal it and the row must read as
+ * pressable. Context in CSS (§3.9): the switcher renders the same tree.
+ * Keyed on the wrapper's slot as well as its layout so these rules outrank
+ * the collapsed-rail ones above without depending on order. */
+[data-slot="sidebar-wrapper"][data-layout="dock"] .trigger {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .logo {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .meta {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .name {
+  font-size: var(--text-lg);
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .chevron {
+  opacity: 1;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .panel {
+  padding: 0 0.6rem;
+  transition:
+    grid-template-rows 250ms var(--ease),
+    padding 250ms var(--ease);
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .panel[data-expanded] {
+  padding: 0.25rem 0.6rem 0.6rem;
+}
