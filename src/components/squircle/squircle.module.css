@@ -1,0 +1,11 @@
+/* The pane, its shadow and its clip are inline SVG paint (theming §5.1:
+ * the colours land as vars through style attributes). The rim is the one
+ * stroke CSS owns, in the palette's lightest green rather than a named
+ * white. */
+.squircle {
+  display: block;
+}
+
+.rim {
+  stroke: var(--juni-needle-50);
+}

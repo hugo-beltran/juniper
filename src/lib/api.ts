@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query"
 import type { Lead } from "@/components/leads-table/leads-table"
+import type { UserProfileUser } from "@/components/user-profile/user-profile"
 import type { User } from "@/components/users-table/users-table"
 import navTree from "./nav-tree.json"
 
@@ -794,6 +795,7 @@ export type NavIcon =
   | "arrow-right-end-on-rectangle"
   | "sparkles"
   | "device-phone-mobile"
+  | "user-circle"
 
 /* A badge the shell resolves to a live count; the tree only names the
  * source, the shell decides how to compute it. */
@@ -896,6 +898,22 @@ export const statsQuery = queryOptions({
   queryFn: async () => {
     await delay(300)
     return STATS
+  },
+})
+
+/* Who signed in: what the shell's UserProfile shows. An answer the API
+ * gives after sign-in, like the navigation tree (component-architecture
+ * §6.4); the demo has one account and no photograph, so the initials show. */
+export const CURRENT_USER: UserProfileUser = {
+  name: "Priya Raman",
+  email: "priya@bridge.example",
+}
+
+export const currentUserQuery = queryOptions({
+  queryKey: ["current-user"],
+  queryFn: async () => {
+    await delay(150)
+    return CURRENT_USER
   },
 })
 

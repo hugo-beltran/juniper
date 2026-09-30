@@ -1,0 +1,30 @@
+{
+  "title": "Squircle",
+  "description": "Superellipse SVG tile with a glass gradient, a tinted drop shadow and an inner rim, clipping whatever is drawn on it to the same curve. Bare, it is the backdrop the tenant switcher's Blobatar sits on; the Avatar draws its photograph, initials or icon on it. Decorative by default.",
+  "category": "primitive",
+  "anatomy": [
+    {
+      "part": "Squircle",
+      "description": "The <svg> root with data-slot=\"squircle\", aria-hidden unless the caller overrides it; size (px, also the path's coordinate space), exponent (Lamé n, 5 by default), resolution, and the glass and shadow colours as CSS var strings."
+    },
+    {
+      "part": "Pane",
+      "description": "The radial glass gradient on the path; it casts the squircle-shaped shadow for everything drawn over it."
+    },
+    {
+      "part": "Children",
+      "description": "SVG content the consumer draws on the pane (an <image>, a <text>, a nested <svg>), rendered in a group clipped to the curve, in the tile's own coordinate space (0 to size)."
+    },
+    {
+      "part": "Rim",
+      "description": "A 2px centred stroke clipped to a 1px inner bevel, the glass rim, drawn over the children."
+    }
+  ],
+  "usage": [
+    "Pass colours as CSS var strings (the defaults are Juniper steps); SVG presentation attributes cannot hold var(), so they land through style attributes (theming §5.1).",
+    "Keep it decorative: the name or label beside it carries the meaning (component-architecture §5.4). Override aria-hidden and add role and aria-label only when nothing beside it names the thing.",
+    "Draw on it with SVG children sized against `size`; for a person, use Avatar rather than composing the faces again.",
+    "Size the rendered box from the consumer's CSS (width and height on the svg); size sets the viewBox and the path's resolution."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

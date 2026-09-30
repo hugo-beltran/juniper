@@ -16,6 +16,7 @@ import {
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components"
 import { cn } from "@/lib/cn"
+import { useExclusiveDisclosure } from "@/lib/use-exclusive-disclosure"
 import styles from "./dock.module.css"
 
 /* The shell's second layout (component-architecture §4.0.1): below
@@ -55,9 +56,15 @@ export function Dock({
     [expanded, panelId],
   )
 
+  /* One shell disclosure at a time: the switcher or the profile opening on
+   * the strip closes More. */
+  const ref = useRef<HTMLElement>(null)
+  useExclusiveDisclosure(ref, expanded, () => setExpanded(false))
+
   return (
     <DockContext.Provider value={value}>
       <nav
+        ref={ref}
         data-slot="dock"
         data-expanded={expanded || undefined}
         aria-label={ariaLabel}

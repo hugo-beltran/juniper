@@ -1,12 +1,20 @@
 import { type ComponentProps, useId, useMemo } from "react"
+import { cn } from "@/lib/cn"
+import styles from "./squircle.module.css"
 
 /* Superellipse (Lamé curve) squircle, after
  * https://observablehq.com/@daformat/draw-squircle-shapes-with-svg-javascript
  * — the path sampling and the glass gradient / tinted drop shadow treatments
  * are ported from the notebook; the wiggle animation is deliberately not.
- * Colors default to Juniper values but land as CSS vars via style attributes
- * (SVG presentation attributes can't hold var()). Private to tenant-switcher
- * until another component needs it. */
+ * The tile and nothing else: the glass pane, its shadow and its rim, and a
+ * clipped group for whatever a consumer draws on it (the Avatar's photograph,
+ * initials or icon; the tenant switcher draws nothing and uses the bare
+ * pane as its Blobatar's backdrop). Colors default to Juniper values but
+ * land as CSS vars via style attributes (SVG presentation attributes can't
+ * hold var()). Decorative by default (aria-hidden): the text beside it
+ * carries the meaning (component-architecture §5.4). Promoted from
+ * tenant-switcher on 2026-09-30 when the avatar became its second consumer
+ * (§2.3). */
 
 interface SquircleProps
   extends Omit<ComponentProps<"svg">, "width" | "height"> {
@@ -21,6 +29,10 @@ interface SquircleProps
   shadowColor?: string
   shadowAlpha?: number
 }
+
+/* A thousandth of a px is well below what renders, and keeps the path
+ * string short. */
+const round = (v: number) => Math.round(v * 1000) / 1000
 
 function lamePath(n: number, size: number, resolution: number) {
   const a = size / 2
@@ -37,7 +49,10 @@ function lamePath(n: number, size: number, resolution: number) {
     const sinT = Math.sin(t)
     const x = Math.sign(cosT) * a * Math.abs(cosT) ** exp
     const y = Math.sign(sinT) * b * Math.abs(sinT) ** exp
-    d += i === 0 ? `M ${x + a} ${y + b}` : `L${x + a} ${y + b}`
+    d +=
+      i === 0
+        ? `M ${round(x + a)} ${round(y + b)}`
+        : `L${round(x + a)} ${round(y + b)}`
     points.push([x, y])
   }
 
@@ -51,7 +66,7 @@ function lamePath(n: number, size: number, resolution: number) {
   for (const [signX, signY] of matrix) {
     points.reverse()
     for (const [x, y] of points) {
-      d += `L${signX * x + a} ${signY * y + b}`
+      d += `L${round(signX * x + a)} ${round(signY * y + b)}`
     }
   }
 
@@ -66,6 +81,8 @@ export function Squircle({
   glassTo = "var(--juni-needle-200)",
   shadowColor = "var(--juni-berry-600)",
   shadowAlpha = 0.33,
+  className,
+  children,
   ...props
 }: SquircleProps) {
   const id = useId()
@@ -80,10 +97,12 @@ export function Squircle({
 
   return (
     <svg
+      data-slot="squircle"
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       style={{ overflow: "visible" }}
+      className={cn(styles.squircle, className)}
       aria-hidden
       {...props}
     >
@@ -121,15 +140,17 @@ export function Squircle({
           <path d={d} />
         </clipPath>
       </defs>
+      {/* The shadow filter reads the group's alpha: the pane casts the
+       * squircle-shaped shadow, and whatever is drawn on it is clipped to
+       * the same curve, so an opaque image simply covers the pane. */}
+      <g style={{ filter: `url(#${id}-shadow)` }}>
+        <path d={d} fill={`url(#${id}-glass)`} style={{ opacity: 0.8 }} />
+        {children && <g clipPath={`url(#${id}-clip)`}>{children}</g>}
+      </g>
       <path
-        d={d}
-        fill={`url(#${id}-glass)`}
-        style={{ filter: `url(#${id}-shadow)`, opacity: 0.8 }}
-      />
-      <path
+        className={styles.rim}
         d={d}
         fill="none"
-        stroke="white"
         strokeWidth={2}
         strokeOpacity={0.3}
         clipPath={`url(#${id}-clip)`}

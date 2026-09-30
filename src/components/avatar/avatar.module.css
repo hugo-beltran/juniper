@@ -1,0 +1,19 @@
+/* The tile is the Squircle's; the two faces that are not a photograph take
+ * their colour here, both in the darkest green so they read on the glass
+ * (theming §5.1: SVG colour from a class, never a presentation attribute). */
+.avatar {
+  display: block;
+}
+
+.initials {
+  fill: var(--juni-needle-950);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* heroicons draw in currentColor. */
+.icon {
+  color: var(--juni-needle-950);
+  opacity: 0.85;
+}
