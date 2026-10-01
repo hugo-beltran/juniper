@@ -110,11 +110,7 @@ export function LoginCard({
   children: ReactNode
   className?: string
 }) {
-  return (
-    <Card material="glass" className={cn(styles.card, className)}>
-      {children}
-    </Card>
-  )
+  return <div className={cn(styles.card, className)}>{children}</div>
 }
 
 export function LoginFooter({ className, ...props }: ComponentProps<"p">) {
