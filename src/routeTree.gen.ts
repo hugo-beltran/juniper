@@ -16,6 +16,7 @@ import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProductsRouteImport } from './routes/_authenticated/products'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenticated/scout-report'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
@@ -27,6 +28,7 @@ import { Route as AuthenticatedLabLiftRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedLabLoginRouteImport } from './routes/_authenticated/lab/login'
 import { Route as AuthenticatedLabLogin2RouteImport } from './routes/_authenticated/lab/login-2'
 import { Route as AuthenticatedLabPaletteRouteImport } from './routes/_authenticated/lab/palette'
+import { Route as AuthenticatedLabUserProfileRouteImport } from './routes/_authenticated/lab/user-profile'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -60,6 +62,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 const AuthenticatedProductsRoute = AuthenticatedProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedScoutReportRoute =
@@ -119,6 +126,12 @@ const AuthenticatedLabPaletteRoute = AuthenticatedLabPaletteRouteImport.update({
   path: '/lab/palette',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLabUserProfileRoute =
+  AuthenticatedLabUserProfileRouteImport.update({
+    id: '/lab/user-profile',
+    path: '/lab/user-profile',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -127,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
@@ -138,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/lab/login': typeof AuthenticatedLabLoginRoute
   '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/lab/user-profile': typeof AuthenticatedLabUserProfileRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -145,6 +160,7 @@ export interface FileRoutesByTo {
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/products': typeof AuthenticatedProductsRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/scout-report': typeof AuthenticatedScoutReportRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
@@ -157,6 +173,7 @@ export interface FileRoutesByTo {
   '/lab/login': typeof AuthenticatedLabLoginRoute
   '/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/lab/user-profile': typeof AuthenticatedLabUserProfileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -166,6 +183,7 @@ export interface FileRoutesById {
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/products': typeof AuthenticatedProductsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scout-report': typeof AuthenticatedScoutReportRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
@@ -178,6 +196,7 @@ export interface FileRoutesById {
   '/_authenticated/lab/login': typeof AuthenticatedLabLoginRoute
   '/_authenticated/lab/login-2': typeof AuthenticatedLabLogin2Route
   '/_authenticated/lab/palette': typeof AuthenticatedLabPaletteRoute
+  '/_authenticated/lab/user-profile': typeof AuthenticatedLabUserProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,6 +207,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/dashboard'
     | '/products'
+    | '/profile'
     | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
@@ -199,6 +219,7 @@ export interface FileRouteTypes {
     | '/lab/login'
     | '/lab/login-2'
     | '/lab/palette'
+    | '/lab/user-profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -206,6 +227,7 @@ export interface FileRouteTypes {
     | '/customers'
     | '/dashboard'
     | '/products'
+    | '/profile'
     | '/scout-report'
     | '/settings'
     | '/trade-analyzer'
@@ -218,6 +240,7 @@ export interface FileRouteTypes {
     | '/lab/login'
     | '/lab/login-2'
     | '/lab/palette'
+    | '/lab/user-profile'
   id:
     | '__root__'
     | '/_authenticated'
@@ -226,6 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/customers'
     | '/_authenticated/dashboard'
     | '/_authenticated/products'
+    | '/_authenticated/profile'
     | '/_authenticated/scout-report'
     | '/_authenticated/settings'
     | '/_authenticated/trade-analyzer'
@@ -238,6 +262,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lab/login'
     | '/_authenticated/lab/login-2'
     | '/_authenticated/lab/palette'
+    | '/_authenticated/lab/user-profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -294,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof AuthenticatedProductsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/scout-report': {
@@ -373,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLabPaletteRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/lab/user-profile': {
+      id: '/_authenticated/lab/user-profile'
+      path: '/lab/user-profile'
+      fullPath: '/lab/user-profile'
+      preLoaderRoute: typeof AuthenticatedLabUserProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -381,6 +420,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProductsRoute: typeof AuthenticatedProductsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScoutReportRoute: typeof AuthenticatedScoutReportRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
@@ -393,6 +433,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLabLoginRoute: typeof AuthenticatedLabLoginRoute
   AuthenticatedLabLogin2Route: typeof AuthenticatedLabLogin2Route
   AuthenticatedLabPaletteRoute: typeof AuthenticatedLabPaletteRoute
+  AuthenticatedLabUserProfileRoute: typeof AuthenticatedLabUserProfileRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -400,6 +441,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProductsRoute: AuthenticatedProductsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScoutReportRoute: AuthenticatedScoutReportRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
@@ -412,6 +454,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLabLoginRoute: AuthenticatedLabLoginRoute,
   AuthenticatedLabLogin2Route: AuthenticatedLabLogin2Route,
   AuthenticatedLabPaletteRoute: AuthenticatedLabPaletteRoute,
+  AuthenticatedLabUserProfileRoute: AuthenticatedLabUserProfileRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

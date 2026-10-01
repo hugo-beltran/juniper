@@ -21,13 +21,14 @@
     },
     {
       "part": "Squircle",
-      "description": "Private superellipse SVG backdrop with a glass gradient and a tinted drop shadow; colors land as CSS vars via style attributes."
+      "description": "The shared Squircle (its own entry since 2026-09-30, when the Avatar became its second consumer) as the tile's glass backdrop under the Blobatar."
     }
   ],
   "usage": [
     "Must render inside SidebarProvider: it reads the collapsed state through useSidebar.",
     "Inline over overlay is the house philosophy for disclosure; do not swap the panel for a popover.",
-    "ListBox, Squircle and useClickOutside stay private to this family until a second, unrelated component needs them."
+    "The shell's disclosures are exclusive (useExclusiveDisclosure in src/lib): opening the UserProfile or the dock's More closes the switcher, and opening the switcher closes them, by pointer or keyboard.",
+    "ListBox and Squircle were promoted when a second component needed them (Select, then Avatar); useClickOutside lives in src/lib, shared with the UserProfile. Nothing in this directory is private any more except its own CSS."
   ],
   "docs": ["component-architecture", "theming"]
 }

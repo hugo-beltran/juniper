@@ -5,10 +5,11 @@ import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { Button as AriaButton, type Selection } from "react-aria-components"
 import { ListBox, ListBoxItem } from "@/components/listbox/listbox"
 import { useSidebar } from "@/components/sidebar/sidebar"
+import { Squircle } from "@/components/squircle/squircle"
 import { TENANT_BLOBATAR_PALETTE } from "@/lib/blobatar-palette"
-import { Squircle } from "./squircle"
+import { useClickOutside } from "@/lib/use-click-outside"
+import { useExclusiveDisclosure } from "@/lib/use-exclusive-disclosure"
 import styles from "./tenant-switcher.module.css"
-import { useClickOutside } from "./use-click-outside"
 
 export interface Tenant {
   name: string
@@ -51,6 +52,9 @@ export function TenantSwitcher({
   /* A press anywhere outside the switcher (trigger + panel) dismisses it.
    * Focus stays where the user clicked — no yanking it back to the trigger. */
   useClickOutside(rootRef, () => setExpanded(false), expanded)
+
+  /* One shell disclosure at a time: the profile or More opening closes it. */
+  useExclusiveDisclosure(rootRef, expanded, () => setExpanded(false))
 
   /* Escape inside the open panel closes it and returns focus to the trigger,
    * the panel's previous sibling. Bound as a listener, not a JSX handler: the

@@ -15,6 +15,7 @@ import {
   RectangleGroupIcon,
   SparklesIcon,
   SwatchIcon,
+  UserCircleIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline"
 import { useSuspenseQuery } from "@tanstack/react-query"
@@ -61,9 +62,11 @@ import {
   SidebarStrip,
   SidebarTrigger,
   TenantSwitcher,
+  UserProfile,
   useSidebar,
 } from "@/components"
 import {
+  currentUserQuery,
   defaultTenant,
   dockItems,
   firstRoute,
@@ -81,6 +84,7 @@ export const Route = createFileRoute("/_authenticated")({
   loader: ({ context }) =>
     Promise.all([
       context.queryClient.ensureQueryData(navigationQuery),
+      context.queryClient.ensureQueryData(currentUserQuery),
       context.queryClient.ensureQueryData(leadsQuery),
     ]),
   component: AuthenticatedLayout,
@@ -105,6 +109,7 @@ const ICONS: Record<NavIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   "arrow-right-end-on-rectangle": ArrowRightEndOnRectangleIcon,
   sparkles: SparklesIcon,
   "device-phone-mobile": DevicePhoneMobileIcon,
+  "user-circle": UserCircleIcon,
 }
 
 /* Badge sources named in the tree, resolved to live counts here. 0 hides
@@ -194,6 +199,7 @@ const ownsPath = (tenant: NavTenant, pathname: string) =>
 
 function AuthenticatedLayout() {
   const tree = useSuspenseQuery(navigationQuery).data
+  const user = useSuspenseQuery(currentUserQuery).data
   const { tenants } = tree
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -216,6 +222,33 @@ function AuthenticatedLayout() {
     if (to) navigate({ to })
   }
 
+  /* The session, at the foot of the sidebar or on the strip: who signed in,
+   * and inline beneath, what they can do about it, as the sidebar's own
+   * rows. Profile is a route; Log out is an action on the session, a
+   * Button, not a link, and the shell owns where it lands. The demo has no
+   * auth, so landing on /login is all it does. The icons are the rail's:
+   * collapsed, a row is its icon alone (component-architecture §3.10). */
+  const profile = (
+    <UserProfile user={user}>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <Link to="/profile">
+              <UserCircleIcon />
+              <span>Profile</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton onPress={() => navigate({ to: "/login" })}>
+            <ArrowLeftStartOnRectangleIcon />
+            <span>Log out</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </UserProfile>
+  )
+
   return (
     <SidebarProvider>
       <Shell
@@ -227,7 +260,7 @@ function AuthenticatedLayout() {
             onActiveTenantChange={handleTenantChange}
           />
         }
-        onLogOut={() => navigate({ to: "/login" })}
+        profile={profile}
       />
     </SidebarProvider>
   )
@@ -238,15 +271,17 @@ function AuthenticatedLayout() {
  * Sidebar, or the strip and the Dock, never both. The inset is the same
  * element in both, so its scroll position, width store and data-narrow
  * survive the swap; the differences in its chrome are CSS against the
- * wrapper's data-layout. */
+ * wrapper's data-layout. The switcher and the profile are the same
+ * elements in both too: header and footer of the column, or the two ends
+ * of the strip. */
 function Shell({
   tenant,
   switcher,
-  onLogOut,
+  profile,
 }: {
   tenant: NavTenant
   switcher: ReactNode
-  onLogOut: () => void
+  profile: ReactNode
 }) {
   const { layout } = useSidebar()
   const badges = useNavBadges()
@@ -308,8 +343,9 @@ function Shell({
   }, [layout])
 
   /* Four cells plus More whenever the tenant has items the row does not
-   * show; a badge hidden behind More moves to More. Log out has no cell of
-   * its own, so More is always there in the dock. */
+   * show; a badge hidden behind More moves to More. The session's exit is
+   * in the profile on the strip, so a tenant whose tagged items all fit
+   * has no More. */
   const { row, more } = dockItems(tenant)
   const moreCount = more.reduce(
     (sum, item) => sum + badgeCount(item, badges),
@@ -339,49 +375,40 @@ function Shell({
               </SidebarGroup>
             ))}
           </SidebarContent>
-          {/* The session's one exit, a menu row in the footer so it wears the
-           * nav's face, its icon and its collapsed-rail label. A Button, not a
-           * link: logging out is an action on the session, and the shell owns
-           * where it lands. The demo has no auth, so landing on /login is all
-           * it does. The icon is the rail's: collapsed, a row is its icon
-           * alone (component-architecture §3.10). */}
+          {/* The devtools rows in development, then the session, last. */}
           <SidebarFooter>
-            <SidebarMenu>
-              {import.meta.env.DEV && (
-                <>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      aria-expanded={devtool === "query"}
-                      aria-controls={DEVTOOLS_DOCK_ID}
-                      onPress={() => toggleDevtool("query")}
-                    >
-                      <CircleStackIcon />
-                      <span>Query devtools</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      aria-expanded={devtool === "router"}
-                      aria-controls={DEVTOOLS_DOCK_ID}
-                      onPress={() => toggleDevtool("router")}
-                    >
-                      <MapIcon />
-                      <span>Router devtools</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </>
-              )}
-              <SidebarMenuItem>
-                <SidebarMenuButton onPress={onLogOut}>
-                  <ArrowLeftStartOnRectangleIcon />
-                  <span>Log out</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            {import.meta.env.DEV && (
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "query"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("query")}
+                  >
+                    <CircleStackIcon />
+                    <span>Query devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    aria-expanded={devtool === "router"}
+                    aria-controls={DEVTOOLS_DOCK_ID}
+                    onPress={() => toggleDevtool("router")}
+                  >
+                    <MapIcon />
+                    <span>Router devtools</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            )}
+            {profile}
           </SidebarFooter>
         </Sidebar>
       ) : (
-        <SidebarStrip>{switcher}</SidebarStrip>
+        <SidebarStrip>
+          {switcher}
+          {profile}
+        </SidebarStrip>
       )}
       <SidebarInset>
         <SidebarInsetHeader>
@@ -426,16 +453,18 @@ function Shell({
                 </NavLink>
               </DockItem>
             ))}
-            <DockMore badge={moreCount > 0 && <SidebarMenuBadge />}>
-              More
-              {badgeWords(moreCount)}
-            </DockMore>
+            {more.length > 0 && (
+              <DockMore badge={moreCount > 0 && <SidebarMenuBadge />}>
+                More
+                {badgeWords(moreCount)}
+              </DockMore>
+            )}
           </DockRow>
           {/* Behind More: the items the row does not show, as the sidebar's
-           * own rows, then the session's exit. The devtools rows stay in the
-           * sidebar. */}
-          <DockPanel>
-            {more.length > 0 && (
+           * own rows. The session's exit is in the profile on the strip; the
+           * devtools rows stay in the sidebar. */}
+          {more.length > 0 && (
+            <DockPanel>
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
@@ -449,20 +478,8 @@ function Shell({
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>
-            )}
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton onPress={onLogOut}>
-                      <ArrowLeftStartOnRectangleIcon />
-                      <span>Log out</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </DockPanel>
+            </DockPanel>
+          )}
         </Dock>
       )}
     </>

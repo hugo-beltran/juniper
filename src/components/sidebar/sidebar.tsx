@@ -414,11 +414,14 @@ export function SidebarInsetHeader({
 }
 
 /* The band of ground above the inset in dock layout, where the brand (the
- * TenantSwitcher) lives once there is no sidebar header to hold it: the
- * wrapper becomes strip, inset, dock, and the switcher keeps its own green
- * surface and its inline disclosure, which pushes the inset down. Chosen on
- * 2026-09-23 at /lab/dock (B′) over a row inside the inset, a dock slot and
- * a home behind More. */
+ * TenantSwitcher) and the session (the UserProfile) live once there is no
+ * sidebar header or footer to hold them: the wrapper becomes strip, inset,
+ * dock, and both keep their own green surface and their inline disclosure,
+ * which pushes the inset down. A grid of two columns (sidebar.module.css):
+ * the switcher, then the profile's avatar; the profile's panel takes the
+ * row beneath. Chosen on 2026-09-23 at /lab/dock (B′) over a row inside
+ * the inset, a dock slot and a home behind More; the profile joined it on
+ * 2026-09-30. */
 export function SidebarStrip({ className, ...props }: ComponentProps<"div">) {
   return (
     <div

@@ -1,0 +1,31 @@
+{
+  "title": "User profile",
+  "description": "The session's identity at the foot of the sidebar and on the strip in dock layout: an avatar row (Avatar with the photograph, initials or icon, name over email) that discloses the session's actions inline, upward from the footer into the content's room, downward from the strip. The actions are the sidebar's own menu rows, passed in as children. The TenantSwitcher's counterpart: same trigger glass, same blob, same grid-rows disclosure. Promoted from meddpicc's account menu on 2026-09-30, its popover replaced by the house disclosure.",
+  "category": "composite",
+  "anatomy": [
+    {
+      "part": "UserProfile",
+      "description": "Root with data-slot=\"user-profile\" and data-expanded while open; props are user ({ name, email, image? }) and children, the rows. Owns the open state; an outside press dismisses."
+    },
+    {
+      "part": "Trigger",
+      "description": "react-aria Button (data-slot=\"user-profile-trigger\") with aria-expanded and aria-controls: the decorative Avatar, the name over the email (the accessible name), and a chevron revealed on hover that turns over while open. In the collapsed rail the avatar stands alone and the name and email become the rail tooltip; on the strip the avatar stands alone."
+    },
+    {
+      "part": "Panel",
+      "description": "data-slot=\"user-profile-panel\": grid-rows 0fr to 1fr disclosure, inert while closed, after the trigger in DOM order and above it on screen in the column (flex column-reverse, as the dock's More panel), on the row beneath the strip in dock layout, where the switcher's blob is drawn in two boxes that meet at the trigger's bottom edge (the root has no box there): the open trigger squares its bottom corners and carries the top highlight, the panel squares the corner beneath it and carries the bottom shade, so the avatar reads as the tab of the sheet it opened. Escape closes and returns focus to the trigger; choosing a row (a link or a button) closes."
+    },
+    {
+      "part": "Rows",
+      "description": "The consumer's SidebarMenu > SidebarMenuItem > SidebarMenuButton rows: a Profile link (asChild around the router Link) and the Log out action in the shell. They collapse to their icons in the rail with the rest of the sidebar's rows, so each carries one (component-architecture §3.10). The active row (aria-current=\"page\" or data-active) does not take the menu's sliding connector tab, which is hidden inside the panel; it wears the dock's needle pill, the whole row in the column and the icon alone in the rail."
+    }
+  ],
+  "usage": [
+    "Render it last in SidebarFooter, and beside the TenantSwitcher in SidebarStrip in dock layout; it needs no provider, every difference between the column, the rail and the strip is CSS against the sidebar's data-state and the wrapper's data-layout (component-architecture §3.9).",
+    "Pass the session's actions as the sidebar's own menu rows; the component never decides what a session can do or where an action lands. Log out lives here, not as a footer row of its own and not behind the dock's More.",
+    "The Avatar is decorative (aria-hidden); the name and email in the trigger carry the meaning. Pass image for a photograph; otherwise the initials show, and a person icon when there is no name.",
+    "Inline over overlay is the house philosophy for disclosure (component-architecture §4.2); do not swap the panel for a popover or a menu.",
+    "The shell's disclosures are exclusive (useExclusiveDisclosure in src/lib): opening the TenantSwitcher or the dock's More closes the profile, and opening the profile closes them, by pointer or keyboard."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

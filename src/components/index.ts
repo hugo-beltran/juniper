@@ -2,6 +2,7 @@
  * families keep direct imports — a family importing the barrel would create
  * an import cycle. */
 
+export * from "./avatar/avatar"
 export * from "./background-noise/background-noise"
 export * from "./button/button"
 export * from "./card/card"
@@ -17,9 +18,11 @@ export * from "./page/page"
 export * from "./select/select"
 export * from "./sidebar/dock"
 export * from "./sidebar/sidebar"
+export * from "./squircle/squircle"
 export * from "./summary-card/summary-card"
 export * from "./switch/switch"
 export * from "./tenant-switcher/tenant-switcher"
 export * from "./textarea/textarea"
 export * from "./tooltip/tooltip"
+export * from "./user-profile/user-profile"
 export * from "./users-table/users-table"

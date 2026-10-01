@@ -47,6 +47,11 @@
               "to": "/lab/dock",
               "icon": "device-phone-mobile",
               "surfaces": ["sidebar", "dock"]
+            },
+            {
+              "label": "User profile",
+              "to": "/lab/user-profile",
+              "icon": "user-circle"
             }
           ]
         },

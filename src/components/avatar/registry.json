@@ -1,0 +1,30 @@
+{
+  "title": "Avatar",
+  "description": "A person on the Squircle tile in three faces, each the fallback of the last: the photograph clipped to the curve and covering it, the initials over the glass, and a person icon when there is not even a name. A photograph that fails to load falls back too. Decorative by default; the name beside it carries the meaning.",
+  "category": "composite",
+  "anatomy": [
+    {
+      "part": "Avatar",
+      "description": "The Squircle root with data-slot=\"avatar\" and data-face=\"image\" | \"initials\" | \"icon\" naming the face that shows; props are src, name, and the Squircle's size and colours."
+    },
+    {
+      "part": "Image",
+      "description": "An SVG <image> covering the tile (xMidYMid slice), clipped to the curve by the Squircle; its load error switches the face to initials."
+    },
+    {
+      "part": "Initials",
+      "description": "First and last initial (one letter for a single word) centred over the glass; the module owns their colour and weight."
+    },
+    {
+      "part": "Icon",
+      "description": "The heroicons person outline, centred at 56% of the tile, the last resort when there is no name."
+    }
+  ],
+  "usage": [
+    "Pass src for the photograph and name for the initials; leave both out for the icon. The face is picked from the data and published as data-face, so CSS can specialise on it.",
+    "Keep it decorative (aria-hidden by default); put the person's name in the text beside it (component-architecture §5.4). Override aria-hidden with role=\"img\" and aria-label only when nothing beside it names the person.",
+    "Size the rendered box from CSS (width and height on the svg); size sets the tile's coordinate space, and the initials and icon scale with it.",
+    "Draw people with Avatar and tiles with Squircle: the tenant switcher's Blobatar sits on a bare Squircle, and a third face belongs here, not in a consumer."
+  ],
+  "docs": ["component-architecture", "theming"]
+}

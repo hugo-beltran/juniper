@@ -45,6 +45,10 @@ src/components/
   switch/                       labelled Switch, extruded track
   filter-bar/                   sticky search / switch / select toolbar
   sidebar/                      the shell: Sidebar parts, Dock parts (dock.tsx)
+  squircle/                     superellipse SVG tile: glass pane, shadow, rim; clips what is drawn on it
+  avatar/                       a person on the squircle: photograph, initials, then a person icon
+  tenant-switcher/              the brand at the head of the sidebar, an inline disclosure
+  user-profile/                 the session at its foot, the same disclosure around the sidebar's rows
   users-table/                  demo composition: FilterBar + flat table
   background-noise/             background layer: film grain for a ground
   full-bleed-canvas/            the ground for screens outside the shell: photograph, grain, credit
@@ -58,7 +62,7 @@ src/components/
     sparkline.tsx               private descendant
     sparkline.module.css
     registry.json
-src/lib/                        shared helpers (cn, blobatar-palette)
+src/lib/                        shared helpers (cn, blobatar-palette, use-click-outside, use-exclusive-disclosure)
 src/styles/                     theme + global base
 src/routes/                     TanStack Router file routes
 ```
@@ -68,8 +72,8 @@ component. The main file is `<name>.tsx` with `<name>.module.css` beside it.
 There is no `ui/` layer and no `components/shared/`.
 
 2.2. A private descendant (a sub-part only this component uses, such as
-`sparkline.tsx`, `squircle.tsx`, `use-click-outside.ts`) MUST colocate in
-its parent's directory. It is not exported from the barrel.
+`sparkline.tsx`) MUST colocate in its parent's directory. It is not
+exported from the barrel.
 
 2.3. **Promotion rule.** A private descendant is promoted to its own
 directory only when a second, *unrelated* component needs it. Promotion
@@ -80,7 +84,13 @@ Do not promote speculatively. Precedents: `select` and `switch` left
 needed them; `filter-bar` (né `leads-filters`) left `leads-table` when the
 users table became its second consumer;
 `field` (label, description, error) was promoted on its first day because
-three unrelated primitives needed it at once, which meets the rule of three.
+three unrelated primitives needed it at once, which meets the rule of three;
+`squircle` left `tenant-switcher` on 2026-09-30 when `avatar` needed the
+curve for a photograph and initials (the tile clips what is drawn on it;
+the faces are the avatar's). A private *hook* is promoted to
+`src/lib/` instead, where the registry publishes it as a `lib` entry:
+`use-click-outside` went there the same day, shared by the switcher and
+the profile.
 
 2.3.1. **Shared chrome is composed, not copied.** Labelled controls (Input,
 Textarea, Select) render the `field` parts for their label, description and
@@ -168,7 +178,14 @@ re-runs to change a shadow. Precedents: the theme re-tunes
 specificity, and no control knows it happened; `ListBox` styles its rows
 through the root's `data-variant` so items take no prop; the sidebar
 inset publishes `data-narrow` and consumers query it; hover for a slotted
-link is `:not([data-rac]):hover`, not a wrapper. Reach for React only when
+link is `:not([data-rac]):hover`, not a wrapper; the `UserProfile` is one
+tree in the column, the collapsed rail and the strip (the avatar row, the
+avatar alone with the name as its rail tooltip, the avatar at the strip's
+end with its panel beneath), all of it CSS against the sidebar's
+`data-state` and the wrapper's `data-layout`; the sidebar footer, on the
+gradient's dark end, inverts the copy of every row and trigger inside it
+by re-declaring the `--menu-copy` properties the rows read with the
+column's steps as fallback. Reach for React only when
 CSS cannot know the fact (data, selection, a measurement), and then
 publish the fact as a data attribute or custom property once (4.0) so the
 rest stays CSS.
@@ -214,8 +231,8 @@ wrapper the way the inset measures itself (a layout effect, then a
 ResizeObserver, into a store read with a selector; never debounced) and
 publishes the fact once: `layout: "sidebar" | "dock"` through
 `useSidebar()`, mirrored as `data-layout` on the wrapper. The shell renders
-`Sidebar`, or `SidebarStrip` (the brand's band of ground above the inset,
-holding the unchanged `TenantSwitcher`) and `Dock`, never both. The inset is
+`Sidebar`, or `SidebarStrip` (the band of ground above the inset, holding
+the unchanged `TenantSwitcher` and `UserProfile`) and `Dock`, never both. The inset is
 the same element in both layouts, so its scroll position, its width store
 and `data-narrow` survive the swap; every difference in its chrome is CSS
 against `data-layout` (3.9): the trigger's gutter resolves to 0,
@@ -229,9 +246,10 @@ portrait keeps the sidebar. The dock is not a second navigation with its
 own data. `NavItem.surfaces` tags where an item may appear (`sidebar` by
 default, `dock`, or both; groups and their labels are sidebar-only); the
 dock shows tagged items in tree order, four at most, and a fifth cell,
-**More**, whenever there is anything the row does not show, which discloses
-the remaining items and the session's exit as the sidebar's own menu rows
-in a panel that grows the dock upward (4.2). A badge hidden behind More
+**More**, only when there is anything the row does not show, which
+discloses the remaining items as the sidebar's own menu rows in a panel
+that grows the dock upward (4.2); the session's exit is not among them, it
+is in the `UserProfile` on the strip (4.9). A badge hidden behind More
 moves to More. The active cell keys off `aria-current="page"` (5.2) and
 answers in needle ([Theming rules](./theming.md) 4.7): the icon alone on a
 needle-200 pill, the label on the ground, pure CSS on the cell. Decided at
@@ -244,7 +262,9 @@ layout, both as CSS hooks. The strip is a permanent band on a phone's
 screen, so the `TenantSwitcher` compacts itself on it through
 `[data-layout="dock"]` rules in its own module (one row, tile and name and
 plan inline, the chevron always shown because touch has no hover); the
-switcher's tree is the same. And the dock scrolls away: the inset, the one
+switcher's tree is the same; the `UserProfile` keeps only its avatar at
+the strip's end and its panel takes the row beneath, spanning the strip,
+which is a two-column grid for that reason. And the dock scrolls away: the inset, the one
 element that scrolls, publishes its scroll direction the way it publishes
 its width, the wrapper mirrors it as `data-scroll`, and the dock's CSS
 slides itself under the screen's edge on `down` and back on `up` or at the
@@ -268,8 +288,15 @@ the h1.
 
 4.2. **Inline over overlay.** Disclosure grows in place and pushes content
 (the tenant switcher's panel; the dock's More panel, which grows the dock
-upward and pushes the inset up) rather than floating a dialog, drawer or
-free-floating menu, wherever the layout allows. When in-place expansion is
+upward and pushes the inset up; the user profile's panel, which grows
+upward from the footer into the content's room, or beneath the strip)
+rather than floating a dialog, drawer or free-floating menu, wherever the
+layout allows. The shell's disclosures are exclusive: opening one closes
+the others, so two panels never push the inset at once. A pointer does it
+through `useClickOutside` (pressing one trigger is a press outside the
+other); `useExclusiveDisclosure` (`src/lib`) covers the keyboard, with an
+opening disclosure announcing itself on the document and every other open
+one closing, no shared state and no provider. When in-place expansion is
 needed, use react-aria `Disclosure`/`DisclosurePanel` (the filter bar's
 narrow layout folds its selects and sort control into a `DisclosurePanel`
 beneath the toolbar row, pushing the rows down); for dismissable
@@ -359,6 +386,23 @@ layer; and a layout that covers the whole ground lets pointer events through
 its bare areas so the layer's own controls (the credit link) stay reachable.
 Wrapping content in a background component, and painting a ground from route
 CSS, are the anti-patterns this rule replaces.
+
+4.9. **The session is a disclosure at the foot of the column.** The
+`UserProfile` shows who signed in (an `Avatar` with the photograph, the
+initials or a person icon, name over email) at the end of `SidebarFooter`, and on the
+strip in dock layout, and discloses inline what the session can do. Its
+actions are not its own: the shell passes them in as the sidebar's own
+menu rows (`SidebarMenu` > `SidebarMenuItem` > `SidebarMenuButton`, the
+arrangement 4.0.1 gives the dock's More panel), a Profile link slotted with
+`asChild` and Log out as a react-aria Button, so the shell decides what a
+session can do and where each action lands, the rows wear the nav's face
+and collapse to their icons in the rail (3.10), and the component only
+opens and closes. Log out lives here, not as a footer row of its own and
+not behind More. Ported on 2026-09-30 from meddpicc's account menu, whose
+popover became this disclosure (4.2) and whose menu items became these
+rows; the `TenantSwitcher` is its counterpart at the head of the column,
+and the two share one trigger material. `/lab/user-profile` holds the
+three contexts side by side.
 
 ## 5. Accessibility baseline
 

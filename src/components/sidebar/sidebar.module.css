@@ -130,11 +130,19 @@
   display: none;
 }
 
-/* The band of ground above the inset that holds the brand in dock layout:
- * a permanent cost on every screen, so it is one tight row (the switcher
- * compacts itself for it, tenant-switcher.module.css). */
+/* The band of ground above the inset that holds the brand and the session
+ * in dock layout: a permanent cost on every screen, so it is one tight row
+ * (the switcher compacts itself for it, tenant-switcher.module.css; the
+ * user profile keeps only its avatar). A two-column grid: the switcher
+ * takes the first column, the profile's avatar the second, and the
+ * profile's panel the row beneath, spanning both (user-profile.module.css
+ * places them; the root hands its boxes to this grid). With no profile the
+ * second column is empty and costs nothing. */
 .strip {
+  display: grid;
   flex-shrink: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   padding: 0.5rem 0.5rem 0;
 }
 
@@ -148,6 +156,20 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.5rem;
+}
+
+/* The footer sits on the gradient's dark end (needle-700 at the bottom),
+ * where the rows' needle-950 copy loses its contrast, so the footer inverts
+ * it: the rows' copy comes from these properties, declared here and read
+ * with the column's steps as their fallback (component-architecture §3.9,
+ * context in CSS), so a row in the footer, the profile's trigger and the
+ * profile's rows all turn light with no prop and no branch. The active pill
+ * and the open tab keep their own dark copy on their own light fill; the
+ * rail tooltips keep theirs on bark-50. Decided 2026-09-30. */
+.footer {
+  --menu-copy: var(--juni-bark-100);
+  --menu-copy-hover: var(--juni-needle-50);
+  --menu-copy-dim: var(--juni-bark-200);
 }
 
 .content {
@@ -256,7 +278,7 @@
 .menuButton[data-active],
 .menuButton[aria-current="page"],
 .menuButton[aria-expanded="true"] {
-  color: var(--juni-needle-900);
+  color: var(--menu-copy-hover, var(--juni-needle-900));
 }
 
 .menu:has(.menuButton:hover)
@@ -273,7 +295,7 @@
     [aria-current="page"],
     [aria-expanded="true"]
   ) {
-  color: var(--juni-needle-700);
+  color: var(--menu-copy-dim, var(--juni-needle-700));
   opacity: 0.75;
 }
 
@@ -288,7 +310,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--juni-needle-950);
+  color: var(--menu-copy, var(--juni-needle-950));
   font-family: inherit;
   font-size: var(--text-base);
   font-weight: 500;
@@ -420,6 +442,7 @@
   padding: 0.25rem 0.625rem;
   border-radius: var(--radius-sm);
   background-color: var(--juni-bark-50);
+  color: var(--juni-needle-950);
   opacity: 0;
   pointer-events: none;
   transition: opacity 120ms var(--ease);

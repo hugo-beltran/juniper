@@ -25,11 +25,11 @@
     },
     {
       "part": "SidebarStrip",
-      "description": "Dock layout only: the band of ground above the inset that holds the TenantSwitcher once there is no sidebar header. The switcher keeps its own surface and its inline disclosure, which pushes the inset down (B′, chosen 2026-09-23 at /lab/dock). One tight row: the switcher compacts itself here by CSS on the wrapper's data-layout (smaller tile, name and plan inline, chevron always visible)."
+      "description": "Dock layout only: the band of ground above the inset that holds the TenantSwitcher and the UserProfile once there is no sidebar header or footer. Both keep their own surface and their inline disclosure, which pushes the inset down (B′, chosen 2026-09-23 at /lab/dock; the profile joined on 2026-09-30). One tight row, laid out as a two-column grid: the switcher compacts itself in the first column by CSS on the wrapper's data-layout (smaller tile, name and plan inline, chevron always visible); the profile keeps only its avatar in the second, and its panel takes the row beneath, spanning the strip."
     },
     {
       "part": "SidebarHeader / SidebarContent / SidebarFooter",
-      "description": "Vertical regions of the column: the header holds the TenantSwitcher, the content the tenant's groups and scrolls, the footer the session's exit (a Log out row in its own SidebarMenu, added 2026-09-28) pinned at the foot."
+      "description": "Vertical regions of the column: the header holds the TenantSwitcher, the content the tenant's groups and scrolls, the footer the UserProfile pinned at the foot (since 2026-09-30; before it, a Log out row of its own, added 2026-09-28, which now lives in the profile's panel). In development the footer also holds the devtools rows above the profile. The footer sits on the gradient's dark end, so it inverts the rows' copy to bark-100 (needle-50 on hover, bark-200 dimmed) by re-declaring --menu-copy, --menu-copy-hover and --menu-copy-dim, which every SidebarMenuButton and the UserProfile's trigger read with the column's dark steps as fallback."
     },
     {
       "part": "SidebarGroup / SidebarGroupLabel / SidebarGroupContent",
@@ -45,7 +45,7 @@
     },
     {
       "part": "Dock",
-      "description": "Dock layout only: the <nav> at the foot of the wrapper (aria-label \"Primary\" by default), padded by the phone's bottom safe area. Owns the open state of More; data-expanded while the panel is open, when it wears the switcher's glass blob. Scrolls away: under [data-scroll=\"down\"] it slides beneath the screen's edge and hands the inset its 3.5rem, keeping the safe-area band; never while open or while a cell has focus."
+      "description": "Dock layout only: the <nav> at the foot of the wrapper (aria-label \"Primary\" by default), padded by the phone's bottom safe area. Owns the open state of More; data-expanded while the panel is open, when it wears the switcher's glass blob. Exclusive with the strip's two disclosures (useExclusiveDisclosure in src/lib): the switcher or the profile opening closes More, and More opening closes them. Scrolls away: under [data-scroll=\"down\"] it slides beneath the screen's edge and hands the inset its 3.5rem, keeping the safe-area band; never while open or while a cell has focus."
     },
     {
       "part": "DockRow",
@@ -57,7 +57,7 @@
     },
     {
       "part": "DockMore",
-      "description": "The fifth cell, present whenever there is anything the row does not show: a disclosure trigger (aria-expanded, aria-controls) for DockPanel. Takes a badge when a badged item is hidden behind it, and the sr-only words inside its label."
+      "description": "The fifth cell, present only when there is anything the row does not show (a tenant whose tagged items all fit has no More): a disclosure trigger (aria-expanded, aria-controls) for DockPanel. Takes a badge when a badged item is hidden behind it, and the sr-only words inside its label."
     },
     {
       "part": "DockPanel",
@@ -74,8 +74,8 @@
     "Collapsed-rail labels need no tooltip component: the row's own label is repositioned and revealed on hover/focus by CSS, so the accessible name stays on the button.",
     "Deliberately not ported: floating/right variants, offcanvas mode, the mobile sheet (narrow shells switch to the Dock instead), rail/input/separator, submenus, cookie persistence, keyboard shortcut.",
     "Badges carry attention only: heartwood is the identity's one red, so a badge means something needs acting on (leads pending analysis), not decoration. Render nothing when the count is 0.",
-    "Actions on the session (Log out) go in SidebarFooter as a SidebarMenu row rendered as a react-aria Button (no asChild), so they wear the nav's face, collapse to their icon with the rail and keep the label as the collapsed tooltip. The shell owns where a log-out lands; the row only reports the press. Rows in the rail are the one place an icon is required (component-architecture §3.10): collapsed, the icon is all that shows. Development tooling follows the same pattern: the shell's query and router devtools are footer rows above Log out that disclose (aria-expanded, aria-controls; never isActive, which would take the pointer away) a dock stuck to the foot of the inset, in place of the libraries' floating corner buttons.",
-    "Tag nav items for the dock with NavItem.surfaces ([\"sidebar\"] by default; \"dock\" or both). The dock shows tagged items in tree order, four at most; the shell puts everything else, then Log out, behind More, so a sidebar-only item stays reachable and no tenant loses its exit. A badge hidden behind More moves to More. The rule is a pure function of the tree (dockItems in src/lib/api.ts) and lives in the shell route, not in the component.",
+    "Actions on the session (the Profile link, Log out) are SidebarMenu rows inside the UserProfile's panel, the last thing in SidebarFooter: a link slotted with asChild, an action rendered as a react-aria Button (no asChild), so they wear the nav's face, collapse to their icon with the rail and keep the label as the collapsed tooltip. The shell owns where each lands; the row only reports the press. Rows in the rail are the one place an icon is required (component-architecture §3.10): collapsed, the icon is all that shows. Development tooling follows the same pattern: the shell's query and router devtools are footer rows above the profile that disclose (aria-expanded, aria-controls; never isActive, which would take the pointer away) a dock stuck to the foot of the inset, in place of the libraries' floating corner buttons.",
+    "Tag nav items for the dock with NavItem.surfaces ([\"sidebar\"] by default; \"dock\" or both). The dock shows tagged items in tree order, four at most; the shell puts everything else behind More, so a sidebar-only item stays reachable, and renders no More when nothing is left over. The session's exit is not behind More: it is in the UserProfile on the strip, in both layouts. A badge hidden behind More moves to More. The rule is a pure function of the tree (dockItems in src/lib/api.ts) and lives in the shell route, not in the component.",
     "The dock is the second place an icon is required (component-architecture §3.10): a cell is its icon over a word.",
     "Width alone picks the layout, at SIDEBAR_DOCK_BELOW measured on the wrapper: a narrow desktop window gets the dock, tablet portrait keeps the sidebar. Never debounce the signal, for the same reason as the inset's.",
     "Swapping layouts while focus is inside the navigation hands focus to the active item of the new navigation (or its first item); the shell route owns that handoff, the parts only record that they held focus.",

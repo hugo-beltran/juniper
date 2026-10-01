@@ -1,0 +1,321 @@
+/* The session's identity at the foot of the sidebar, the TenantSwitcher's
+ * counterpart at its head: the same trigger recipe (the glass bevel on
+ * hover, the blob when open) so the two identity controls bookend the
+ * column in one material, and the same grid-rows disclosure. The rows in
+ * the panel are the sidebar's own menu parts and bring their chrome.
+ *
+ * The panel comes after the trigger in DOM order (Tab reaches it from the
+ * trigger) and sits above it on screen, growing upward into the content's
+ * room, the dock's arrangement for More. */
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  border-radius: var(--radius-md);
+  transition:
+    background-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+
+.trigger {
+  display: flex;
+  width: 100%;
+  height: 3rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  /* The footer publishes its inverted copy (sidebar.module.css); on the
+   * strip nothing does, and the column's dark step applies. */
+  color: var(--menu-copy, var(--juni-needle-950));
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--ease),
+    box-shadow 120ms var(--ease),
+    color 120ms var(--ease);
+}
+
+.trigger:focus-visible {
+  outline-color: var(--nav-outline);
+}
+
+/* Inner bevel glass on hover, closed state only: open, the blob owns it. */
+.trigger[data-hovered]:not([aria-expanded="true"]) {
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-400) l c h / 0.35),
+    oklch(from var(--juni-needle-400) l c h / 0.9)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.25),
+    inset 0 -1px 0 oklch(from var(--juni-berry-900) l c h / 0.1);
+}
+
+/* Open: the switcher's blob, grown around trigger and panel. The surface
+ * lives on the root, so it stretches with the panel as it opens. */
+.root[data-expanded] {
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-500) l c h / 0.6),
+    oklch(from var(--juni-needle-500) l c h / 0.8)
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.55),
+    inset 0 -1px 0 oklch(from var(--juni-berry-800) l c h / 0.15);
+}
+
+.trigger[aria-expanded="true"] {
+  color: var(--juni-needle-50);
+}
+
+.avatar {
+  position: relative;
+  display: flex;
+  width: 2.125rem;
+  height: 2.125rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+.meta {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+  line-height: 1.2;
+}
+
+.name,
+.email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.email {
+  font-size: var(--text-sm);
+  opacity: 0.7;
+}
+
+/* The disclosure cue, revealed on hover like the switcher's; turned over
+ * while the panel is open. */
+.chevron {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-left: auto;
+  opacity: 0;
+  transition:
+    opacity 200ms var(--ease),
+    rotate 200ms var(--ease);
+}
+
+.trigger[data-hovered] .chevron {
+  opacity: 1;
+}
+
+.trigger[aria-expanded="true"] .chevron {
+  opacity: 1;
+  rotate: 180deg;
+}
+
+/* Inline expansion: grid-rows 0fr → 1fr animates to the rows' height. No
+ * padding on the panel itself, so a closed panel adds nothing above the
+ * trigger; the content carries the blob's inner spacing. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 250ms var(--ease);
+}
+
+.panel[data-expanded] {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Once open, the rail tooltips of the rows inside must escape the panel,
+ * so the clip lifts when the growth lands (a discrete flip after the
+ * transition); closing clips again at once. Engines without discrete
+ * transitions keep the clip, and only the tooltip is lost. */
+.panel[data-expanded] .panelInner {
+  overflow: visible;
+  transition: overflow 0s 250ms allow-discrete;
+}
+
+/* A little side padding so the active row's pill (below) sits inside the
+ * blob's edge rather than against it; the rows keep their own geometry. */
+.panelContent {
+  padding: 0.375rem 0.25rem 0.125rem;
+}
+
+/* The rows inside are the sidebar's, but the active one does not take the
+ * menu's sliding tab: the notch belongs to the navigation, whose rows meet
+ * the inset's edge; these rows are the session's, and what holds them is
+ * the blob, not the column. The active row wears the dock's pill instead
+ * (theming §4.7, selection in needle): needle-200, lit along its top edge,
+ * needle-950 copy. The whole row in the column; in the rail, where a row
+ * is its icon alone, that is the dock's own cell. Decided 2026-09-30. */
+.panel [data-slot="sidebar-menu-indicator"] {
+  display: none;
+}
+
+.panel
+  [data-slot="sidebar-menu-button"]:is([aria-current="page"], [data-active]) {
+  border-radius: 999px;
+  background-color: oklch(from var(--juni-needle-200) l c h / 0.5);
+  box-shadow: inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.25);
+  color: var(--juni-needle-950);
+}
+
+/* The collapsed rail: the avatar alone, tilted like the switcher's tile.
+ * The rows inside collapse to their icons on their own (they are the
+ * sidebar's rows); the name and email become the rail tooltip, the rows'
+ * own mechanism (sidebar.module.css): beside the rail in the inset's
+ * surface colour, shown after a short intent delay on hover or focus. */
+[data-slot="sidebar"][data-state="collapsed"] .trigger {
+  position: relative;
+  justify-content: center;
+  padding: 0;
+  overflow: visible;
+}
+
+[data-slot="sidebar"][data-state="collapsed"] .avatar {
+  rotate: -5deg;
+  transition: rotate 300ms var(--ease);
+}
+
+@starting-style {
+  [data-slot="sidebar"][data-state="collapsed"] .avatar {
+    rotate: 0deg;
+  }
+}
+
+[data-slot="sidebar"][data-state="collapsed"] .chevron {
+  display: none;
+}
+
+/* The rail's geometry resolves a row to the 2rem tile only at full width. */
+[data-slot="sidebar"][data-state="collapsed"] .panelContent {
+  padding-inline: 0;
+}
+
+[data-slot="sidebar"][data-state="collapsed"] .meta {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 1rem);
+  width: max-content;
+  max-width: 14rem;
+  flex: none;
+  translate: 0 -50%;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--juni-bark-50);
+  color: var(--juni-needle-950);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms var(--ease);
+}
+
+[data-slot="sidebar"][data-state="collapsed"]
+  .trigger:is([data-hovered], :focus-visible)
+  .meta {
+  opacity: 1;
+  transition-delay: 300ms;
+}
+
+/* The strip (the shell's dock layout, component-architecture §4.0.1): the
+ * strip is a grid, the switcher in its first column, and the profile
+ * hands its two boxes to that grid: the avatar alone at the end of the
+ * row, the panel on the row beneath, spanning the strip. The root has no
+ * box here, so the blob is drawn in two pieces that meet at the trigger's
+ * bottom edge: the open trigger squares its bottom corners and carries
+ * the blob's top highlight, the panel squares the corner beneath it and
+ * carries the bottom shade, and the fill is continuous across the joint,
+ * so the avatar reads as the tab of the sheet it opened (the switcher's
+ * glass, in two boxes). Keyed on the wrapper's slot as well as its layout
+ * so these rules outrank the rail's above without depending on order. */
+[data-slot="sidebar-wrapper"][data-layout="dock"] .root {
+  display: contents;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .trigger {
+  grid-area: 1 / 2;
+  width: auto;
+  height: 2.5rem;
+  margin-left: 0.5rem;
+  padding: 0.375rem;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] :is(.meta, .chevron) {
+  display: none;
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"]
+  .trigger[aria-expanded="true"] {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background-color: oklch(from var(--juni-needle-500) l c h / 0.6);
+  box-shadow: inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.55);
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .panel {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  border-radius: var(--radius-md) 0 var(--radius-md) var(--radius-md);
+  transition:
+    grid-template-rows 250ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .panel[data-expanded] {
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--juni-needle-500) l c h / 0.6),
+    oklch(from var(--juni-needle-500) l c h / 0.8)
+  );
+  box-shadow: inset 0 -1px 0 oklch(from var(--juni-berry-800) l c h / 0.15);
+}
+
+[data-slot="sidebar-wrapper"][data-layout="dock"] .panelContent {
+  padding: 0.5rem 0.25rem 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+
+  .panel[data-expanded] .panelInner {
+    transition: none;
+  }
+
+  [data-slot="sidebar"][data-state="collapsed"] .avatar {
+    transition: none;
+  }
+}
