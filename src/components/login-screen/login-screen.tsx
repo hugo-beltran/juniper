@@ -8,7 +8,7 @@ import {
 import { Form } from "react-aria-components"
 import { BackgroundNoise } from "@/components/background-noise/background-noise"
 import { Button } from "@/components/button/button"
-import { Card, CardFooter } from "@/components/card/card"
+import { CardFooter } from "@/components/card/card"
 import { ImageOverlay } from "@/components/image-overlay/image-overlay"
 import { Input } from "@/components/input/input"
 import { cn } from "@/lib/cn"
