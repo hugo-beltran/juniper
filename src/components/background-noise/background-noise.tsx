@@ -7,9 +7,9 @@ import styles from "./background-noise.module.css"
  * palette stays the only colour source). A background layer in the sense of
  * component-architecture §4.8: it takes no children and fills the positioned
  * container it is rendered into, behind the siblings that follow, so the
- * grain lands on the ground and never on the content. FullBleedCanvas
- * renders it over the photograph; any other positioned surface can do the
- * same. */
+ * grain lands on the ground and never on the content. The login route
+ * renders it after the ImageOverlay so the grain lands on the photograph;
+ * any positioned surface can do the same. */
 export function BackgroundNoise({
   className,
   ...props

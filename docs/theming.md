@@ -199,7 +199,8 @@ never by shadow.
   a busy background (a photograph): the shadows have nothing to cast on. A
   secondary takes its place there; the login's switches and nav link
   became secondaries for this reason the same day.
-- A card that floats on a ground (a Card on the FullBleedCanvas) MAY wear
+- A card that floats on a photographed ground (a Card in the login's
+  full-bleed region) MAY wear
   the **glass** variant: the primary button's pane on a surface, a radial
   fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
   specular line along the top edge, the translucent ring, and a

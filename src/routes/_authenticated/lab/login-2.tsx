@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/lab/login-2")({
  * form, a framed minimal sheet, a pale stage with a top bar, and the dark
  * pane itself with the hierarchy the references share. Built from the
  * registry's primitives on the real ground (ImageOverlay and BackgroundNoise
- * in a framed panel, the FullBleedCanvas's own arrangement at a frame's
+ * in a framed panel, the login's own arrangement of the layers at a frame's
  * height), so what is tweaked here is what ships. Decided 2026-09-25: C
  * (stage), now the login-screen registry entry and the /login route; A, B
  * and D stay here as the archive. Exploration mock, not a shipped
@@ -100,7 +100,7 @@ function Toggle<T extends string | number>({
   )
 }
 
-/* The ground: the two layers the FullBleedCanvas stacks, at the frame's
+/* The ground: the two layers the login route stacks, at the frame's
  * size. */
 function Ground({ clarity }: { clarity: "low" | "mid" | "high" }) {
   return (

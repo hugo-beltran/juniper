@@ -51,11 +51,10 @@ src/components/
   user-profile/                 the session at its foot, the same disclosure around the sidebar's rows
   users-table/                  demo composition: FilterBar + flat table
   background-noise/             background layer: film grain for a ground
-  full-bleed-canvas/            the ground for screens outside the shell: photograph, grain, credit
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
   image-overlay/                standalone background layer: fills its positioned container behind its siblings
-  login-screen/                 demo composition: the sign-in stage (bar, card, footer)
+  login-screen/                 demo composition: the sign-in card and its form
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -346,27 +345,24 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
-entry is the reference for a whole screen, in parts the route arranges on a
-ground the route composes (4.7.1): a `LoginBar` holding
-`LoginBrand` (the wordmark, sized and coloured by the part) and `LoginNav`
-(the visitor's actions as Buttons asChild around router Links), a `LoginCard`
-(the flat Card centred in the middle row; flat because the ground is flat, and
-the extruded controls read on bark-50) whose header the route fills from
-Card's own parts (a title at level 1, a lede), a `LoginForm` (the fields, a
-slotted help link and the actions, react-aria native validation, a controlled
-API of `onSignIn` with the credentials and nothing else) and a `LoginFooter`
-(one line), with the router kept in the route.
-One composition serves phone and desktop: the bar wraps, the wordmark shrinks
-and the card takes the width below 40rem of the `full-bleed` region the parts
-stand in. A demo entry MUST NOT
+entry is the sign-in card and its form, placed by the route on a ground the
+route composes (4.7.1) inside a page the route writes (4.7.2): a `LoginCard`
+(the glass Card; glass because the ground carries a photograph) whose header
+the route fills from Card's own parts (a title at level 1, a lede) and a
+`LoginForm` (the ways in, react-aria native validation, a controlled API of
+`onSignIn` with the credentials and nothing else), with the router kept in
+the route. One composition serves phone and desktop: the card takes the
+width with tighter padding below 40rem of the `full-bleed` region it stands
+in. A demo entry MUST NOT
 import the router or the mock data in `src/lib`; a route shell passes data,
 links and the brand in. The registry inlines source files, not assets, so the
 wordmark is an asset the route imports and nothing of it ships in the entry.
 The alternatives a shipped composition was chosen from stay under `/lab` as
 the archive (`/lab/login`, `/lab/login-2`, `/lab/glass`): the stage was chosen
 on 2026-09-25 over a photo panel beside the form, a framed sheet and a dark
-pane on the photograph. `FullBleedCanvas` and `ImageOverlay` remain the ground
-for a screen that wants the photograph.
+pane on the photograph. `ImageOverlay` and `BackgroundNoise`, laid by the
+route as the first children of its region, remain the ground for a screen
+that wants the photograph.
 
 4.7.1. **Composition over coupling: no stage component.** A reference
 composition exposes parts and never a wrapper that owns the screen around
@@ -376,8 +372,11 @@ named the container, was retired on 2026-10-01 for that reason: it bound four
 decisions that have nothing to do with one another (the ground's colour, the
 layers on it, the arrangement of the rows, the container the parts query)
 into one login-only element, so none of them could change without a prop or
-a second stage, and it re-stacked the two layers `FullBleedCanvas` already
-composes (4.8). The route now composes the screen from standalone pieces: a
+a second stage. `FullBleedCanvas`, the same wrapper without the rows (the two
+layers stacked and the content centred at the viewport's height), went the
+same day for the same reason: it made a screen choose a wrapper before it
+chose its parts, and the one thing it decided, the order of two layers, is
+DOM order (4.8). The route now composes the screen from standalone pieces: a
 `full-bleed` region (a global class in `global.css` for a screen outside the
 shell: the viewport's height, the page gutters, an inline-size container
 named `full-bleed`, and `flex: 1` so it fills the root column), the two
@@ -388,6 +387,21 @@ and decide their surroundings is coupling; the route arranging pieces that
 each stand alone is the composition the contract prefers, and a new demo
 entry MUST NOT add a `<Name>Stage`, `<Name>Screen` or `<Name>Shell` root.
 
+4.7.2. **A page is not a component.** The elements that make a page around
+its components (a bar with the wordmark and the visitor's actions, a footer
+line, the box that sizes a logo) are the page's own: plain elements the
+route writes, with a line of layout in the route's module when they need
+one, and never promoted to exported parts, because the project standardises
+components and not pages. `LoginBar`, `LoginBrand`, `LoginNav` and
+`LoginFooter` (2026-09-25) were retired on 2026-10-01 for this reason: each
+was a flex row or a paragraph with one page-specific job, and documenting
+them meant explaining a page. The test: when the only thing to say about an
+element is where it sits on one page, it belongs to that page. Two
+consequences: a demo entry documents what it ships (the login's card and
+form) and nothing around it; and a route carries no comment that walks
+through its layout, because a page that needs a paragraph to explain it has
+too many parts. Simplicity here is not having to explain the page at all.
+
 4.8. **Background layers are standalone.** A component that paints a ground
 (`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)
 takes no children and never assumes the viewport. It is absolutely positioned
@@ -396,16 +410,18 @@ positioned container, so the siblings that follow paint above it in DOM order
 (a layer with no controls of its own, the grain, also takes `z-index: -1`
 inside an isolating container, so nothing can land on top of content). The
 consumer owns the container, its position and its size, which is what lets the
-same layer ground a whole screen, a panel or a card. `FullBleedCanvas` is the
-composed ground for screens outside the shell: it renders the overlay and then
-the grain and decides their order itself (photograph at -2, grain at -1,
-content above), which a consumer never re-stacks. Two consequences for the
-consumer: narrow-layout container queries are declared on the consumer's
-container (a screen on the canvas queries `full-bleed-canvas`), not on the
-layer; and a layout that covers the whole ground lets pointer events through
-its bare areas so the layer's own controls (the credit link) stay reachable.
-Wrapping content in a background component, and painting a ground from route
-CSS, are the anti-patterns this rule replaces.
+same layer ground a whole screen, a panel or a card. There is no composed
+ground component: `FullBleedCanvas`, which stacked the overlay and the grain
+and centred the content, was retired on 2026-10-01 (4.7.1). The consumer lays
+the layers itself, in paint order, as the first children of its positioned,
+isolating container: the `ImageOverlay` first, the `BackgroundNoise` after it
+so the grain lands on the photograph, the content after both. Two
+consequences for the consumer: narrow-layout container queries are declared
+on the consumer's container (the login's parts query `full-bleed`), not on
+the layer; and a layout that covers the whole ground lets pointer events
+through its bare areas so the layer's own controls (the credit link) stay
+reachable. Wrapping content in a background component is the anti-pattern
+this rule replaces.
 
 4.9. **The session is a disclosure at the foot of the column.** The
 `UserProfile` shows who signed in (an `Avatar` with the photograph, the

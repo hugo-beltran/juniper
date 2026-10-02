@@ -1,27 +1,11 @@
 {
   "title": "Login screen",
-  "description": "The sign-in screen as the reference composition for a whole screen built from the contract: a stage (chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane), in parts the route arranges on a ground it composes itself: no stage component (retired 2026-10-01, composition over coupling), the route lays a full-bleed region with the ImageOverlay at low clarity and the BackgroundNoise as its first children and the parts after them. LoginBar holds LoginBrand (the wordmark) and LoginNav (the visitor's actions); LoginCard is the glass Card centred in the middle row, whose header the route fills from Card's own parts (a title, a lede); LoginForm is the two ways in on one panel (since 2026-10-01, after the PubDash sign-in): the hero Single sign-on button, an \"or\" rule, the two required Inputs, a slotted help link, the primary Sign in and a slotted footnote; LoginFooter is one line at the foot. One composition for phone and desktop, tightened below 40rem of the full-bleed region.",
+  "description": "The sign-in card and its form, the reference composition for a form on a card built from the contract (the stage chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane). LoginCard is the glass Card, whose header the route fills from Card's own parts (a title, a lede); LoginForm is the two ways in on one panel (since 2026-10-01, after the PubDash sign-in): the hero Single sign-on button, an \"or\" rule, the two required Inputs and the primary Sign in. Nothing around them is a part: the ground (a full-bleed region with the ImageOverlay and the BackgroundNoise), a bar, a footer are the page's own elements, written in the route (component-architecture §4.7.1, §4.7.2). The card takes the width below 40rem of the full-bleed region.",
   "category": "demo",
   "anatomy": [
     {
-      "part": "Ground",
-      "description": "Composed by the route, not a part: a section with the global full-bleed class (min-height 100svh, the page gutters, an inline-size container named full-bleed) holding ImageOverlay at low clarity and BackgroundNoise as its first children, then the login parts; the route's own module arranges the rows. There is no LoginStage (retired 2026-10-01): a wrapper that owned the ground, the layers, the rows and the container coupled four unrelated decisions into one login-only element (component-architecture §4.7.1)."
-    },
-    {
-      "part": "LoginBar",
-      "description": "A header with data-slot=\"login-bar\": a flex row, space-between, for LoginBrand on the left and LoginNav on the right."
-    },
-    {
-      "part": "LoginBrand",
-      "description": "A span with data-slot=\"login-brand\" that sizes the svg inside it (7.5rem wide, 5.5rem below 40rem) and colours it needle-900 through currentColor. The route imports the wordmark asset and drops it in."
-    },
-    {
-      "part": "LoginNav",
-      "description": "A nav with data-slot=\"login-nav\": a 0.5rem row for the visitor's actions, Buttons asChild around router Links (a secondary link and the one primary of the bar; secondary rather than discrete because the stage is a photograph, where a discrete button's lift has nothing to cast on)."
-    },
-    {
       "part": "LoginCard",
-      "description": "The house Card in glass (data-slot=\"card\", data-material=\"glass\"; chosen 2026-09-28 once the stage took the photograph), centred in the middle row: the width up to 26rem, 1.75rem 2rem padding (1.5rem 1.25rem below 40rem), the md radius, the bark-200 hairline at 60%. Its module gives the card's header 1.25rem below."
+      "description": "The house Card in glass (data-slot=\"card\", data-material=\"glass\"; chosen 2026-09-28 once the stage took the photograph), placed by the route: the width up to 26rem, 1.75rem 2rem padding (1.5rem 1.25rem below 40rem), the md radius, the bark-200 hairline at 60%. Its module gives the card's header 1.25rem below."
     },
     {
       "part": "CardHeader",
@@ -38,15 +22,11 @@
     {
       "part": "CardFooter",
       "description": "Under the Sign in button, only with a footnote: the footnote (a p at text-sm, bark-900, whose links are needle-800 and answer in bloom on hover)."
-    },
-    {
-      "part": "LoginFooter",
-      "description": "A p with data-slot=\"login-footer\": one centred line at text-sm, bloom-800, in the stage's last row (the copyright, a privacy link, the demo's disclaimer)."
     }
   ],
   "usage": [
-    "A reference composition, not a reusable primitive: copy the structure (a stage in three rows, a glass Card in the middle, the header from Card's parts, the form from Field-composed controls) rather than the components.",
-    "The route arranges: <section className={cn(styles.stage, \"full-bleed\")}><ImageOverlay clarity=\"low\" /><BackgroundNoise /><LoginBar><LoginBrand>…</LoginBrand><LoginNav>…</LoginNav></LoginBar><LoginCard><CardHeader>…</CardHeader><LoginForm … /></LoginCard><LoginFooter>…</LoginFooter></section>. The title, the lede, the bar's actions, the help link, the footnote and the footer are the route's words and links; the route's module arranges the rows and never touches the parts.",
+    "A reference composition, not a reusable primitive: copy the structure (a glass Card on a photographed ground, the header from Card's parts, the form from Field-composed controls) rather than the components.",
+    "The route arranges: <LoginCard><CardHeader><CardTitle level={1}>…</CardTitle><CardDescription>…</CardDescription></CardHeader><LoginForm … /></LoginCard>, placed inside a region the route owns, with the ImageOverlay at low clarity and the BackgroundNoise as that region's first children. The title and the lede are the route's words; the route's module centres the card and never touches the parts.",
     "Controlled: onSignIn({ email, password }) is all the form reports and the component never navigates; the route decides where a sign-in lands. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
     "Pass onSingleSignOn (no arguments) to render the hero Single sign-on button and the \"or\" rule above the fields; leave it out and the form is the credentials alone, with the email focused on load. Pass helpAction and footnote as nodes built from Button asChild and router Links so the router stays in the route.",
     "Add a third way in as another button above the divider, never as a panel: the form stayed one panel on purpose (2026-10-01), so every way in is on screen at once and the component needs no effect.",
@@ -54,7 +34,7 @@
     "Sign in stays disabled until both fields hold a value; beyond that, validation is react-aria's native behaviour: do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
     "The alternatives this was chosen from (a photo panel beside the form, a framed sheet, the dark pane) stay at /lab/login-2 as the archive; the first round at /lab/login.",
     "Few icons: the SSO button is words alone and the switches point with a typographic arrow in the label, not a chevron icon (component-architecture §3.10). Add an icon here only for a meaning the words do not carry.",
-    "Compose, do not couple: there is no stage component, and a copy of this screen MUST NOT add one. The ground, the layers, the rows and the container each stand alone in the route, so any one can change without a prop or a second wrapper (component-architecture §4.7.1)."
+    "Compose, do not couple, and do not standardise the page: there is no stage component and no bar, brand, nav or footer part. The ground and whatever page chrome a sign-in page wants (a wordmark, the visitor's actions, a footer line) are plain elements the route writes, styled from the route's own module when they need a line of layout (component-architecture §4.7.1, §4.7.2)."
   ],
   "docs": ["component-architecture", "theming"]
 }

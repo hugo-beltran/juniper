@@ -1,4 +1,4 @@
-import { type ComponentProps, type ReactNode, useState } from "react"
+import { type ReactNode, useState } from "react"
 import { Form } from "react-aria-components"
 import { Button } from "@/components/button/button"
 import { Card } from "@/components/card/card"
@@ -14,17 +14,12 @@ export interface LoginCredentials {
   password: string
 }
 
-/* The sign-in screen (chosen 2026-09-25 at /lab/login-2, C) in parts the
- * route arranges (component-architecture §4.1, §4.7) on a ground the route
- * composes itself: LoginBar with LoginBrand (the wordmark) and LoginNav (the
- * visitor's actions); LoginCard, the Card centred in the middle row, whose
- * header the route fills from Card's parts (a title, a lede); LoginForm, the
- * two ways in on one panel; and LoginFooter, one line at the foot. No stage
- * part (retired 2026-10-01, §4.7.1): a wrapper that owned the ground, the
- * layers, the rows and the container coupled four unrelated decisions into
- * one login-only element, so the route lays a full-bleed region with the
- * layers as its first children and these parts after them. Controlled: the
- * form reports the credentials and the route decides where a sign-in lands.
+/* The sign-in card and its form (the stage chosen 2026-09-25 at
+ * /lab/login-2, C): LoginCard, the glass Card whose header the route fills
+ * from Card's parts (a title, a lede), and LoginForm, the two ways in on one
+ * panel. Nothing around them is a part: the ground, a bar, a footer are the
+ * page's own elements (component-architecture §4.7.2). Controlled: the form
+ * reports the credentials and the route decides where a sign-in lands.
  *
  * One panel (since 2026-10-01, after the PubDash sign-in): the single
  * sign-on button first, an "or" rule, then the credentials, so both ways
@@ -38,36 +33,6 @@ export interface LoginFormProps {
   onSingleSignOn?: () => void
 }
 
-export function LoginBar({ className, ...props }: ComponentProps<"header">) {
-  return (
-    <header
-      data-slot="login-bar"
-      className={cn(styles.bar, className)}
-      {...props}
-    />
-  )
-}
-
-export function LoginBrand({ className, ...props }: ComponentProps<"span">) {
-  return (
-    <span
-      data-slot="login-brand"
-      className={cn(styles.brand, className)}
-      {...props}
-    />
-  )
-}
-
-export function LoginNav({ className, ...props }: ComponentProps<"nav">) {
-  return (
-    <nav
-      data-slot="login-nav"
-      className={cn(styles.nav, className)}
-      {...props}
-    />
-  )
-}
-
 export function LoginCard({
   children,
   className,
@@ -79,16 +44,6 @@ export function LoginCard({
     <Card material="glass" className={cn(styles.card, className)}>
       {children}
     </Card>
-  )
-}
-
-export function LoginFooter({ className, ...props }: ComponentProps<"p">) {
-  return (
-    <p
-      data-slot="login-footer"
-      className={cn(styles.siteFooter, className)}
-      {...props}
-    />
   )
 }
 

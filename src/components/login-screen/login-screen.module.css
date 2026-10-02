@@ -1,36 +1,10 @@
-/* The parts only. The ground they stand on (the full-bleed region, its
- * layers, the rows) is the route's composition, not a stage part
- * (component-architecture §4.7.1); the narrow rules below query the
- * `full-bleed` container the route provides. */
+/* The card and the form only. What surrounds them (the ground, a bar, a
+ * footer) is the page's own, written in the route (component-architecture
+ * §4.7.2); the narrow rule below queries the `full-bleed` container the
+ * route provides. */
 
-.bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* The wordmark, sized here so the route imports the asset and nothing else. */
-.brand {
-  display: inline-flex;
-  color: var(--juni-needle-900);
-}
-
-.brand svg {
-  width: 7.5rem;
-  height: auto;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* The card, centred in the middle row: the width but a floor of 26rem, the
- * house card with the larger radius and a softer hairline. */
+/* The card: the width but a ceiling of 26rem, the house card with the
+ * larger radius and a softer hairline. */
 .card {
   justify-self: center;
   align-self: center;
@@ -119,32 +93,9 @@
   text-underline-offset: 0.15em;
 }
 
-.siteFooter {
-  margin: 0;
-  text-align: center;
-  font-size: var(--text-sm);
-  line-height: 1.4;
-  color: var(--juni-bloom-800);
-  position: relative;
-}
-
-/* Narrow: the bar and its actions may wrap, the wordmark shrinks a step and
- * the card takes the width with tighter padding. Queried against the
- * full-bleed region the route composes. */
+/* Narrow: the card takes the width with tighter padding. Queried against
+ * the full-bleed region the route composes. */
 @container full-bleed (max-width: 40rem) {
-  .bar,
-  .nav {
-    flex-wrap: wrap;
-  }
-
-  .nav {
-    justify-content: flex-end;
-  }
-
-  .brand svg {
-    width: 5.5rem;
-  }
-
   .card {
     padding: 1.5rem 1.25rem;
   }

@@ -17,7 +17,7 @@
     }
   ],
   "usage": [
-    "Render it as the first child of a positioned container that isolates (position: relative; isolation: isolate); it fills that container and paints above its background and below its other children. FullBleedCanvas does this for the page ground, with the photograph pushed one layer deeper so the grain lands on it.",
+    "Render it as the first child of a positioned container that isolates (position: relative; isolation: isolate); it fills that container and paints above its background and below its other children. The login route does this for the page ground, rendering it after the ImageOverlay so the grain lands on the photograph; there is no composed ground component (component-architecture §4.7.1).",
     "It carries no colour: the filter is desaturated and the rect is near-transparent, so the palette stays the only colour source and the grain reads the same in light and dark.",
     "Strength is the rect's opacity (0.03); frequency and octaves set the grain's size. Change them here, never per consumer.",
     "Never render it above content: grain over text or controls is noise in the wrong sense. It is a ground treatment."

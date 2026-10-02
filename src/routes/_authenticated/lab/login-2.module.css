@@ -88,8 +88,8 @@
 }
 
 /* Frames — a viewport, clipped. Positioned and isolated so the ground's
- * layers stay inside: the FullBleedCanvas's own arrangement (the overlay
- * one step below the grain) at a frame's height instead of the viewport's. */
+ * layers stay inside: the login's own arrangement (the overlay, then the
+ * grain over it) at a frame's height instead of the viewport's. */
 .frame {
   position: relative;
   isolation: isolate;
