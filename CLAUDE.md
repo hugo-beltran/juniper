@@ -27,9 +27,10 @@ docs disagree, the docs win; fix this file.
    `--lift-highlight` / `--lift-shade`, inset when pressed
    (`docs/theming.md` §4.6). The primary button keeps its glass pane.
    Static surfaces stay flat; so may a text field on a photograph (Input's
-   `flat` variant), where the lift has nothing to cast on. Compare alternatives at `/lab/lift`. Hover,
-   focus and the focus ring (`--ring`) answer in bloom; selection answers
-   in needle (§4.4, §4.7). Never draw a green focus ring.
+   `flat` variant), where the lift has nothing to cast on. Compare alternatives at `/lab/lift`. Hover
+   answers in bloom; selection, the active state and the focus ring
+   (`--ring`, needle-600 at half alpha, 3px, flush) answer in needle
+   (§4.4, §4.7). Never emulate the ring with box-shadow or add an offset.
 5. Context lives in CSS, not in React. A component that must differ by
    where it sits (inside a glass card, on the sidebar, in a narrow inset)
    says so in CSS against data attributes, custom properties and container

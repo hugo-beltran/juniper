@@ -75,10 +75,13 @@ body {
   flex-direction: column;
 }
 
-/* Native focus outline over emulated box-shadow rings. */
+/* Native focus outline over emulated box-shadow rings: a 3px translucent
+ * ring flush with the control (no offset since 2026-10-01; theming §4.4).
+ * The ring overlaps the hairline rather than standing off it, so it reads
+ * as a glow around the control instead of a second line beside it. */
 :focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: 3px solid var(--ring);
+  outline-offset: 0;
 }
 
 /* Headings sit on the type scale rather than the UA defaults (h2 was 24px,

@@ -106,9 +106,13 @@
   /* Page canvas. (Dark stop was spruce-800; needle-900 is its closest match.) */
   --body: light-dark(var(--juni-bark-200), var(--juni-needle-900));
 
-  /* Focus ring for the global :focus-visible rule and proxy outlines.
-   * Bloom, never needle: focus is a pointer state (theming §4.4, §4.7). */
-  --ring: var(--juni-bloom-600);
+  /* Focus ring for the global :focus-visible rule and proxy outlines:
+   * needle-600 at half alpha, the Tailwind ring (0 0 0 3px, a 52% green at
+   * 50%) emulated from the palette's nearest step. Needle since 2026-10-01
+   * (bloom-600 before): focus is where you are, and joins the active state
+   * in needle; the translucency, not the hue, keeps it apart from a
+   * selected fill (theming §4.4). */
+  --ring: oklch(from var(--juni-needle-600) l c h / 0.5);
 
   /* Links — private base feeds both states. */
   --link-color: light-dark(
@@ -121,8 +125,9 @@
     oklch(from var(--link-color) calc(l + 0.25) 0.18 h)
   );
 
-  /* Nav — focus outline on the sidebar's dark needle surface; the same
-   * bloom decision as --ring, lifted to a step that clears needle-900. */
+  /* Nav — focus outline on the sidebar's dark needle surface, where a
+   * needle ring would vanish into the ground: bloom-400, the step that
+   * clears needle-900 (theming §4.4). */
   --nav-outline: var(--juni-bloom-400);
 
   /* Pastel needle for the hover state of an interactive element whose

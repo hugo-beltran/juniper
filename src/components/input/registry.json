@@ -13,7 +13,7 @@
     },
     {
       "part": "Box",
-      "description": "The react-aria Input: --control-fill and --control-hairline from the theme. Extruded: --lift-highlight up-left and --lift-shade down-right, further out on hover, inset while focused. Flat: no box-shadow in any state. Both: bloom hairline on hover and focus, the native focus ring, heartwood hairline while invalid. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
+      "description": "The react-aria Input: --control-fill from the theme, copy in needle-700 (2026-10-01; needle-950 before, too heavy in a box). Extruded: --control-hairline, --lift-highlight up-left and --lift-shade down-right, further out on hover, inset while focused. Flat: no box-shadow in any state and a pastel needle hairline (needle-500 at 75% lightness, a tenth of its chroma, 80%) in place of the neutral one, because the bark hairline vanishes on a ground. Both: bloom hairline on hover and focus, the native focus ring, heartwood hairline while invalid. The stack is a 0.25rem column. Sizes mini (1.75rem), small (2rem) and medium (2.5rem, default) mirror Button."
     }
   ],
   "usage": [
@@ -21,7 +21,7 @@
     "Use react-aria semantics: value and onChange (the string, not an event), isRequired, isInvalid, isDisabled, type, name and autoComplete pass straight through to TextField.",
     "Sizes mirror Button (mini, small, medium) so a field and a button share a row; forms use the default medium.",
     "variant=\"flat\" is for a field on a photograph or a busy ground (the login's form on its photographed ground), where the extruded lift reads as smudges because the shadows have nothing to cast on; the same reason keeps the discrete button off a photograph (theming §4.6). On the sheet and inside the shell's inset the field stays extruded: flat is an answer to the ground, never a style choice.",
-    "The box sinks (inset shadows) while focused and keeps the native bloom focus ring; never remove the outline or emulate it with box-shadow.",
+    "The box sinks (inset shadows) while focused and keeps the native focus ring (theming §4.4); never remove the outline or emulate it with box-shadow.",
     "For multi-line text use Textarea; for a fixed set of choices use Select. Route code composes these, it never styles a raw input."
   ],
   "docs": ["component-architecture", "theming"]

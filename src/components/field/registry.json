@@ -5,7 +5,7 @@
   "anatomy": [
     {
       "part": "FieldLabel",
-      "description": "react-aria Label with data-slot=\"field-label\". Variants: caption (uppercase, bark-500; the default) and title (sentence case, needle-950, for a field that heads its own card), mirrored as data-variant."
+      "description": "react-aria Label with data-slot=\"field-label\", inset 0.25rem at its inline start (2026-10-01) so its first letter sits over the box's text rather than its edge. Variants: caption (uppercase, bark-500; the default) and title (sentence case, needle-950, for a field that heads its own card), mirrored as data-variant."
     },
     {
       "part": "FieldDescription",
@@ -18,7 +18,7 @@
   ],
   "usage": [
     "Render these parts inside a react-aria field root (TextField, Select) so the label, description and error are associated automatically; never wire htmlFor or aria-describedby by hand.",
-    "Field owns type and colour only; the control that composes it owns the stack (flex column, 0.2rem gap) and the control box.",
+    "Field owns type and colour only; the control that composes it owns the stack (flex column; Input's is a 0.25rem gap) and the control box. A composition MAY recolour the label through the cascade where its ground asks for it (the login's form sets its labels bloom-800), never through a prop (component-architecture §3.9).",
     "Errors are the identity's only red: FieldError uses the heartwood ramp, and nothing else in a field may be red.",
     "Prefer passing label, description and errorMessage props to Input, Textarea or Select; reach for these parts directly only when building a new labelled control.",
     "Promotion precedent: three unrelated primitives needed the same chrome at once, which meets the rule of three, so Field was promoted on its first day rather than copied into each directory."

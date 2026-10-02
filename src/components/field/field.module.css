@@ -5,6 +5,7 @@
 .label {
   font-weight: 600;
   line-height: 1;
+  padding-inline-start: 0.25rem;
 }
 
 .caption {

@@ -133,12 +133,21 @@ is a conversation about the scale, not a new value in a component.
 
 4.4. Focus is the native outline drawn by the global `:focus-visible` rule
 with `--ring`. Components MUST NOT emulate focus rings with `box-shadow` and
-MUST NOT remove the outline. **The ring is bloom** (`--ring` = `bloom-600`
-on light surfaces, `--nav-outline` = `bloom-400` on the exposed green
-ground: the sidebar and the dock), not the brand green: focus is a pointer state (4.7), and a focused control MUST
-be distinguishable from a selected one at a glance. A component that has to
-draw the outline on a proxy element, because its real input is visually
-hidden (a switch track), MUST still use `--ring`. One exception: options
+MUST NOT remove the outline. **The ring is needle, translucent and flush**
+(since 2026-10-01; bloom-600, 2px, offset 2px before): `--ring` is
+needle-600 at half alpha, drawn 3px wide with no offset, the Tailwind ring
+(`0 0 0 3px` of a 52% green at 50%) emulated from the palette's nearest
+step. Focus is where you are, so it joins the active state in needle rather
+than the pointer's bloom; what keeps a focused control apart from a selected
+one is form, not hue: a soft ring around the control against a filled
+surface. The translucency is also what retires the offset: a solid ring had
+to stand off the hairline or read as a second line beside it, while a
+half-alpha ring overlaps the hairline and reads as a glow. On the exposed
+green ground (the sidebar and the dock) a needle ring would vanish, so
+`--nav-outline` stays `bloom-400`, the step that clears needle-900. A
+component that has to draw the outline on a proxy element, because its real
+input is visually hidden (a switch track), MUST still use `--ring`. One
+exception: options
 inside an open list (a Select's popover, a menu) draw no ring, because the
 bloom row wash (4.7) already marks the focused row and a ring on top of it
 is noise; the ring stays on the list's trigger.
@@ -199,9 +208,13 @@ never by shadow.
   cannot drift apart. Decided 2026-10-01 with the discrete's lift: the
   extruded recipe now says "touched", the pane's drop says "a button".
 - A text field on a photograph or a busy ground MAY be **flat**: Input's
-  `flat` variant (added 2026-10-01) keeps the control surface (fill and
-  hairline) and drops the lift in every state, hover and focus still
-  answering in bloom on the hairline and the focus ring the native outline.
+  `flat` variant (added 2026-10-01) keeps the fill from the control surface,
+  drops the lift in every state, and trades the neutral hairline for a
+  pastel needle one (needle-500 at 75% lightness and a tenth of its chroma,
+  at 80%), because the bark hairline that separates a box from the sheet
+  vanishes on a ground and the edge is then all that draws the field. Hover
+  and focus still answer in bloom on the hairline and the focus ring is the
+  native outline.
   The reason is the one that keeps the discrete button off a photograph:
   the lift is light cast on a surface, and on a photograph the shadows have
   nothing to cast on and read as smudges. Flat is an answer to the ground,
@@ -301,7 +314,8 @@ state stay in needle. The two states MUST NOT share a ramp, so "where you
 are" never blurs with "what is chosen"; when both land on one element,
 MIX the two washes rather than picking a third step:
 `color-mix(in oklch, var(--juni-needle-100), var(--juni-bloom-100))`. The
-focus ring is the same decision made visible: `--ring` is bloom (4.4).
+focus ring sits on the needle side of this line (4.4): focus is where you
+are, not what the pointer is touching.
 
 ## 5. SVG and charts
 

@@ -1,11 +1,11 @@
 {
   "title": "Login screen",
-  "description": "The sign-in standing on the ground, the reference composition for a form on a page built from the contract (the stage chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane; no card since 2026-10-01). Login is the centred column; LoginBrand is the lockup that heads it, a row the route fills with the logo and the wordmark as an h1 and styles from its own module; LoginForm is the two ways in on one panel (since 2026-10-01, after the PubDash sign-in): the hero Single sign-on button, an \"or\" rule, the two required Inputs and the primary Sign in. Nothing around them is a part: the ground (a full-bleed region with the ImageOverlay and the BackgroundNoise), a bar, a footer are the page's own elements, written in the route (component-architecture §4.7.1, §4.7.2). The column takes the width below 40rem of the full-bleed region.",
+  "description": "The sign-in standing on the ground, the reference composition for a form on a page built from the contract (the stage chosen 2026-09-25 at /lab/login-2 over a photo panel beside the form, a framed sheet and a dark pane; no card since 2026-10-01). Three parts that arrange and hold no state or copy: Login is the centred column; LoginBrand is the lockup that heads it, a row the route fills with the logo and the wordmark as an h1 and styles from its own module; LoginForm is a react-aria Form as a column slot the route fills with the ways in (the hero Single sign-on, an \"or\" rule, two flat Inputs and the primary Sign in). Nothing around them is a part: the ground (a full-bleed region with the ImageOverlay and the BackgroundNoise), the \"or\" rule, a bar, a footer are the page's own elements, written in the route (component-architecture §4.7.1, §4.7.2). The column takes the width below 40rem of the full-bleed region.",
   "category": "demo",
   "anatomy": [
     {
       "part": "Login",
-      "description": "Root div: the column, width 100% up to 26rem, centred by the route's region, position relative, no background, border or padding of its own. There is no card (since 2026-10-01): the glass Card the form sat in framed a form on an otherwise empty page, and a frame around the only thing on the page frames nothing."
+      "description": "Root div: the column, width 100% between 18rem and 30rem, flex-shrink 0 so the region's flex column never squeezes it, centred by the route's region, position relative, no background, border or padding of its own. There is no card (since 2026-10-01): the glass Card the form sat in framed a form on an otherwise empty page, and a frame around the only thing on the page frames nothing."
     },
     {
       "part": "LoginBrand",
@@ -13,24 +13,19 @@
     },
     {
       "part": "LoginForm",
-      "description": "react-aria Form with data-slot=\"login-form\", a 1rem column centred at 22rem, nothing but markup and two controlled strings: no effect, no ref, no measurement. The Sign in button is disabled until both fields hold a value (2026-10-01), so an empty submit cannot happen; native validation still checks the email's shape on submit and FieldError shows the message; onSubmit hands the credentials to the caller. With onSingleSignOn, the hero Single sign-on button and the divider come first; without it the email takes focus on load."
-    },
-    {
-      "part": "Divider",
-      "description": "A p with data-slot=\"login-divider\", only with onSingleSignOn: the word \"or\" as a caps eyebrow (text-xs, 600, 0.07em, bark-500) between two 1px bark-300 hairlines, read by assistive tech as the word it is."
+      "description": "react-aria Form with data-slot=\"login-form\": a 1.5rem column centred at 22rem that takes children and passes every FormProps through (onSubmit is the route's). It holds no state, no copy and no controls of its own (since 2026-10-01; the controlled credentials API and the disabled-until-filled submit went with the change): the route fills it with the ways in. Its labels answer in bloom-800 on the photographed ground, set by the form's module through the cascade and never by a prop (component-architecture §3.9). Validation is react-aria's native behaviour."
     }
   ],
   "usage": [
-    "A reference composition, not a reusable primitive: copy the structure (a centred column on a photographed ground, the brand lockup as the heading, the form from Field-composed controls) rather than the components.",
-    "The route arranges: <Login><LoginBrand><Logo className={styles.logo} /><h1 className={styles.title}>Brand</h1></LoginBrand><LoginForm … /></Login>, placed inside a region the route owns, with the ImageOverlay at low clarity and the BackgroundNoise as that region's first children. The logo and the wordmark are the route's, styled from the route's module; the parts never touch them.",
-    "Controlled: onSignIn({ email, password }) is all the form reports and the component never navigates; the route decides where a sign-in lands. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
-    "Pass onSingleSignOn (no arguments) to render the hero Single sign-on button and the \"or\" rule above the fields; leave it out and the form is the credentials alone, with the email focused on load. Pass helpAction and footnote as nodes built from Button asChild and router Links so the router stays in the route.",
-    "Add a third way in as another button above the divider, never as a panel: the form stayed one panel on purpose (2026-10-01), so every way in is on screen at once and the component needs no effect.",
-    "No card: the form stands on the ground, so the ground must carry it on its own (the photograph at low clarity, the grain at 5% since 2026-10-01, the tint the route paints). Nothing depends on the photograph loading: the ground under it is the overlay's own gradient.",
-    "Sign in stays disabled until both fields hold a value; beyond that, validation is react-aria's native behaviour: do not add noValidate or an attempted-submit flag. Messages come through errorMessage on each Input.",
+    "A reference composition, not a reusable primitive: copy the structure (a centred column on a photographed ground, the brand lockup as the heading, a Form slot filled with Field-composed controls) rather than the components.",
+    "The route arranges: <Login><LoginBrand><Logo /><h1>Brand</h1></LoginBrand><LoginForm onSubmit={…}><Button variant=\"hero\">Single sign-on</Button><p>or</p><Input variant=\"flat\" … /><Input variant=\"flat\" … /><Button type=\"submit\">Sign in</Button></LoginForm></Login>, inside a region the route owns with the ImageOverlay at low clarity and the BackgroundNoise as its first children. The brand, the \"or\" rule and every word are the route's, styled from the route's module; the parts only arrange.",
+    "The route decides where a sign-in lands and what the single sign-on does; the parts never navigate. Ask for nothing user-scoped before sign-in (workspaces, names, plans): the authenticated shell resolves those once it knows who signed in.",
+    "Add a third way in as another button above the \"or\" rule in the route, never as a panel: the form stays one panel (2026-10-01), so every way in is on screen at once and nothing slides, measures or re-focuses.",
+    "No card: the form stands on the ground, so the ground must carry it on its own (the photograph at low clarity, the grain at 5% since 2026-10-01, the tint the route paints) and the fields are flat (Input's variant for a ground, theming §4.6). Nothing depends on the photograph loading: the ground under it is the overlay's own gradient.",
+    "Validation is react-aria's native behaviour on the Form: isRequired and type on each Input, errorMessage for the copy; do not add noValidate or an attempted-submit flag.",
     "The alternatives this was chosen from (a photo panel beside the form, a framed sheet, the dark pane) stay at /lab/login-2 as the archive; the first round at /lab/login.",
-    "Few icons: the SSO button is words alone and the switches point with a typographic arrow in the label, not a chevron icon (component-architecture §3.10). Add an icon here only for a meaning the words do not carry.",
-    "Compose, do not couple, and do not standardise the page or the brand: there is no stage component, no card, and no bar, nav or footer part. The ground and whatever page chrome a sign-in page wants are plain elements the route writes; the brand's look is the route's too, styled from its module (component-architecture §4.7.1, §4.7.2; theming §1.6)."
+    "Few icons: the single sign-on button is words alone (component-architecture §3.10). Add an icon here only for a meaning the words do not carry.",
+    "Compose, do not couple, and do not standardise the page or the brand: there is no stage component, no card, and no bar, nav, divider or footer part. The ground and whatever page chrome a sign-in page wants are plain elements the route writes; the brand's look and the \"or\" rule are the route's too, styled from its module (component-architecture §4.7.1, §4.7.2; theming §1.6)."
   ],
   "docs": ["component-architecture", "theming"]
 }

@@ -347,11 +347,17 @@ screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
 entry is the sign-in standing on the ground, placed by the route on a ground
 the route composes (4.7.1) inside a page the route writes (4.7.2): a `Login`
-(the column, 26rem at most, centred), a `LoginBrand` (the lockup that heads
-it: a centred row the route fills with the logo and the wordmark as an
-`h1`) and a `LoginForm` (the ways in, react-aria native validation, a
-controlled API of `onSignIn` with the credentials and nothing else), with
-the router kept in the route. No card since 2026-10-01: the glass Card the
+(the column, 18 to 30rem, centred, never shrunk by the region), a
+`LoginBrand` (the lockup that heads it: a centred row the route fills with
+the logo and the wordmark as an `h1`) and a `LoginForm` (a react-aria `Form`
+as a column slot the route fills with the ways in: the hero Single sign-on,
+an "or" rule, the flat fields and Sign in), with the router kept in the
+route. The parts arrange and the page says: since 2026-10-01 the form holds
+no state and no copy, so the controlled credentials API, the submit held
+disabled until both fields were filled, and the comments that walked
+through the composition all went when the form became a slot. Validation is
+react-aria's native behaviour on the `Form`, and `onSubmit` is the route's,
+like every other decision about where a sign-in lands. No card since 2026-10-01: the glass Card the
 form sat in from 2026-09-28 framed a form on an otherwise empty page, and a
 frame around the only thing on the page frames nothing; the lockup over the
 form is what reads as the login, so the greeting and the lede the card's
@@ -408,9 +414,12 @@ standardises; the `LoginBrand` that replaced it arranges only (a centred
 row, the gap, the margin to the form) and takes the logo and the wordmark as
 children the route styles from its own module, with the asset imported by
 the route (4.7). Two consequences: a demo entry documents what it ships
-(the login's column, lockup and form) and nothing around it; and a route
-carries no comment that walks through its layout, because a page that needs
-a paragraph to explain it has too many parts. Simplicity here is not having
+(the login's column, lockup and form) and nothing around it, so the "or"
+rule between two ways in is the page's too, styled from the route's module;
+and neither the route nor the demo component carries a comment that walks
+through the layout, because a page that needs a paragraph to explain it has
+too many parts and a part that is a container has nothing to explain; the
+sidecar is where the composition is described. Simplicity here is not having
 to explain the page at all.
 
 4.8. **Background layers are standalone.** A component that paints a ground

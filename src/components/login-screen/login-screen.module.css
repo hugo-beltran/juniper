@@ -3,13 +3,15 @@
  * (component-architecture §4.7.2); the narrow rule below queries the
  * `full-bleed` container the route provides. */
 
-/* The column: the width but a ceiling of 26rem, centred, no frame (no card
- * since 2026-10-01). */
+/* The column: the width between 18rem and 30rem, never squeezed by the
+ * region's flex column, centred, no frame (no card since 2026-10-01). */
 .card {
   justify-self: center;
   align-self: center;
   width: 100%;
-  max-width: 26rem;
+  max-width: 30rem;
+  min-width: 18rem;
+  flex-shrink: 0;
   position: relative;
 }
 
@@ -25,13 +27,20 @@
   margin: 0.25rem auto 1.25rem;
 }
 
+/* The form slot: a column the route fills with the ways in. Its labels
+ * answer in bloom on the photographed ground, through the cascade
+ * (component-architecture §3.9), never a prop. */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   width: 100%;
   max-width: 22rem;
   margin: 0 auto;
+
+  & label {
+    color: var(--juni-bloom-800);
+  }
 }
 
 /* The "or" between the two ways in: a caps eyebrow between two hairlines,
