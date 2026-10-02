@@ -27,7 +27,7 @@ export const Route = createFileRoute("/_authenticated/lab/login-2")({
  * registry's primitives on the real ground (ImageOverlay and BackgroundNoise
  * in a framed panel, the login's own arrangement of the layers at a frame's
  * height), so what is tweaked here is what ships. Decided 2026-09-25: C
- * (stage), now the login-screen registry entry and the /login route; A, B
+ * (stage), now the login registry entry and the /login route; A, B
  * and D stay here as the archive. Exploration mock, not a shipped
  * component: the forms submit nowhere. */
 
@@ -305,7 +305,7 @@ function PaneMock({ frame }: { frame: Frame }) {
   return (
     <div className={cn(styles.frame, styles[frame])}>
       <Ground clarity="high" />
-      <Card material="dark-glass" className={cn(styles.pane, styles.dark)}>
+      <Card className={cn(styles.pane, styles.dark)}>
         <Mark className={styles.paneMark} aria-hidden />
         <Form>
           <div className={styles.head}>

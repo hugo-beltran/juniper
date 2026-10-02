@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { Form, type FormProps } from "react-aria-components"
-import styles from "./login-screen.module.css"
+import { cn } from "@/lib/cn"
+import styles from "./login.module.css"
 export interface LoginCredentials {
   email: string
   password: string
@@ -12,19 +13,24 @@ export interface LoginFormProps {
 }
 
 export function Login({ children }: { children: ReactNode }) {
-  return <div className={styles.card}>{children}</div>
+  return <div className={styles.login}>{children}</div>
 }
 
 export function LoginBrand({ children }: { children: ReactNode }) {
-  return <div className={styles.branding}>{children}</div>
+  return <div className={styles.brand}>{children}</div>
 }
 
 export function LoginForm({
   children,
+  className,
   ...props
 }: { children: ReactNode } & FormProps) {
   return (
-    <Form data-slot="login-form" className={styles.form} {...props}>
+    <Form
+      data-slot="login-form"
+      className={cn(styles.form, className)}
+      {...props}
+    >
       {children}
     </Form>
   )

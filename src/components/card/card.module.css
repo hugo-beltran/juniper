@@ -28,50 +28,8 @@
   border-color: var(--juni-bark-200);
 }
 
-/* Glass: a pane on a ground, lit by the primary button's lamp (theming
- * §4.6). The two glass materials share one recipe and differ only in the
- * ramp: a radial fill lit from beyond the top-left corner (50% there, 20%
- * at the far edge) over a 0.25rem backdrop blur so the ground shows
- * through, a hairline, a 1px specular line along the top edge, a 1px inner
- * ring, and a bloom-tinted drop at equal x and y offsets. Light glass takes
- * the fill from bark-50 into bark-100 with a bark-200 hairline and the
- * primary button's own needle-50 light; dark glass takes the fill from
- * bloom-900 into bloom-950 with a bloom-800 hairline and the light turned
- * down (needle-100 and needle-300 at low alpha) over a bloom-900 drop.
- * Chosen 2026-09-24 from /lab/glass (3 · pane); the baseline and the other
- * alternatives stay there as the archive. */
-.glass {
-  background: radial-gradient(
-    circle at 30% 20%,
-    oklch(from var(--juni-bark-50) l c h / 0.9) -20%,
-    oklch(from var(--juni-bark-100) l c h / 0.6) 80%
-  );
-  border-color: oklch(from var(--juni-bark-200) l c h / 0.2);
-  backdrop-filter: blur(0.5rem);
-  box-shadow:
-    inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.9),
-    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.3),
-    6px 6px 18px oklch(from var(--juni-bloom-700) l c h / 0.2);
-}
-
-.darkGlass {
-  background: radial-gradient(
-    circle at 30% 20%,
-    oklch(from var(--juni-bloom-900) l 10% h / 0.333) -20%,
-    oklch(from var(--juni-bloom-950) l 5% h / 0.6) 80%
-  );
-  border-color: oklch(from var(--juni-bloom-800) l 10% h / 0.75);
-  backdrop-filter: blur(0.25rem);
-  box-shadow:
-    inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.25),
-    inset 0 0 0 1px oklch(from var(--juni-needle-300) l c h / 0.1),
-    6px 6px 18px oklch(from var(--juni-bloom-900) l c h / 0.2);
-}
-
 /* Parts. Each owns its own type and colour; the consumer owns arrangement
- * (component-architecture §4.1). Set for the light surfaces (flat, glass);
- * under dark-glass the surface re-tunes them below (§3.9): the parts stay
- * unaware of where they sit. */
+ * (component-architecture §4.1). */
 
 .header {
   display: flex;
@@ -97,16 +55,6 @@
   line-height: 1.5;
   color: var(--juni-bark-700);
   text-align: center;
-}
-
-/* On dark glass the copy is light: needle-50 for the title, bark-100 for
- * the description. */
-.darkGlass .title {
-  color: var(--juni-needle-50);
-}
-
-.darkGlass .description {
-  color: var(--juni-bark-100);
 }
 
 .footer {

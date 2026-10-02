@@ -151,14 +151,6 @@
   --control-hairline: oklch(from var(--juni-bark-200) l c h / 0.75);
 }
 
-/* Inside glass the lift pair is re-tuned (theming §4.6): neutral highlight
- * at chroma 0, shade at half strength, because the needle tint reads green
- * through a translucent surface. :where keeps it at zero specificity. */
-:where([data-slot="card"][data-material="glass"]) {
-  --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.3);
-  --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.1);
-}
-
 :root ::selection {
   background-color: oklch(from var(--juni-needle-200) l c h / 0.65);
 }

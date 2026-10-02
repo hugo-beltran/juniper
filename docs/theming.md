@@ -50,6 +50,18 @@ or a brand, so the route's module MAY take palette steps, `light-dark()`
 and the type tokens for them. The exception covers the page around the
 components, never a component's job done over again in route CSS.
 
+1.7. **The surface owns its override.** A token re-tuned by context is set
+by the surface that is the context, in that surface's own module, at zero
+specificity (`:where()`) so it only sets the inherited value, and never
+from the theme or the control: the shell's inset sets `--ring` for what
+sits on it (4.4), and the ImageOverlay turns the lift off in the container
+that holds it, because the layer that makes a ground busy is what knows it
+(4.6), and the global `.glass` pane re-tunes the lift pair for the controls
+inside it (6.2). The theme holds one root value per
+token; a control reads its tokens and never asks where it is
+(component-architecture §3.9). Decided 2026-10-01 over the theme-level
+`:where()` rule and over a per-control variant.
+
 ## 2. Ramps carry one function each
 
 2.1. `--juni-needle-*` is the brand: primary actions, links, selection,
@@ -142,7 +154,14 @@ than the pointer's bloom; what keeps a focused control apart from a selected
 one is form, not hue: a soft ring around the control against a filled
 surface. The translucency is also what retires the offset: a solid ring had
 to stand off the hairline or read as a second line beside it, while a
-half-alpha ring overlaps the hairline and reads as a glow. On the exposed
+half-alpha ring overlaps the hairline and reads as a glow. The step
+answers the surface, and the surface sets it, never the control
+(component-architecture §3.9): the shell's inset re-tunes `--ring` in its
+own module to needle-300 at 85% for everything that sits on it, because on
+its pale sheet, among extruded controls, needle-600 at half alpha reads as
+a heavy line and the lighter, more opaque step reads as the same glow. The
+surface that knows what it is owns the override, so the theme keeps one
+root value and a ground such as the login's inherits it unchanged. On the exposed
 green ground (the sidebar and the dock) a needle ring would vanish, so
 `--nav-outline` stays `bloom-400`, the step that clears needle-900. A
 component that has to draw the outline on a proxy element, because its real
@@ -207,21 +226,23 @@ never by shadow.
   properties, so the two faces that share a row are lit by one lamp and
   cannot drift apart. Decided 2026-10-01 with the discrete's lift: the
   extruded recipe now says "touched", the pane's drop says "a button".
-- A text field on a photograph or a busy ground MAY be **flat**: Input's
-  `flat` variant (added 2026-10-01) keeps the fill from the control surface,
-  drops the lift in every state, and trades the neutral hairline for a
-  pastel needle one (needle-500 at 75% lightness and a tenth of its chroma,
-  at 80%), because the bark hairline that separates a box from the sheet
-  vanishes on a ground and the edge is then all that draws the field. Hover
-  and focus still answer in bloom on the hairline and the focus ring is the
-  native outline.
-  The reason is the one that keeps the discrete button off a photograph:
-  the lift is light cast on a surface, and on a photograph the shadows have
-  nothing to cast on and read as smudges. Flat is an answer to the ground,
-  never a style choice: on the sheet and inside the shell's inset a field
-  MUST stay extruded. The login's form, standing on its photographed
-  ground since 2026-10-01, is the case it was made for. Textarea and
-  Select have no flat variant until a ground asks for one.
+- On a **busy ground** the lift is turned off by the ground, not chosen
+  by the control. The lift is light cast on a surface, and on a photograph
+  the shadows have nothing to cast on and read as smudges, the reason that
+  keeps the discrete button off a photograph. So the `ImageOverlay`'s
+  module sets, on any container that holds the layer as a direct child
+  (`:where(:has(> .container))`), the lift pair to its own steps at zero
+  alpha and `--control-hairline` to a pastel needle hairline (needle-500 at
+  75% lightness and a tenth of its chroma, at 80%), because the bark
+  hairline that separates a box from the sheet vanishes on a ground and the
+  edge is then all that draws a field. Every neutral control on it goes
+  flat at once through the tokens it already reads, hover and focus still
+  answering in bloom on the hairline and the focus ring the native outline;
+  no control carries a flat variant (Input's `flat` of earlier the same day
+  was removed for this, 1.7). A busy ground without the overlay (a tenant's
+  own hero image) sets the same three tokens in its own module. On the
+  sheet and inside the shell's inset nothing re-tunes them, so a field
+  there is extruded by default and MUST NOT be flattened by hand.
 - The discrete button is the one neutral trigger with no volume at rest: it
   is inline text until touched. On hover it MUST take the extruded recipe
   with no fill, the copy answering in bloom (4.7), and when pressed or open
@@ -233,18 +254,20 @@ never by shadow.
   a busy background (a photograph): the shadows have nothing to cast on. A
   secondary takes its place there; the login's switches and nav link
   became secondaries for this reason the same day.
-- A card that floats on a photographed ground (a Card on the login's
-  ground from 2026-09-28 to 2026-10-01, when the form took the ground
-  without a frame) MAY wear
-  the **glass** variant: the primary button's pane on a surface, a radial
-  fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
-  specular line along the top edge, the translucent ring, and a
-  bloom-tinted drop at equal x and y offsets, so card and button are lit by
-  one lamp. The same pane comes in the dark ramp as **dark-glass**
-  (bloom-900 into bloom-950, the light turned down) for a card whose copy
-  is light; its title and description are re-tuned to the light ramp by
-  the surface, not the consumer (component-architecture §3.9). The dark ramp
-  gives the Button its **hero** variant too (né rich, then inverse, renamed
+- The Card has two materials and both are static, so both are flat:
+  **flat**, the default and the only page surface, and **dotted** (added
+  2026-10-01), the flat sheet under a bark-300 dot grid on a 1rem pitch,
+  the drafting sheet a catalogue stage is made of, where a component is
+  shown at no particular place. The **glass** and **dark-glass** panes
+  (the primary button's pane on a surface, chosen 2026-09-24 at `/lab/glass`
+  over a lighter baseline, a deeper extrusion, a pressed well and an
+  edge-lit rim) were retired on 2026-10-01: their one product consumer, the
+  login's card, went that morning when the form took the ground, and a
+  material no screen wears is a promise the contract cannot keep. The light
+  pane lives on as the global `.glass` class (6.2) for any element, because
+  a pane is a surface treatment and not a card; the dark pane stays only
+  in the `/lab/login-2` archive, painted by that module.
+- The Button's **hero** variant is the primary's pane in the dark ramp (né rich, then inverse, renamed
   2026-10-01: the name carries the rule below, that a page has one hero,
   rather than the colour): the primary's pane from bloom-800 into bloom-900 with
   needle-50 copy, for a light sheet where the green pane would shout. It
@@ -256,14 +279,6 @@ never by shadow.
   hero pane already covers the call to action on a sign-in surface.
   Every variant, size and state is compared on every surface at
   `/components/buttons` in the demo app.
-  A **dotted** material (added 2026-10-01) is the flat sheet under a
-  bark-300 dot grid on a 1rem pitch: the drafting sheet a catalogue stage
-  is made of, where a component is shown at no particular place. It is
-  static, so it stays flat.
-  Flat stays the default and the only material for a card inside the
-  shell's inset, and for a card on a flat ground  Chosen on 2026-09-24 at `/lab/glass` over a lighter
-  baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
-  stay there as the archive.
 - The primary action keeps its own material: the chromatic **glass pane**
   (radial fill lit off-center, 1px translucent inner ring, bloom-tinted
   drop shadow with equal x/y offset, press flips the light and pulls the
@@ -283,15 +298,8 @@ never by shadow.
   `--lift-shade` take the primary button's own light: its needle-50 inner
   ring and its bloom-700 drop shadow, so every control is lit by the same
   lamp (the highlight lifts lightness and alpha to stay visible on
-  bark-50). Inside a glass card the highlight is re-tuned by the theme, not
-  by the controls: a `:where()` rule on the glass surface (zero specificity,
-  so it only sets the inherited tokens) makes `--lift-highlight` a neutral,
-  quieter glow (bark-50 at chroma 0, 30%) and halves `--lift-shade`
-  (bloom-700 at 10%), because the needle tint reads green and loud through
-  a translucent surface over the ground and the full shade too heavy on
-  it. Do not introduce a third material. The chosen recipe and
-  the five rejected alternatives are archived at `/lab/lift` in the demo
-  app.
+  bark-50). The chosen recipe and the five rejected alternatives are
+  archived at `/lab/lift` in the demo app.
 
 4.7. **Pointer colour.** Hover and keyboard focus on a neutral control
 answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
@@ -307,7 +315,7 @@ and the hover shows it approaching; the bloom-300 track before it is
 retired. The token is for the hover state of an interactive element whose
 selected state is needle, and nothing else. A wash on a
 control that can land on more than one surface (a trigger on the sheet and
-inside a glass card) MUST be a translucent derivation of a mid step, which
+on a photographed ground) MUST be a translucent derivation of a mid step, which
 keeps its contrast wherever it lands; the opaque tint
 is for rows inside an opaque list. Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you
@@ -331,6 +339,19 @@ hidden content that stays in the accessibility tree. Use `.sr-only` for
 icon-only labels and table captions; use `.sr-only-focusable` for anything
 that can receive focus, such as a skip link. Never apply plain `.sr-only` to
 a focusable element.
+
+6.2. `.glass` is the glass pane as a global class (since 2026-10-01; the
+Card's glass material from 2026-09-24 until then), for any element that
+floats on a photographed ground: the primary button's light on a surface, a
+radial fill from bark-50 into bark-100 lit from beyond the top-left corner
+over a backdrop blur, a bark-200 hairline at 20%, a needle-50 specular top
+edge and inner ring, and a bloom-tinted drop at equal offsets, with the
+house radius; padding is the element's own. It became a class rather than
+a material because a pane is a surface treatment, not a card, and the
+project will not be made of cards. It carries its own lift re-tuning (4.6,
+1.7) so the controls inside it stay lit by one lamp. Use it on a
+photographed ground only, never on the sheet or inside the shell's inset;
+the alternatives it was chosen over stay at `/lab/glass`.
 
 ## Conformance
 

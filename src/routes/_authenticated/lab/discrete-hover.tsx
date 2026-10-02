@@ -130,7 +130,7 @@ function Surfaces({ alt }: { alt: Alternative }) {
       <div className={styles.cell}>
         <div className={styles.frame}>
           <ImageOverlay />
-          <Card material="glass" className={styles.pane}>
+          <Card className={cn("glass", styles.pane)}>
             <Pair alt={alt} />
           </Card>
         </div>

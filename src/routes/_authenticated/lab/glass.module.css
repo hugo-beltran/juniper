@@ -44,6 +44,9 @@
   overflow: hidden;
 }
 
+/* The sample: a flat Card wearing the global .glass pane (theming §6.2),
+ * which 3 · pane shows as is; the alternatives below override it at a
+ * higher specificity. */
 .sample {
   display: flex;
   flex-direction: column;

@@ -26,17 +26,21 @@ docs disagree, the docs win; fix this file.
 4. Interactive controls carry volume: the extruded recipe from
    `--lift-highlight` / `--lift-shade`, inset when pressed
    (`docs/theming.md` §4.6). The primary button keeps its glass pane.
-   Static surfaces stay flat; so may a text field on a photograph (Input's
-   `flat` variant), where the lift has nothing to cast on. Compare alternatives at `/lab/lift`. Hover
+   Static surfaces stay flat; a surface that floats on a photograph wears
+   the global `.glass` class (§6.2). On a busy ground the ground turns the lift
+   off through the tokens (the ImageOverlay's module does it for its
+   container); no control has a flat variant. Compare alternatives at `/lab/lift`. Hover
    answers in bloom; selection, the active state and the focus ring
    (`--ring`, needle-600 at half alpha, 3px, flush) answer in needle
    (§4.4, §4.7). Never emulate the ring with box-shadow or add an offset.
 5. Context lives in CSS, not in React. A component that must differ by
-   where it sits (inside a glass card, on the sidebar, in a narrow inset)
+   where it sits (on a photographed ground, on the sidebar, in a narrow inset)
    says so in CSS against data attributes, custom properties and container
    queries, never with a prop, a context or a render branch. The virtual
    DOM stays one tree; the cascade specialises
-   (`docs/component-architecture.md` §3.9).
+   (`docs/component-architecture.md` §3.9). A token re-tuned by context is
+   set by the surface that is the context, in its own module, never from
+   the theme (`docs/theming.md` §1.7).
 6. Every component exported from `src/components/index.ts` MUST carry a
    `registry.json` sidecar (title, description, category, anatomy, usage,
    docs). Directories not in the barrel are private and need none. The

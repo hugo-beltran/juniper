@@ -66,6 +66,12 @@
    * it and are ignored where scrollbar-color applies. */
   scrollbar-width: thin;
   scrollbar-color: var(--juni-bark-300) transparent;
+
+  /* The inset re-tunes the focus ring for everything on it (theming §4.4):
+   * needle-300 at 85% in place of the root's needle-600 at half alpha,
+   * which reads as a heavy line on this pale sheet among extruded
+   * controls. The surface knows what it is, so the surface sets it. */
+  --ring: oklch(from var(--juni-needle-300) l c h / 0.85);
 }
 
 .inset:hover {

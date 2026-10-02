@@ -54,7 +54,7 @@ src/components/
   card/                         surface container with header, title, description, footer parts
   page/                         PageHeader, PageTitle, PageDescription: a route's title and intro
   image-overlay/                standalone background layer: fills its positioned container behind its siblings
-  login-screen/                 demo composition: the sign-in card and its form
+  login/                        demo composition: the sign-in column, lockup and form
   summary-card/
     summary-card.tsx
     summary-card.module.css
@@ -137,7 +137,7 @@ const buttonVariants = cva(styles.button, {
 and consumer overrides. A CVA axis that is not a role is named for what it
 is and mirrored under that name: `Card` picks what the surface is made of,
 so its axis is `material`, mirrored as `data-material` (renamed from
-`variant` on 2026-09-28); the theme's glass re-tune keys on it (3.9).
+`variant` on 2026-09-28); consumer CSS keys on it (3.9).
 
 3.5. Use react-aria semantics: `onPress` not `onClick`, `isDisabled` not
 `disabled`, `isSelected`, `selectedKeys`. State styling in CSS MUST use the
@@ -163,18 +163,18 @@ default), so a field and a button placed on one row at the same size name
 align without consumer CSS.
 
 3.9. **Context lives in CSS, not in React.** When a component must look or
-behave differently because of where it sits (inside a glass card, on the
-dark sidebar, in a narrow inset, while hovered by a pointer), the rule MUST
+behave differently because of where it sits (on a photographed ground, on
+the dark sidebar, in a narrow inset, while hovered by a pointer), the rule MUST
 be expressed in CSS against the context's data attributes, custom
 properties and container queries, never as a prop threaded down, a context
 read, or a branch in the render. The virtual DOM stays one tree of the
 same elements everywhere; the cascade does the specialising. The cost of
 the alternative is real: a `variant` prop for every surface a control can
 land on, providers for every ancestor that matters, and a render that
-re-runs to change a shadow. Precedents: the theme re-tunes
-`--lift-highlight` for every control inside a glass card through a
-`:where([data-slot="card"][data-material="glass"])` rule, at zero
-specificity, and no control knows it happened; `ListBox` styles its rows
+re-runs to change a shadow. Precedents: the `ImageOverlay`'s module turns
+the lift off for every control in the container that holds it through a
+`:where(:has(> .container))` rule, at zero specificity, and no control
+knows it happened (theming §1.7); `ListBox` styles its rows
 through the root's `data-variant` so items take no prop; the sidebar
 inset publishes `data-narrow` and consumers query it; hover for a slotted
 link is `:not([data-rac]):hover`, not a wrapper; the `UserProfile` is one
@@ -344,7 +344,7 @@ leads table is the reference.
 
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
-consumer copies the structure rather than the component. The `login-screen`
+consumer copies the structure rather than the component. The `login`
 entry is the sign-in standing on the ground, placed by the route on a ground
 the route composes (4.7.1) inside a page the route writes (4.7.2): a `Login`
 (the column, 18 to 30rem, centred, never shrunk by the region), a
@@ -441,7 +441,10 @@ on the consumer's container (the login's parts query `full-bleed`), not on
 the layer; and a layout that covers the whole ground lets pointer events
 through its bare areas so the layer's own controls (the credit link) stay
 reachable. Wrapping content in a background component is the anti-pattern
-this rule replaces.
+this rule replaces. A layer that makes a ground busy also owns what that
+does to the controls on it: the `ImageOverlay`'s module turns the lift off
+and re-tunes the hairline in the container that holds it (theming §1.7,
+§4.6), so a field on a photograph goes flat with no prop and no variant.
 
 4.9. **The session is a disclosure at the foot of the column.** The
 `UserProfile` shows who signed in (an `Avatar` with the photograph, the

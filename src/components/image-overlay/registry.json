@@ -5,7 +5,7 @@
   "anatomy": [
     {
       "part": "ImageOverlay",
-      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the bark-100 to needle-400 gradient (needle reached at 150%, so the ground stays pale; retuned 2026-09-28 from needle-400 into needle-700), isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together; `clarity` (low | mid | high, mid by default) sets how much of it shows. No children."
+      "description": "Root div with data-slot=\"image-overlay\": absolute, inset 0, width and height 100%, the bark-100 to needle-400 gradient (needle reached at 150%, so the ground stays pale; retuned 2026-09-28 from needle-400 into needle-700), isolated, an inline-size container named image-overlay, a flex box whose alignment (align-items end) seats the credit at the bottom-left. Accepts div props; `image` ({ url, creditHref, caption }) swaps the photograph and its credit together; `clarity` (low | mid | high, mid by default) sets how much of it shows. No children. Its module also sets, on any container holding it as a direct child, the lift pair at zero alpha and --control-hairline to pastel needle, so every neutral control on the ground is flat (theming §1.7, §4.6)."
     },
     {
       "part": "Image",
@@ -18,6 +18,7 @@
   ],
   "usage": [
     "A background, not a wrapper: it takes no children. Render it as the first child of a positioned container (position: relative or absolute) and put the content after it; it fills the container's full width and height and the later siblings paint above it in DOM order.",
+    "It makes the ground busy and owns what that means for controls: the container holding it gets the lift turned off and a pastel needle hairline through the tokens, so an Input, Textarea or Select on it is flat with no prop (theming §4.6). The surface owns the override (§1.7); a busy ground without this layer sets the same three tokens in its own module.",
     "It never assumes the viewport. The consumer owns the container, its position and its size: a full screen (min-height 100svh, as the login screen does), a card or a panel all work the same way.",
     "Query narrow layouts against the consumer's container, not the overlay: declare container-type inline-size on the positioned container and write the queries on its children.",
     "A sibling layout that covers the whole ground must give its bare areas pointer-events: none (and its columns pointer-events: auto), or the credit link beneath cannot be clicked.",

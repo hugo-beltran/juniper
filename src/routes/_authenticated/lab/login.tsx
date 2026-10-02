@@ -33,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/lab/login")({
  * needle green the shell stands on and work happens on a bark-50 card; the
  * extruded controls only read on bark-50, so the form always lands on the
 ` * card and the brand takes the ground. Decided 2026-09-23: B (ground), now
- * shipped as the login-screen registry entry and the /login route; A and C
+ * shipped as the login registry entry and the /login route; A and C
  * stay here as the rejected alternatives. Exploration mock, not a shipped
  * component: the form submits nowhere. The Workspace select these mocks
  * still show left the shipped login on 2026-09-24: which workspaces a user

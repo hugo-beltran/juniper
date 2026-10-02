@@ -449,6 +449,23 @@
   color: var(--juni-needle-50);
 }
 
+/* The dark pane: the dark-glass recipe that was a Card material from
+ * 2026-09-28 to 2026-10-01, painted here over a flat Card since its
+ * retirement. */
+.dark {
+  background: radial-gradient(
+    circle at 30% 20%,
+    oklch(from var(--juni-bloom-900) l 10% h / 0.333) -20%,
+    oklch(from var(--juni-bloom-950) l 5% h / 0.6) 80%
+  );
+  border-color: oklch(from var(--juni-bloom-800) l 10% h / 0.75);
+  backdrop-filter: blur(0.25rem);
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-100) l c h / 0.25),
+    inset 0 0 0 1px oklch(from var(--juni-needle-300) l c h / 0.1),
+    6px 6px 18px oklch(from var(--juni-bloom-900) l c h / 0.2);
+}
+
 .dark .title {
   color: var(--juni-needle-50);
 }

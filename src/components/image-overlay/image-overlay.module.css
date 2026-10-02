@@ -84,3 +84,16 @@
 .credit a:focus-visible {
   outline-color: var(--nav-outline);
 }
+
+/* The ground this layer makes is busy. A photograph gives the lift nothing
+ * to cast on, so the container that holds this layer turns the lift off for
+ * every control on it and swaps the neutral hairline for a pastel needle
+ * one, the edge being all that draws a field there (theming §4.6). The
+ * surface owns the override (§1.7): the layer that makes the ground busy
+ * sets it, at zero specificity, and the controls read their tokens as
+ * ever; no control carries a flat variant. */
+:where(:has(> .container)) {
+  --lift-highlight: oklch(from var(--juni-bark-50) l c h / 0);
+  --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0);
+  --control-hairline: oklch(from var(--juni-needle-500) 75% 10% h / 0.8);
+}

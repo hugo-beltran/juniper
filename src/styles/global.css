@@ -165,3 +165,37 @@ pre {
   width: 100%;
   padding: 1.25rem 2rem 1rem;
 }
+
+/* The glass pane as a global class, for any element that floats on a
+ * photographed ground (theming §6.2; the Card's glass material until
+ * 2026-10-01, when it became this because a pane is a surface treatment
+ * and not a card): the primary button's light on a surface, a radial fill
+ * from bark-50 into bark-100 lit from beyond the top-left corner over a
+ * backdrop blur, a bark-200 hairline at 20%, a 1px needle-50 specular line
+ * along the top edge, a 1px needle-50 inner ring and a bloom-tinted drop
+ * at equal offsets. The house radius; padding is the consumer's. Chosen
+ * 2026-09-24 at /lab/glass, where the alternatives stay. */
+.glass {
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(
+    circle at 30% 20%,
+    oklch(from var(--juni-bark-50) l c h / 0.9) -20%,
+    oklch(from var(--juni-bark-100) l c h / 0.6) 80%
+  );
+  border-color: oklch(from var(--juni-bark-200) l c h / 0.2);
+  backdrop-filter: blur(0.5rem);
+  box-shadow:
+    inset 0 1px 0 oklch(from var(--juni-needle-50) l c h / 0.9),
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.3),
+    6px 6px 18px oklch(from var(--juni-bloom-700) l c h / 0.2);
+}
+
+/* Inside glass the lift pair is re-tuned (theming §4.6): the needle tint
+ * reads green and loud through a translucent surface and the full shade
+ * too heavy, so the highlight goes neutral and quieter and the shade is
+ * halved. The surface owns the override (§1.7), at zero specificity. */
+:where(.glass) {
+  --lift-highlight: oklch(from var(--juni-bark-50) calc(l + 0.03) 0 h / 0.3);
+  --lift-shade: oklch(from var(--juni-bloom-700) l c h / 0.1);
+}

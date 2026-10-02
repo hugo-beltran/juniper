@@ -44,7 +44,6 @@ function LoginPage() {
             label="Email"
             name="email"
             type="email"
-            variant="flat"
             autoComplete="username"
             placeholder="you@club.example"
             value={email}
@@ -56,7 +55,6 @@ function LoginPage() {
             label="Password"
             name="password"
             type="password"
-            variant="flat"
             autoComplete="current-password"
             value={password}
             onChange={(value) => setPassword(value)}

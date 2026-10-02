@@ -1,11 +1,11 @@
 {
   "title": "Card",
-  "description": "Generic surface container with the shadcn Card's named parts: CardHeader stacks a centred CardTitle (react-aria Heading, level picks the element; display-md, bloom-800) over a centred CardDescription, and CardFooter rows up the actions. Four materials by the material prop (mirrored as data-material): flat (default), the bark-50 sheet with a bark-200 hairline; dotted, the same sheet under a bark-300 dot grid, a stage for a component shown at no particular place; glass and dark-glass, for a card floating on a ground: the primary button's pane on a surface, a radial fill lit from beyond the top-left corner over a backdrop blur, a specular top edge, an inner ring and a bloom-tinted drop, in the light ramp (bark-50 into bark-100) or the dark one (bloom-900 into bloom-950).",
+  "description": "Generic surface container with the shadcn Card's named parts: CardHeader stacks a centred CardTitle (react-aria Heading, level picks the element; display-md, bloom-800) over a centred CardDescription, and CardFooter rows up the actions. Two materials by the material prop (mirrored as data-material): flat (default), the bark-50 sheet with a bark-200 hairline; dotted, the same sheet under a bark-300 dot grid, a stage for a component shown at no particular place. Static surfaces, so both stay flat and separate by border and tint, never by shadow. The glass and dark-glass panes (2026-09-24) were retired on 2026-10-01 with no product consumer; the light pane is the global .glass class for any element (theming §6.2), the dark one stays in the /lab/login-2 archive.",
   "category": "layout",
   "anatomy": [
     {
       "part": "Card",
-      "description": "A div with data-slot=\"card\" and data-material. flat: bark-50 surface, bark-200 hairline border, the house radius. dotted: the flat sheet with a bark-300 dot grid on a 1rem pitch, centred. glass: a radial fill of bark-50 into bark-100 lit from beyond the top-left corner (75% there, 50% at the edge, raised from 50/20 on 2026-09-28 so copy stays legible on a photograph) over a 0.25rem backdrop blur, a bark-200 hairline at 20%, a 1px needle-50 specular line along the top edge, a 1px needle-50 inner ring, and a 6px/6px 18px bloom-700 drop at 20%. dark-glass: the same recipe from bloom-900 into bloom-950, a bloom-800 hairline, the light turned down (needle-100 at 25% and needle-300 at 10%) over a bloom-900 drop. Accepts any div props and a className to extend."
+      "description": "A div with data-slot=\"card\" and data-material. flat: bark-50 surface, bark-200 hairline border, the house radius. dotted: the flat sheet with a bark-300 dot grid on a 1rem pitch, centred. Accepts any div props and a className to extend."
     },
     {
       "part": "CardHeader",
@@ -13,11 +13,11 @@
     },
     {
       "part": "CardTitle",
-      "description": "react-aria Heading with data-slot=\"card-title\": display-md in the display face, weight 700, bloom-800 (needle-50 under dark-glass), centred and balanced (text-wrap: balance). `level` picks the element (h2 by default; a card that is the page's main content passes 1)."
+      "description": "react-aria Heading with data-slot=\"card-title\": display-md in the display face, weight 700, bloom-800, centred and balanced (text-wrap: balance). `level` picks the element (h2 by default; a card that is the page's main content passes 1)."
     },
     {
       "part": "CardDescription",
-      "description": "A p with data-slot=\"card-description\": text-base, bark-700 (bark-100 under dark-glass), centred, the muted intro under a title."
+      "description": "A p with data-slot=\"card-description\": text-base, bark-700, centred, the muted intro under a title."
     },
     {
       "part": "CardFooter",
@@ -26,15 +26,12 @@
   ],
   "usage": [
     "Compose content inside; Card owns only the surface, border and radius, never padding conventions of its children.",
-    "The axis is material, not variant: what the surface is made of (flat, dotted, glass, dark-glass), mirrored as data-material for the theme and consumer CSS. A rule that keys on the card's surface selects [data-slot=\"card\"][data-material=\"glass\"].",
-    "Pick the material by placement: flat inside the shell's inset, where a card separates by border and tint; glass or dark-glass only for a card that floats on a photographed ground (a full-bleed region where the route lays the ImageOverlay), where the photograph should show through: light glass where the copy on it is dark, dark glass where the copy is light. Never glass on a flat page. dotted is for a stage that shows a component at no particular place (the Components catalogue at /components/buttons); it is not a page surface.",
-    "The glass recipe is the pane chosen at /lab/glass on 2026-09-24 (the primary button's light on a surface); the baseline and the three other alternatives stay there as the archive. A change to the recipe is made there first, then here.",
-    "Controls inside a glass card keep the extruded recipe, but the theme re-tunes both lift tokens for them (a :where() rule on the glass surface: the highlight a neutral bark-50 at chroma 0 and 30%, the shade bloom-700 at 10%) because the needle tint reads green through the translucent surface and the full shade too heavy. Nothing to do in a consumer; never override the token per control.",
+    "The axis is material, not variant: what the surface is made of (flat, dotted), mirrored as data-material for consumer CSS. A rule that keys on the card's surface selects [data-slot=\"card\"][data-material=\"dotted\"].",
+    "Pick the material by placement: flat everywhere a card sits on the sheet or inside the shell's inset, where a card separates by border and tint; dotted only for a stage that shows a component at no particular place (the Components catalogue at /components/buttons), never as a page surface. There is no material for a card on a photograph: the product has no such card since the login's form took the ground (2026-10-01), and the glass and dark-glass panes went with it (theming §4.6). A card on a photograph wears the global .glass class like any other element (theming §6.2).",
     "Prefer extending Card over drawing a bordered box in a route or feature module.",
     "A card's title and intro are CardTitle and CardDescription inside CardHeader; never restate their size or colour in route CSS (theming §1.6).",
     "CardContent is deliberately not ported: Card already pads. Put the body straight inside Card between the header and the footer.",
-    "Promotion precedent: a private descendant becomes a top-level component like this one when a second, unrelated component needs it.",
-    "The parts are set for the light surfaces; under dark-glass the surface re-tunes their colour in the module (.darkGlass .title, .darkGlass .description), never the consumer and never a prop (component-architecture §3.9)."
+    "Promotion precedent: a private descendant becomes a top-level component like this one when a second, unrelated component needs it."
   ],
   "docs": ["component-architecture", "theming"]
 }

@@ -7,18 +7,17 @@ import styles from "./card.module.css"
 /* Generic surface container, with the shadcn Card's named parts ported
  * onto it (component-architecture §8): CardHeader, CardTitle,
  * CardDescription and CardFooter. CardContent is deliberately not ported:
- * Card already pads, and a content wrapper would only restate it. Three
+ * Card already pads, and a content wrapper would only restate it. Two
  * materials by `material` (the axis is what the card is made of, not a
  * role, so it is not called `variant`; mirrored as data-material per
  * component-architecture §3.4): `flat` (default), the bark-50 sheet with a
  * bark-200 hairline that separates by border and tint (theming §4.6), and
- * `glass`, for a card that floats on a ground: the primary button's pane on
- * a surface, a radial fill lit from the top-left over a backdrop blur, a
- * specular top edge, the translucent ring and a bloom-tinted drop, so card
- * and button are lit by one lamp. Chosen at /lab/glass, which keeps the
- * alternatives. A fourth, `dotted` (added 2026-10-01), is the drafting
- * sheet: flat, with a dot grid, for a stage that shows a component at no
- * particular place (the Components catalogue). Card was promoted out
+ * `dotted` (added 2026-10-01), the drafting sheet: flat, with a dot grid,
+ * for a stage that shows a component at no particular place (the
+ * Components catalogue). The glass and dark-glass panes of 2026-09-24
+ * were retired as materials on 2026-10-01 with no product consumer left;
+ * the light pane is the global .glass class for any element now (theming
+ * §6.2), the dark one stays in the /lab/login-2 archive. Card was promoted out
  * of the summary-card family when the SCOUT report timeline became its
  * second consumer; the parts arrived with the login screen. */
 
@@ -26,8 +25,6 @@ const cardVariants = cva(styles.card, {
   variants: {
     material: {
       flat: styles.flat,
-      glass: styles.glass,
-      "dark-glass": styles.darkGlass,
       dotted: styles.dotted,
     },
   },

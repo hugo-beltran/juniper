@@ -37,17 +37,12 @@ import styles from "./buttons.module.css"
  * forced: Tab to the live button to see the ring (theming §4.4).
  *
  * The route owns layout and demo state only; the stage is a Card in the
- * dotted material, every surface on it is a registry component (Card's
- * other materials, ImageOverlay), every control a registry control. */
+ * dotted material, every surface on it is from the contract (the flat
+ * Card, the global .glass pane, ImageOverlay), every control a registry
+ * control. */
 
 const STATES = ["rest", "hovered", "pressed", "disabled"] as const
-const SURFACES = [
-  "canvas",
-  "sheet",
-  "glass",
-  "dark-glass",
-  "photograph",
-] as const
+const SURFACES = ["canvas", "sheet", "glass", "photograph"] as const
 
 type ButtonState = (typeof STATES)[number]
 type Surface = (typeof SURFACES)[number]
@@ -99,8 +94,7 @@ const STATE_OPTIONS: SelectOption[] = [
 const SURFACE_OPTIONS: SelectOption[] = [
   { value: "canvas", label: "Canvas", hint: "the dotted sheet" },
   { value: "sheet", label: "Sheet", hint: "flat card" },
-  { value: "glass", label: "Glass card" },
-  { value: "dark-glass", label: "Dark glass card" },
+  { value: "glass", label: "Glass pane" },
   { value: "photograph", label: "Photograph" },
 ]
 
@@ -167,7 +161,7 @@ function Sample({
 /* The stage is the dotted sheet, and the surface the sample sits on
  * stands on it: nothing (the canvas itself), a flat Card at the slot's
  * width, or a framed panel an ImageOverlay fills (component-architecture
- * §4.8) carrying one of the glass cards or the bare photograph. The slot
+ * §4.8) carrying the glass pane or the bare photograph. The slot
  * holds the sample at the login form's measure, so "wide" means that
  * width. */
 function Stage({
@@ -191,13 +185,12 @@ function Stage({
           </div>
         )
       case "glass":
-      case "dark-glass":
         return (
           <div className={styles.frame}>
             <ImageOverlay />
-            <Card material={surface} className={cn(styles.slot, styles.pane)}>
+            <div className={cn("glass", styles.slot, styles.pane)}>
               {children}
-            </Card>
+            </div>
           </div>
         )
     }

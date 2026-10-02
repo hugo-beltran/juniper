@@ -18,14 +18,16 @@ export const Route = createFileRoute("/_authenticated/lab/glass")({
   component: GlassPage,
 })
 
-/* Glass lab — five materials for the Card's glass variant, each on the real
+/* Glass lab — five materials for a glass card, each on the real
  * photograph ground (an ImageOverlay filling a framed panel, the §4.8 claim
  * that a layer grounds a panel as well as a screen) and each carrying real
  * controls, so the material is judged on what it will hold. Every value is
  * a --juni-* step or a derivation from one; the lift shadows are the shared
  * tokens. Decided 2026-09-24: 3 · pane, the primary button's light on a
- * surface, now the recipe in card.module.css; the first baseline and the
- * other three stay here as the archive. */
+ * surface, the Card's glass material until 2026-10-01, when it became the
+ * global .glass class for any element (theming §6.2); the sample wears
+ * that class over a flat Card, and the four alternatives stay here as the
+ * archive. */
 
 const ALTERNATIVES = [
   {
@@ -59,7 +61,7 @@ function Sample({ alt }: { alt: (typeof ALTERNATIVES)[number]["id"] }) {
   return (
     <div className={styles.frame}>
       <ImageOverlay />
-      <Card material="glass" className={cn(styles.sample, styles[alt])}>
+      <Card className={cn("glass", styles.sample, styles[alt])}>
         <CardHeader>
           <CardTitle level={3}>Sign in</CardTitle>
           <CardDescription>Inspired by nature's clarity.</CardDescription>
