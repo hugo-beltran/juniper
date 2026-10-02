@@ -1,18 +1,21 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import JuniperLogo from "@/assets/juni.svg?react"
 import {
+  BackgroundNoise,
   Button,
   CardDescription,
   CardHeader,
   CardTitle,
+  ImageOverlay,
   LoginBar,
   LoginBrand,
   LoginCard,
   LoginFooter,
   LoginForm,
   LoginNav,
-  LoginStage,
 } from "@/components"
+import { cn } from "@/lib/cn"
+import styles from "./login.module.css"
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -21,9 +24,8 @@ export const Route = createFileRoute("/login")({
 /* The sign-in route is a shell around the login-screen composition: the
  * stage in three rows (the bar with the wordmark and the visitor's actions,
  * the card whose header the route fills from Card's parts, the footer). The
- * card's form is two panels on one scroll-snap track, single sign-on first,
- * the credentials a swipe or a switch link away; which panel shows is the
- * component's own fact, never route state. It loads nothing: which
+ * card's form is one panel, single sign-on first, an "or" rule, then the
+ * credentials, so both ways in are on screen at once. It loads nothing: which
  * workspaces a user has is an answer the API gives after sign-in, so the
  * login asks for and shows nothing user-scoped. The demo has no marketing
  * site and no auth, so every link and both sign-in paths land on the app's
@@ -35,13 +37,15 @@ function LoginPage() {
   const land = () => navigate({ to: "/" })
 
   return (
-    <LoginStage>
+    <section className={cn(styles.stage, "full-bleed")}>
+      <ImageOverlay clarity="low" />
+      <BackgroundNoise />
       <LoginBar>
         <LoginBrand>
           <JuniperLogo />
         </LoginBrand>
         <LoginNav>
-          <Button variant="discrete" size="small" asChild>
+          <Button variant="secondary" size="small" asChild>
             <Link to="/">Continue as guest</Link>
           </Button>
           <Button size="small" asChild>
@@ -54,19 +58,11 @@ function LoginPage() {
           <CardTitle level={1}>Welcome back</CardTitle>
           <CardDescription>Sign in to your workspace.</CardDescription>
         </CardHeader>
-        <LoginForm
-          onSignIn={land}
-          onSingleSignOn={land}
-          footnote={
-            <>
-              Don't have an account? <Link to="/">Request now</Link>
-            </>
-          }
-        />
+        <LoginForm onSignIn={land} onSingleSignOn={land} />
       </LoginCard>
       <LoginFooter>
         © Juniper 2026 · A demo: nothing is stored and no account is created.
       </LoginFooter>
-    </LoginStage>
+    </section>
   )
 }

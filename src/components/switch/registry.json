@@ -1,6 +1,6 @@
 {
   "title": "Switch",
-  "description": "Boolean control on react-aria SwitchField + SwitchButton: an extruded track on the left and the copy (a title plus an optional muted hint) as the label on the right, the whole row one press target. Hover answers in bloom, the selected track in needle, and the focus ring is drawn on the track.",
+  "description": "Boolean control on react-aria SwitchField + SwitchButton: an extruded track on the left and the copy (a title plus an optional muted hint) as the label on the right, the whole row one press target. Hover is the pastel needle token (--juni-needle-pastel), the selected track needle-600, and the focus ring is drawn on the track.",
   "category": "primitive",
   "anatomy": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "part": "Track",
-      "description": "2rem × 1.125rem pill in bark-300 wearing the extruded recipe at the small-control offsets (1px/2px), inset while pressed; bloom-300 on hover, needle-600 when selected (needle-700 hovered). Carries the --ring outline on focus-visible because the real input is hidden."
+      "description": "2rem × 1.125rem pill in bark-300 wearing the extruded recipe at the small-control offsets (1px/2px), inset while pressed; --juni-needle-pastel on hover (needle-500 at 75% lightness, a fifth of its chroma, 70% alpha, since 2026-10-01; bloom-300 before), needle-600 when selected (needle-700 hovered). Carries the --ring outline on focus-visible because the real input is hidden."
     },
     {
       "part": "Thumb",
@@ -28,7 +28,7 @@
     "Pass label and, when the toggle needs explaining, description; both render inside the press target and are wired as name and description automatically.",
     "Controlled or uncontrolled through react-aria: isSelected + onChange, or defaultSelected. Built on SwitchField + SwitchButton; the single Switch export of react-aria-components is deprecated and must not be used.",
     "Use a Switch for a setting or filter that takes effect immediately; for a value that is submitted with a form, prefer a checkbox when one exists.",
-    "The track wears the extruded recipe scaled to the small-control offsets, never a different recipe (theming §4.6); hover is bloom, selection needle (§4.7).",
+    "The track wears the extruded recipe scaled to the small-control offsets, never a different recipe (theming §4.6); hover is the pastel needle token, the exception §4.7 names, selection needle.",
     "No fixed height: a toolbar bottom-aligns the row so the copy's last line sits on the same edge as neighbouring controls.",
     "Promotion precedent: this was the leads-filters toolbar's private switch until the form primitives story made it a shared control."
   ],

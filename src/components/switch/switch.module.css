@@ -64,10 +64,11 @@
     inset 1px 1px 2px var(--lift-shade);
 }
 
-/* Pointer colour (theming §4.7): hover answers in bloom; selection stays
- * in needle. */
+/* Pointer colour (theming §4.7): the track is the one neutral control
+ * whose hover tints toward its selected colour, the pastel needle token,
+ * so the next state is already in sight; selection stays in needle. */
 .button[data-hovered] .track {
-  background-color: var(--juni-bloom-300);
+  background-color: var(--juni-needle-pastel);
 }
 
 .button[data-focus-visible] .track {

@@ -19,7 +19,7 @@ the palette: `background-color: var(--juni-bark-50)`, not
 `var(--surface)`.
 
 1.3. A shared semantic token (`--body`, `--ring`, `--link`, `--link-hover`,
-`--nav-outline`) MAY be added to the theme file only when a second consumer
+`--nav-outline`, `--juni-needle-pastel`) MAY be added to the theme file only when a second consumer
 needs the same resolved value. Add it on the second consumer, never the first.
 The first consumer references the palette step directly.
 
@@ -152,8 +152,8 @@ pushed out toward the viewer, and pressing pushes them back in. Static
 surfaces (cards, tables, panels) stay flat and separate by border and tint,
 never by shadow.
 
-- Neutral controls (text fields, textareas, select triggers, switch tracks,
-  secondary buttons) MUST use the **extruded** recipe: the control box
+- Neutral controls (text fields, textareas, select triggers, switch tracks)
+  MUST use the **extruded** recipe: the control box
   takes its fill and its faint hairline from the shared surface tokens
   `--control-fill` (bark-50 held at 95% lightness) and `--control-hairline`
   (bark-200 at 75%), then a highlight cast up-left and a shade cast
@@ -169,7 +169,8 @@ never by shadow.
 
   Every neutral control MUST read the surface tokens rather than restate
   the derivation: Input, Textarea, Select (trigger and popover) and the
-  secondary Button take both; the discrete Button takes the fill when
+  secondary Button take both (the secondary without the lift, see below);
+  the discrete Button takes the fill when
   pressed or open; the Switch thumb takes the fill (its track is state,
   not surface: bark-300 off, bloom on hover, needle selected). The theme
   owns the material, the control owns its geometry and states. Hover MAY push further out (larger offsets). Pressed or open MUST invert
@@ -179,9 +180,25 @@ never by shadow.
   1px/2px), never the recipe. A control's own popover (a Select's list)
   wears the same recipe at the trigger's width, so the open pair reads as
   one body: a sunken cap over a raised list.
+- The secondary button is the neutral face beside the primary. It takes
+  the control surface (fill and hairline) but not the lift: it wears the
+  **pane's shadows**, the primary's own inner ring and bloom-tinted drop at
+  rest, on hover and when pressed, read from the Button module's shared
+  `--pane-shadow`, `--pane-shadow-hover` and `--pane-shadow-pressed`
+  properties, so the two faces that share a row are lit by one lamp and
+  cannot drift apart. Decided 2026-10-01 with the discrete's lift: the
+  extruded recipe now says "touched", the pane's drop says "a button".
 - The discrete button is the one neutral trigger with no volume at rest: it
-  is inline text until touched. It MUST still take the surface fill and
-  sink (inset) when pressed or open, so every control shares the press.
+  is inline text until touched. On hover it MUST take the extruded recipe
+  with no fill, the copy answering in bloom (4.7), and when pressed or open
+  the surface fill, sunk inset, so every control shares the volume and the
+  press. Chosen 2026-10-01 at `/lab/discrete-hover` over the wash it
+  replaced (which turned the button into a chip the moment it was touched),
+  a hairline, copy alone, an underline and a pointer-lit spot, archived
+  there. Because the lift is all it has, a discrete button MUST NOT sit on
+  a busy background (a photograph): the shadows have nothing to cast on. A
+  secondary takes its place there; the login's switches and nav link
+  became secondaries for this reason the same day.
 - A card that floats on a ground (a Card on the FullBleedCanvas) MAY wear
   the **glass** variant: the primary button's pane on a surface, a radial
   fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
@@ -191,9 +208,22 @@ never by shadow.
   (bloom-900 into bloom-950, the light turned down) for a card whose copy
   is light; its title and description are re-tuned to the light ramp by
   the surface, not the consumer (component-architecture §3.9). The dark ramp
-  gives the Button its **rich** variant too: the primary's pane from
-  bloom-800 into bloom-900 with needle-50 copy, for a light sheet where the
-  green pane would shout; it stands in for the primary, never beside it.
+  gives the Button its **hero** variant too (né rich, then inverse, renamed
+  2026-10-01: the name carries the rule below, that a page has one hero,
+  rather than the colour): the primary's pane from bloom-800 into bloom-900 with
+  needle-50 copy, for a light sheet where the green pane would shout. It
+  is the heavy call to action, the main character of a page that exists
+  for one thing (a sign-in, a checkout): it stands in for the primary,
+  never beside it, nothing else on the page competes with it, and it is
+  used sparsely, one page in many, never one per card. A flat `cta` slab in the
+  deep needle ramp was tried on 2026-10-01 and dropped the same day: the
+  hero pane already covers the call to action on a sign-in surface.
+  Every variant, size and state is compared on every surface at
+  `/components/buttons` in the demo app.
+  A **dotted** material (added 2026-10-01) is the flat sheet under a
+  bark-300 dot grid on a 1rem pitch: the drafting sheet a catalogue stage
+  is made of, where a component is shown at no particular place. It is
+  static, so it stays flat.
   Flat stays the default and the only material for a card inside the
   shell's inset, and for a card on a flat ground such as the login's stage. Chosen on 2026-09-24 at `/lab/glass` over a lighter
   baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
@@ -202,7 +232,17 @@ never by shadow.
   (radial fill lit off-center, 1px translucent inner ring, bloom-tinted
   drop shadow with equal x/y offset, press flips the light and pulls the
   shadow inside). It is the one control that carries color, so it is the
-  one that carries light.
+  one that carries light. On both panes (primary and hero) the lamp
+  follows the pointer (prototyped 2026-10-01 at `/components/buttons`):
+  the fill's centre is a pair of registered custom properties, `--lamp-x`
+  and `--lamp-y`, the module sets each state's resting position, and while
+  a pointer hovers the pane the Button publishes the pointer's position
+  inline so the light sits under the hand and glides back when it leaves.
+  A touch never hovers and a keyboard press keeps the resting flip, so the
+  recipe above is still what those users see; `prefers-reduced-motion`
+  turns the following off. Neutral controls keep their fixed up-left lift:
+  the pane is the one surface with light, so the one that answers the
+  hand.
 - Shadow colors MUST derive from palette steps. `--lift-highlight` and
   `--lift-shade` take the primary button's own light: its needle-50 inner
   ring and its bloom-700 drop shadow, so every control is lit by the same
@@ -222,11 +262,17 @@ answer in `--juni-bloom-*`, the complementary (chromatic action buttons —
 the primary button, a clear ×  — keep their own needle fill on hover: they
 act rather than point): a bloom hairline on a trigger
 or a text field (`bloom-400`), a bloom wash on a list row (`bloom-100`,
-text `bloom-950`) or a discrete button (`bloom-500` at 40%, text
-`bloom-950`), a bloom track on a hovered switch (`bloom-300`). A wash on a
-control that can land on any surface (the discrete button sits on glass
-and on photographs as well as on bark-50) MUST be a translucent derivation
-of a mid step, which keeps its contrast wherever it lands; the opaque tint
+text `bloom-950`), bloom copy on a hovered discrete button (`bloom-800`,
+its volume from 4.6, no wash since 2026-10-01). One exception, decided 2026-10-01: a hovered switch track
+tints toward its own selected colour with `--juni-needle-pastel`
+(needle-500 lifted to 75% lightness at a fifth of its chroma, 70% alpha,
+a shared token in the theme), because the track's next state is needle
+and the hover shows it approaching; the bloom-300 track before it is
+retired. The token is for the hover state of an interactive element whose
+selected state is needle, and nothing else. A wash on a
+control that can land on more than one surface (a trigger on the sheet and
+inside a glass card) MUST be a translucent derivation of a mid step, which
+keeps its contrast wherever it lands; the opaque tint
 is for rows inside an opaque list. Selection and the active
 state stay in needle. The two states MUST NOT share a ramp, so "where you
 are" never blurs with "what is chosen"; when both land on one element,

@@ -1,17 +1,7 @@
-/* The stage: a bark-100 ground at the viewport's height in three rows (the
- * bar, the card centred in the middle, the footer), an inline-size container
- * the narrow rules query. Flat on flat: the card separates by tint and
- * hairline, never by shadow (theming §4.6). */
-.stage {
-  container: login-stage / inline-size;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto 1fr auto;
-  gap: 0.5rem;
-  min-height: 100svh;
-  padding: 1.25rem 2rem 1rem;
-  background-color: var(--juni-bark-200);
-}
+/* The parts only. The ground they stand on (the full-bleed region, its
+ * layers, the rows) is the route's composition, not a stage part
+ * (component-architecture §4.7.1); the narrow rules below query the
+ * `full-bleed` container the route provides. */
 
 .bar {
   display: flex;
@@ -66,51 +56,27 @@
   margin: 0 auto;
 }
 
-/* The track: the two ways in as two panels in one horizontal scroll-snap
- * row. A real scroller, so a touch screen swipes it and the browser owns
- * the snap; no scrollbar, because the switch links and the swipe are the
- * controls, not a bar. The height follows the snapped panel through the
- * measurement the form publishes (--login-panel-height), so the card is as
- * tall as what it shows; the other panel is clipped, and inert. The
- * quarter-rem bleed (margin in, padding on the panel) keeps a focus ring
- * at a panel's edge inside the clip. Smooth only when motion is wanted. */
-.track {
+/* The "or" between the two ways in: a caps eyebrow between two hairlines,
+ * the field label's own type (one panel since 2026-10-01). */
+.divider {
   display: flex;
-  align-items: flex-start;
-  margin: -0.25rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  height: var(--login-panel-height, auto);
-  transition: height 160ms var(--ease);
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--juni-bark-500);
 }
 
-.track::-webkit-scrollbar {
-  display: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .track {
-    scroll-behavior: smooth;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .track {
-    transition: none;
-  }
-}
-
-.panel {
-  flex: 0 0 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0.25rem;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--juni-bark-300);
 }
 
 /* The help link, pulled up under the fields and set to the right. */
@@ -120,7 +86,7 @@
   margin-top: -0.5rem;
 }
 
-/* The footnote, under the track. */
+/* The footnote, under the fields. */
 .footer {
   flex-direction: column;
   align-items: stretch;
@@ -131,13 +97,6 @@
 
 .wide {
   width: 100%;
-}
-
-/* The switch between the two ways in: a discrete button centred under the
- * panel's action, the chevron pointing the way the track will move. */
-.switch {
-  align-self: center;
-  color: var(--juni-bark-600);
 }
 
 .fine {
@@ -169,15 +128,10 @@
   position: relative;
 }
 
-/* Narrow: the stage tightens its gutters, the bar and its actions may wrap
- * (the column is minmax(0, 1fr), so a wide bar never widens the stage), the
- * wordmark shrinks a step and the card takes the width with tighter padding.
- * Queried against the stage. */
-@container login-stage (max-width: 40rem) {
-  .stage {
-    padding: 1rem 0.75rem 0.75rem;
-  }
-
+/* Narrow: the bar and its actions may wrap, the wordmark shrinks a step and
+ * the card takes the width with tighter padding. Queried against the
+ * full-bleed region the route composes. */
+@container full-bleed (max-width: 40rem) {
   .bar,
   .nav {
     flex-wrap: wrap;

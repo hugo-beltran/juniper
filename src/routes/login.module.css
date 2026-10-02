@@ -1,0 +1,7 @@
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--juni-bark-200);
+}

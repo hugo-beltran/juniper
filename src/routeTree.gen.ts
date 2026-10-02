@@ -21,6 +21,8 @@ import { Route as AuthenticatedScoutReportRouteImport } from './routes/_authenti
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTradeAnalyzerRouteImport } from './routes/_authenticated/trade-analyzer'
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
+import { Route as AuthenticatedComponentsButtonsRouteImport } from './routes/_authenticated/components/buttons'
+import { Route as AuthenticatedLabDiscreteHoverRouteImport } from './routes/_authenticated/lab/discrete-hover'
 import { Route as AuthenticatedLabDockRouteImport } from './routes/_authenticated/lab/dock'
 import { Route as AuthenticatedLabFormsRouteImport } from './routes/_authenticated/lab/forms'
 import { Route as AuthenticatedLabGlassRouteImport } from './routes/_authenticated/lab/glass'
@@ -91,6 +93,18 @@ const AuthenticatedUsersRoute = AuthenticatedUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedComponentsButtonsRoute =
+  AuthenticatedComponentsButtonsRouteImport.update({
+    id: '/components/buttons',
+    path: '/components/buttons',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLabDiscreteHoverRoute =
+  AuthenticatedLabDiscreteHoverRouteImport.update({
+    id: '/lab/discrete-hover',
+    path: '/lab/discrete-hover',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedLabDockRoute = AuthenticatedLabDockRouteImport.update({
   id: '/lab/dock',
   path: '/lab/dock',
@@ -145,6 +159,8 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/users': typeof AuthenticatedUsersRoute
+  '/components/buttons': typeof AuthenticatedComponentsButtonsRoute
+  '/lab/discrete-hover': typeof AuthenticatedLabDiscreteHoverRoute
   '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/glass': typeof AuthenticatedLabGlassRoute
@@ -166,6 +182,8 @@ export interface FileRoutesByTo {
   '/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/users': typeof AuthenticatedUsersRoute
   '/': typeof AuthenticatedIndexRoute
+  '/components/buttons': typeof AuthenticatedComponentsButtonsRoute
+  '/lab/discrete-hover': typeof AuthenticatedLabDiscreteHoverRoute
   '/lab/dock': typeof AuthenticatedLabDockRoute
   '/lab/forms': typeof AuthenticatedLabFormsRoute
   '/lab/glass': typeof AuthenticatedLabGlassRoute
@@ -189,6 +207,8 @@ export interface FileRoutesById {
   '/_authenticated/trade-analyzer': typeof AuthenticatedTradeAnalyzerRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/components/buttons': typeof AuthenticatedComponentsButtonsRoute
+  '/_authenticated/lab/discrete-hover': typeof AuthenticatedLabDiscreteHoverRoute
   '/_authenticated/lab/dock': typeof AuthenticatedLabDockRoute
   '/_authenticated/lab/forms': typeof AuthenticatedLabFormsRoute
   '/_authenticated/lab/glass': typeof AuthenticatedLabGlassRoute
@@ -212,6 +232,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/trade-analyzer'
     | '/users'
+    | '/components/buttons'
+    | '/lab/discrete-hover'
     | '/lab/dock'
     | '/lab/forms'
     | '/lab/glass'
@@ -233,6 +255,8 @@ export interface FileRouteTypes {
     | '/trade-analyzer'
     | '/users'
     | '/'
+    | '/components/buttons'
+    | '/lab/discrete-hover'
     | '/lab/dock'
     | '/lab/forms'
     | '/lab/glass'
@@ -255,6 +279,8 @@ export interface FileRouteTypes {
     | '/_authenticated/trade-analyzer'
     | '/_authenticated/users'
     | '/_authenticated/'
+    | '/_authenticated/components/buttons'
+    | '/_authenticated/lab/discrete-hover'
     | '/_authenticated/lab/dock'
     | '/_authenticated/lab/forms'
     | '/_authenticated/lab/glass'
@@ -356,6 +382,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/components/buttons': {
+      id: '/_authenticated/components/buttons'
+      path: '/components/buttons'
+      fullPath: '/components/buttons'
+      preLoaderRoute: typeof AuthenticatedComponentsButtonsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/lab/discrete-hover': {
+      id: '/_authenticated/lab/discrete-hover'
+      path: '/lab/discrete-hover'
+      fullPath: '/lab/discrete-hover'
+      preLoaderRoute: typeof AuthenticatedLabDiscreteHoverRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/lab/dock': {
       id: '/_authenticated/lab/dock'
       path: '/lab/dock'
@@ -426,6 +466,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTradeAnalyzerRoute: typeof AuthenticatedTradeAnalyzerRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedComponentsButtonsRoute: typeof AuthenticatedComponentsButtonsRoute
+  AuthenticatedLabDiscreteHoverRoute: typeof AuthenticatedLabDiscreteHoverRoute
   AuthenticatedLabDockRoute: typeof AuthenticatedLabDockRoute
   AuthenticatedLabFormsRoute: typeof AuthenticatedLabFormsRoute
   AuthenticatedLabGlassRoute: typeof AuthenticatedLabGlassRoute
@@ -447,6 +489,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTradeAnalyzerRoute: AuthenticatedTradeAnalyzerRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedComponentsButtonsRoute: AuthenticatedComponentsButtonsRoute,
+  AuthenticatedLabDiscreteHoverRoute: AuthenticatedLabDiscreteHoverRoute,
   AuthenticatedLabDockRoute: AuthenticatedLabDockRoute,
   AuthenticatedLabFormsRoute: AuthenticatedLabFormsRoute,
   AuthenticatedLabGlassRoute: AuthenticatedLabGlassRoute,

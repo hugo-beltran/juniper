@@ -6,7 +6,23 @@
  * pseudo-classes apply only to slotted children, never to react-aria
  * buttons. */
 
+/* The pane's shadows (theming §4.6): the 1px translucent inner ring and
+ * the bloom-tinted drop at equal x/y, at rest, hovered and pressed. Set
+ * once on the base so the primary and the secondary read one value and
+ * cannot drift: on 2026-10-01 the secondary gave its lift to the
+ * discrete's hover and took the primary's drop instead, so the two faces
+ * on one row are lit by one lamp. The hero keeps its own ring, in bloom. */
 .button {
+  --pane-shadow:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
+    2px 2px 6px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  --pane-shadow-hover:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
+    1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  --pane-shadow-pressed:
+    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.1),
+    inset 1px 1px 3px oklch(from var(--juni-needle-950) l c h / 0.35),
+    1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.15);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -47,34 +63,52 @@
 
 /* Roles */
 
+/* The lamp (theming §4.6): where a pane's radial fill is lit from, as two
+ * registered percentages so a move between positions glides. Each pane
+ * state sets its resting position below; while a pointer hovers a pane,
+ * Button writes the pointer's position inline (§3.9: the one fact CSS
+ * cannot know, published as a custom property) and the light follows the
+ * hand, gliding back when it leaves. Keyboard press and touch never set
+ * it, so they keep the resting positions. Prototyped 2026-10-01 at
+ * /components/buttons. */
+@property --lamp-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 70%;
+}
+
+@property --lamp-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 70%;
+}
+
 /* Primary — glass pane (theming §4.6), after the Squircle's recipe: radial
  * fill lit off-center, 1px translucent inner ring, needle-tinted drop
  * shadow at equal x/y. The one control with colour, so the one with light. */
 .primary {
   background: radial-gradient(
     circle at 70% 70%,
-    var(--juni-needle-400) 10%,
-    var(--juni-needle-500) 145%
+    var(--juni-needle-500) 10%,
+    var(--juni-needle-600) 145%
   );
   color: var(--juni-bark-50);
-  box-shadow:
-    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
-    2px 2px 6px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  box-shadow: var(--pane-shadow);
   transition:
     box-shadow 120ms var(--ease),
-    transform 120ms var(--ease);
+    transform 120ms var(--ease),
+    --lamp-x 120ms var(--ease),
+    --lamp-y 120ms var(--ease);
 }
 
 .primary:is([data-hovered], :not([data-rac]):hover) {
   color: var(--juni-bark-50);
   background: radial-gradient(
     circle at 70% 70%,
-    var(--juni-needle-300) -50%,
-    var(--juni-needle-400) 55%
+    var(--juni-needle-400) -50%,
+    var(--juni-needle-500) 55%
   );
-  box-shadow:
-    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.15),
-    1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
+  box-shadow: var(--pane-shadow-hover);
 }
 
 /* Pressed: one step deeper than idle, light flipped to the top-left, the
@@ -86,101 +120,127 @@
     var(--juni-needle-500) 10%,
     var(--juni-needle-600) 145%
   );
-  box-shadow:
-    inset 0 0 0 1px oklch(from var(--juni-needle-50) l c h / 0.1),
-    inset 1px 1px 3px oklch(from var(--juni-needle-950) l c h / 0.35),
-    1px 1px 2px oklch(from var(--juni-bloom-700) l c h / 0.15);
+  box-shadow: var(--pane-shadow-pressed);
 }
 
-/* Secondary — extruded (theming §4.6) on the shared control surface, the
- * same material as a field. Hover pushes out in bloom (§4.7); pressed or
- * open sinks it. */
+/* Secondary — the neutral face beside the primary: the shared control
+ * surface (fill and hairline, the same material as a field) under the
+ * primary's own shadows, read from the base's --pane-shadow* so the two
+ * cannot drift. No lift since 2026-10-01: the extruded recipe became the
+ * discrete's hover, and a resting secondary is lit by the pane's drop
+ * instead. Hover answers with a needle hairline and the pane's hover
+ * drop; pressed or open takes the pane's pressed shadow, pulled inside. */
 .secondary {
-  background-color: var(--control-fill);
+  background-color: var(--juni-bark-50);
+  color: var(--juni-needle-600);
+  border-color: var(--juni-needle-500);
+  box-shadow: var(--pane-shadow);
+}
+
+.secondary:is([data-hovered], [data-focus-visible], :not([data-rac]):hover) {
+  border-color: oklch(from var(--juni-needle-500) l c h / 0.75);
+  color: var(--juni-needle-500);
+}
+
+.secondary:is([data-hovered], :not([data-rac]):hover) {
+  box-shadow: var(--pane-shadow-hover);
+}
+
+.secondary:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
+  box-shadow: var(--pane-shadow-pressed);
+  color: var(--juni-bloom-700);
+  border-color: var(--juni-bloom-600);
+  background-color: color-mix(
+    in oklch,
+    var(--juni-bloom-200) 9%,
+    var(--juni-needle-400) 15%
+  );
+}
+
+/* Discrete — flat inline text at rest: the one neutral control with no
+ * volume until touched. Hover gives it the extruded volume (§4.6) with no
+ * fill, the copy answering in bloom (§4.7); pressed or open takes the
+ * control fill and sinks. No wash, so it stays discrete; and no busy
+ * background: with nothing to cast on the lift vanishes, so a discrete
+ * button sits on the sheet or in a glass card, never on a photograph,
+ * where a secondary takes its place. Chosen 2026-10-01 at
+ * /lab/discrete-hover over the wash it replaces and four others. */
+.discrete {
+  background-color: transparent;
+  color: var(--juni-bloom-600);
+}
+
+.discrete:is([data-hovered], :not([data-rac]):hover) {
   color: var(--juni-bloom-800);
-  border-color: var(--control-hairline);
   box-shadow:
     -2px -2px 4px var(--lift-highlight),
     2px 2px 5px var(--lift-shade);
 }
 
-.secondary:is([data-hovered], [data-focus-visible], :not([data-rac]):hover) {
-  border-color: oklch(from var(--juni-needle-500) l c h / 0.75);
-  color: var(--juni-needle-700);
-}
-
-.secondary:is([data-hovered], :not([data-rac]):hover) {
-  box-shadow:
-    -2px -2px 5px var(--lift-highlight),
-    3px 3px 6px var(--lift-shade);
-}
-
-.secondary:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
-  box-shadow:
-    inset -1px -1px 2px var(--lift-highlight),
-    inset 1px 1px 3px var(--lift-shade);
-  color: var(--juni-bloom-900);
-}
-
-/* Discrete — flat inline text at rest. Hover is a translucent bloom wash
- * (§4.7) so it holds on glass and photographs; pressed or open takes the
- * control fill and sinks (§4.6). */
-.discrete {
-  background-color: transparent;
-  color: var(--juni-needle-800);
-}
-
-.discrete:is([data-hovered], :not([data-rac]):hover) {
-  background-color: oklch(from var(--juni-bloom-500) l c h / 0.4);
-  color: var(--juni-bloom-950);
-}
-
 .discrete:is([data-pressed], [aria-expanded="true"], :not([data-rac]):active) {
-  background-color: var(--control-fill);
-  color: var(--juni-needle-950);
+  background-color: oklch(from var(--juni-needle-300) l c h / 0.1);
+  color: var(--juni-needle-700);
   box-shadow:
-    inset -1px -1px 2px var(--lift-highlight),
-    inset 1px 1px 3px var(--lift-shade);
+    2px 2px 1px var(--lift-shade),
+    inset 5px 5px 15px 1px oklch(from var(--juni-bark-200) l c h / 0.15);
 }
 
-/* Rich — the primary's pane in the dark ramp (bloom-800 → bloom-900,
- * needle-50 copy) for a light sheet. Stands in for primary, never beside
- * it (§4.6). */
-.rich {
+/* Hero — the primary's pane in the dark ramp (bloom-800 → bloom-900,
+ * needle-50 copy): the heavy call to action, the main character of a page
+ * that exists for one thing. Stands in for primary, never beside it; one
+ * page in many (§4.6). Né rich, then inverse; hero since 2026-10-01. */
+.hero {
+  --lamp-x: 70%;
+  --lamp-y: 50%;
   background: radial-gradient(
-    circle at 70% 50%,
+    circle at var(--lamp-x) var(--lamp-y),
     var(--juni-bloom-800) 10%,
     var(--juni-bloom-900) 145%
   );
-  color: var(--juni-needle-50);
+  color: oklch(from var(--juni-needle-100) 98% c h);
   box-shadow:
     inset 0 0 0 1px oklch(from var(--juni-bloom-50) l c h / 0.15),
     2px 2px 6px oklch(from var(--juni-bloom-700) l c h / 0.2);
   transition:
     box-shadow 120ms var(--ease),
-    transform 120ms var(--ease);
+    transform 120ms var(--ease),
+    --lamp-x 120ms var(--ease),
+    --lamp-y 120ms var(--ease);
 }
 
-.rich:is([data-hovered], :not([data-rac]):hover) {
-  color: var(--juni-needle-50);
+.hero:is([data-hovered], :not([data-rac]):hover) {
+  --lamp-y: 70%;
+  color: oklch(from var(--juni-needle-300) 90% c h);
   background: radial-gradient(
-    circle at 70% 70%,
+    circle at var(--lamp-x) var(--lamp-y),
     var(--juni-bloom-600) -50%,
-    var(--juni-bloom-900) 55%
+    var(--juni-bloom-800) 55%
   );
   box-shadow:
     inset 0 0 0 1px oklch(from var(--juni-bloom-50) l c h / 0.15),
     1px 1px 3px oklch(from var(--juni-bloom-700) l c h / 0.2);
 }
 
-.rich:is([data-pressed], :not([data-rac]):active) {
+.hero:is([data-pressed], :not([data-rac]):active) {
+  --lamp-y: 70%;
   color: var(--juni-needle-100);
   background: radial-gradient(
-    circle at 70% 70%,
+    circle at var(--lamp-x) var(--lamp-y),
     var(--juni-bloom-800) 10%,
     var(--juni-bloom-950) 145%
   );
 }
+/* Under reduced motion the lamp keeps its resting positions (Button does
+ * not write the pointer's) and moves between states without the glide. */
+@media (prefers-reduced-motion: reduce) {
+  .primary,
+  .hero {
+    transition:
+      box-shadow 120ms var(--ease),
+      transform 120ms var(--ease);
+  }
+}
+
 /* Sizes */
 
 .mini {

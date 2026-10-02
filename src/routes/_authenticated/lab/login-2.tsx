@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/lab/login-2")({
 })
 
 /* Login lab, round two — four structures for the sign-in screen after the
- * 2026-09-25 pass (dark-glass card, SSO first, the rich button, the
+ * 2026-09-25 pass (dark-glass card, SSO first, the hero button, the
  * ImageOverlay's clarity), from four references: a photo panel beside the
  * form, a framed minimal sheet, a pale stage with a top bar, and the dark
  * pane itself with the hierarchy the references share. Built from the
@@ -51,8 +51,8 @@ const VARIANTS: {
   {
     id: "sheet",
     title: "B · Sheet — one framed sheet, nothing else",
-    note: "The whole frame is a bark-50 sheet inset on the ground: the wordmark small in its corner, the form a narrow column in the middle with a caps eyebrow for a title and this pass's rich button for the action, SSO and passkey sharing a row under an 'or continue with' rule, the legal line at the sheet's foot.",
-    pros: "The quietest and the most product-like: whitespace does the work, and it holds up with no photograph at all. The rich button finds its place.",
+    note: "The whole frame is a bark-50 sheet inset on the ground: the wordmark small in its corner, the form a narrow column in the middle with a caps eyebrow for a title and this pass's hero button for the action, SSO and passkey sharing a row under an 'or continue with' rule, the legal line at the sheet's foot.",
+    pros: "The quietest and the most product-like: whitespace does the work, and it holds up with no photograph at all. The hero button finds its place.",
     cons: "The least brand: the ground shows only as a 1.25rem rim. An eyebrow for a title needs the whitespace to carry authority, which a phone does not give it.",
   },
   {
@@ -220,7 +220,7 @@ function SheetMock({ frame }: { frame: Frame }) {
                 Forgot password?
               </Button>
             </div>
-            <Button variant="rich" type="submit" className={styles.wide}>
+            <Button variant="hero" type="submit" className={styles.wide}>
               Sign in
             </Button>
             <Divider>or continue with</Divider>

@@ -346,9 +346,8 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
-entry is the reference for a whole screen, in parts the route arranges: a
-`LoginStage` (the bark-100 ground at the viewport's height in three rows; the
-stage owns the ground, the route paints nothing), a `LoginBar` holding
+entry is the reference for a whole screen, in parts the route arranges on a
+ground the route composes (4.7.1): a `LoginBar` holding
 `LoginBrand` (the wordmark, sized and coloured by the part) and `LoginNav`
 (the visitor's actions as Buttons asChild around router Links), a `LoginCard`
 (the flat Card centred in the middle row; flat because the ground is flat, and
@@ -356,9 +355,10 @@ the extruded controls read on bark-50) whose header the route fills from
 Card's own parts (a title at level 1, a lede), a `LoginForm` (the fields, a
 slotted help link and the actions, react-aria native validation, a controlled
 API of `onSignIn` with the credentials and nothing else) and a `LoginFooter`
-(one line), with the router kept in the route, which needs no CSS of its own.
-One composition serves phone and desktop: the stage tightens its gutters and
-the card takes the width below 40rem of the stage. A demo entry MUST NOT
+(one line), with the router kept in the route.
+One composition serves phone and desktop: the bar wraps, the wordmark shrinks
+and the card takes the width below 40rem of the `full-bleed` region the parts
+stand in. A demo entry MUST NOT
 import the router or the mock data in `src/lib`; a route shell passes data,
 links and the brand in. The registry inlines source files, not assets, so the
 wordmark is an asset the route imports and nothing of it ships in the entry.
@@ -367,6 +367,26 @@ the archive (`/lab/login`, `/lab/login-2`, `/lab/glass`): the stage was chosen
 on 2026-09-25 over a photo panel beside the form, a framed sheet and a dark
 pane on the photograph. `FullBleedCanvas` and `ImageOverlay` remain the ground
 for a screen that wants the photograph.
+
+4.7.1. **Composition over coupling: no stage component.** A reference
+composition exposes parts and never a wrapper that owns the screen around
+them. The `LoginStage` of 2026-09-25, one div that painted the ground,
+stacked the `ImageOverlay` and the `BackgroundNoise`, laid the three rows and
+named the container, was retired on 2026-10-01 for that reason: it bound four
+decisions that have nothing to do with one another (the ground's colour, the
+layers on it, the arrangement of the rows, the container the parts query)
+into one login-only element, so none of them could change without a prop or
+a second stage, and it re-stacked the two layers `FullBleedCanvas` already
+composes (4.8). The route now composes the screen from standalone pieces: a
+`full-bleed` region (a global class in `global.css` for a screen outside the
+shell: the viewport's height, the page gutters, an inline-size container
+named `full-bleed`, and `flex: 1` so it fills the root column), the two
+layers as its first children, then the login parts, arranged by the route's
+own module. The parts query `full-bleed` for their narrow layout. The test
+generalises: a wrapper whose only job is to hold a screen's parts together
+and decide their surroundings is coupling; the route arranging pieces that
+each stand alone is the composition the contract prefers, and a new demo
+entry MUST NOT add a `<Name>Stage`, `<Name>Screen` or `<Name>Shell` root.
 
 4.8. **Background layers are standalone.** A component that paints a ground
 (`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)

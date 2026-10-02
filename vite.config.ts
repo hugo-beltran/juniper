@@ -3,7 +3,13 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import svgr from "vite-plugin-svgr"
+import { labGate } from "./scripts/lab-gate.ts"
 import { juniperRegistry } from "./scripts/registry/vite-plugin.ts"
+
+/* The lab routes are built only on request: `npm run dev:lab` (LAB=on),
+ * or `npm run dev --lab=on` under npm (npm_config_lab). See
+ * scripts/lab-gate.ts. */
+const lab = process.env.npm_config_lab === "on" || process.env.LAB === "on"
 
 export default defineConfig(({ command, isPreview }) => ({
   // GitHub Pages serves the app from /<repo>/; dev stays at the root. The
@@ -12,6 +18,9 @@ export default defineConfig(({ command, isPreview }) => ({
   // isPreview flag to serve the built output under the same base.
   base: command === "build" || isPreview ? "/juniper/" : "/",
   plugins: [
+    // Gates the lab routes behind --lab=on; before the router plugin so a
+    // gated route file is already a stub when the router transforms it.
+    labGate(lab),
     // Must run before the React plugin: generates src/routeTree.gen.ts
     // from the files in src/routes/.
     tanstackRouter({ target: "react", autoCodeSplitting: true }),

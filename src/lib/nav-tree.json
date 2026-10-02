@@ -7,6 +7,17 @@
       "plan": "Smart Dashboard",
       "groups": [
         {
+          "label": "Components",
+          "items": [
+            {
+              "label": "Buttons",
+              "to": "/components/buttons",
+              "icon": "squares-2x2",
+              "surfaces": ["sidebar", "dock"]
+            }
+          ]
+        },
+        {
           "label": "Lab",
           "items": [
             {
@@ -52,6 +63,11 @@
               "label": "User profile",
               "to": "/lab/user-profile",
               "icon": "user-circle"
+            },
+            {
+              "label": "Discrete hover",
+              "to": "/lab/discrete-hover",
+              "icon": "cursor-arrow-rays"
             }
           ]
         },

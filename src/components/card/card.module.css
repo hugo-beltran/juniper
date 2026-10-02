@@ -11,6 +11,23 @@
   border-color: var(--juni-bark-200);
 }
 
+/* Dotted: the drafting sheet. The flat sheet under a bark-300 dot grid on
+ * a 1rem pitch, centred so the grid meets every edge alike; a stage for a
+ * component shown at no particular place (the Components catalogue).
+ * Static, so it stays flat and separates by border and tint (theming
+ * §4.6). Added 2026-10-01. */
+.dotted {
+  background-color: var(--juni-bark-50);
+  background-image: radial-gradient(
+    circle,
+    var(--juni-bark-200) 0.75px,
+    transparent 1.25px
+  );
+  background-size: 1rem 1rem;
+  background-position: center;
+  border-color: var(--juni-bark-200);
+}
+
 /* Glass: a pane on a ground, lit by the primary button's lamp (theming
  * §4.6). The two glass materials share one recipe and differ only in the
  * ramp: a radial fill lit from beyond the top-left corner (50% there, 20%

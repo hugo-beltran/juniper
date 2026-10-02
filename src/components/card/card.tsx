@@ -16,7 +16,9 @@ import styles from "./card.module.css"
  * a surface, a radial fill lit from the top-left over a backdrop blur, a
  * specular top edge, the translucent ring and a bloom-tinted drop, so card
  * and button are lit by one lamp. Chosen at /lab/glass, which keeps the
- * alternatives. Card was promoted out
+ * alternatives. A fourth, `dotted` (added 2026-10-01), is the drafting
+ * sheet: flat, with a dot grid, for a stage that shows a component at no
+ * particular place (the Components catalogue). Card was promoted out
  * of the summary-card family when the SCOUT report timeline became its
  * second consumer; the parts arrived with the login screen. */
 
@@ -26,6 +28,7 @@ const cardVariants = cva(styles.card, {
       flat: styles.flat,
       glass: styles.glass,
       "dark-glass": styles.darkGlass,
+      dotted: styles.dotted,
     },
   },
   defaultVariants: { material: "flat" },

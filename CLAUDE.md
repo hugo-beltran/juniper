@@ -73,6 +73,18 @@ are consumed by agents outside this repo. Do not rename or move them; add
 new paths beside them and bump `schemaVersion` only for breaking shape
 changes.
 
+## Lab routes are opt-in
+
+The lab pages (`src/routes/_authenticated/lab/`, the Juniper tenant's Lab
+group) are explorations and archives, not the product. They are built only
+on request: `npm run dev:lab` (any runner: `bun run dev:lab`), or
+`LAB=on` before `vite` or `vite build`; under npm alone, `--lab=on` on
+`npm run dev` or `npm run build` does the same through `npm_config_lab`.
+Off by default: `scripts/lab-gate.ts` stubs each lab route
+to a not-found at load time, so the route tree and the typecheck never
+change, and the navigation drops the Lab items through
+`import.meta.env.LAB`. The Components catalogue is always built.
+
 ## Repo conventions in brief
 
 - Routes import components through the barrel; inside a component family,

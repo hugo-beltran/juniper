@@ -1,0 +1,109 @@
+/* Layout only: every surface and control on this page is a registry
+ * component; the route arranges them. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.page h2 {
+  margin: 0;
+  font-size: var(--text-base);
+}
+
+/* The stage beside its controls. Below the house threshold the inset
+ * publishes data-narrow and the panel drops under the stage. */
+.workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 17rem;
+  gap: 1rem;
+  align-items: start;
+}
+
+[data-narrow] .workbench {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* The stage: the dotted sheet at a fixed height whatever the surface, the
+ * surface centred on it. */
+.stage {
+  display: grid;
+  place-items: center;
+  min-height: 22rem;
+  padding: 1.5rem;
+}
+
+/* A framed panel the ImageOverlay fills (component-architecture §4.8),
+ * stretched to the stage's inner box, its own content centred. */
+.frame {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  justify-self: stretch;
+  align-self: stretch;
+  min-height: 19rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* The slot holds the sample at the login form's measure; "wide" fills it.
+ * Positioned, so it paints above an ImageOverlay before it. */
+.slot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 22rem);
+}
+
+.pane {
+  padding: 1.5rem;
+}
+
+.wide {
+  width: 100%;
+}
+
+.snippet {
+  margin: 0;
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The usage note under the snippet, at the intro's measure. */
+.note {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--text-md);
+  line-height: 1.5;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 1rem;
+}
+
+.reference {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+/* Controls bottom-align so faces of different heights share a baseline. */
+.row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

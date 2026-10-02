@@ -75,10 +75,10 @@ function FormsPage() {
         <Card className={styles.card}>
           <h2>Button · variants</h2>
           <p className={styles.note}>
-            Primary is the glass pane. Secondary is extruded like a field and
-            sinks when pressed. Discrete is flat text until touched: bloom wash
-            on hover, inset when pressed. The last one is a router Link wearing
-            the button through <code>asChild</code>.
+            Primary is the glass pane. Secondary is the control surface under
+            the primary's shadow and sinks when pressed. Discrete is flat text
+            until touched: it lifts on hover, inset when pressed. The last one
+            is a router Link wearing the button through <code>asChild</code>.
           </p>
           <div className={styles.row}>
             <Button>Primary</Button>

@@ -796,6 +796,8 @@ export type NavIcon =
   | "sparkles"
   | "device-phone-mobile"
   | "user-circle"
+  | "squares-2x2"
+  | "cursor-arrow-rays"
 
 /* A badge the shell resolves to a live count; the tree only names the
  * source, the shell decides how to compute it. */
@@ -917,11 +919,31 @@ export const currentUserQuery = queryOptions({
   },
 })
 
+/* The lab routes exist only when the build was asked for them
+ * (`npm run dev --lab=on`; scripts/lab-gate.ts). Off, their items leave
+ * the tree here, and a group with nothing left leaves with them, so the
+ * menu never links to a page that is not built. */
+const isLabItem = (item: NavItem) => item.to?.startsWith("/lab/") === true
+
+const withoutLab = (tree: NavTree): NavTree => ({
+  ...tree,
+  tenants: tree.tenants.map((tenant) => ({
+    ...tenant,
+    groups: tenant.groups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => !isLabItem(item)),
+      }))
+      .filter((group) => group.items.length > 0),
+  })),
+})
+
 export const navigationQuery = queryOptions({
   queryKey: ["navigation"],
   queryFn: async () => {
     await delay(200)
-    return navTree as NavTree
+    const tree = navTree as NavTree
+    return import.meta.env.LAB ? tree : withoutLab(tree)
   },
 })
 

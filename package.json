@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lab": "LAB=on vite",
     "build": "vite build && tsc -b && cp dist/index.html dist/404.html",
     "typecheck": "tsc -b",
     "check": "biome check .",
