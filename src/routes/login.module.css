@@ -5,3 +5,18 @@
   align-items: center;
   background-color: var(--juni-bark-200);
 }
+
+.logo {
+  width: 3rem;
+  height: auto;
+  color: light-dark(var(--juni-bark-950), var(--juni-bark-50));
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: light-dark(var(--juni-bark-950), var(--juni-bark-50));
+  font-size: 2.75rem;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+}

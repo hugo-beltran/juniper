@@ -36,13 +36,19 @@ change. Where two states meet on one element (selection and pointer, 4.7),
 combine their two steps with `color-mix(in oklch, …)`; do not mix a palette
 step with a literal, and do not mix more than two steps.
 
-1.6. Route and page code MUST NOT reference tokens or palette steps. If a
-view needs a themed surface, a component is missing. Callers pass intent
-props (`variant`, `size`), never token names or class names. A route's title
-and intro are the `page` parts (`PageHeader`, `PageTitle`,
-`PageDescription`); a card's are Card's (`CardTitle`, `CardDescription`).
-A muted paragraph styled from route CSS is the tell that one of these was
-skipped.
+1.6. Route and page code MUST NOT reference tokens or palette steps for a
+control or a surface. If a view needs a themed surface, a component is
+missing. Callers pass intent props (`variant`, `size`), never token names or
+class names. A route's title and intro are the `page` parts (`PageHeader`,
+`PageTitle`, `PageDescription`); a card's are Card's (`CardTitle`,
+`CardDescription`). A muted paragraph styled from route CSS is the tell that
+one of these was skipped. The one exception (2026-10-01) is the page's own
+elements (component-architecture §4.7.2): the tint of a page's ground and
+the look of its brand lockup (the logo's colour and size, the wordmark's
+face and weight) are the route's, because no component stands in for a page
+or a brand, so the route's module MAY take palette steps, `light-dark()`
+and the type tokens for them. The exception covers the page around the
+components, never a component's job done over again in route CSS.
 
 ## 2. Ramps carry one function each
 
@@ -92,7 +98,11 @@ these tokens for corner radii; fully round pills MAY use `999px`.
 Display titles (a card's title, a hero tagline) MAY point at
 `--font-display` instead, a token that today resolves to the same Geist: it
 names the one place a display face could diverge later without touching
-components, and until it does there is still no second face on screen. A
+components, and until it does there is still no second face on screen. The
+one second face is the brand's: `--font-brand` (added 2026-10-01) resolves
+to Russo One, falling back to the sans, and is for the wordmark set as text
+and nothing else. It is identity, not hierarchy, so it MUST NOT set a title,
+a label or a control, and a page MUST show it at most once. A
 component MUST NOT restate a family name; it inherits or uses the token.
 
 4.2.1. **Type scale.** Every `font-size` MUST be one of the eleven tokens
@@ -188,6 +198,17 @@ never by shadow.
   properties, so the two faces that share a row are lit by one lamp and
   cannot drift apart. Decided 2026-10-01 with the discrete's lift: the
   extruded recipe now says "touched", the pane's drop says "a button".
+- A text field on a photograph or a busy ground MAY be **flat**: Input's
+  `flat` variant (added 2026-10-01) keeps the control surface (fill and
+  hairline) and drops the lift in every state, hover and focus still
+  answering in bloom on the hairline and the focus ring the native outline.
+  The reason is the one that keeps the discrete button off a photograph:
+  the lift is light cast on a surface, and on a photograph the shadows have
+  nothing to cast on and read as smudges. Flat is an answer to the ground,
+  never a style choice: on the sheet and inside the shell's inset a field
+  MUST stay extruded. The login's form, standing on its photographed
+  ground since 2026-10-01, is the case it was made for. Textarea and
+  Select have no flat variant until a ground asks for one.
 - The discrete button is the one neutral trigger with no volume at rest: it
   is inline text until touched. On hover it MUST take the extruded recipe
   with no fill, the copy answering in bloom (4.7), and when pressed or open
@@ -199,8 +220,9 @@ never by shadow.
   a busy background (a photograph): the shadows have nothing to cast on. A
   secondary takes its place there; the login's switches and nav link
   became secondaries for this reason the same day.
-- A card that floats on a photographed ground (a Card in the login's
-  full-bleed region) MAY wear
+- A card that floats on a photographed ground (a Card on the login's
+  ground from 2026-09-28 to 2026-10-01, when the form took the ground
+  without a frame) MAY wear
   the **glass** variant: the primary button's pane on a surface, a radial
   fill of bark-50 lit from the top-left over a 16px backdrop blur, a 1px
   specular line along the top edge, the translucent ring, and a
@@ -226,7 +248,7 @@ never by shadow.
   is made of, where a component is shown at no particular place. It is
   static, so it stays flat.
   Flat stays the default and the only material for a card inside the
-  shell's inset, and for a card on a flat ground such as the login's stage. Chosen on 2026-09-24 at `/lab/glass` over a lighter
+  shell's inset, and for a card on a flat ground  Chosen on 2026-09-24 at `/lab/glass` over a lighter
   baseline, a deeper extrusion, a pressed well and an edge-lit rim, which
   stay there as the archive.
 - The primary action keeps its own material: the chromatic **glass pane**

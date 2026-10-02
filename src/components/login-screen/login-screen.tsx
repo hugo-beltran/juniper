@@ -1,9 +1,7 @@
 import { type ReactNode, useState } from "react"
 import { Form } from "react-aria-components"
 import { Button } from "@/components/button/button"
-import { Card } from "@/components/card/card"
 import { Input } from "@/components/input/input"
-import { cn } from "@/lib/cn"
 import styles from "./login-screen.module.css"
 
 /* What the form knows. Nothing user-scoped (which workspaces exist, where
@@ -14,12 +12,15 @@ export interface LoginCredentials {
   password: string
 }
 
-/* The sign-in card and its form (the stage chosen 2026-09-25 at
- * /lab/login-2, C): LoginCard, the glass Card whose header the route fills
- * from Card's parts (a title, a lede), and LoginForm, the two ways in on one
- * panel. Nothing around them is a part: the ground, a bar, a footer are the
- * page's own elements (component-architecture §4.7.2). Controlled: the form
- * reports the credentials and the route decides where a sign-in lands.
+/* The sign-in standing on the ground (the stage chosen 2026-09-25 at
+ * /lab/login-2, C; no card since 2026-10-01, a frame around the only thing
+ * on the page frames nothing): Login, the centred column; LoginBrand, the
+ * lockup that heads it, a row the route fills with the logo and the
+ * wordmark and styles itself, because a brand's look is the tenant's; and
+ * LoginForm, the two ways in on one panel. Nothing around them is a part:
+ * the ground, a bar, a footer are the page's own (component-architecture
+ * §4.7.2). Controlled: the form reports the credentials and the route
+ * decides where a sign-in lands.
  *
  * One panel (since 2026-10-01, after the PubDash sign-in): the single
  * sign-on button first, an "or" rule, then the credentials, so both ways
@@ -33,18 +34,12 @@ export interface LoginFormProps {
   onSingleSignOn?: () => void
 }
 
-export function LoginCard({
-  children,
-  className,
-}: {
-  children: ReactNode
-  className?: string
-}) {
-  return (
-    <Card material="glass" className={cn(styles.card, className)}>
-      {children}
-    </Card>
-  )
+export function Login({ children }: { children: ReactNode }) {
+  return <div className={styles.card}>{children}</div>
+}
+
+export function LoginBrand({ children }: { children: ReactNode }) {
+  return <div className={styles.branding}>{children}</div>
 }
 
 export function LoginForm({ onSignIn, onSingleSignOn }: LoginFormProps) {
@@ -80,6 +75,7 @@ export function LoginForm({ onSignIn, onSingleSignOn }: LoginFormProps) {
         label="Email"
         name="email"
         type="email"
+        variant="flat"
         autoComplete="username"
         placeholder="you@club.example"
         autoFocus={!onSingleSignOn}
@@ -92,6 +88,7 @@ export function LoginForm({ onSignIn, onSingleSignOn }: LoginFormProps) {
         label="Password"
         name="password"
         type="password"
+        variant="flat"
         autoComplete="current-password"
         value={password}
         onChange={setPassword}

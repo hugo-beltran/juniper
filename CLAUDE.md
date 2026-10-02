@@ -19,12 +19,15 @@ docs disagree, the docs win; fix this file.
    `oklch(from var(--juni-…) …)`. Font sizes are type-scale tokens only
    (`--text-2xs` … `--text-xl`, `--display-sm`, `--display-md`, `--display-lg`,
    `--display-xl`; see
-   `docs/theming.md` §4.2.1), never a raw rem or px. Route code never
-   touches a token.
+   `docs/theming.md` §4.2.1), never a raw rem or px. Route code touches a token
+   only for the page's own elements: its ground's tint and its brand lockup
+   (`docs/theming.md` §1.6, `docs/component-architecture.md` §4.7.2), never
+   for a control or a surface a component should own.
 4. Interactive controls carry volume: the extruded recipe from
    `--lift-highlight` / `--lift-shade`, inset when pressed
    (`docs/theming.md` §4.6). The primary button keeps its glass pane.
-   Static surfaces stay flat. Compare alternatives at `/lab/lift`. Hover,
+   Static surfaces stay flat; so may a text field on a photograph (Input's
+   `flat` variant), where the lift has nothing to cast on. Compare alternatives at `/lab/lift`. Hover,
    focus and the focus ring (`--ring`) answer in bloom; selection answers
    in needle (§4.4, §4.7). Never draw a green focus ring.
 5. Context lives in CSS, not in React. A component that must differ by

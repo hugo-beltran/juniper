@@ -7,9 +7,8 @@
   min-width: 0;
 }
 
-/* The box — extruded (theming §4.6): the surface pushed out, faint
- * hairline, highlight up-left, shade down-right. Hover pushes further out;
- * focus sinks it, and it stays sunk while the caret is inside. */
+/* The box: the control surface (theming §4.6), fill and faint hairline from
+ * the shared tokens. The volume is the variant's. */
 .input {
   width: 100%;
   border: 1px solid var(--control-hairline);
@@ -17,12 +16,27 @@
   background-color: var(--control-fill);
   color: var(--juni-needle-950);
   font: inherit;
-  box-shadow:
-    -2px -2px 4px var(--lift-highlight),
-    2px 2px 5px var(--lift-shade);
   transition:
     border-color 120ms var(--ease),
     box-shadow 120ms var(--ease);
+}
+
+/* Extruded (the default): the surface pushed out, highlight up-left, shade
+ * down-right. Hover pushes further out; focus sinks it, and it stays sunk
+ * while the caret is inside. */
+.extruded .input {
+  box-shadow:
+    -2px -2px 4px var(--lift-highlight),
+    2px 2px 5px var(--lift-shade);
+}
+
+/* Flat (2026-10-01): the same surface with no lift, for a field on a
+ * photograph or a busy ground where the shadows have nothing to cast on.
+ * Hover and focus still answer in bloom on the hairline, and the focus
+ * ring is the native outline. */
+.flat .input {
+  box-shadow: none;
+  border-color: var(--juni-bloom-200);
 }
 
 /* Sizes mirror Button's so a field and a button share a row. */
@@ -54,13 +68,13 @@
   border-color: var(--juni-bloom-400);
 }
 
-.input[data-hovered] {
+.extruded .input[data-hovered] {
   box-shadow:
     -2px -2px 5px var(--lift-highlight),
     3px 3px 6px var(--lift-shade);
 }
 
-.input[data-focused] {
+.extruded .input[data-focused] {
   box-shadow:
     inset -1px -1px 2px var(--lift-highlight),
     inset 1px 1px 3px var(--lift-shade);

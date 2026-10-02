@@ -12,6 +12,10 @@
    * token so the face can diverge later without touching components; today
    * it resolves to the same Geist (docs/theming.md §4.2). */
   --font-display: var(--font-sans);
+  /* The brand face (added 2026-10-01): Russo One, for the wordmark and nothing
+   * else (docs/theming.md §4.2). The fallback is the sans so a slow load
+   * never shows a serif. */
+  --font-brand: "Russo One", var(--font-sans);
   --font-mono:
     "Geist Mono", source-code-pro, Menlo, Consolas, "DejaVu Sans Mono",
     monospace;

@@ -1,6 +1,6 @@
 {
   "title": "Background noise",
-  "description": "Film grain for a ground: an SVG turbulence filter over a full-size rect at 3% opacity, desaturated so it adds texture and no colour of its own. A background layer: it takes no children and fills the positioned container it is rendered into, behind the siblings that follow, so the grain lands on the ground and never on the content.",
+  "description": "Film grain for a ground: an SVG turbulence filter over a full-size rect at 5% opacity (3% until 2026-10-01, raised when the login's form took the ground without a pane over it), desaturated so it adds texture and no colour of its own. A background layer: it takes no children and fills the positioned container it is rendered into, behind the siblings that follow, so the grain lands on the ground and never on the content.",
   "category": "layout",
   "anatomy": [
     {
@@ -13,13 +13,13 @@
     },
     {
       "part": "Rect",
-      "description": "A full-size rect carrying the filter at opacity 0.03: the grain's strength lives here."
+      "description": "A full-size rect carrying the filter at opacity 0.05: the grain's strength lives here."
     }
   ],
   "usage": [
     "Render it as the first child of a positioned container that isolates (position: relative; isolation: isolate); it fills that container and paints above its background and below its other children. The login route does this for the page ground, rendering it after the ImageOverlay so the grain lands on the photograph; there is no composed ground component (component-architecture §4.7.1).",
     "It carries no colour: the filter is desaturated and the rect is near-transparent, so the palette stays the only colour source and the grain reads the same in light and dark.",
-    "Strength is the rect's opacity (0.03); frequency and octaves set the grain's size. Change them here, never per consumer.",
+    "Strength is the rect's opacity (0.05); frequency and octaves set the grain's size. Change them here, never per consumer.",
     "Never render it above content: grain over text or controls is noise in the wrong sense. It is a ground treatment."
   ],
   "docs": ["component-architecture", "theming"]

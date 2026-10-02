@@ -1,24 +1,28 @@
-/* The card and the form only. What surrounds them (the ground, a bar, a
- * footer) is the page's own, written in the route (component-architecture
- * §4.7.2); the narrow rule below queries the `full-bleed` container the
- * route provides. */
+/* The column, the lockup and the form only. What surrounds them (the
+ * ground, a bar, a footer) is the page's own, written in the route
+ * (component-architecture §4.7.2); the narrow rule below queries the
+ * `full-bleed` container the route provides. */
 
-/* The card: the width but a ceiling of 26rem, the house card with the
- * larger radius and a softer hairline. */
+/* The column: the width but a ceiling of 26rem, centred, no frame (no card
+ * since 2026-10-01). */
 .card {
   justify-self: center;
   align-self: center;
   width: 100%;
   max-width: 26rem;
-  padding: 1.75rem 2rem;
-  border-radius: var(--radius-md);
-  border-color: oklch(from var(--juni-bark-200) l c h / 0.6);
   position: relative;
+}
 
-  & [data-slot="card-header"] {
-    gap: 0.375rem;
-    margin-bottom: 1.25rem;
-  }
+/* The lockup that heads the login: a centred row for the logo and the
+ * wordmark, which the route provides and styles (a brand's look is the
+ * tenant's, theming §1.6). This only arranges. */
+.branding {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem auto 1.25rem;
 }
 
 .form {

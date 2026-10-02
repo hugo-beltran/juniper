@@ -345,15 +345,19 @@ leads table is the reference.
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a
 consumer copies the structure rather than the component. The `login-screen`
-entry is the sign-in card and its form, placed by the route on a ground the
-route composes (4.7.1) inside a page the route writes (4.7.2): a `LoginCard`
-(the glass Card; glass because the ground carries a photograph) whose header
-the route fills from Card's own parts (a title at level 1, a lede) and a
-`LoginForm` (the ways in, react-aria native validation, a controlled API of
-`onSignIn` with the credentials and nothing else), with the router kept in
-the route. One composition serves phone and desktop: the card takes the
-width with tighter padding below 40rem of the `full-bleed` region it stands
-in. A demo entry MUST NOT
+entry is the sign-in standing on the ground, placed by the route on a ground
+the route composes (4.7.1) inside a page the route writes (4.7.2): a `Login`
+(the column, 26rem at most, centred), a `LoginBrand` (the lockup that heads
+it: a centred row the route fills with the logo and the wordmark as an
+`h1`) and a `LoginForm` (the ways in, react-aria native validation, a
+controlled API of `onSignIn` with the credentials and nothing else), with
+the router kept in the route. No card since 2026-10-01: the glass Card the
+form sat in from 2026-09-28 framed a form on an otherwise empty page, and a
+frame around the only thing on the page frames nothing; the lockup over the
+form is what reads as the login, so the greeting and the lede the card's
+header carried went with it. One composition serves phone and desktop: the
+column takes the width below 40rem of the `full-bleed` region it stands in.
+A demo entry MUST NOT
 import the router or the mock data in `src/lib`; a route shell passes data,
 links and the brand in. The registry inlines source files, not assets, so the
 wordmark is an asset the route imports and nothing of it ships in the entry.
@@ -392,15 +396,22 @@ its components (a bar with the wordmark and the visitor's actions, a footer
 line, the box that sizes a logo) are the page's own: plain elements the
 route writes, with a line of layout in the route's module when they need
 one, and never promoted to exported parts, because the project standardises
-components and not pages. `LoginBar`, `LoginBrand`, `LoginNav` and
-`LoginFooter` (2026-09-25) were retired on 2026-10-01 for this reason: each
-was a flex row or a paragraph with one page-specific job, and documenting
-them meant explaining a page. The test: when the only thing to say about an
-element is where it sits on one page, it belongs to that page. Two
-consequences: a demo entry documents what it ships (the login's card and
-form) and nothing around it; and a route carries no comment that walks
-through its layout, because a page that needs a paragraph to explain it has
-too many parts. Simplicity here is not having to explain the page at all.
+components and not pages. `LoginBar`, `LoginNav` and `LoginFooter`
+(2026-09-25) were retired on 2026-10-01 for this reason: each was a flex row
+or a paragraph with one page-specific job, and documenting them meant
+explaining a page. The test: when the only thing to say about an element is
+where it sits on one page, it belongs to that page. The brand is the
+sharpest case. The first `LoginBrand` sized and coloured the wordmark and
+went the same day, because a brand's look (the logo's size, the wordmark's
+face, weight and colour) is the tenant's and nothing the system
+standardises; the `LoginBrand` that replaced it arranges only (a centred
+row, the gap, the margin to the form) and takes the logo and the wordmark as
+children the route styles from its own module, with the asset imported by
+the route (4.7). Two consequences: a demo entry documents what it ships
+(the login's column, lockup and form) and nothing around it; and a route
+carries no comment that walks through its layout, because a page that needs
+a paragraph to explain it has too many parts. Simplicity here is not having
+to explain the page at all.
 
 4.8. **Background layers are standalone.** A component that paints a ground
 (`ImageOverlay`: gradient, photograph, credit; `BackgroundNoise`: film grain)

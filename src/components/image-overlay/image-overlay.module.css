@@ -15,8 +15,8 @@
     linear-gradient(to bottom, var(--juni-bark-100), var(--juni-bark-400) 150%),
     linear-gradient(
       to bottom,
-      var(--juni-needle-700),
-      var(--juni-needle-900) 150%
+      var(--juni-needle-800),
+      var(--juni-bloom-950) 150%
     )
   );
   justify-items: start;

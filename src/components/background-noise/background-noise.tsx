@@ -3,7 +3,9 @@ import { cn } from "@/lib/cn"
 import styles from "./background-noise.module.css"
 
 /* Film grain for a ground: an SVG turbulence filter over a full-size rect at
- * 3% opacity, desaturated so it adds texture and no colour of its own (the
+ * 5% opacity (3% until 2026-10-01, when the login's form took the ground
+ * without a pane over it and the grain had to read on its own), desaturated
+ * so it adds texture and no colour of its own (the
  * palette stays the only colour source). A background layer in the sense of
  * component-architecture §4.8: it takes no children and fills the positioned
  * container it is rendered into, behind the siblings that follow, so the
@@ -33,7 +35,7 @@ export function BackgroundNoise({
         <feColorMatrix type="saturate" values="0" />
         <feBlend in="SourceGraphic" mode="overlay" />
       </filter>
-      <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.03" />
+      <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.05" />
     </svg>
   )
 }

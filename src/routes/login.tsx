@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import LogoIpsum from "@/assets/logo.svg?react"
 import {
   BackgroundNoise,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  Button,
   ImageOverlay,
-  LoginCard,
+  Login,
+  LoginBrand,
   LoginForm,
 } from "@/components"
 import { cn } from "@/lib/cn"
@@ -23,13 +23,17 @@ function LoginPage() {
     <section className={cn(styles.stage, "full-bleed")}>
       <ImageOverlay clarity="low" />
       <BackgroundNoise />
-      <LoginCard>
-        <CardHeader>
-          <CardTitle level={1}>Welcome back</CardTitle>
-          <CardDescription>Sign in to your workspace.</CardDescription>
-        </CardHeader>
+      <Login>
+        <LoginBrand>
+          {/* FakeBrand Logo - replace with actual logo */}
+          <LogoIpsum className={styles.logo} />
+          <h1 className={styles.title}>Juniper</h1>
+        </LoginBrand>
         <LoginForm onSignIn={land} onSingleSignOn={land} />
-      </LoginCard>
+        {/* <Button variant="hero" className={styles.wide} onPress={land}>
+          Single sign-on
+        </Button> */}
+      </Login>
     </section>
   )
 }
