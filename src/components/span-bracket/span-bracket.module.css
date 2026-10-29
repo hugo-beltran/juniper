@@ -1,0 +1,18 @@
+/* The bracket over a plot: a hairline along the selection's columns, its
+ * ends turned up, the span's name over it in the eyebrow's type. */
+.bracket {
+  path {
+    fill: none;
+    stroke: var(--juni-bark-700);
+    stroke-width: 1;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    fill: var(--juni-bark-700);
+  }
+}

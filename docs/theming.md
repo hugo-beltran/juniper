@@ -332,6 +332,62 @@ MUST be applied through CSS classes (`fill`, `stroke` in a module) or, when a
 library only accepts a string, through a `style` attribute that lands a
 `var(--juni-…)` value. Charts then re-theme live with light/dark.
 
+5.2. **Chart tokens.** The theme carries the few tokens a chart needs
+beyond the ramps (added 2026-10-29 with the data-visualisation components,
+ported from the ops dashboard where they were tuned): six categorical steps,
+the track, the out-of-bounds anchor, the heat ramp and the waterfall pair.
+A chart module MUST take its series colours from these and MUST NOT pick
+ramp steps of its own for a series, so every chart on a page is read with
+one key.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--juni-categorical-0` … `-5` | needle-600, a pale needle, a muted berry, the heartwood red, bloom-500, aubergine | Series by position: the first band of a stack, the first segment of a bar, is 0 |
+| `--juni-track` | bark-400 at 25% | What a bar, a ring or a gauge leaves empty |
+| `--juni-needle-out-of-bounds` | bark-200 | The hue anchor for points outside the selection (5.4) |
+| `--juni-needle-heatmap-low` / `-medium` / `-high` | a warm pale needle, needle-500, needle-800 | The heat grid's one-hue ramp, mixed in oklch by value |
+| `--juni-waterfall-rise` / `-fall` | a soft needle-500, categorical-3 | The waterfall's two directions |
+
+5.3. **Position, not meaning.** Categorical colour is assigned by position
+in the series list, never by what the series is: the caller orders the
+series and the chart colours them 0, 1, 2 … in that order. A chart's
+legend (the `Legend` component, or a row of `Swatch`es) MUST pass the same
+`var(--juni-categorical-n)` expressions, so the key and the plot cannot
+disagree. The one meaningful colour is `categorical-3`, the palette's red:
+it is also the colour of every "earlier figure" mark (the diamond on a bar
+list, split bar, butterfly or gauge) and of the line over an area, so a red
+mark always means "compare against this".
+
+5.4. **Out of bounds.** A point outside the selection (a month outside the
+chosen half, a column before the period) is still drawn, so the context
+keeps its shape, but in the out-of-bounds anchor's hue and chroma with only
+its lightness varied: `oklch(from var(--juni-needle-out-of-bounds) calc(l -
+0.1) c h)`. The rule is the same everywhere: the anchor's own lightness is
+the lightest fill (an area, a bar); a line or an outline over it sits about
+0.2 lower; a stack steps 0.08 down per band from the first, so the bands
+keep their order; the heat grid runs its cells from 90% to 46% by value.
+Text beside an out-of-bounds mark never takes the anchor: it stays in
+bark-400. A chart that takes `muted` on its points MUST draw them this way
+and MUST NOT drop them.
+
+5.5. **Hover and focus are the caller's.** A chart reports the point under
+the pointer through `onHover(id | null)` and takes `focus` back; it keeps no
+hover state of its own. While a point is hovered the chart shows it with a
+faint bark wash over its band and a `--juni-needle-pastel` pill behind its
+label, and the other rows, bubbles or steps step back to 45% opacity; with
+`focus` set, the focused point is drawn as the selection on its own (every
+other point out of bounds, or stepped back). The chart never draws a
+tooltip: the summary lives in the caller's `Stat`s and `Legend` values, fed
+from the hovered id, so the figures stay on the page and are readable
+without a pointer. Every chart root carries `role="img"` with a spoken
+summary of its figures; the SVG inside is `aria-hidden`.
+
+5.6. **The selected span.** A chart that takes `span` draws the
+`SpanBracket` over the columns in the selection: a bark-700 hairline with
+turned-up ends and the span's name over it in the eyebrow type, in its own
+row above the plot. The heat grid draws the same bracket in CSS over its
+columns. The bracket names the selection the out-of-bounds hue implies.
+
 ## 6. Global utilities
 
 6.1. `.sr-only` and `.sr-only-focusable` are global classes for visually
@@ -363,12 +419,13 @@ published registry can never contradict this document.
 | --- | --- |
 | 1.4 no color literals in component CSS (hex, rgb, hsl, hwb, lab, lch, color, bare oklch) | build |
 | 1.5 `oklch(from …)` MUST derive from a `--juni-*` step | build |
-| every `--juni-*` step a component references exists in the theme | build |
+| every `--juni-*` step a component references exists in the theme (the chart tokens of 5.2 included) | build |
 | every barrel export carries a `registry.json` sidecar | build |
 | 4.2.1 every `font-size` in component CSS is a type-scale token or `inherit` | build |
 | 1.4 named color keywords, 1.6 tokens in route code, 4.1–4.5 (4.2.1 in route CSS) | review |
 | 4.6 volume: extruded recipe on neutral controls, inset when pressed, flat static surfaces | review |
 | 4.7 pointer colour: hover/focus in bloom, selection in needle | review |
+| 5.2–5.6 series colour by position from the chart tokens, out-of-bounds by the anchor, hover state in the caller | review |
 | color values in TypeScript (for example avatar palettes handed to a third-party renderer) | review |
 
 Rules marked "review" are still normative; they are checked by the reviewer

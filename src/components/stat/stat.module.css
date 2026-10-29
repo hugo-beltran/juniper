@@ -1,0 +1,39 @@
+.stat {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+/* The label in the eyebrow type. */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--juni-bark-700);
+  white-space: nowrap;
+}
+
+.row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--juni-needle-950);
+}
+
+.medium .value {
+  font-size: var(--display-sm);
+}
+
+.large .value {
+  font-size: var(--display-lg);
+}

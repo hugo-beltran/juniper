@@ -1,0 +1,95 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* A gridline and its label, as the other charts draw theirs; the zero line
+ * is the stronger one. */
+.tick {
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.12);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    fill: var(--juni-bark-700);
+  }
+
+  &[data-zero] line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.4);
+    stroke-dasharray: none;
+  }
+}
+
+.row {
+  transition: opacity 120ms var(--ease);
+}
+
+/* The hovered or focused row stays full; the others step back. */
+.root:has(.row:hover) .row:not(:hover),
+.root[data-focus] .row:not([data-focused]) {
+  opacity: 0.45;
+}
+
+.hit {
+  fill: transparent;
+}
+
+.label {
+  font-size: var(--text-sm);
+  fill: var(--juni-bark-800);
+}
+
+/* The run from the lowest value to the highest, as the track. */
+.band {
+  stroke: var(--juni-track);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+/* A value in the selection in needle; one before it in the out-of-bounds
+ * hue, a line's step darker than a fill. */
+.dot {
+  fill: var(--juni-needle-700);
+
+  &[data-muted] {
+    fill: oklch(from var(--juni-needle-out-of-bounds) calc(l - 0.2) c h);
+  }
+}
+
+/* The earlier figure: a ring in bloom, open so the dots under it still show. */
+.prior {
+  fill: none;
+  stroke: var(--juni-bloom-500);
+  stroke-width: 1.5;
+}
+
+/* The selection's own figure: a warm heartwood bar edged in the sunflower's
+ * bold step so it holds on the light surface. */
+.mark {
+  fill: var(--juni-heartwood-300);
+  stroke: var(--juni-sunflower-bold);
+  stroke-width: 1;
+}
+
+/* In the mask, the bar grown by the halo: black is coverage there, so the
+ * surface shows through around the bar. */
+.halo {
+  fill: black;
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  fill: var(--juni-bark-700);
+}

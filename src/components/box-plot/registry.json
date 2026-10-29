@@ -1,0 +1,25 @@
+{
+  "title": "Box plot",
+  "description": "One box per column on a log scale: first to third quartile as a needle box, the median as a surface-coloured line across it, whiskers to the extremes; muted columns out of bounds. Focusing a column marks its high and low with a hairline across the plot and a chip on the column, so there is no tooltip.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "BoxPlot",
+      "description": "The root with data-slot=\"box-plot\", role=\"img\" and a summary of every column's count, range and median."
+    },
+    {
+      "part": "column",
+      "description": "A group per box with --fill and --ink (needle-700 and needle-900, out of bounds when muted): hit rect, hover wash, whisker, box, median, label pill and label."
+    },
+    {
+      "part": "marker",
+      "description": "For the focused column, a hairline across the plot at its high and its low and a needle-pastel chip on the column naming each; the two chips step clear when the lines are close."
+    }
+  ],
+  "usage": [
+    "Figures must be positive: the scale is logarithmic and clamps at 1. Use it for amounts that spread over orders of magnitude (contract values, attendance), not for rates.",
+    "countLabel names what count counts in the summary ('games', 'signings').",
+    "A column with count 0 shows its label alone; pass it rather than dropping the period, so the axis keeps its rhythm."
+  ],
+  "docs": ["theming"]
+}

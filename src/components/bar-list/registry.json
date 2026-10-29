@@ -1,0 +1,26 @@
+{
+  "title": "Bar list",
+  "description": "A compact ranked list, two lines per row: the name, then the value, a thin needle bar on a shared track and a change at the right. An earlier value sits on the track as a heartwood diamond with the track carved away around it. Hover and focus step the other rows back.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "BarList",
+      "description": "The root grid with data-slot=\"bar-list\", role=\"img\" and a spoken summary; data-focus while a row is focused."
+    },
+    {
+      "part": "row",
+      "description": "One item on a subgrid: label over value, lane and change; data-focused on the focused one; onMouseEnter/Leave report to onHover."
+    },
+    {
+      "part": "lane",
+      "description": "An inline-size container holding the track (the fill from the left, masked around the prior mark) and the prior mark, both placed from the --share custom property."
+    }
+  ],
+  "usage": [
+    "Pass the domain the rows share ([0, max]) so every bar is drawn on one scale; the component clamps values inside it.",
+    "The change slot takes a ReactNode: a DeltaChip is the usual occupant.",
+    "The list is controlled for hover: keep focus in the caller and feed it back, or leave both off for a static list.",
+    "Chart colours are the track token and needle-700; the prior mark is categorical-3, the palette's one red (theming §5.2)."
+  ],
+  "docs": ["theming", "component-architecture"]
+}

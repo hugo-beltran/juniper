@@ -1,0 +1,115 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* The area, in needle; its out-of-bounds twin keeps the shape of the context
+ * without its colour. */
+.area {
+  --fill: var(--juni-categorical-0);
+
+  .live {
+    fill: var(--fill);
+  }
+
+  /* Out of bounds: the anchor as it is. */
+  .muted {
+    fill: oklch(from var(--juni-needle-out-of-bounds) l c h);
+  }
+}
+
+/* In the mask, the line's course that is cut out of the area (black is
+ * coverage there, not colour). */
+.carve {
+  fill: none;
+  stroke: black;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* The line over the area, in the palette's red against the area's green. */
+.line {
+  --stroke: var(--juni-categorical-3);
+
+  path {
+    fill: none;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .live {
+    stroke: var(--stroke);
+  }
+
+  /* Out of bounds: the anchor a fifth darker, so the line still reads over the area. */
+  .muted {
+    stroke: oklch(from var(--juni-needle-out-of-bounds) calc(l - 0.2) c h);
+  }
+}
+
+/* A gridline and its label; the zero line is the stronger one. */
+.tick {
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.12);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    fill: var(--juni-bark-700);
+  }
+
+  &[data-zero] line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.4);
+    stroke-dasharray: none;
+  }
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  fill: var(--juni-bark-800);
+}
+
+.point[data-muted] text {
+  fill: var(--juni-bark-400);
+}
+
+/* A point's hit area is invisible; while the pointer is on it, a faint wash
+ * over the plot says which point that is, and under the axis a pill behind
+ * the point's label picks the label out. */
+.hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.wash,
+.pill {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms var(--ease);
+}
+
+.wash {
+  fill: oklch(from var(--juni-bark-900) l c h / 0.06);
+}
+
+.pill {
+  fill: oklch(from var(--juni-needle-pastel) l c h / 0.8);
+}
+
+.point:hover :is(.wash, .pill) {
+  opacity: 1;
+}
+
+.point:hover .label {
+  fill: var(--juni-needle-800);
+}

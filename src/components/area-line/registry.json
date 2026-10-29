@@ -1,0 +1,30 @@
+{
+  "title": "Area line",
+  "description": "One series as a needle area from the baseline and an optional second as a red line over it, on one scale or (lineScale own) on the line's own scale labelled down the right. The area is carved away around the line where they overlap. Muted points draw out of bounds; hover and focus work per point as in StackedArea.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "AreaLine",
+      "description": "The root with data-slot=\"area-line\", role=\"img\" and a summary naming each point's area and line figures; measures its width and draws the plot."
+    },
+    {
+      "part": "area",
+      "description": "A group with --fill categorical-0: the muted path under the live path clipped to the selection, masked by the line's halo when there is a line."
+    },
+    {
+      "part": "line",
+      "description": "A group with --stroke categorical-3: the muted stroke under the live stroke clipped to the selection."
+    },
+    {
+      "part": "point",
+      "description": "A group per point: hit rect over its half steps, hover wash, label pill and label; data-muted when out of bounds."
+    }
+  ],
+  "usage": [
+    "Use the shared scale when the two series are the same unit (runs scored over runs allowed) and lineScale own when the line is a rate over a count.",
+    "formatLine writes the line's own axis and its figures in the summary; it defaults to formatTick.",
+    "The area is always categorical-0 and the line categorical-3; a legend the caller writes uses the same two tokens.",
+    "AreaBand and AreaPoint come from StackedArea; one points array can feed both charts."
+  ],
+  "docs": ["theming"]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Range dots",
+  "description": "One row per item on a shared scale from zero: its values as needle dots with the run between lowest and highest as a track band, the selection's own figure as a warm bar carved clear of the dots, the earlier figure as a bloom ring, and the figure written at the row's end. Muted dots take the out-of-bounds hue.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "RangeDots",
+      "description": "The root with data-slot=\"range-dots\", role=\"img\", the summary and data-focus; draws one SVG of the rows' height plus the axis."
+    },
+    {
+      "part": "row",
+      "description": "A group per item: an invisible hit rect over the row, the label, the masked band, dots and prior ring, the mark bar and the figure; data-focused on the focused one."
+    },
+    {
+      "part": "mark",
+      "description": "The selection's figure as a 4px bar across the row, heartwood-300 edged in sunflower-bold; its halo in the mask cuts the surface around it."
+    }
+  ],
+  "usage": [
+    "values are the individual observations (a game's figure each); mark is the selection's aggregate and prior the earlier one's, each nullable.",
+    "Name the ring with priorLabel so the summary reads 'last season 3.2' rather than 'before'.",
+    "Rows share one scale from zero, so a row's position is comparable with the rows above and below it.",
+    "Keep hover in the caller: onHover reports the row's id or null, focus holds one row full while the others step back."
+  ],
+  "docs": ["theming"]
+}

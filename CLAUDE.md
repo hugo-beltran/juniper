@@ -23,6 +23,10 @@ docs disagree, the docs win; fix this file.
    only for the page's own elements: its ground's tint and its brand lockup
    (`docs/theming.md` §1.6, `docs/component-architecture.md` §4.7.2), never
    for a control or a surface a component should own.
+   A chart takes its series colours from the chart tokens
+   (`--juni-categorical-*`, `--juni-track`, `--juni-needle-out-of-bounds`,
+   the heat ramp, the waterfall pair; `docs/theming.md` §5.2–5.6), by
+   position, and keeps no hover state: the caller holds it.
 4. Interactive controls carry volume: the extruded recipe from
    `--lift-highlight` / `--lift-shade`, inset when pressed
    (`docs/theming.md` §4.6). The primary button keeps its glass pane.

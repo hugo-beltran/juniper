@@ -1,0 +1,26 @@
+{
+  "title": "Butterfly",
+  "description": "Two sides compared measure by measure: per row, the left side's bar grows left from the centre and the right side's grows right on the row's own scale, each side's figure under its bar at the outer edge with the larger in bold and its side's colour, an optional change chip beneath, and an earlier figure as a red diamond carved into the bar.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Butterfly",
+      "description": "The root with data-slot=\"butterfly\", role=\"img\" and the summary; sets --left and --right from the sides' colours."
+    },
+    {
+      "part": "sides",
+      "description": "The header row: each side's Swatch and name in its colour, and between them the key for the prior mark when priorLabel is given."
+    },
+    {
+      "part": "row",
+      "description": "A grid per measure: the eyebrow label, two lanes (each an inline-size container with its track, fill and prior mark) and two feet (figure with data-leads on the larger, then the change)."
+    }
+  ],
+  "usage": [
+    "Give each side a colour as a var(--juni-…) expression; home in categorical-0 and away in categorical-4 is the house pairing.",
+    "Each row carries its own format, so unlike measures (a count, a rate, an average) can share the chart.",
+    "Pass leftChange and rightChange as DeltaChips when there is a base to compare against; leave them out otherwise.",
+    "The scale is per row, so bars compare within a row, never down a column."
+  ],
+  "docs": ["theming"]
+}

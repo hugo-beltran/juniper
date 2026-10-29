@@ -108,6 +108,12 @@
               "to": "/trade-analyzer",
               "icon": "arrows-right-left",
               "surfaces": ["sidebar", "dock"]
+            },
+            {
+              "label": "Season",
+              "to": "/season",
+              "icon": "chart-bar",
+              "surfaces": ["sidebar", "dock"]
             }
           ]
         }

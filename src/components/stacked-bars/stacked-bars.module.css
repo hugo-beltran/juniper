@@ -1,0 +1,122 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* A band's colour by its position in the stack, from the categorical tokens
+ * (theming §5.3); the same index sets how far out of bounds steps it down. */
+.band[data-band="0"] {
+  --fill: var(--juni-categorical-0);
+  --band: 0;
+}
+
+.band[data-band="1"] {
+  --fill: var(--juni-categorical-1);
+  --band: 1;
+}
+
+.band[data-band="2"] {
+  --fill: var(--juni-categorical-2);
+  --band: 2;
+}
+
+.band[data-band="3"] {
+  --fill: var(--juni-categorical-3);
+  --band: 3;
+}
+
+.band[data-band="4"] {
+  --fill: var(--juni-categorical-4);
+  --band: 4;
+}
+
+.band[data-band="5"] {
+  --fill: var(--juni-categorical-5);
+  --band: 5;
+}
+
+/* The blocks leave the pointer to the column under them. */
+.block {
+  fill: var(--fill);
+  pointer-events: none;
+  transition: fill 120ms var(--ease);
+
+  /* Out of bounds: the anchor's hue and chroma, a step of lightness darker
+   * per band, so the stack keeps its order. */
+  &[data-muted] {
+    fill: oklch(
+      from var(--juni-needle-out-of-bounds) calc(l - var(--band, 0) * 0.08) c h
+    );
+  }
+}
+
+/* A column's hit area is invisible; while the pointer is on it, a faint wash
+ * over the plot says which column that is. */
+.hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.wash,
+.pill {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms var(--ease);
+}
+
+.wash {
+  fill: oklch(from var(--juni-bark-900) l c h / 0.06);
+}
+
+/* Under the axis, the pill behind the column's label, with the label in the
+ * darker needle over it. */
+.pill {
+  fill: oklch(from var(--juni-needle-pastel) l c h / 0.8);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xs);
+  fill: var(--juni-bark-800);
+}
+
+.column:hover {
+  .wash,
+  .pill {
+    opacity: 1;
+  }
+
+  .label {
+    fill: var(--juni-needle-800);
+  }
+}
+
+/* A gridline and its label; the zero line is the stronger one. */
+.tick {
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.12);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    fill: var(--juni-bark-700);
+  }
+
+  &[data-zero] line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.4);
+    stroke-dasharray: none;
+  }
+}
+
+.column[data-muted] .label {
+  fill: var(--juni-bark-400);
+}

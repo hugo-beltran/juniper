@@ -1,0 +1,71 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* A gridline and its label, as the stacked bars draw theirs; the zero line
+ * is the stronger one. */
+.tick {
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.12);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    fill: var(--juni-bark-700);
+  }
+
+  &[data-zero] line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.4);
+    stroke-dasharray: none;
+  }
+}
+
+/* The reference value, between a gridline and the zero line in weight. */
+.reference {
+  stroke: oklch(from var(--juni-bark-900) l c h / 0.3);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+/* The axes' names in the eyebrow type. */
+.axisName {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  fill: var(--juni-bark-700);
+}
+
+.bubble {
+  transition: opacity 120ms var(--ease);
+}
+
+/* The hovered or focused bubble stays full; the others step back, so it
+ * reads as the one named. */
+.root:has(.bubble:hover) .bubble:not(:hover),
+.root[data-focus] .bubble:not([data-focused]) {
+  opacity: 0.45;
+}
+
+/* The split bars' filled needle, see-through where bubbles overlap, ringed
+ * in the darker step so each edge holds. */
+.mark {
+  fill: oklch(from var(--juni-needle-700) l c h / 0.6);
+  stroke: var(--juni-needle-900);
+  stroke-width: 1;
+}
+
+.label {
+  font-size: var(--text-xs);
+  fill: var(--juni-bark-800);
+}

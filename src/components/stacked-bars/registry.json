@@ -1,0 +1,25 @@
+{
+  "title": "Stacked bars",
+  "description": "One column per point stacked by band from the baseline, blocks coloured by position from the categorical tokens with a 2px surface gap between them; muted points draw out of bounds. Each column owns its band of the width for hover, with a wash and a label pill.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "StackedBars",
+      "description": "The root with data-slot=\"stacked-bars\", role=\"img\" and the per-column totals as its summary."
+    },
+    {
+      "part": "column",
+      "description": "A group per point: hit rect over its band, hover wash, label pill and label; data-muted when out of bounds."
+    },
+    {
+      "part": "band",
+      "description": "A visx BarStack group per band with --fill var(--juni-categorical-<index>) and --band; each block rect carries data-muted with its column."
+    }
+  ],
+  "usage": [
+    "Takes the same bands and points as StackedArea; use bars for a handful of discrete periods (innings, quarters) and the area for a run of many.",
+    "A block shorter than the gap is not drawn, so a tiny share never shows as a hairline.",
+    "Keep hover in the caller: onHover reports the column's id or null; focus draws one column alone in colour."
+  ],
+  "docs": ["theming"]
+}

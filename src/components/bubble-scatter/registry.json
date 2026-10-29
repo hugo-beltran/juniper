@@ -1,0 +1,26 @@
+{
+  "title": "Bubble scatter",
+  "description": "One translucent needle bubble per item: across on a log scale ticked at powers of ten, up on a linear scale from zero, area proportional to size. Largest drawn first so small ones stay on top, each labelled on the side with room; an optional reference line and axis names in the eyebrow type.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "BubbleScatter",
+      "description": "The root with data-slot=\"bubble-scatter\", role=\"img\", the summary and data-focus; measures its width and draws the plot at height."
+    },
+    {
+      "part": "bubble",
+      "description": "A group per item: the circle (needle-700 at 60%, needle-900 stroke) and its label; data-focused on the focused one, siblings step back on hover."
+    },
+    {
+      "part": "axisName",
+      "description": "The y axis's name at the top left and the x axis's at the bottom right, mono 2xs uppercase."
+    }
+  ],
+  "usage": [
+    "x must be positive (log scale); y is linear from zero; size drives area, not radius, so a figure twice another reads as twice the bubble.",
+    "Pass reference for a line the reader compares against: the league average, parity.",
+    "Three formatters write the summary and the ticks: formatX, formatY and formatSize, with tick variants when the axis wants a shorter form.",
+    "All bubbles wear one colour; the position and area carry the data. A second series is a second chart."
+  ],
+  "docs": ["theming"]
+}

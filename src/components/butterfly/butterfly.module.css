@@ -1,0 +1,208 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* The two sides named over their halves. */
+.sides {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  font-weight: 600;
+
+  & span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+}
+
+.left {
+  color: var(--left);
+}
+
+.right {
+  color: var(--right);
+}
+
+/* A measure: its name over the whole row, the two bars meeting in the
+ * middle, and each side's figure and change under its bar at the outer
+ * edge. The halves are exactly half each, whatever their figures need, so
+ * every row's bars start at the same centre. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "label label"
+    "left-track right-track"
+    "left-foot right-foot";
+  align-items: center;
+  column-gap: 3px;
+  row-gap: 0.375rem;
+}
+
+/* The measure's name in the eyebrow type. */
+.label {
+  grid-area: label;
+  justify-self: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--juni-bark-700);
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--juni-bark-700);
+
+  /* the larger figure of the row, in its side's colour */
+  &[data-leads] {
+    font-weight: 700;
+  }
+
+  &[data-leads][data-side="left"] {
+    color: var(--left);
+  }
+
+  &[data-leads][data-side="right"] {
+    color: var(--right);
+  }
+}
+
+/* A half of the row: the track and its mark side by side, so the cut around
+ * the mark takes the bar and not the mark. The lane is a container, so the
+ * mark and the cut are placed in its own width. */
+.lane {
+  position: relative;
+  display: flex;
+  container-type: inline-size;
+
+  &[data-side="left"] {
+    grid-area: left-track;
+  }
+
+  &[data-side="right"] {
+    grid-area: right-track;
+  }
+}
+
+/* The mark's distance from the middle, to a whole pixel, worked out alike on
+ * the track and the mark (both read the lane's width), so the cut and the
+ * mark sit on the same coordinates. */
+.track,
+.prior {
+  --x: round(calc(var(--share) * 100cqw), 1px);
+}
+
+/* The bar grows out from the middle. With a mark, a square turned on its
+ * corner, the mark grown by the halo, is cut out of the bar at the mark's
+ * place, so the surface shows around it: 14px high, so the cut is centred
+ * 1px above its 16px image. The mask is coverage, not colour. */
+.track {
+  --halo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='2.5' y='2.5' width='11' height='11' rx='2.5' transform='rotate(45 8 8)'/%3E%3C/svg%3E");
+
+  display: flex;
+  flex: 1;
+  height: 14px;
+
+  & i {
+    display: block;
+    height: 100%;
+    min-width: 2px;
+  }
+
+  &[data-side="left"] {
+    justify-content: flex-end;
+
+    & i {
+      border-radius: 3px 0 0 3px;
+      background: var(--left);
+    }
+
+    &[data-cut] {
+      mask:
+        var(--halo) no-repeat calc(100cqw - var(--x) - 8px) -1px / 16px 16px,
+        linear-gradient(black 0 0);
+      mask-composite: exclude;
+    }
+  }
+
+  &[data-side="right"] {
+    & i {
+      border-radius: 0 3px 3px 0;
+      background: var(--right);
+    }
+
+    &[data-cut] {
+      mask:
+        var(--halo) no-repeat calc(var(--x) - 8px) -1px / 16px 16px,
+        linear-gradient(black 0 0);
+      mask-composite: exclude;
+    }
+  }
+}
+
+/* The earlier figure: the split bars' mark, a heartwood square turned on its
+ * corner, 8px about the cut's centre and centred on the 14px track, its
+ * edges on whole pixels. */
+.prior {
+  position: absolute;
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 1.5px;
+  background: var(--juni-categorical-3);
+  transform: rotate(45deg);
+
+  &[data-side="left"] {
+    right: calc(var(--x) - 4px);
+  }
+
+  &[data-side="right"] {
+    left: calc(var(--x) - 4px);
+  }
+}
+
+/* Between the sides' names, what the mark stands for. */
+.key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--juni-bark-800);
+}
+
+.keyMark {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin: 0 2px;
+  border-radius: 1px;
+  background: var(--juni-categorical-3);
+  transform: rotate(45deg);
+}
+
+/* A side's figure with its change under it, held to the side's outer edge. */
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &[data-side="left"] {
+    grid-area: left-foot;
+    align-items: flex-start;
+  }
+
+  &[data-side="right"] {
+    grid-area: right-foot;
+    align-items: flex-end;
+  }
+}

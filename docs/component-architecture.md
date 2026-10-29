@@ -18,7 +18,7 @@ modules as the styling layer.
 | Slotting | `@radix-ui/react-slot` for `asChild` only |
 | Icons | `@heroicons/react/24/outline` |
 | Tables | `@tanstack/react-table` v9 (`useTable` + `tableFeatures`) |
-| Charts | visx primitives with d3 helpers |
+| Charts | visx primitives with d3 helpers; the `dataviz` entries (theming §5), measured with `useParentSize` and coloured only through classes |
 | Search-param validation | `zod` schemas passed to the route's `validateSearch` |
 
 1.1. New components MUST use react-aria-components as the primitive source
@@ -89,7 +89,12 @@ curve for a photograph and initials (the tile clips what is drawn on it;
 the faces are the avatar's). A private *hook* is promoted to
 `src/lib/` instead, where the registry publishes it as a `lib` entry:
 `use-click-outside` went there the same day, shared by the switcher and
-the profile.
+the profile. The data-visualisation set (2026-10-29, ported from the
+ops dashboard) arrived with two shared parts already promoted: `swatch`,
+because the `butterfly` draws its sides with it and a route's `legend`
+does too, and `span-bracket`, a `<g>` five charts render inside their own
+SVG; the `AreaBand` and `AreaPoint` types stay in `stacked-area` and
+`area-line` and `stacked-bars` import them from there (2.5).
 
 2.3.1. **Shared chrome is composed, not copied.** Labelled controls (Input,
 Textarea, Select) render the `field` parts for their label, description and
@@ -341,6 +346,15 @@ space a table has and every component inside the inset must switch
 together; the inset measures before paint so the layout never flashes.
 Never fork the data or the column definitions for a mobile variant. The
 leads table is the reference.
+
+4.6.1. **A chart card is the route's.** A dashboard is cards, and each
+chart card is composed by the route from `Card` (title at level 3, so the
+parts set small and to the start), the chart, a `Legend` and a row of
+`Stat`s for the readout, with the hover id held in the route's state and
+fed back as `focus`; the route's module lays out the grid and the rows and
+nothing else (theming §1.6). No `ChartCard` wraps them, for the reason
+4.7.1 gives. The Season page (`/season`, 2026-10-29) is the reference: every
+`dataviz` entry on one page, on mock sports figures.
 
 4.7. **Reference compositions.** Registry entries in the `demo` category are
 screens or screen-sized parts assembled from the primitives, published so a

@@ -13,7 +13,7 @@
     },
     {
       "part": "CardTitle",
-      "description": "react-aria Heading with data-slot=\"card-title\": display-md in the display face, weight 700, bloom-800, centred and balanced (text-wrap: balance). `level` picks the element (h2 by default; a card that is the page's main content passes 1)."
+      "description": "react-aria Heading with data-slot=\"card-title\": display-md in the display face, weight 700, bloom-800, centred and balanced (text-wrap: balance). `level` picks the element (h2 by default; a card that is the page's main content passes 1). At level 3 or below the title is one of many on a page and sets at text-lg to the start, with the description under it at text-sm (added 2026-10-29)."
     },
     {
       "part": "CardDescription",
@@ -30,6 +30,7 @@
     "Pick the material by placement: flat everywhere a card sits on the sheet or inside the shell's inset, where a card separates by border and tint; dotted only for a stage that shows a component at no particular place (the Components catalogue at /components/buttons), never as a page surface. There is no material for a card on a photograph: the product has no such card since the login's form took the ground (2026-10-01), and the glass and dark-glass panes went with it (theming §4.6). A card on a photograph wears the global .glass class like any other element (theming §6.2).",
     "Prefer extending Card over drawing a bordered box in a route or feature module.",
     "A card's title and intro are CardTitle and CardDescription inside CardHeader; never restate their size or colour in route CSS (theming §1.6).",
+    "Pick the title's level by the card's place: 1 for a screen that is one card, 2 for a section, 3 for a card among many (a chart card on a dashboard), where the parts set smaller and to the start on their own.",
     "CardContent is deliberately not ported: Card already pads. Put the body straight inside Card between the header and the footer.",
     "Promotion precedent: a private descendant becomes a top-level component like this one when a second, unrelated component needs it."
   ],

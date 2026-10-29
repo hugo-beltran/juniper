@@ -788,6 +788,7 @@ export type NavIcon =
   | "rectangle-group"
   | "arrows-right-left"
   | "chart-pie"
+  | "chart-bar"
   | "cog"
   | "cube"
   | "users"

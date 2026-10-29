@@ -149,6 +149,46 @@
    * Hairline dimmed 2026-09-29 from 60% to 75%. */
   --control-fill: oklch(from var(--juni-bark-50) 95% c h);
   --control-hairline: oklch(from var(--juni-bark-200) l c h / 0.75);
+
+  /* Chart tokens (added 2026-10-29 with the data-visualisation components,
+   * theming §5.2–5.6). Categorical series by position, 0 first: the brand's
+   * needle, a paler needle, a muted berry, the palette's one red (heartwood
+   * at the mean lightness and chroma of the reds it replaced), bloom's teal
+   * and the aubergine accent, so a stack of six keeps every band apart. */
+  --juni-categorical-0: var(--juni-needle-600);
+  --juni-categorical-1: oklch(from var(--juni-needle-300) l 20% 120);
+  --juni-categorical-2: oklch(from var(--juni-berry-200) 60% 8% h);
+  --juni-categorical-3: oklch(from var(--juni-heartwood-500) 66% 30% h);
+  --juni-categorical-4: var(--juni-bloom-500);
+  --juni-categorical-5: var(--juni-aubergine);
+
+  /* The heat grid's ramp: a cell's fill is mixed in oklch from low through
+   * medium to high with its value, a warm pale needle for the least through
+   * needle to the deepest needle for the most, so a low cell reads warm
+   * rather than merely pale. */
+  --juni-needle-heatmap-low: oklch(from var(--juni-needle-200) l 4% 116);
+  --juni-needle-heatmap-medium: var(--juni-needle-500);
+  --juni-needle-heatmap-high: var(--juni-needle-800);
+
+  /* Out of bounds: what every chart draws for the points outside the
+   * selection, so context keeps its shape without the selection's colour.
+   * The token is a hue anchor and the rule is the same everywhere: a mark
+   * takes the anchor's hue and chroma and varies only its lightness,
+   * `oklch(from var(--juni-needle-out-of-bounds) calc(l - 0.1) c h)`. The
+   * anchor's own lightness is the lightest fill (an area, a bar); a line or
+   * an outline over it sits about 0.2 lower; a stack steps 0.08 down per
+   * band from the first; the heat grid runs its cells from 90% to 46%. Text
+   * beside an out-of-bounds mark never takes the anchor: bark-400. */
+  --juni-needle-out-of-bounds: var(--juni-bark-200);
+
+  /* The track: what a bar, a ring or a gauge leaves empty, as a faint bark
+   * wash with no outline. */
+  --juni-track: oklch(from var(--juni-bark-400) l c h / 0.25);
+
+  /* The waterfall's two directions: a rise in a soft needle, a fall in the
+   * categorical red. */
+  --juni-waterfall-rise: oklch(from var(--juni-needle-500) l 25% h);
+  --juni-waterfall-fall: var(--juni-categorical-3);
 }
 
 :root ::selection {

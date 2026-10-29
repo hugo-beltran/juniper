@@ -1,0 +1,63 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* The gap to the target, as the track. */
+.gap {
+  fill: var(--juni-track);
+}
+
+/* A segment's colour by position, and its outline when it asks for one: the
+ * swatch's by default, a darker needle on the first. */
+.segment {
+  --fill: var(--juni-needle-500);
+  --stroke: oklch(from var(--juni-bark-600) l c h / 0.5);
+  transition: opacity 120ms var(--ease);
+
+  &[data-index="0"] {
+    --fill: var(--juni-needle-700);
+    --stroke: var(--juni-needle-900);
+  }
+
+  &[data-index="1"] {
+    --fill: var(--juni-categorical-1);
+  }
+
+  &[data-index="2"] {
+    --fill: var(--juni-categorical-3);
+  }
+
+  rect {
+    fill: var(--fill);
+  }
+
+  &[data-outlined] rect {
+    stroke: var(--stroke);
+    stroke-width: 1;
+  }
+}
+
+/* The hovered segment stays full; its siblings step back, so the pointer's
+ * segment reads as the one named. */
+.root:has(.segment:hover) .segment:not(:hover) {
+  opacity: 0.45;
+}
+
+.marker {
+  polygon {
+    fill: var(--juni-bark-800);
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    fill: var(--juni-bark-700);
+  }
+}
