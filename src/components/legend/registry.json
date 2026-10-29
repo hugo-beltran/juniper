@@ -1,0 +1,21 @@
+{
+  "title": "Legend",
+  "description": "The key beside a chart: a Swatch and a label per series in series order, with an optional figure after each. The caller passes the same var(--juni-…) expressions the chart's bands wear, so the key cannot drift from the plot.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Legend",
+      "description": "A ul with data-slot=\"legend\": a wrapping row of items with no list styling."
+    },
+    {
+      "part": "item",
+      "description": "A li holding the Swatch, the label in text-sm bark-800 and, when given, the value in mono text-sm bark-700."
+    }
+  ],
+  "usage": [
+    "Order the items as the chart stacks or ranks its series; the first band is categorical-0.",
+    "Pass value to turn the legend into a readout: the series' total at rest, the hovered point's figure while the pointer is on the chart.",
+    "A chart with one series needs no legend; its title says what it is."
+  ],
+  "docs": ["theming"]
+}

@@ -1,0 +1,53 @@
+/* The Season page's arrangement and nothing else: the controls row, the KPI
+ * row, the grid of chart cards and the rows inside them. Type and colour
+ * belong to the parts (theming §1.6). */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.controls > * {
+  min-width: 11rem;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+/* A chart card stacks its header, the plot, the legend and the readout. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.centred {
+  align-items: center;
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Target bar",
+  "description": "One horizontal bar to a target: solid segments stacked from the left, coloured by position (needle-700, then categorical-1 and -3), the remaining gap drawn as the track, an optional inset segment lying inside the gap for what is possible but not banked, and a triangle marker on the same scale (games played, last season's level) with a label above.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "TargetBar",
+      "description": "The root with data-slot=\"target-bar\", role=\"img\" and the summary; measures its width and draws the SVG at height plus the marker's room."
+    },
+    {
+      "part": "segment",
+      "description": "A visx Bar per segment in a group carrying data-index and data-outlined, with a <title> naming it on hover; siblings step back while one is hovered."
+    },
+    {
+      "part": "marker",
+      "description": "A bark-800 triangle pointing down onto the bar, its label in mono 2xs above, anchored to stay inside the plot."
+    }
+  ],
+  "usage": [
+    "Segments are a progression, not categories: order them from banked to speculative and mark the speculative one inset.",
+    "The scale is [0, target], clamped; a value past the target fills the bar.",
+    "The legend is the caller's: a row of Swatch and label pairs using the same position colours (needle-700, categorical-1, categorical-3)."
+  ],
+  "docs": ["theming"]
+}

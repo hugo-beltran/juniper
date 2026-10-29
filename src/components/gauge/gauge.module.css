@@ -1,0 +1,45 @@
+.root {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5rem;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* A section the share reaches: its fill is set inline, a color-mix between
+ * needle-200 (empty) and needle-700 (full) by how much of it is covered. */
+.section {
+  transition: fill 120ms var(--ease);
+}
+
+/* A section the share does not reach, as the track. */
+.track {
+  fill: var(--juni-track);
+}
+
+/* The mark, in the palette's red. */
+.mark {
+  fill: var(--juni-categorical-3);
+}
+
+/* Inside the mask, coverage not colour: the halo is the same square as the
+ * mark grown by its stroke, in black, cutting the surface around the mark
+ * out of the ring. */
+.halo {
+  fill: black;
+  stroke: black;
+  stroke-linejoin: round;
+}
+
+/* The caller's figure inside the arc, centred on its baseline. */
+.centre {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}

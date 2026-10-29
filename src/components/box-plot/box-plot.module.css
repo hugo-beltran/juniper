@@ -1,0 +1,125 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+.column {
+  --fill: var(--juni-needle-700);
+  --ink: var(--juni-needle-900);
+  transition: opacity 120ms var(--ease);
+
+  /* Out of bounds: the box a tenth under the anchor, its lines a further
+   * fifth, so the shape keeps its edges. */
+  &[data-muted] {
+    --fill: oklch(from var(--juni-needle-out-of-bounds) calc(l - 0.1) c h);
+    --ink: oklch(from var(--juni-needle-out-of-bounds) calc(l - 0.3) c h);
+  }
+}
+
+/* A column's hit area is invisible; while the pointer is on it, a faint wash
+ * over the plot says which column that is. */
+.hit {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.wash,
+.pill {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms var(--ease);
+}
+
+.wash {
+  fill: oklch(from var(--juni-bark-900) l c h / 0.06);
+}
+
+/* Under the axis, the pill behind the column's label, with the label in the
+ * darker needle over it. */
+.pill {
+  fill: oklch(from var(--juni-needle-pastel) l c h / 0.8);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  fill: var(--juni-bark-800);
+}
+
+.column:hover {
+  .wash,
+  .pill {
+    opacity: 1;
+  }
+
+  .label {
+    fill: var(--juni-needle-800);
+  }
+}
+
+.whisker {
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+.box {
+  fill: var(--fill);
+  stroke: var(--ink);
+  stroke-width: 1;
+}
+
+/* The median, in the surface so it reads against the box. */
+.median {
+  stroke: var(--juni-bark-50);
+  stroke-width: 1;
+}
+
+/* A gridline and its label. */
+.tick {
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.12);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    fill: var(--juni-bark-700);
+  }
+}
+
+.column[data-muted] .label {
+  fill: var(--juni-bark-400);
+}
+
+/* The focused column's highest and lowest figure: a hairline across the plot
+ * under the columns, and on the column a chip rounded to a pill, in the
+ * label pill's colour, with the figure. Neither takes the pointer, which
+ * belongs to the columns. */
+.marker {
+  pointer-events: none;
+
+  line {
+    stroke: oklch(from var(--juni-bark-900) l c h / 0.35);
+    stroke-width: 1;
+  }
+
+  text {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-2xs);
+    font-weight: 600;
+    fill: var(--juni-needle-800);
+  }
+}
+
+.chip {
+  fill: oklch(from var(--juni-needle-pastel) l c h / 0.8);
+}

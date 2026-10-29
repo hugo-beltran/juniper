@@ -1,0 +1,28 @@
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--juni-bark-800);
+}
+
+/* The figure after a label, in the charts' mono. */
+.value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--juni-bark-700);
+}

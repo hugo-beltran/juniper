@@ -1,0 +1,22 @@
+{
+  "title": "Waterfall",
+  "description": "A running total step by step: per step a rise bar from the level the last step left, pointed at its top and in the rise token, then a fall bar dropping from the rise's top, pointed at its bottom and in the fall token; amounts above and below the bars, the next step starting where the fall ends. Muted steps draw out of bounds.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Waterfall",
+      "description": "The root with data-slot=\"waterfall\", role=\"img\", the per-step nets as its summary and data-focus."
+    },
+    {
+      "part": "step",
+      "description": "A group per step translated to its band: the hit rect over the band, the pointed rise and fall paths, their amounts, and the label; data-muted and data-focused as the state says."
+    }
+  ],
+  "usage": [
+    "rise and fall are both positive amounts; the chart computes the running level and the net itself.",
+    "The two tokens --juni-waterfall-rise and --juni-waterfall-fall are the chart's only colours (theming §5.6); a legend uses the same two.",
+    "The pointed ends carry direction, so never add arrows or signs to the amounts.",
+    "Keep hover in the caller: onHover reports the step's id or null; focus holds one step full while the others step back."
+  ],
+  "docs": ["theming"]
+}

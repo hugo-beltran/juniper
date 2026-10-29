@@ -1,0 +1,12 @@
+.swatch {
+  --stroke: oklch(from var(--juni-bark-600) l c h / 0.5);
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  rect {
+    fill: var(--fill);
+    stroke: var(--stroke);
+    stroke-width: 1;
+  }
+}

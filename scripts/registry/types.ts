@@ -8,7 +8,12 @@ export const SCHEMA_VERSION = 1
 
 export type EntryType = "component" | "lib" | "theme"
 
-export type ComponentCategory = "primitive" | "composite" | "layout" | "demo"
+export type ComponentCategory =
+  | "primitive"
+  | "composite"
+  | "layout"
+  | "dataviz"
+  | "demo"
 
 export type FileKind = "component" | "style" | "hook" | "util"
 

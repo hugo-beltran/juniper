@@ -1,0 +1,117 @@
+/* The rows share their columns, so every value and every change takes the
+ * widest one's room and every track starts and ends at the same place: the
+ * value, the track, the change. */
+.list {
+  display: grid;
+  grid-template-columns: max-content minmax(3rem, 1fr) max-content;
+  column-gap: 0.75rem;
+  row-gap: 0.375rem;
+}
+
+/* An item over two lines: its name, then its value, its bar and its change. */
+.row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  grid-template-areas:
+    "label label label"
+    "value lane change";
+  align-items: center;
+  row-gap: 0;
+  transition: opacity 120ms var(--ease);
+}
+
+/* The hovered or focused row stays full; the others step back. */
+.list:has(.row:hover) .row:not(:hover),
+.list[data-focus] .row:not([data-focused]) {
+  opacity: 0.45;
+}
+
+/* The name over the whole row, so only the values size the first column. */
+.label {
+  grid-area: label;
+  font-size: var(--text-md);
+  font-weight: 800;
+  color: var(--juni-bark-800);
+  white-space: nowrap;
+}
+
+/* The track and the earlier value's mark side by side, so the cut around the
+ * mark takes the track and not it. The lane is a container, so the cut is
+ * placed in its own width: a mask's percentage would count across the room
+ * left beside the cut instead. */
+.lane {
+  grid-area: lane;
+  position: relative;
+  display: flex;
+  align-items: center;
+  container-type: inline-size;
+}
+
+/* The mark's centre along the lane, to a whole pixel, worked out alike on
+ * the track and the mark (both read the lane's width), so the cut and the
+ * mark sit on the same coordinates. */
+.track,
+.prior {
+  --x: round(calc(var(--share) * 100cqw), 1px);
+}
+
+/* The track over the whole domain, with the bar from its start. With a mark
+ * on it, a square turned on its corner, the mark grown by the halo, is cut
+ * out of both at the mark's place, so the surface shows around the mark.
+ * The mask is coverage, not colour: black is the one keyword a mask reads. */
+.track {
+  --halo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='2.5' y='2.5' width='11' height='11' rx='2.5' transform='rotate(45 8 8)'/%3E%3C/svg%3E");
+
+  position: relative;
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--juni-track);
+
+  &[data-cut] {
+    mask:
+      var(--halo) no-repeat calc(var(--x) - 8px) -4px / 16px 16px,
+      linear-gradient(black 0 0);
+    mask-composite: exclude;
+  }
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  background: var(--juni-needle-700);
+}
+
+/* The earlier value: the split bars' mark, a heartwood square turned on its
+ * corner about the same centre as the cut, its edges on whole pixels: 8px
+ * wide, from 4px before the centre, and level with the track's 8px. */
+.prior {
+  position: absolute;
+  left: calc(var(--x) - 4px);
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 1.5px;
+  background: var(--juni-categorical-3);
+  transform: rotate(45deg);
+}
+
+.value {
+  grid-area: value;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--juni-bark-700);
+  text-align: right;
+}
+
+/* The chip, lifted 2px off the line's centre. */
+.change {
+  grid-area: change;
+  display: flex;
+  translate: 0 -2px;
+  justify-content: flex-end;
+}

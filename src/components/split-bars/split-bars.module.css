@@ -1,0 +1,64 @@
+.root {
+  width: 100%;
+
+  svg {
+    display: block;
+    overflow: visible;
+  }
+}
+
+.bar {
+  transition: opacity 120ms var(--ease);
+}
+
+/* The hovered bar stays full; its siblings step back, so the pointer's bar
+ * reads as the one named. */
+.root:has(.bar:hover) .bar:not(:hover) {
+  opacity: 0.45;
+}
+
+/* The filled share, as the target bar's first segment; the rest, as the track. */
+.filled {
+  fill: var(--juni-needle-700);
+  stroke: var(--juni-needle-900);
+  stroke-width: 1;
+}
+
+.rest {
+  fill: var(--juni-track);
+}
+
+/* The mark, in the palette's red; in the mask, the same square grown by the
+ * halo cuts the surface around it (black is coverage there, not colour). */
+.mark {
+  fill: var(--juni-categorical-3);
+}
+
+.halo {
+  fill: black;
+  stroke: black;
+  stroke-linejoin: round;
+}
+
+.label {
+  font-size: var(--text-sm);
+  fill: var(--juni-bark-800);
+}
+
+/* The filled count over the total, after the label; the share at the line's
+ * right end, in bold. */
+.figures,
+.rate {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  fill: var(--juni-bark-700);
+}
+
+.figures {
+  font-size: var(--text-xs);
+}
+
+.rate {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}

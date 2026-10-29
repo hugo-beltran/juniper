@@ -1,0 +1,30 @@
+{
+  "title": "Gauge",
+  "description": "A half-ring of equal sections filled clockwise to a share of the whole: full sections in needle-700, the one the share ends in mixed toward needle-200 by its coverage, the rest the track. An optional mark is a red diamond inside the ring at another share, the ring carved away around it. Children sit inside the arc.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Gauge",
+      "description": "The root with data-slot=\"gauge\"; measures its own width with visx useParentSize and draws an SVG of that width and half its radius in height, role=\"img\" with the summary."
+    },
+    {
+      "part": "section",
+      "description": "One visx Arc per section; its fill is a color-mix set inline, so the partial section's tone follows the value."
+    },
+    {
+      "part": "mark",
+      "description": "A rounded square rotated on its corner at the tick share, categorical-3; its halo in the SVG mask cuts the surface around it."
+    },
+    {
+      "part": "centre",
+      "description": "Children placed at the arc's baseline centre: the figure, usually in the display size, with a chip or a caption under it."
+    }
+  ],
+  "usage": [
+    "value and tick are shares, 0 to 1; format writes them for the spoken summary (a percent formatter).",
+    "Name the tick with tickLabel so the summary reads 'last season 54%' rather than 'before'.",
+    "Give the gauge a container with a known width; it fills it and caps its radius at 140px.",
+    "The empty-to-full tone is one hue (needle) so the fill reads as progress, never as a category."
+  ],
+  "docs": ["theming"]
+}

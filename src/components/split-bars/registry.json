@@ -1,0 +1,25 @@
+{
+  "title": "Split bars",
+  "description": "One horizontal bar per item on a shared scale: the filled share as a solid needle block from the left, the rest as the track after a 2px gap, the label and filled/total over the bar and the rate at the right. A tick is a red diamond inside the bar at an earlier rate with the bar carved away around it.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "SplitBars",
+      "description": "The root with data-slot=\"split-bars\", role=\"img\" and a summary of every bar; draws one SVG of the rows' total height."
+    },
+    {
+      "part": "bar",
+      "description": "A group per item: the label line (label, figures tspan, rate) over the filled and rest rects, with a <title> that names it on hover."
+    },
+    {
+      "part": "mark",
+      "description": "The tick as a rotated rounded square, categorical-3, drawn over the masked bars; its halo in the mask cuts the surface around it."
+    }
+  ],
+  "usage": [
+    "filled and total are counts (wins of games, saves of chances); tick is a share of total, 0 to 1, for the earlier rate.",
+    "format writes counts and formatShare writes the rate; pass a percent formatter for the latter.",
+    "Bars share one scale from zero to the largest total, so a short bar is a small whole, not a low rate; read the rate at the right."
+  ],
+  "docs": ["theming"]
+}

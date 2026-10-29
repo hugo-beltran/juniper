@@ -65,7 +65,9 @@
       "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
       "uniqueItems": true
     },
-    "category": { "enum": ["primitive", "composite", "layout", "demo"] },
+    "category": {
+      "enum": ["primitive", "composite", "layout", "dataviz", "demo"]
+    },
     "anatomy": {
       "type": "array",
       "items": {

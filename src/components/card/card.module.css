@@ -57,6 +57,23 @@
   text-align: center;
 }
 
+/* A card that is one of many on a page (a chart card on a dashboard) titles
+ * itself at level 3 or below, and the level is the context the parts read
+ * (component-architecture §3.9): the title drops to text-lg, the intro to
+ * text-sm, both set to the start, because a centred display title is the
+ * h1 of a screen that is one card, and a grid of them would be a grid of
+ * logins. Added 2026-10-29 with the Season page. */
+.title:is(h3, h4, h5, h6) {
+  font-size: var(--text-lg);
+  text-align: start;
+  text-wrap: pretty;
+}
+
+.header:has(> :is(h3, h4, h5, h6)) .description {
+  font-size: var(--text-sm);
+  text-align: start;
+}
+
 .footer {
   display: flex;
   align-items: center;

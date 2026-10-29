@@ -1,0 +1,17 @@
+{
+  "title": "Span bracket",
+  "description": "A bracket drawn inside a chart's SVG over the columns of the selected span: a bark hairline with turned-up ends and the span's name over it. Charts that take a span prop add SPAN pixels of room above the plot for it.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "SpanBracket",
+      "description": "A <g data-slot=\"span-bracket\"> holding the path and the label text; positioned by x0 and x1 in the chart's own pixel space, from its top edge."
+    }
+  ],
+  "usage": [
+    "Render it as the first child of the chart's SVG and translate the plot down by SPAN so the bracket has its own row.",
+    "Snap x0 and x1 to the first and last selected columns' edges; the bracket rounds them to whole pixels itself.",
+    "The label is the span's name (a season, a month range), set in the eyebrow type: mono, 2xs, uppercase."
+  ],
+  "docs": ["theming"]
+}

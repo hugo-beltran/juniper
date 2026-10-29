@@ -1,0 +1,18 @@
+{
+  "title": "Stat",
+  "description": "A figure with its eyebrow label over it and a change chip beside it: the readout under a chart, the number inside a Gauge, a cell of a stat row. Two sizes, medium (display-sm) and large (display-lg); not a card.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Stat",
+      "description": "A column with data-slot=\"stat\" and data-size: the label (mono 2xs uppercase, bark-700) over a baseline row of the value (display face, weight 800, needle-950) and the change."
+    }
+  ],
+  "usage": [
+    "Pass value as a ReactNode so the caller can mark up a unit or a dash for missing data.",
+    "change is a DeltaChip; leave it out when there is no base to compare against.",
+    "Use SummaryCard for a KPI on its own surface and Stat for a figure inside another card.",
+    "A row of Stats is laid out by the caller (a flex row with a gap); the Stat owns only its type."
+  ],
+  "docs": ["theming"]
+}

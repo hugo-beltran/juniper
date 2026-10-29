@@ -1,0 +1,17 @@
+{
+  "title": "Delta chip",
+  "description": "A change against a base as a small mono chip with an arrow: needle when up, heartwood when down, bark when flat. invert swaps the tones for a figure that is better lower. Renders nothing for null.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "DeltaChip",
+      "description": "A single span with data-slot=\"delta-chip\" and data-tone (up, down, flat); the text is the formatted value followed by ↑, ↓ or -."
+    }
+  ],
+  "usage": [
+    "The default formatter is a signed percentage to one decimal; pass any object with a format(number) method (an Intl.NumberFormat, or a custom one for points or runs) to write the change in its own unit.",
+    "Use invert for a figure that is better lower (runs allowed, turnovers): the arrow still follows the value's sign, only the tone swaps.",
+    "Pass null when there is no base to compare against; the chip renders nothing rather than a dash."
+  ],
+  "docs": ["theming"]
+}

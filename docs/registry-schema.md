@@ -83,7 +83,7 @@ the files are absolute. Responses are served with `Access-Control-Allow-Origin: 
 | `name` | directory | Kebab-case identifier, the directory under `src/components/` |
 | `type` | generator | `component`, `lib` or `theme` |
 | `title`, `description` | sidecar | Human and agent-facing naming |
-| `category` | sidecar | `primitive` (one react-aria primitive, reusable anywhere), `composite` (assembled from primitives, reusable), `layout` (a surface or container), `demo` (a reference composition for the demo app; copy its patterns, not the component). Components only |
+| `category` | sidecar | `primitive` (one react-aria primitive, reusable anywhere), `composite` (assembled from primitives, reusable), `layout` (a surface or container), `dataviz` (a chart or a piece of chart chrome on visx and plain SVG, coloured from the chart tokens of [Theming rules](./theming.md) §5; added 2026-10-29), `demo` (a reference composition for the demo app; copy its patterns, not the component). Components only |
 | `anatomy[]` | sidecar | Named parts with a sentence each. Components only |
 | `usage[]` | sidecar | Rules and guidance, one sentence each. Components only |
 | `files[]` | derived | Every `.ts`, `.tsx` and `.css` file in the directory with full `content`. `kind`: `component` (.tsx), `style` (.css), `hook` (use-*.ts), `util` (other .ts) |

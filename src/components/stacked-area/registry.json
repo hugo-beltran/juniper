@@ -1,0 +1,26 @@
+{
+  "title": "Stacked area",
+  "description": "Bands stacked from the baseline as eased monotone areas, coloured by position from the categorical tokens, with a 2px surface gap carved between them. Muted points are drawn out of bounds; the colour starts at the first live point. Each point owns its half steps for hover, with a wash over the plot and a pill behind its label.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "StackedArea",
+      "description": "The root with data-slot=\"stacked-area\", role=\"img\" and the per-point totals as its summary; measures its width and draws the plot, with SPAN extra height when a span bracket is asked for."
+    },
+    {
+      "part": "band",
+      "description": "A group per band with --fill set to var(--juni-categorical-<index>) and --band to its index: a muted path under a live one clipped to the selection."
+    },
+    {
+      "part": "point",
+      "description": "A group per point: the invisible hit rect over its half steps, the hover wash, the label pill and the label; data-muted when out of bounds."
+    }
+  ],
+  "usage": [
+    "bands are in stacking order from the baseline; the first takes categorical-0. Export AreaBand and AreaPoint are shared with AreaLine and StackedBars.",
+    "Mark points outside the selection muted rather than dropping them: the chart keeps the context's shape in the out-of-bounds hue.",
+    "Keep hover state in the caller: onHover reports the point's id or null, focus draws one point as the selection alone.",
+    "The legend is the caller's: Swatch and label per band, in band order, using the same categorical tokens."
+  ],
+  "docs": ["theming"]
+}

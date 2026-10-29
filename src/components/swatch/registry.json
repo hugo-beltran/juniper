@@ -1,0 +1,17 @@
+{
+  "title": "Swatch",
+  "description": "A 12px square drawn as the mark a legend label stands for: the fill and an optional stroke arrive as CSS colour expressions, so a legend and its chart cannot disagree.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "Swatch",
+      "description": "An inline SVG with data-slot=\"swatch\", aria-hidden; a single rect whose fill and stroke read the --fill and --stroke custom properties the component sets inline."
+    }
+  ],
+  "usage": [
+    "Pass fill as a var(--juni-…) expression, the same one the series' CSS uses (var(--juni-categorical-0)), never a literal.",
+    "The swatch is decorative; the label beside it carries the meaning.",
+    "The stroke defaults to bark-600 at half alpha so a pale fill still has an edge."
+  ],
+  "docs": ["theming", "component-architecture"]
+}

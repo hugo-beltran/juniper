@@ -1,0 +1,30 @@
+{
+  "title": "Heat grid",
+  "description": "A grid of cells, one per row and column, each filled darker with its value along the needle heat ramp (low through medium to high, mixed in oklch) and carrying the value as text, so a table of rates reads at a glance and in detail at once. Muted columns take the out-of-bounds hue; scale row shades each row over its own range.",
+  "category": "dataviz",
+  "anatomy": [
+    {
+      "part": "HeatGrid",
+      "description": "The root with data-slot=\"heat-grid\", role=\"img\" and the full summary, around a presentation grid sized by --columns; data-focus while a column is focused."
+    },
+    {
+      "part": "head",
+      "description": "A column label; data-muted for context columns, data-focused with a needle-pastel pill for the focused one."
+    },
+    {
+      "part": "cell",
+      "description": "A div per value with --fill and --ink set inline from the ramp; data-empty draws the track, data-emphasis sets a total row apart."
+    },
+    {
+      "part": "scale",
+      "description": "Under the grid, six ramp steps between the domain's low and high, or 'each row's low' to 'high' when scale is row."
+    }
+  ],
+  "usage": [
+    "value(rowId, columnId) returns a number or null; null draws an empty cell on the track rather than zero.",
+    "Pass domain when the grid should hold a fixed range across periods (a rate from 0 to 1); leave it off to shade over the data's own extent.",
+    "Mark a totals row emphasis so it sits apart under the parts in bold.",
+    "The ramp is one hue so lightness alone carries the value; never pass a second hue for a second measure, use scale row instead."
+  ],
+  "docs": ["theming"]
+}
